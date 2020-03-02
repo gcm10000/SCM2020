@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Authorization;
 using SCM2020___Server.Extensions;
 using System.IO;
 using Newtonsoft.Json;
+using SCM2020___Server.Context;
+using Microsoft.AspNetCore.Http;
+using System.Web;
+
 
 namespace SCM2020___Server.Controllers
 {
@@ -31,44 +35,52 @@ namespace SCM2020___Server.Controllers
             this.SignInManager = signInManager;
             this.Configuration = configuration;
         }
-        [HttpGet]
-        //[Authorize]
+        [HttpGet("Get")]
+        [Authorize(Roles = "Desenvolvimento")]
         public ActionResult<string> Get() 
         {
             return "UsuariosController";
         }
-        [HttpPost("Criar")]
+        [HttpPost("NewUser")]
         [AllowAnonymous]
-        //[Authorize(Roles = Roles.SCM)]
+        [Authorize(Roles = "SCM")]
         public async Task<ActionResult<UserToken>> CreateUser()
         {
             var postData = await SignUpUserInfo();
-            var user = new ApplicationUser { PJERJRegistration = postData.PJERJRegistration };
+            var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
+            var user = new ApplicationUser { UserName = username, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration };
             
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, postData.Name),
-                new Claim("CPF", postData.CPFRegistration),
-                new Claim("PJERJRegistration", postData.PJERJRegistration),
                 new Claim(ClaimTypes.Role, postData.Role),
                 new Claim("Occupation", postData.Occupation),
             };
 
-            var result = await UserManager.CreateAsync(user, postData.Password);
+            var r1 = UserManager.FindByPJERJRegistrationAsync(postData.PJERJRegistration);
+            var r2 = UserManager.FindByPJERJRegistrationAsync(postData.CPFRegistration);
+            if ((r1 != null) || (r2 != null))
+                return BadRequest("Já existe um usuário com algum dos dois registros.");
 
-            //var resultclaims = 
+            var result = await UserManager.CreateAsync(user, postData.Password);
+            
+            if (result.Succeeded)
+            {
+                //var resultclaims = 
                 await UserManager.AddClaimsAsync(
                 user: user,
                 claims: claims
                 );
-
-            if (result.Succeeded)
-            {
                 return BuildToken(claims);
             }
             else
             {
-                return BadRequest($"Usuário ou senha inválidos.\nMatrícula do tribunal: {postData.PJERJRegistration}\nSenha: {postData.Password}");
+                string strerror = "Não foi possível efetuar o cadastro.\n";
+                foreach (var error in result.Errors.ToArray())
+                {
+                    strerror += $"{error.Code}: {error.Description}\n";
+                }
+                return BadRequest(strerror);
             }
         }
         [HttpPost("Login")]
@@ -77,9 +89,12 @@ namespace SCM2020___Server.Controllers
         {
             var fromPOST = await SignInUserInfo();
             string strRegistration = fromPOST.Registration;
-            
+
             var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistrationAsync(strRegistration) : UserManager.FindByCPFAsync(strRegistration);
-            
+
+            if (user == null)
+                return BadRequest("Usuário ou senha inválidos.");
+
             var result = await SignInManager.PasswordSignInAsync(
                 userName: user.UserName,
                 password: fromPOST.Password,
@@ -87,7 +102,7 @@ namespace SCM2020___Server.Controllers
                 lockoutOnFailure: false
                 );
             var claims = await UserManager.GetClaimsAsync(user);
-           
+
             if (result.Succeeded)
             {
                 return BuildToken(claims.ToArray());
@@ -100,9 +115,9 @@ namespace SCM2020___Server.Controllers
         public async Task<ActionResult<UserToken>> Update()
         {
             var fromPOST = await SignUpUserInfo();
-            string strRegistration = (fromPOST.IsPJERJRegistration) ? 
+            string strRegistration = (fromPOST.IsPJERJRegistration) ?
                 fromPOST.PJERJRegistration : fromPOST.CPFRegistration;
-            
+
             var user = await UserManager.FindByNameAsync(strRegistration);
             user.PJERJRegistration = fromPOST.PJERJRegistration;
             UserManager.PasswordHasher.HashPassword(user, fromPOST.Password);
@@ -114,6 +129,7 @@ namespace SCM2020___Server.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("SignOut")]
         public async Task<IActionResult> SignOut()
         {
             await SignInManager.SignOutAsync();
@@ -141,7 +157,7 @@ namespace SCM2020___Server.Controllers
             }
             return BadRequest();
         }
-        [HttpPost("Delete")]
+        [HttpDelete("Delete")]
         [Authorize(Roles = Roles.SCM)]
         public IActionResult DeleteUser()
         {
@@ -158,7 +174,7 @@ namespace SCM2020___Server.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             //Token expiration
-            var expiration = DateTime.UtcNow.AddHours(1);
+            var expiration = DateTime.UtcNow.AddMinutes(60);
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,
                 audience: null,

@@ -8,7 +8,6 @@ namespace SCM2020___Server.Context
         public DbSet<AboutProduct> AboutProducts { get; set; }
         public DbSet<SpecificProduct> IndividualProducts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
-        public DbSet<Employee> Employees { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<MaterialInputByVendor> MaterialInputByVendor { get; set; }

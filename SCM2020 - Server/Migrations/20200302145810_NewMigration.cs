@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SCM2020___Server.Migrations
 {
-    public partial class ApplicationDb : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace SCM2020___Server.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     PJERJRegistration = table.Column<string>(nullable: true),
-                    CPF = table.Column<string>(nullable: true)
+                    Employee = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

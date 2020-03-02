@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SCM2020___Server.Models
 {
@@ -8,14 +9,7 @@ namespace SCM2020___Server.Models
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
-        
-        /// <summary>
-        /// Matrícula do usuário pelo Tribunal de Justiça.
-        /// </summary>
         public string PJERJRegistration { get; set; }
-        /// <summary>
-        /// CPF do funcionário.
-        /// </summary>
-        public string CPF { get; set; }
+        public string CPFRegistration { get; set; }
     }
 }

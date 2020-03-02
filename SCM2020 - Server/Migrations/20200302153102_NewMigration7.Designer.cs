@@ -10,8 +10,8 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200222221816_ApplicationDb")]
-    partial class ApplicationDb
+    [Migration("20200302153102_NewMigration7")]
+    partial class NewMigration7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -160,9 +160,6 @@ namespace SCM2020___Server.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("CPF")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -187,9 +184,6 @@ namespace SCM2020___Server.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
-
-                    b.Property<string>("PJERJRegistration")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

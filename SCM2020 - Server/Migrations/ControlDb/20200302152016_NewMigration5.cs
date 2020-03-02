@@ -2,7 +2,7 @@
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
-    public partial class NewMigration8 : Migration
+    public partial class NewMigration5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

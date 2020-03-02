@@ -10,8 +10,8 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20200301232035_NewMigration8")]
-    partial class NewMigration8
+    [Migration("20200302150505_NewMigration4")]
+    partial class NewMigration4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<long>("Drawer")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("GroupID")
+                    b.Property<int?>("Group")
                         .HasColumnType("int");
 
                     b.Property<int>("Localization")
@@ -63,18 +63,10 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("VendorID")
+                    b.Property<int?>("Vendor")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupID")
-                        .IsUnique()
-                        .HasFilter("[GroupID] IS NOT NULL");
-
-                    b.HasIndex("VendorID")
-                        .IsUnique()
-                        .HasFilter("[VendorID] IS NOT NULL");
 
                     b.ToTable("AboutProducts");
                 });
@@ -86,14 +78,11 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CPFRegistration")
+                    b.Property<string>("AspNetUsersId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsPJERJRegistration")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("KeyUser")
-                        .IsRequired()
+                    b.Property<string>("CPFRegistration")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -105,10 +94,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PJERJRegistration")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
@@ -274,7 +259,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("DateAdd")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InformationProductId")
+                    b.Property<int>("InformationProduct")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaterialInputByVendorId")
@@ -293,8 +278,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InformationProductId");
 
                     b.HasIndex("MaterialInputByVendorId");
 
@@ -325,27 +308,8 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.AboutProduct", b =>
-                {
-                    b.HasOne("SCM2020___Server.Models.Group", "Group")
-                        .WithOne()
-                        .HasForeignKey("SCM2020___Server.Models.AboutProduct", "GroupID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SCM2020___Server.Models.Vendor", "Vendor")
-                        .WithOne()
-                        .HasForeignKey("SCM2020___Server.Models.AboutProduct", "VendorID")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("SCM2020___Server.Models.SpecificProduct", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.AboutProduct", "InformationProduct")
-                        .WithMany()
-                        .HasForeignKey("InformationProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SCM2020___Server.Models.MaterialInputByVendor", null)
                         .WithMany("Products")
                         .HasForeignKey("MaterialInputByVendorId");

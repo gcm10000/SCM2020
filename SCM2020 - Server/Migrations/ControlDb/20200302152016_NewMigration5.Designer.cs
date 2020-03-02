@@ -10,8 +10,8 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20200302001141_NewMigration10")]
-    partial class NewMigration10
+    [Migration("20200302152016_NewMigration5")]
+    partial class NewMigration5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,14 +78,11 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CPFRegistration")
+                    b.Property<string>("AspNetUsersId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsPJERJRegistration")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("KeyUser")
-                        .IsRequired()
+                    b.Property<string>("CPFRegistration")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -97,10 +94,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PJERJRegistration")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
@@ -266,7 +259,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("DateAdd")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InformationProductId")
+                    b.Property<int>("InformationProduct")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaterialInputByVendorId")
@@ -285,8 +278,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InformationProductId");
 
                     b.HasIndex("MaterialInputByVendorId");
 
@@ -319,12 +310,6 @@ namespace SCM2020___Server.Migrations.ControlDb
 
             modelBuilder.Entity("SCM2020___Server.Models.SpecificProduct", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.AboutProduct", "InformationProduct")
-                        .WithMany()
-                        .HasForeignKey("InformationProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SCM2020___Server.Models.MaterialInputByVendor", null)
                         .WithMany("Products")
                         .HasForeignKey("MaterialInputByVendorId");
