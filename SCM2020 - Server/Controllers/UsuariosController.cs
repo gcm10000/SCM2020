@@ -86,7 +86,6 @@ namespace SCM2020___Server.Controllers
                 isPersistent: false,
                 lockoutOnFailure: false
                 );
-
             var claims = await UserManager.GetClaimsAsync(user);
            
             if (result.Succeeded)
@@ -114,6 +113,11 @@ namespace SCM2020___Server.Controllers
                 return Ok("Alteração feita com sucesso.");
             }
             return BadRequest();
+        }
+        public async Task<IActionResult> SignOut()
+        {
+            await SignInManager.SignOutAsync();
+            return Ok("Logoff realizado com sucesso.");
         }
         [HttpPost("ResetPassword")]
         [Authorize(Roles = Roles.SCM)]

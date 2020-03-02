@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Server", "SCM2020 - Server\SCM2020 - Server.csproj", "{BAC3263C-D3DE-401F-8028-706EE9CF18E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCM2020 - Server", "SCM2020 - Server\SCM2020 - Server.csproj", "{BAC3263C-D3DE-401F-8028-706EE9CF18E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Client", "SCM2020 - Client\SCM2020 - Client.csproj", "{74EED641-BA28-4101-A5A3-830CAB09AFF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Utility", "SCM2020 - Utility\SCM2020 - Utility.csproj", "{3A88577D-F37E-4882-9682-9ECF178532A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{74EED641-BA28-4101-A5A3-830CAB09AFF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74EED641-BA28-4101-A5A3-830CAB09AFF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74EED641-BA28-4101-A5A3-830CAB09AFF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A88577D-F37E-4882-9682-9ECF178532A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A88577D-F37E-4882-9682-9ECF178532A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A88577D-F37E-4882-9682-9ECF178532A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A88577D-F37E-4882-9682-9ECF178532A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
