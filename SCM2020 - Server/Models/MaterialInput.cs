@@ -43,7 +43,7 @@ namespace SCM2020___Server.Models
         /// Materiais de entrada.
         /// </summary>
         [Required]
-        public SpecificProduct[] Products { get; set; }
+        public PermanentProduct[] Products { get; set; }
     }
     public enum Regarding
     {

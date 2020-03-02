@@ -25,7 +25,7 @@ namespace SCM2020___Server.Controllers
             using (context)
             {
                 var raw = await Helper.RawFromBody(this);
-                AboutProduct newProduct = new AboutProduct(raw);
+                ConsumptionProduct newProduct = new ConsumptionProduct(raw);
                 context.AboutProducts.Add(newProduct);
                 await context.SaveChangesAsync();
                 return Ok("Produto adicionado com sucesso.");
@@ -35,7 +35,7 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var aboutProduct = JsonConvert.DeserializeObject<AboutProduct>(raw);
+            var aboutProduct = JsonConvert.DeserializeObject<ConsumptionProduct>(raw);
             aboutProduct.Id = id;
             context.AboutProducts.Update(aboutProduct);
             await context.SaveChangesAsync();
@@ -72,13 +72,13 @@ namespace SCM2020___Server.Controllers
         {
             var strid = await Helper.RawFromBody(this);
             int id = int.Parse(strid);
-            AboutProduct product = context.AboutProducts.Find(id);
+            ConsumptionProduct product = context.AboutProducts.Find(id);
             context.AboutProducts.Remove(product);
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
         }
 
-        private AboutProduct GetProductById(int id)
+        private ConsumptionProduct GetProductById(int id)
         {
             using (context)
             {

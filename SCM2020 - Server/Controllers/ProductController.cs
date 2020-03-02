@@ -30,7 +30,7 @@ namespace SCM2020___Server.Controllers
             using (context)
             {
                 var raw = await Helper.RawFromBody(this);
-                SpecificProduct newProduct = new SpecificProduct(raw);
+                PermanentProduct newProduct = new PermanentProduct(raw);
                 context.IndividualProducts.Add(newProduct);
                 await context.SaveChangesAsync();
                 return Ok("Produto adicionado com sucesso.");
@@ -87,7 +87,7 @@ namespace SCM2020___Server.Controllers
             {
                 var strid = await Helper.RawFromBody(this);
                 int id = int.Parse(strid);
-                AboutProduct product = context.AboutProducts.Find(id);
+                ConsumptionProduct product = context.AboutProducts.Find(id);
                 context.AboutProducts.Remove(product);
                 await context.SaveChangesAsync();
                 return Ok("Produto removido com sucesso.");

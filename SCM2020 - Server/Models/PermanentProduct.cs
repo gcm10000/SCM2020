@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SCM2020___Server.Models
 {
     /// <summary>
-    /// Esta classe serve para uma visão individual do produto.
+    /// Esta classe serve para uma visão individual do produto permanente.
     /// </summary>
-    public class SpecificProduct
+    public class PermanentProduct
     {
-        public SpecificProduct(string raw)
+        public PermanentProduct(string raw)
         {
             var newproduct = JObject.Parse(raw);
             this.InformationProduct = newproduct.Value<int>("InformationProduct");
@@ -18,7 +18,7 @@ namespace SCM2020___Server.Models
             this.Status = newproduct.Value<Status>("Status");
             this.DateAdd = DateTime.Now;
         }
-        public SpecificProduct()
+        public PermanentProduct()
         {
 
         }

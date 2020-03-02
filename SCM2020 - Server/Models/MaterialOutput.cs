@@ -40,7 +40,7 @@ namespace SCM2020___Server.Models
         /// <summary>
         /// Produtos retirados na movimentação de saída.
         /// </summary>
-        public SpecificProduct[] Products { get; set; }
+        public PermanentProduct[] Products { get; set; }
 
     }
 }

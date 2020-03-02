@@ -23,7 +23,7 @@ namespace SCM2020___Server.Models
         /// <summary>
         /// Produtos de entrada.
         /// </summary>
-        public SpecificProduct[] Products { get; set; }
+        public PermanentProduct[] Products { get; set; }
 
     }
 }
