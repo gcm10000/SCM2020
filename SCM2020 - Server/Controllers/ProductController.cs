@@ -31,7 +31,7 @@ namespace SCM2020___Server.Controllers
             {
                 var raw = await Helper.RawFromBody(this);
                 PermanentProduct newProduct = new PermanentProduct(raw);
-                context.IndividualProducts.Add(newProduct);
+                context.PermanentProduct.Add(newProduct);
                 await context.SaveChangesAsync();
                 return Ok("Produto adicionado com sucesso.");
             }
@@ -42,12 +42,12 @@ namespace SCM2020___Server.Controllers
             using (context)
             {
                 var raw = await Helper.RawFromBody(this);
-                var product = context.IndividualProducts.FirstOrDefault(x => x.Id == id);
+                var product = context.PermanentProduct.FirstOrDefault(x => x.Id == id);
 
                 var productparsed = JObject.Parse(raw);
                 var infoId = productparsed.Value<int>("InformationProduct");
                 product.InformationProduct = infoId;
-                context.IndividualProducts.Update(product);
+                context.PermanentProduct.Update(product);
                 await context.SaveChangesAsync();
                 return Ok("Atualizado com sucesso.");
             }
@@ -55,27 +55,21 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            using (context)
-            {
-                var tojson = JsonConvert.SerializeObject(context.IndividualProducts.ToArray());
-                return Ok(tojson);
-            }
+            var tojson = JsonConvert.SerializeObject(context.PermanentProduct.ToArray());
+            return Ok(tojson);
         }
         [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
-            using (context)
+            var product = context.ConsumptionProduct.FirstOrDefault(x => x.Id == id);
+            if (product != null)
             {
-                var product = context.AboutProducts.FirstOrDefault(x => x.Id == id);
-                if (product != null)
-                {
-                    var tojson = JsonConvert.SerializeObject(product);
-                    return Ok(tojson);
-                }
-                else
-                {
-                    return BadRequest($"O registro com o id {id} não existe.");
-                }
+                var tojson = JsonConvert.SerializeObject(product);
+                return Ok(tojson);
+            }
+            else
+            {
+                return BadRequest($"O registro com o id {id} não existe.");
             }
         }
 
@@ -87,8 +81,8 @@ namespace SCM2020___Server.Controllers
             {
                 var strid = await Helper.RawFromBody(this);
                 int id = int.Parse(strid);
-                ConsumptionProduct product = context.AboutProducts.Find(id);
-                context.AboutProducts.Remove(product);
+                ConsumptionProduct product = context.ConsumptionProduct.Find(id);
+                context.ConsumptionProduct.Remove(product);
                 await context.SaveChangesAsync();
                 return Ok("Produto removido com sucesso.");
             }

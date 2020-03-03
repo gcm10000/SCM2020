@@ -32,7 +32,6 @@ namespace SCM2020___Server.Models
             //this.Vendor = vendor.Id;
             this.Group = productFromRaw.Value<int>("Group");
             this.Vendor = productFromRaw.Value<int>("Vendor");
-
         }
         public ConsumptionProduct()
         {

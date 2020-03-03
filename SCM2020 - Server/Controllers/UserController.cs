@@ -24,12 +24,12 @@ namespace SCM2020___Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class UsuariosController : Controller
+    public class UserController : Controller
     {
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
-        public UsuariosController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
+        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
             this.UserManager = userManager;
             this.SignInManager = signInManager;
@@ -43,7 +43,7 @@ namespace SCM2020___Server.Controllers
         }
         [HttpPost("NewUser")]
         [AllowAnonymous]
-        [Authorize(Roles = "SCM")]
+        //[Authorize(Roles = "SCM")]
         public async Task<ActionResult<UserToken>> CreateUser()
         {
             var postData = await SignUpUserInfo();

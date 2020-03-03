@@ -5,8 +5,8 @@ namespace SCM2020___Server.Context
 {
     public class ControlDbContext : DbContext
     {
-        public DbSet<ConsumptionProduct> AboutProducts { get; set; }
-        public DbSet<PermanentProduct> IndividualProducts { get; set; }
+        public DbSet<ConsumptionProduct> ConsumptionProduct { get; set; }
+        public DbSet<PermanentProduct> PermanentProduct { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Sector> Sectors { get; set; }

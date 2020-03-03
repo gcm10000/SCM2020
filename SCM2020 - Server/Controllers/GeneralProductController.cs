@@ -18,7 +18,7 @@ namespace SCM2020___Server.Controllers
         ControlDbContext context;
         public GeneralProductController(ControlDbContext context) { this.context = context; }
 
-        //Add new product content every information about
+        //Add new consumpter product content every information about
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
@@ -26,7 +26,13 @@ namespace SCM2020___Server.Controllers
             {
                 var raw = await Helper.RawFromBody(this);
                 ConsumptionProduct newProduct = new ConsumptionProduct(raw);
-                context.AboutProducts.Add(newProduct);
+
+                if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
+                    return BadRequest("Não existe fornecedor com este id.");
+                if (!context.Groups.Any(x => x.Id == newProduct.Group))
+                    return BadRequest("Não existe grupo com este id.");
+
+                context.ConsumptionProduct.Add(newProduct);
                 await context.SaveChangesAsync();
                 return Ok("Produto adicionado com sucesso.");
             }
@@ -35,34 +41,37 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var aboutProduct = JsonConvert.DeserializeObject<ConsumptionProduct>(raw);
-            aboutProduct.Id = id;
-            context.AboutProducts.Update(aboutProduct);
+            var consumptionProduct = JsonConvert.DeserializeObject<ConsumptionProduct>(raw);
+            consumptionProduct.Id = id;
+
+            if (!context.Vendors.Any(x => x.Id == consumptionProduct.Vendor))
+                return BadRequest("Não existe fornecedor com este id.");
+            if (!context.Groups.Any(x => x.Id == consumptionProduct.Group))
+                return BadRequest("Não existe grupo com este id.");
+
+            context.ConsumptionProduct.Update(consumptionProduct);
             await context.SaveChangesAsync();
             return Ok("Atualizado com sucesso.");
         }
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var ArrayAboutProducts = context.AboutProducts.ToArray();
+            var ArrayAboutProducts = context.ConsumptionProduct.ToArray();
             var tojson = JsonConvert.SerializeObject(ArrayAboutProducts);
             return Ok(tojson);
         }
         [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
-            using (context)
+            var product = context.ConsumptionProduct.FirstOrDefault(x => x.Id == id);
+            if (product != null)
             {
-                var product = context.AboutProducts.FirstOrDefault(x => x.Id == id);
-                if (product != null)
-                {
-                    var tojson = JsonConvert.SerializeObject(product);
-                    return Ok(tojson);
-                }
-                else
-                {
-                    return BadRequest($"O registro com o id {id} não existe.");
-                }
+                var tojson = JsonConvert.SerializeObject(product);
+                return Ok(tojson);
+            }
+            else
+            {
+                return BadRequest($"O registro com o id {id} não existe.");
             }
         }
 
@@ -72,18 +81,10 @@ namespace SCM2020___Server.Controllers
         {
             var strid = await Helper.RawFromBody(this);
             int id = int.Parse(strid);
-            ConsumptionProduct product = context.AboutProducts.Find(id);
-            context.AboutProducts.Remove(product);
+            ConsumptionProduct product = context.ConsumptionProduct.Find(id);
+            context.ConsumptionProduct.Remove(product);
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
-        }
-
-        private ConsumptionProduct GetProductById(int id)
-        {
-            using (context)
-            {
-                return context.AboutProducts.FirstOrDefault(x => x.Id == id);
-            }
         }
     }
 }
