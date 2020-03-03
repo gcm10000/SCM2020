@@ -51,7 +51,7 @@ namespace SCM2020___Server.Models
         /// <summary>
         /// Grupo que o produto se encontra.
         /// </summary>
-        [ForeignKey("GroupID")]
+        [ForeignKey("GroupId")]
         public int? Group { get; set; }
         /// <summary>
         /// Nome e descrição do produto.
@@ -79,7 +79,7 @@ namespace SCM2020___Server.Models
         /// <summary>
         /// Fornecedor do produto.
         /// </summary>
-        [ForeignKey("VendorID")]
+        [ForeignKey("VendorId")]
         public int? Vendor { get; set; }
         /// <summary>
         /// Quantidade atual do produto encontrado no estoque.

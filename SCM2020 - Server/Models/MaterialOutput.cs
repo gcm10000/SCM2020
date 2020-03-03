@@ -1,11 +1,38 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
+using System.Linq;
 
 namespace SCM2020___Server.Models
 {
     public class MaterialOutput
     {
+        public MaterialOutput(string raw)
+        {
+            var productFromRaw = JObject.Parse(raw);
+            this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
+            this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
+            this.EmployeeRegistration = productFromRaw.Value<string>("EmployeeRegistration");
+            this.SCMRegistration = productFromRaw.Value<string>("SCMRegistration");
+            this.RequestingSector = productFromRaw.Value<int>("RequestingSector");
+            this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
+            this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
+
+            var arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<int>>();
+            var arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<int>>();
+            this.ConsumptionProducts = new List<ConsumptionOutput>();
+            this.PermanentProducts = new List<PermanentOutput>();
+            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new ConsumptionOutput() { ConsumperId = x }));
+            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new PermanentOutput() { PermanentId = x }));
+
+        }
+        public MaterialOutput()
+        {
+
+        }
         /// <summary>
         /// Chave primária referente ao registro do material.
         /// </summary>
@@ -38,9 +65,13 @@ namespace SCM2020___Server.Models
         /// </summary>
         public string ServiceLocation { get; set; }
         /// <summary>
-        /// Produtos retirados na movimentação de saída.
+        /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>
-        public PermanentProduct[] Products { get; set; }
+        public ICollection<ConsumptionOutput> ConsumptionProducts { get; set; }
+        /// <summary>
+        /// Somente produtos permanentes retirados na movimentação de saída.
+        /// </summary>
+        public ICollection<PermanentOutput> PermanentProducts { get; set; }
 
     }
 }

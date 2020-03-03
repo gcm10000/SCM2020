@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200303140832_NewMigration10")]
+    partial class NewMigration10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,7 +21,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SCM2020___Server.Models.ConsumptionOutput", b =>
+            modelBuilder.Entity("SCM2020___Server.Models.ConsumpterOutput", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +38,7 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.HasIndex("MaterialOutputId");
 
-                    b.ToTable("ConsumptionOutput");
+                    b.ToTable("ConsumpterOutput");
                 });
 
             modelBuilder.Entity("SCM2020___Server.Models.ConsumptionProduct", b =>
@@ -307,10 +309,10 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.ConsumptionOutput", b =>
+            modelBuilder.Entity("SCM2020___Server.Models.ConsumpterOutput", b =>
                 {
                     b.HasOne("SCM2020___Server.Models.MaterialOutput", null)
-                        .WithMany("ConsumptionProducts")
+                        .WithMany("ConsumpterProducts")
                         .HasForeignKey("MaterialOutputId");
                 });
 

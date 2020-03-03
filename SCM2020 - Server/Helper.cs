@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace SCM2020___Server
 {
@@ -19,5 +20,10 @@ namespace SCM2020___Server
             }
             return postData;
         }
+        public static T GetValue<T>(this JObject parsedResult, string jsonPropertyName)
+        {
+            return parsedResult.SelectToken(jsonPropertyName).ToObject<T>();
+        }
+
     }
 }

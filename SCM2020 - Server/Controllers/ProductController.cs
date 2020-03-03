@@ -27,14 +27,14 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            using (context)
-            {
-                var raw = await Helper.RawFromBody(this);
-                PermanentProduct newProduct = new PermanentProduct(raw);
-                context.PermanentProduct.Add(newProduct);
-                await context.SaveChangesAsync();
-                return Ok("Produto adicionado com sucesso.");
-            }
+            var raw = await Helper.RawFromBody(this);
+            PermanentProduct newProduct = new PermanentProduct(raw);
+            if (!context.PermanentProduct.Any(x => x.Id == newProduct.InformationProduct))
+                return BadRequest("Não existe informação de produto com este id.");
+
+            context.PermanentProduct.Add(newProduct);
+            await context.SaveChangesAsync();
+            return Ok("Produto adicionado com sucesso.");
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
@@ -42,12 +42,10 @@ namespace SCM2020___Server.Controllers
             using (context)
             {
                 var raw = await Helper.RawFromBody(this);
-                var product = context.PermanentProduct.FirstOrDefault(x => x.Id == id);
+                var permanentProduct = JsonConvert.DeserializeObject<PermanentProduct>(raw);
+                permanentProduct.Id = id;
 
-                var productparsed = JObject.Parse(raw);
-                var infoId = productparsed.Value<int>("InformationProduct");
-                product.InformationProduct = infoId;
-                context.PermanentProduct.Update(product);
+                context.PermanentProduct.Update(permanentProduct);
                 await context.SaveChangesAsync();
                 return Ok("Atualizado com sucesso.");
             }
