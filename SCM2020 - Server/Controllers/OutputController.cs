@@ -51,8 +51,8 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok(JsonConvert.SerializeObject(output));
         }
-        [HttpPost("Update/{id}")]
-        public async Task<IActionResult> Update(int id)
+        [HttpPost("Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
         {
             var raw = await Helper.RawFromBody(this);
             var outputFromRaw = JsonConvert.DeserializeObject<MaterialOutput>(raw);

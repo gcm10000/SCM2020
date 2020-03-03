@@ -56,14 +56,14 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var ArrayAboutProducts = context.ConsumptionProduct.ToArray();
-            var tojson = JsonConvert.SerializeObject(ArrayAboutProducts);
+            var ArrayInfoProducts = context.ConsumptionProduct.ToArray();
+            var tojson = JsonConvert.SerializeObject(ArrayInfoProducts);
             return Ok(tojson);
         }
         [HttpGet("{id}")]
-        public IActionResult Show(int id)
+        public async Task<IActionResult> ShowById(int id)
         {
-            var product = context.ConsumptionProduct.FirstOrDefault(x => x.Id == id);
+            var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Id == id);
             if (product != null)
             {
                 var tojson = JsonConvert.SerializeObject(product);
@@ -72,6 +72,20 @@ namespace SCM2020___Server.Controllers
             else
             {
                 return BadRequest($"O registro com o id {id} não existe.");
+            }
+        }
+        [HttpGet("{code}")]
+        public async Task<IActionResult> ShowByCode(int code)
+        {
+            var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Code == code);
+            if (product != null)
+            {
+                var tojson = JsonConvert.SerializeObject(product);
+                return Ok(tojson);
+            }
+            else
+            {
+                return BadRequest($"O registro com o código {code} não existe.");
             }
         }
 
