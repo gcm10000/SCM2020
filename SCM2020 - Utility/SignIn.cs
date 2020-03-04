@@ -49,7 +49,7 @@ namespace SCM2020___Utility
                     Token token = JsonConvert.DeserializeObject<Token>(content);
                     // Associar o token aos headers do objeto
                     // do tipo HttpClient
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.token);
                 }
                 else if (respToken.StatusCode == HttpStatusCode.BadRequest)
                 {

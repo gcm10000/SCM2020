@@ -28,7 +28,7 @@ namespace SCM2020___Utility
                 //incluir o cabeçalho Accept que será envia na requisição             
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
-
+                
                 // Envio da requisição a fim de autenticar
                 // e obter o token de acesso
                 HttpResponseMessage respToken = client.PostAsync(url, new StringContent(

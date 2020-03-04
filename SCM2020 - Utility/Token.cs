@@ -2,7 +2,7 @@
 {
     public class Token
     {
-        public string AccessToken { get; set; }
+        public string token { get; set; }
         public string Expiration { get; set; }
     }
 }

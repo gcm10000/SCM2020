@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
@@ -12,7 +13,7 @@ namespace SCM2020___Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
@@ -27,8 +28,8 @@ namespace SCM2020___Server.Controllers
                 var raw = await Helper.RawFromBody(this);
                 ConsumptionProduct newProduct = new ConsumptionProduct(raw);
 
-                if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
-                    return BadRequest("Não existe fornecedor com este id.");
+                //if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
+                //    return BadRequest("Não existe fornecedor com este id.");
                 if (!context.Groups.Any(x => x.Id == newProduct.Group))
                     return BadRequest("Não existe grupo com este id.");
 
@@ -44,8 +45,8 @@ namespace SCM2020___Server.Controllers
             var consumptionProduct = JsonConvert.DeserializeObject<ConsumptionProduct>(raw);
             consumptionProduct.Id = id;
 
-            if (!context.Vendors.Any(x => x.Id == consumptionProduct.Vendor))
-                return BadRequest("Não existe fornecedor com este id.");
+            //if (!context.Vendors.Any(x => x.Id == consumptionProduct.Vendor))
+            //    return BadRequest("Não existe fornecedor com este id.");
             if (!context.Groups.Any(x => x.Id == consumptionProduct.Group))
                 return BadRequest("Não existe grupo com este id.");
 

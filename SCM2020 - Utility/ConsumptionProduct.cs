@@ -1,9 +1,16 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Authentication;
+using System.Text;
 
-namespace SCM2020___Server.Models
+namespace SCM2020___Utility
 {
     /// <summary>
     /// Informações sobre o produto. Esta classe contém números sobre o produto.
@@ -26,8 +33,32 @@ namespace SCM2020___Server.Models
 
             this.Group = productFromRaw.Value<int>("Group");
         }
-        public ConsumptionProduct()
+        public ConsumptionProduct() { }
+        public HttpStatusCode AddProduct(string url, ConsumptionProduct consumptionProduct, AuthenticationHeaderValue Authorization)
         {
+            using (var client = new HttpClient())
+            {
+                //limpa o header
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Authorization = Authorization;
+                //incluir o cabeçalho Accept que será envia na requisição             
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // Envio da requisição a fim de autenticar
+                // e obter o token de acesso
+                HttpResponseMessage respToken = client.PostAsync(url, new StringContent(
+                        JsonConvert.SerializeObject(consumptionProduct), Encoding.UTF8, "application/json")).Result;
+
+                //obtem o resultado
+                string content = respToken.Content.ReadAsStringAsync().Result;
+
+                if (respToken.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new AuthenticationException(content);
+                }
+                return respToken.StatusCode;
+            }
 
         }
         /// <summary>
