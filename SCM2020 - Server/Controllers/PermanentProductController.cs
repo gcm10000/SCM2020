@@ -16,10 +16,10 @@ namespace SCM2020___Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.SCM)]
-    public class ProductController : ControllerBase
+    public class PermanentProductController : ControllerBase
     {
         ControlDbContext context;
-        public ProductController(ControlDbContext context)
+        public PermanentProductController(ControlDbContext context)
         {
             this.context = context;
         }
