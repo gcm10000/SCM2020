@@ -26,7 +26,7 @@ namespace SCM2020___Server.Controllers
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == output.WorkOrder);
             if (monitoring == null)
                 return BadRequest("Ordem de serviço inexistente.");
-            if (monitoring.Situation == false)
+            if (monitoring.Situation == true)
                 return BadRequest("Ordem de serviço fechada.");
             var arrayConsumption = output.ConsumptionProducts.ToList();
             var arrayPermanent = output.PermanentProducts.ToList();

@@ -5,6 +5,10 @@ namespace SCM2020___Server.Models
 {
     public class Sector
     {
+        public Sector(string raw)
+        {
+            
+        }
         public Sector() { }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

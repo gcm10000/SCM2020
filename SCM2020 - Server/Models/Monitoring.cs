@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,7 +18,7 @@ namespace SCM2020___Server.Models
             this.Situation = false;
             this.Work_Order = monitoringRaw.Work_Order;
         }
-        [Required]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
@@ -41,6 +40,6 @@ namespace SCM2020___Server.Models
         /// False = Em aberto.
         /// True = Fechada.
         /// </summary>
-        public bool? Situation { get; set; }
+        public bool Situation { get; set; }
     }
 }
