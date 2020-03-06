@@ -37,6 +37,7 @@ namespace SCM2020___Server.Controllers
                 await context.SaveChangesAsync();
                 return Ok("Produto adicionado com sucesso.");
             }
+            return Ok("");
         }
     }
 }
