@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using SCM2020___Server.Models;
+using ModelsLibrary;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

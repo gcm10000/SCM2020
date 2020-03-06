@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using SCM2020___Server.Context;
-using SCM2020___Server.Models;
-using System;
-using System.Collections.Generic;
+using ModelsLibrary;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -62,7 +58,6 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Monitoramento removida com sucesso.");
         }
-
         //[HttpGet("{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         //public async Task<ActionResult> ShowBeetweenTwoDates(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         //{

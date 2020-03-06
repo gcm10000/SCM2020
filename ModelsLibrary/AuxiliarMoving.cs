@@ -1,0 +1,29 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ModelsLibrary
+{
+    public class ProductFromJson<T> where T : class
+    {
+        public T Product { get; set; }
+    }
+    public class ConsumptionOutput : TProduct { }
+    public class PermanentOutput : TProduct { }
+    public abstract class TProduct
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        /// <summary>
+        /// Produtos de consumo retirados na movimentação de saída.
+        /// </summary>
+        [Required]
+        public int ProductId { get; set; }
+        /// <summary>
+        /// Data de quando foi realizada saída do material.
+        /// </summary>
+        [Required]
+        public DateTime Date { get; set; }
+    }
+}

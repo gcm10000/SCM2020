@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
-using SCM2020___Server.Models;
+using ModelsLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,20 +54,22 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Atualizado com sucesso.");
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var ArrayInfoProducts = context.ConsumptionProduct.ToArray();
-            var tojson = JsonConvert.SerializeObject(ArrayInfoProducts);
+            var ArrayInfoProducts = context.ConsumptionProduct.ToList();
+            var tojson = JsonConvert.SerializeObject(ArrayInfoProducts, Formatting.Indented);
             return Ok(tojson);
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> ShowById(int id)
         {
             var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Id == id);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product);
+                var tojson = JsonConvert.SerializeObject(product, Formatting.Indented);
                 return Ok(tojson);
             }
             else
@@ -75,13 +77,14 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o id {id} não existe.");
             }
         }
+        [AllowAnonymous]
         [HttpGet("{code}")]
-        public async Task<IActionResult> ShowByCode(int code)
+        public IActionResult ShowByCode(int code)
         {
-            var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Code == code);
+            var product = context.ConsumptionProduct.SingleOrDefault(x => x.Code == code);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product);
+                var tojson = JsonConvert.SerializeObject(product, Formatting.Indented);
                 return Ok(tojson);
             }
             else
@@ -89,7 +92,34 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o código {code} não existe.");
             }
         }
+        //Levensthein distance or .Where(Contains(bool))
+        [AllowAnonymous]
+        [HttpGet("Search/{description}")]
+        public IActionResult Search(string description)
+        {
+            var lproduct = context.ConsumptionProduct.Where(x => x.Description.Contains(description));
+            var tojson = JsonConvert.SerializeObject(lproduct, Formatting.Indented);
+            return Ok(tojson);
+        }
+        //Show information today about products
+        [HttpGet("Inventory")]
+        public IActionResult Inventory()
+        {
+            var ArrayInfoProducts = context.ConsumptionProduct.ToList();
+            var listInventory = new List<object>();
+            foreach (var product in ArrayInfoProducts)
+            {
+                listInventory.Add(new
+                {
+                    Code = product.Code,
+                    Description = product.Description,
+                    Stock = product.Stock,
+                });
+            }
+            var tojson = JsonConvert.SerializeObject(listInventory, Formatting.Indented);
 
+            return Ok(tojson);
+        }
         //Remove by ID
         [HttpDelete("Remove")]
         public async Task<IActionResult> Remove()

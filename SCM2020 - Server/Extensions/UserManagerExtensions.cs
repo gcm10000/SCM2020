@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SCM2020___Server.Models;
-using System;
-using System.Collections.Generic;
+using ModelsLibrary;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SCM2020___Server.Extensions
 {

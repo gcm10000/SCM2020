@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Linq;
 
-namespace SCM2020___Server.Models
+namespace ModelsLibrary
 {
     public class MaterialOutput
     {
@@ -21,13 +19,12 @@ namespace SCM2020___Server.Models
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
-            var arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<int>>();
-            var arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<int>>();
+            List<ProductFromJson<ConsumptionOutput>> arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<ProductFromJson<ConsumptionOutput>>>();
+            List<ProductFromJson<PermanentOutput>> arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<ProductFromJson<PermanentOutput>>>();
             this.ConsumptionProducts = new List<ConsumptionOutput>();
             this.PermanentProducts = new List<PermanentOutput>();
-            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new ConsumptionOutput() { ConsumperId = x }));
-            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new PermanentOutput() { PermanentId = x }));
-
+            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new ConsumptionOutput() { ProductId = x.Product.ProductId,  Date = x.Product.Date }));
+            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new PermanentOutput() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
         }
         public MaterialOutput()
         {

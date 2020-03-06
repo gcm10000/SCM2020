@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SCM2020___Server.Models
+namespace ModelsLibrary
 {
     /// <summary>
     /// Esta classe serve para uma visão individual do produto permanente.

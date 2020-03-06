@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
-using SCM2020___Server.Models;
+using ModelsLibrary;
 using System.Linq;
 using System.Threading.Tasks;
 

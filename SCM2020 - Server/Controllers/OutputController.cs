@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
-using SCM2020___Server.Models;
+using ModelsLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace SCM2020___Server.Controllers
 {
@@ -18,6 +16,31 @@ namespace SCM2020___Server.Controllers
     {
         ControlDbContext context;
         public OutputController(ControlDbContext context) { this.context = context; }
+        [HttpGet]
+        public IActionResult Show()
+        {
+            var lOutput = context.MaterialOutput.ToList();
+            return Ok(lOutput);
+        }
+        [HttpGet("{id}")]
+        public IActionResult Show(int id)
+        {
+            var lOutput = context.MaterialOutput.Find(id);
+            return Ok(lOutput);
+        }
+        [HttpGet("{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
+        public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
+        {
+            DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
+            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
+            List<ConsumptionOutput> outputs = new List<ConsumptionOutput>();
+            foreach (var output in context.MaterialOutput.ToList())
+            {
+                outputs.AddRange(output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
+            }
+
+            return Ok(outputs.ToList());
+        }
         [HttpPost("New")]
         public async Task<IActionResult> NewOutput()
         {
@@ -34,10 +57,10 @@ namespace SCM2020___Server.Controllers
             //Check if every objects of ConsumptionProduct (less) are inside list ConsumptionProduct (bigger)
             bool MatchesConsumption = arrayConsumption
                 .All(x => context.ConsumptionProduct
-                .Any(y => y.Id == x.ConsumperId));
+                .Any(y => y.Id == x.ProductId));
             bool MatchesPermanent = arrayPermanent
                 .All(x => context.ConsumptionProduct
-                .Any(y => y.Id == x.PermanentId));
+                .Any(y => y.Id == x.ProductId));
             if (!MatchesConsumption)
                 return BadRequest("Há produtos de consumo não cadastrados sendo solicitado na movimentação de saída. Verifique e tente novamente.");
             if (!MatchesPermanent)
@@ -45,8 +68,8 @@ namespace SCM2020___Server.Controllers
 
             context.MaterialOutput.Add(output);
 
-            arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ConsumperId).Stock -= 1);
-            arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.PermanentId).Stock -= 1);
+            arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
+            arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
 
             await context.SaveChangesAsync();
             return Ok(JsonConvert.SerializeObject(output));

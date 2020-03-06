@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SCM2020___Server.Models
+namespace ModelsLibrary
 {
     public class Monitoring : WorkOrder
     {

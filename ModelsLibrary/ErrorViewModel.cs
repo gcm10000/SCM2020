@@ -1,6 +1,6 @@
 using System;
 
-namespace SCM2020___Server.Models
+namespace ModelsLibrary
 {
     public class ErrorViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SCM2020___Server.Context;
-using SCM2020___Server.Models;
+using ModelsLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,8 @@ namespace SCM2020___Server.Controllers
     {
         ControlDbContext context;
         UserManager<ApplicationUser> userManager;
-        public SectorController(UserManager<ApplicationUser> userManager, ControlDbContext context) { this.context = context; }
+        public SectorController(UserManager<ApplicationUser> userManager, ControlDbContext context)
+        { this.userManager = userManager; this.context = context; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -46,6 +47,7 @@ namespace SCM2020___Server.Controllers
             var raw = await Helper.RawFromBody(this);
             var sector = new Sector(raw);
             sector.Id = id;
+            //ATUALIZAR TODAS AS CLAIMS TAMBÉM
             context.Sectors.Update(sector);
             await context.SaveChangesAsync();
             return Ok("Setor atualizada com sucesso.");
