@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200306145812_NewMigration18")]
+    partial class NewMigration18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,7 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.HasIndex("MaterialOutputId");
 
-                    b.ToTable("AuxiliarConsumption");
+                    b.ToTable("ConsumptionOutput");
                 });
 
             modelBuilder.Entity("ModelsLibrary.AuxiliarPermanent", b =>
@@ -67,7 +69,7 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.HasIndex("MaterialOutputId");
 
-                    b.ToTable("AuxiliarPermanent");
+                    b.ToTable("PermanentOutput");
                 });
 
             modelBuilder.Entity("ModelsLibrary.ConsumptionProduct", b =>

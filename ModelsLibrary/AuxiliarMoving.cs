@@ -8,15 +8,15 @@ namespace ModelsLibrary
     {
         public T Product { get; set; }
     }
-    public class ConsumptionOutput : TProduct { }
-    public class PermanentOutput : TProduct { }
-    public abstract class TProduct
+    public class AuxiliarConsumption : ProductBase { }
+    public class AuxiliarPermanent : ProductBase { }
+    public abstract class ProductBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
-        /// Produtos de consumo retirados na movimentação de saída.
+        /// Produtos retirado na movimentação.
         /// </summary>
         [Required]
         public int ProductId { get; set; }

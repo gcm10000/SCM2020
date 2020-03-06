@@ -52,6 +52,7 @@ namespace SCM2020___Server.Controllers
             
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, username),
                 new Claim(ClaimTypes.Name, postData.Name),
                 new Claim(ClaimTypes.Role, postData.Role),
                 new Claim("Occupation", postData.Occupation),

@@ -9,11 +9,12 @@ namespace ModelsLibrary
     public class MaterialInputByVendor
     {
         public MaterialInputByVendor() { }
-        public MaterialInputByVendor(string raw)
+        public MaterialInputByVendor(string raw, string UserId)
         {
             var input = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
             this.Invoice = input.Invoice;
             this.MovingDate = input.MovingDate;
+            this.SCMEmployeeId = UserId;
         }
 
         /// <summary>
@@ -32,8 +33,10 @@ namespace ModelsLibrary
         public DateTime MovingDate { get; set; }
         /// <summary>
         /// Produtos de entrada.
+        /// Entrada por Id do produto.
         /// </summary>
-        
+        public ICollection<ConsumptionProduct> AuxiliarConsumptions { get; set; }
+        public ICollection<AuxiliarPermanent> AuxiliarPermanents { get; set; }
         //Colocar as informações do produto permanente
         //dentro da entrada por fornecedor?
         //public ICollection<ConsumptionProduct> Products { get; set; }
@@ -42,6 +45,5 @@ namespace ModelsLibrary
         /// Id do funcionário que cadastrou a entrada.
         /// </summary>
         public string SCMEmployeeId { get; set; }
-
     }
 }

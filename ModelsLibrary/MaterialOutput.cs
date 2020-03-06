@@ -19,12 +19,12 @@ namespace ModelsLibrary
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
-            List<ProductFromJson<ConsumptionOutput>> arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<ProductFromJson<ConsumptionOutput>>>();
-            List<ProductFromJson<PermanentOutput>> arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<ProductFromJson<PermanentOutput>>>();
-            this.ConsumptionProducts = new List<ConsumptionOutput>();
-            this.PermanentProducts = new List<PermanentOutput>();
-            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new ConsumptionOutput() { ProductId = x.Product.ProductId,  Date = x.Product.Date }));
-            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new PermanentOutput() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
+            List<ProductFromJson<AuxiliarConsumption>> arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<ProductFromJson<AuxiliarConsumption>>>();
+            List<ProductFromJson<AuxiliarPermanent>> arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<ProductFromJson<AuxiliarPermanent>>>();
+            this.ConsumptionProducts = new List<AuxiliarConsumption>();
+            this.PermanentProducts = new List<AuxiliarPermanent>();
+            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.Product.ProductId,  Date = x.Product.Date }));
+            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new AuxiliarPermanent() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
         }
         public MaterialOutput()
         {
@@ -64,11 +64,11 @@ namespace ModelsLibrary
         /// <summary>
         /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>
-        public ICollection<ConsumptionOutput> ConsumptionProducts { get; set; }
+        public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
         /// <summary>
         /// Somente produtos permanentes retirados na movimentação de saída.
         /// </summary>
-        public ICollection<PermanentOutput> PermanentProducts { get; set; }
+        public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
 
     }
 }

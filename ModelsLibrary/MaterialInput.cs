@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,18 @@ namespace ModelsLibrary
 {
     public class MaterialInput
     {
+        public MaterialInput() { }
+        public MaterialInput(string raw)
+        {
+            var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            this.DocDate = input.DocDate;
+            this.EmployeeId = input.EmployeeId;
+            this.MovingDate = input.MovingDate;
+            this.ConsumptionProduct = input.ConsumptionProduct;
+            this.Regarding = input.Regarding;
+            this.SCMEmployeeId = input.SCMEmployeeId;
+            this.WorkOrder = input.WorkOrder;
+        }
         /// <summary>
         /// Chave primária referente ao registro da devolução de material.
         /// </summary>
@@ -20,14 +33,14 @@ namespace ModelsLibrary
         /// Funcionário que solicitou a entrada do material.
         /// </summary>
         [Required]
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         /// <summary>
         /// Funcionário que fez a entrada do material.
         /// </summary>
         [Required]
-        public int SCMEmployeeId { get; set; }
+        public string SCMEmployeeId { get; set; }
         /// <summary>
-        /// Data da movimentação do material.
+        /// Data da movimentação.
         /// </summary>
         [Required]
         public DateTime MovingDate { get; set; }
@@ -43,13 +56,12 @@ namespace ModelsLibrary
         /// Materiais de entrada.
         /// </summary>
         [Required]
-        public PermanentProduct[] Products { get; set; }
+        public ConsumptionProduct[] ConsumptionProduct { get; set; }
     }
     public enum Regarding
     {
         InternalTransfer = 0,
         NotUsed = 1,
         AnotherCounty = 2,
-
     }
 }

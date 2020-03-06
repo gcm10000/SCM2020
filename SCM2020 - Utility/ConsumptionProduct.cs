@@ -38,7 +38,7 @@ namespace SCM2020___Utility
         {
             using (var client = new HttpClient())
             {
-                //limpa o header
+                //Limpa o header
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Authorization = Authorization;
                 //incluir o cabeçalho Accept que será envia na requisição             

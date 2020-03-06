@@ -14,8 +14,8 @@ namespace SCM2020___Server.Context
         public DbSet<MaterialInput> MaterialInput { get; set; }
         public DbSet<MaterialOutput> MaterialOutput { get; set; }
         public DbSet<Monitoring> Monitoring { get; set; }
-        public DbSet<ConsumptionOutput> ConsumptionOutput { get; set; }
-        public DbSet<PermanentOutput> PermanentOutput { get; set; }
+        public DbSet<AuxiliarConsumption> AuxiliarConsumption { get; set; }
+        public DbSet<AuxiliarPermanent> AuxiliarPermanent { get; set; }
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
 

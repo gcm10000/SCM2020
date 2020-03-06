@@ -17,22 +17,14 @@ namespace SCM2020___Server.Controllers
         ControlDbContext context;
         public DevolutionController(ControlDbContext context) { this.context = context; }
 
-        [HttpPost("")]
-        public async Task<IActionResult> DevolutionOfConsumpterProduct()
+        [HttpPost("New")]
+        public async Task<IActionResult> DevolutionConsumpterProduct()
         {
             var raw = await Helper.RawFromBody(this);
-            //MaterialInput materialInput = new MaterialInput();
-            //materialInput.DocDate = DateTime.Now;;
-            //materialInput.EmployeeId = 1;
-            //materialInput.Id = 1;
-            //materialInput.MovingDate = DateTime.Now;
-            //materialInput.Regarding = Regarding.InternalTransfer;
-            //materialInput.SCMEmployeeId = 15;
-            //materialInput.WorkOrder = "400662/13";
-            //materialInput.
-            //var newMaterial = ;
-            //context.MaterialInput.Add(raw);
-            return Ok();
+            MaterialInput materialInput = new MaterialInput(raw);
+            context.MaterialInput.Add(materialInput);
+            await context.SaveChangesAsync();
+            return Ok("Produto adicionado com sucesso.");
         }
     }
 }

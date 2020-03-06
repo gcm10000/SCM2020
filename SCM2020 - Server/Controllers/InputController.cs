@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using ModelsLibrary;
 using SCM2020___Server.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SCM2020___Server.Controllers
@@ -14,7 +16,8 @@ namespace SCM2020___Server.Controllers
     public class InputController : ControllerBase
     {
         ControlDbContext context;
-        public InputController(ControlDbContext context) { this.context = context; }
+        UserManager<ApplicationUser> userManager;
+        public InputController(UserManager<ApplicationUser> userManager, ControlDbContext context) { this.userManager = userManager; this.context = context; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -31,8 +34,10 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Create()
         {
             var raw = await Helper.RawFromBody(this);
-            var input = new MaterialInputByVendor(raw);
-
+            string id = userManager.GetUserId(User);
+            var input = new MaterialInputByVendor(raw, id);
+            if (!context.ConsumptionProduct.All(x => x.Id == input.Id))
+                return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
             context.MaterialInputByVendor.Add(input);
             await context.SaveChangesAsync();
             return Ok("Entrada por fornecedor foi adicionada com sucesso.");
