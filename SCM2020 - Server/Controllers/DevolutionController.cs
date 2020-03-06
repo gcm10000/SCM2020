@@ -26,9 +26,17 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             MaterialInput materialInput = new MaterialInput(raw);
-            context.MaterialInput.Add(materialInput);
-            await context.SaveChangesAsync();
-            return Ok("Produto adicionado com sucesso.");
+            if (context.MaterialOutput.Any(x => x.WorkOrder == materialInput.WorkOrder))
+            {
+                var output = context.MaterialOutput.SingleOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
+                //if (materialInput.ConsumptionProducts.All(x => output.ConsumptionProducts.Any(y => x == y)))
+                //{
+
+                //}
+                context.MaterialInput.Add(materialInput);
+                await context.SaveChangesAsync();
+                return Ok("Produto adicionado com sucesso.");
+            }
         }
     }
 }

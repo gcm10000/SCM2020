@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +15,7 @@ namespace ModelsLibrary
             this.DocDate = input.DocDate;
             this.EmployeeId = input.EmployeeId;
             this.MovingDate = input.MovingDate;
-            this.ConsumptionProduct = input.ConsumptionProduct;
+            this.ConsumptionProducts = input.ConsumptionProducts;
             this.Regarding = input.Regarding;
             this.SCMEmployeeId = input.SCMEmployeeId;
             this.WorkOrder = input.WorkOrder;
@@ -56,7 +57,7 @@ namespace ModelsLibrary
         /// Materiais de entrada.
         /// </summary>
         [Required]
-        public ConsumptionProduct[] ConsumptionProduct { get; set; }
+        public ICollection<ConsumptionProduct> ConsumptionProducts { get; set; }
     }
     public enum Regarding
     {
