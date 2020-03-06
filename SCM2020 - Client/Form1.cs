@@ -17,14 +17,14 @@ namespace SCM2020___Client
         public Form1()
         {
             InitializeComponent();
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            var urlBase = config.GetSection("API_Access:UrlBase").Value;
-            var uriRelative = urlBase + "usuarios/login";
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json");
+            //var config = builder.Build();
+            //var urlBase = config.GetSection("API_Access:UrlBase").Value;
+            //var uriRelative = urlBase + "usuarios/login";
             
-            var getToken = new SignIn(uriRelative);
+            //var getToken = new SignIn(uriRelative);
 
 
         }

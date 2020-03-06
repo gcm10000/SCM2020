@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Client", "SCM2020
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Utility", "SCM2020 - Utility\SCM2020 - Utility.csproj", "{3A88577D-F37E-4882-9682-9ECF178532A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsLibrary", "ModelsLibrary\ModelsLibrary.csproj", "{7B56B28C-7831-40A0-BB50-402734BB50A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsLibrary", "ModelsLibrary\ModelsLibrary.csproj", "{7B56B28C-7831-40A0-BB50-402734BB50A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{293B6448-1F85-4533-8CFF-5379B672326F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

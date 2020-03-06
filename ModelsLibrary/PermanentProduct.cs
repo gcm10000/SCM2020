@@ -28,7 +28,9 @@ namespace ModelsLibrary
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("AboutProductId")]
+        /// <summary>
+        /// Id do produto como produto consumível.
+        /// </summary>
         public int InformationProduct { get; set; }
         /// <summary>
         /// Como se encontra o produto.
