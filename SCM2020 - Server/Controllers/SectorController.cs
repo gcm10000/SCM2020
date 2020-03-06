@@ -20,8 +20,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var list = context.Sectors.ToList();
-            return Ok(list);
+            return Ok(context.Sectors.ToList());
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)

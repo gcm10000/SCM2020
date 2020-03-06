@@ -16,7 +16,11 @@ namespace SCM2020___Server.Controllers
     {
         ControlDbContext context;
         public DevolutionController(ControlDbContext context) { this.context = context; }
-
+        [HttpGet]
+        public IActionResult ShowAll()
+        {
+            return Ok(context.MaterialInput.ToList());
+        }
         [HttpPost("New")]
         public async Task<IActionResult> DevolutionConsumpterProduct()
         {

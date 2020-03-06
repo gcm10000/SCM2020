@@ -21,8 +21,9 @@ namespace SCM2020___Utility
         {
 
             var start = Start();
+            //SignUpAll();
             //AddGroup(start);
-            AddProduct(start);
+            //AddProduct(start);
             Pause();
         }
         static void AddGroup(AuthenticationHeaderValue Authentication)
@@ -176,11 +177,11 @@ TableName: "Grupos");
             Console.WriteLine($"Total de {records.Count} registros.");
 
         }
-        static void SignUpAll(System.Net.Http.Headers.AuthenticationHeaderValue authentication)
+        static void SignUpAll()
         {
             SCMAccess dbAccess = new SCMAccess(
                 ConnectionString: SCMAccess.ConnectionString,
-                TableName: "Fornecedor");
+                TableName: "Funcionario");
             var records = dbAccess.GetDataFromTable();
             foreach (var employees in records)
             {
@@ -207,7 +208,7 @@ TableName: "Grupos");
                 }
                 try
                 {
-                    SignUp(authentication, signUp);
+                    SignUp(signUp);
                 }
                 catch (AuthenticationException)
                 {
@@ -216,9 +217,9 @@ TableName: "Grupos");
             }
             Console.WriteLine($"Total de {records.Count} funcionários.");
         }
-        static void SignUp(System.Net.Http.Headers.AuthenticationHeaderValue authentication, SignUpUserInfo userInfo)
+        static void SignUp(SignUpUserInfo userInfo)
         {
-            SignUp signUp = new SignUp(authentication);
+            SignUp signUp = new SignUp();
             signUp.MakeSignUp(urlAddUser, userInfo);
         }
         static void Pause()

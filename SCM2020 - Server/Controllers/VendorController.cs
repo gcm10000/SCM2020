@@ -17,15 +17,12 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            using (context)
-            {
-                var raw = await Helper.RawFromBody(this);
-                var vendor = JsonConvert.DeserializeObject<Vendor>(raw);
+            var raw = await Helper.RawFromBody(this);
+            var vendor = JsonConvert.DeserializeObject<Vendor>(raw);
 
-                context.Vendors.Add(vendor);
-                await context.SaveChangesAsync();
-                return Ok("Adicionado com sucesso.");
-            }
+            context.Vendors.Add(vendor);
+            await context.SaveChangesAsync();
+            return Ok("Adicionado com sucesso.");
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
@@ -43,43 +40,30 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            using (context)
-            {
-                var tojson = JsonConvert.SerializeObject(context.Vendors.ToArray());
-                return Ok(tojson);
-            }
+            return Ok(context.Vendors.ToList());
         }
         [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
-            using (context)
-            {
-                var vendor = context.Vendors.FirstOrDefault(x => x.Id == id);
-                if (vendor != null)
-                {
-                    var tojson = JsonConvert.SerializeObject(vendor);
-                    return Ok(tojson);
-                }
-                else
-                {
-                    return BadRequest($"O registro com o id {id} não existe.");
-                }
-            }
+            var vendor = context.Vendors.FirstOrDefault(x => x.Id == id);
+            if (vendor == null)
+                return BadRequest($"O registro com o id {id} não existe.");
+            return Ok(vendor);
         }
         //Remove by id
-        [HttpPost("Remove")]
+        [HttpDelete("Remove")]
         public async Task<IActionResult> Remove()
         {
-            using (context)
-            {
-                var raw = await Helper.RawFromBody(this);
-                var id = JsonConvert.DeserializeObject<int>(raw);
-                var obj = context.Vendors.FirstOrDefault(x => x.Id == id);
-                context.Vendors.Remove(obj);
-                await context.SaveChangesAsync();
-                return Ok("Removido com sucesso.");
-            }
+            var raw = await Helper.RawFromBody(this);
+            var id = JsonConvert.DeserializeObject<int>(raw);
+            var obj = context.Vendors.FirstOrDefault(x => x.Id == id);
+
+            if (context.MaterialInputByVendor.Any(x => x.VendorId == obj.Id))
+                return BadRequest("Fornecedor sendo utilizado em alguma entrada.");
+
+            context.Vendors.Remove(obj);
+            await context.SaveChangesAsync();
+            return Ok("Removido com sucesso.");
         }
-        //
     }
 }

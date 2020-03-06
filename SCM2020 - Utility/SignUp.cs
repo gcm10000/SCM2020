@@ -13,10 +13,8 @@ namespace SCM2020___Utility
 {
     class SignUp
     {
-        AuthenticationHeaderValue Authentication;
-        public SignUp(AuthenticationHeaderValue Authentication)
+        public SignUp()
         {
-            this.Authentication = Authentication;
         }
         public HttpStatusCode MakeSignUp(string url, SignUpUserInfo userInfo)
         {
