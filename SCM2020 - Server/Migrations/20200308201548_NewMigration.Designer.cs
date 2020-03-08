@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations.ControlDb
+namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20200302180134_NewMigration8")]
-    partial class NewMigration8
+    [Migration("20200308201548_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,15 +21,63 @@ namespace SCM2020___Server.Migrations.ControlDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SCM2020___Server.Models.ConsumptionProduct", b =>
+            modelBuilder.Entity("ModelsLibrary.AuxiliarConsumption", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Block")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MaterialInputId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaterialOutputId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialInputId");
+
+                    b.HasIndex("MaterialOutputId");
+
+                    b.ToTable("AuxiliarConsumption");
+                });
+
+            modelBuilder.Entity("ModelsLibrary.AuxiliarPermanent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MaterialOutputId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialOutputId");
+
+                    b.ToTable("AuxiliarPermanent");
+                });
+
+            modelBuilder.Entity("ModelsLibrary.ConsumptionProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Code")
                         .HasColumnType("int");
@@ -38,13 +86,13 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Drawer")
-                        .HasColumnType("bigint");
-
                     b.Property<int?>("Group")
                         .HasColumnType("int");
 
-                    b.Property<int>("Localization")
+                    b.Property<string>("Localization")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaterialInputByVendorId")
                         .HasColumnType("int");
 
                     b.Property<double>("MaximumStock")
@@ -52,6 +100,9 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.Property<double>("MininumStock")
                         .HasColumnType("float");
+
+                    b.Property<long>("NumberLocalization")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
@@ -63,15 +114,14 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Vendor")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("AboutProducts");
+                    b.HasIndex("MaterialInputByVendorId");
+
+                    b.ToTable("ConsumptionProduct");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.Group", b =>
+            modelBuilder.Entity("ModelsLibrary.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +137,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.MaterialInput", b =>
+            modelBuilder.Entity("ModelsLibrary.MaterialInput", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,8 +147,9 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("DocDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
@@ -106,8 +157,9 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<int>("Regarding")
                         .HasColumnType("int");
 
-                    b.Property<int>("SCMEmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("SCMEmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WorkOrder")
                         .HasColumnType("nvarchar(max)");
@@ -117,7 +169,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("MaterialInput");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.MaterialInputByVendor", b =>
+            modelBuilder.Entity("ModelsLibrary.MaterialInputByVendor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,12 +182,18 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SCMEmployeeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VendorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("MaterialInputByVendor");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.MaterialOutput", b =>
+            modelBuilder.Entity("ModelsLibrary.MaterialOutput", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +223,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("MaterialOutput");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.Monitoring", b =>
+            modelBuilder.Entity("ModelsLibrary.Monitoring", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,14 +233,16 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("ClosingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SCMEmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("SCMEmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Situation")
                         .HasColumnType("bit");
@@ -196,7 +256,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Monitoring");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.PermanentProduct", b =>
+            modelBuilder.Entity("ModelsLibrary.PermanentProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,15 +269,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<int>("InformationProduct")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaterialInputByVendorId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaterialInputId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaterialOutputId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Patrimony")
                         .HasColumnType("nvarchar(max)");
 
@@ -226,16 +277,10 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MaterialInputByVendorId");
-
-                    b.HasIndex("MaterialInputId");
-
-                    b.HasIndex("MaterialOutputId");
-
-                    b.ToTable("IndividualProducts");
+                    b.ToTable("PermanentProduct");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.Sector", b =>
+            modelBuilder.Entity("ModelsLibrary.Sector", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +299,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Sectors");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.Vendor", b =>
+            modelBuilder.Entity("ModelsLibrary.Vendor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -274,19 +319,29 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("Vendors");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.PermanentProduct", b =>
+            modelBuilder.Entity("ModelsLibrary.AuxiliarConsumption", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.MaterialInputByVendor", null)
-                        .WithMany("Products")
-                        .HasForeignKey("MaterialInputByVendorId");
-
-                    b.HasOne("SCM2020___Server.Models.MaterialInput", null)
-                        .WithMany("Products")
+                    b.HasOne("ModelsLibrary.MaterialInput", null)
+                        .WithMany("ConsumptionProducts")
                         .HasForeignKey("MaterialInputId");
 
-                    b.HasOne("SCM2020___Server.Models.MaterialOutput", null)
-                        .WithMany("Products")
+                    b.HasOne("ModelsLibrary.MaterialOutput", null)
+                        .WithMany("ConsumptionProducts")
                         .HasForeignKey("MaterialOutputId");
+                });
+
+            modelBuilder.Entity("ModelsLibrary.AuxiliarPermanent", b =>
+                {
+                    b.HasOne("ModelsLibrary.MaterialOutput", null)
+                        .WithMany("PermanentProducts")
+                        .HasForeignKey("MaterialOutputId");
+                });
+
+            modelBuilder.Entity("ModelsLibrary.ConsumptionProduct", b =>
+                {
+                    b.HasOne("ModelsLibrary.MaterialInputByVendor", null)
+                        .WithMany("AuxiliarConsumptions")
+                        .HasForeignKey("MaterialInputByVendorId");
                 });
 #pragma warning restore 612, 618
         }

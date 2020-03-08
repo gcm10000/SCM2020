@@ -1,55 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SCM2020___Server.Migrations.ControlDb
+namespace SCM2020___Server.Migrations
 {
-    public partial class NewMigration2 : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AboutProducts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<int>(nullable: false),
-                    Group = table.Column<int>(nullable: true),
-                    Description = table.Column<string>(nullable: false),
-                    Photo = table.Column<string>(nullable: true),
-                    Block = table.Column<string>(nullable: true),
-                    Localization = table.Column<int>(nullable: false),
-                    Drawer = table.Column<long>(nullable: false),
-                    Vendor = table.Column<int>(nullable: true),
-                    Stock = table.Column<double>(nullable: false),
-                    MininumStock = table.Column<double>(nullable: false),
-                    MaximumStock = table.Column<double>(nullable: false),
-                    Unity = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AboutProducts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PJERJRegistration = table.Column<string>(nullable: true),
-                    CPFRegistration = table.Column<string>(nullable: true),
-                    IsPJERJRegistration = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Occupation = table.Column<string>(nullable: false),
-                    Role = table.Column<string>(nullable: false),
-                    AspNetUsersId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
@@ -70,8 +27,8 @@ namespace SCM2020___Server.Migrations.ControlDb
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Regarding = table.Column<int>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: false),
-                    SCMEmployeeId = table.Column<int>(nullable: false),
+                    EmployeeId = table.Column<string>(nullable: false),
+                    SCMEmployeeId = table.Column<string>(nullable: false),
                     MovingDate = table.Column<DateTime>(nullable: false),
                     DocDate = table.Column<DateTime>(nullable: false),
                     WorkOrder = table.Column<string>(nullable: true)
@@ -88,7 +45,9 @@ namespace SCM2020___Server.Migrations.ControlDb
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Invoice = table.Column<string>(nullable: true),
-                    MovingDate = table.Column<DateTime>(nullable: false)
+                    MovingDate = table.Column<DateTime>(nullable: false),
+                    VendorId = table.Column<int>(nullable: false),
+                    SCMEmployeeId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -122,13 +81,29 @@ namespace SCM2020___Server.Migrations.ControlDb
                     Work_Order = table.Column<string>(nullable: false),
                     MovingDate = table.Column<DateTime>(nullable: false),
                     ClosingDate = table.Column<DateTime>(nullable: false),
-                    SCMEmployeeId = table.Column<int>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: false),
+                    SCMEmployeeId = table.Column<string>(nullable: false),
+                    EmployeeId = table.Column<string>(nullable: false),
                     Situation = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Monitoring", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PermanentProduct",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InformationProduct = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    DateAdd = table.Column<DateTime>(nullable: false),
+                    Patrimony = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PermanentProduct", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,36 +135,77 @@ namespace SCM2020___Server.Migrations.ControlDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "IndividualProducts",
+                name: "ConsumptionProduct",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InformationProduct = table.Column<int>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    DateAdd = table.Column<DateTime>(nullable: false),
-                    Patrimony = table.Column<string>(nullable: true),
-                    MaterialInputByVendorId = table.Column<int>(nullable: true),
+                    Code = table.Column<int>(nullable: false),
+                    Group = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: false),
+                    Photo = table.Column<string>(nullable: true),
+                    Localization = table.Column<string>(nullable: true),
+                    NumberLocalization = table.Column<long>(nullable: false),
+                    Stock = table.Column<double>(nullable: false),
+                    MininumStock = table.Column<double>(nullable: false),
+                    MaximumStock = table.Column<double>(nullable: false),
+                    Unity = table.Column<string>(nullable: false),
+                    MaterialInputByVendorId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConsumptionProduct", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ConsumptionProduct_MaterialInputByVendor_MaterialInputByVendorId",
+                        column: x => x.MaterialInputByVendorId,
+                        principalTable: "MaterialInputByVendor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuxiliarConsumption",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     MaterialInputId = table.Column<int>(nullable: true),
                     MaterialOutputId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IndividualProducts", x => x.Id);
+                    table.PrimaryKey("PK_AuxiliarConsumption", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IndividualProducts_MaterialInputByVendor_MaterialInputByVendorId",
-                        column: x => x.MaterialInputByVendorId,
-                        principalTable: "MaterialInputByVendor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IndividualProducts_MaterialInput_MaterialInputId",
+                        name: "FK_AuxiliarConsumption_MaterialInput_MaterialInputId",
                         column: x => x.MaterialInputId,
                         principalTable: "MaterialInput",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_IndividualProducts_MaterialOutput_MaterialOutputId",
+                        name: "FK_AuxiliarConsumption_MaterialOutput_MaterialOutputId",
+                        column: x => x.MaterialOutputId,
+                        principalTable: "MaterialOutput",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuxiliarPermanent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    MaterialOutputId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuxiliarPermanent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuxiliarPermanent_MaterialOutput_MaterialOutputId",
                         column: x => x.MaterialOutputId,
                         principalTable: "MaterialOutput",
                         principalColumn: "Id",
@@ -197,37 +213,45 @@ namespace SCM2020___Server.Migrations.ControlDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IndividualProducts_MaterialInputByVendorId",
-                table: "IndividualProducts",
-                column: "MaterialInputByVendorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IndividualProducts_MaterialInputId",
-                table: "IndividualProducts",
+                name: "IX_AuxiliarConsumption_MaterialInputId",
+                table: "AuxiliarConsumption",
                 column: "MaterialInputId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IndividualProducts_MaterialOutputId",
-                table: "IndividualProducts",
+                name: "IX_AuxiliarConsumption_MaterialOutputId",
+                table: "AuxiliarConsumption",
                 column: "MaterialOutputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuxiliarPermanent_MaterialOutputId",
+                table: "AuxiliarPermanent",
+                column: "MaterialOutputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ConsumptionProduct_MaterialInputByVendorId",
+                table: "ConsumptionProduct",
+                column: "MaterialInputByVendorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AboutProducts");
+                name: "AuxiliarConsumption");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "AuxiliarPermanent");
+
+            migrationBuilder.DropTable(
+                name: "ConsumptionProduct");
 
             migrationBuilder.DropTable(
                 name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "IndividualProducts");
+                name: "Monitoring");
 
             migrationBuilder.DropTable(
-                name: "Monitoring");
+                name: "PermanentProduct");
 
             migrationBuilder.DropTable(
                 name: "Sectors");
@@ -236,13 +260,13 @@ namespace SCM2020___Server.Migrations.ControlDb
                 name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "MaterialInputByVendor");
-
-            migrationBuilder.DropTable(
                 name: "MaterialInput");
 
             migrationBuilder.DropTable(
                 name: "MaterialOutput");
+
+            migrationBuilder.DropTable(
+                name: "MaterialInputByVendor");
         }
     }
 }

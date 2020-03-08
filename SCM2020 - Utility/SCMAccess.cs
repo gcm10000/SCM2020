@@ -9,7 +9,7 @@ namespace SCM2020___Utility
 {
     class SCMAccess
     {
-        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""E:\SCM2013\SISTEMA STK.mdb""";
+        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""C:\SCM\SISTEMA STK.mdb""";
         OleDbConnection aConnection;
         OleDbCommand aCommand;
         public SCMAccess(string ConnectionString, string TableName)
@@ -48,11 +48,6 @@ namespace SCM2020___Utility
                 Console.WriteLine("Error: {0}", e.Errors[0].Message);
                 return null;
             }
-        }
-        public class EmployeeAccess
-        {
-            public string Matricula { get; set; }
-            public string Funcionario { get; set; }
         }
     }
 }

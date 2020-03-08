@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations
+namespace SCM2020___Server.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200302153102_NewMigration7")]
-    partial class NewMigration7
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,13 +150,16 @@ namespace SCM2020___Server.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("SCM2020___Server.Models.ApplicationUser", b =>
+            modelBuilder.Entity("ModelsLibrary.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("CPFRegistration")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -184,6 +185,9 @@ namespace SCM2020___Server.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("PJERJRegistration")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -228,7 +232,7 @@ namespace SCM2020___Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.ApplicationUser", null)
+                    b.HasOne("ModelsLibrary.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -237,7 +241,7 @@ namespace SCM2020___Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.ApplicationUser", null)
+                    b.HasOne("ModelsLibrary.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -252,7 +256,7 @@ namespace SCM2020___Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SCM2020___Server.Models.ApplicationUser", null)
+                    b.HasOne("ModelsLibrary.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -261,7 +265,7 @@ namespace SCM2020___Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SCM2020___Server.Models.ApplicationUser", null)
+                    b.HasOne("ModelsLibrary.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

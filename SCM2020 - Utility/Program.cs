@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCM2020___Utility.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -15,12 +16,18 @@ namespace SCM2020___Utility
         const string urlGroups = "http://localhost:52991/api/Group/";
         const string urlAddGroup = "http://localhost:52991/api/Group/Add";
         const string urlAddProduct = "http://localhost:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://localhost:52991/api/GeneralProduct/Add";
 
 
         static void Main(string[] args)
         {
 
             var start = Start();
+            RegisterVendors(start);
+            APIClient client = new APIClient("http://localhost:52991/api/Vendor/", start);
+            var data = client.GETData<List<Vendor>>();
+            Console.WriteLine("Dados resgatados.");
+            
             //SignUpAll();
             //AddGroup(start);
             //AddProduct(start);
