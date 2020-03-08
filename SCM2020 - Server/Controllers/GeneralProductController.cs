@@ -78,7 +78,7 @@ namespace SCM2020___Server.Controllers
             }
         }
         [AllowAnonymous]
-        [HttpGet("{code}")]
+        [HttpGet("Code/{code}")]
         public IActionResult ShowByCode(int code)
         {
             var product = context.ConsumptionProduct.SingleOrDefault(x => x.Code == code);
@@ -121,11 +121,9 @@ namespace SCM2020___Server.Controllers
             return Ok(tojson);
         }
         //Remove by ID
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            var strid = await Helper.RawFromBody(this);
-            int id = int.Parse(strid);
             ConsumptionProduct product = context.ConsumptionProduct.Find(id);
             context.ConsumptionProduct.Remove(product);
             await context.SaveChangesAsync();

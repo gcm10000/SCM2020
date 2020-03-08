@@ -72,18 +72,13 @@ namespace SCM2020___Server.Controllers
         }
 
         //Remove by ID
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            using (context)
-            {
-                var strid = await Helper.RawFromBody(this);
-                int id = int.Parse(strid);
-                ConsumptionProduct product = context.ConsumptionProduct.Find(id);
-                context.ConsumptionProduct.Remove(product);
-                await context.SaveChangesAsync();
-                return Ok("Produto removido com sucesso.");
-            }
+            ConsumptionProduct product = context.ConsumptionProduct.Find(id);
+            context.ConsumptionProduct.Remove(product);
+            await context.SaveChangesAsync();
+            return Ok("Produto removido com sucesso.");
         }
     }
 }

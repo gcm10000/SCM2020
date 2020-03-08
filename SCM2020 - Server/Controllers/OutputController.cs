@@ -94,11 +94,9 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
         }
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            var raw = await Helper.RawFromBody(this);
-            int id = int.Parse(raw);
             var materialOutput = context.MaterialOutput.Find(id);
 
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))

@@ -17,7 +17,7 @@ namespace SCM2020___Utility.RequestingClient
         Uri baseUri;
         AuthenticationHeaderValue authentication;
         public APIClient(Uri baseUri) { this.baseUri = baseUri; }
-        public APIClient(AuthenticationHeaderValue authentication) { this.authentication = authentication; }
+        public APIClient(Uri baseUri, AuthenticationHeaderValue authentication) { this.baseUri = baseUri; this.authentication = authentication; }
         public string POSTData(object ObjectData)
         {
             //CRUD

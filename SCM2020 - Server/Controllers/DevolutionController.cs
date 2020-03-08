@@ -63,11 +63,9 @@ namespace SCM2020___Server.Controllers
             context.MaterialInput.Update(materialInput);
             return Ok("Devolução atualizada com sucesso.");
         }
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            var raw = await Helper.RawFromBody(this);
-            int id = int.Parse(raw);
             var materialInput = context.MaterialInput.Find(id);
             if (context.Monitoring.Any(x => (x.Work_Order == materialInput.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");

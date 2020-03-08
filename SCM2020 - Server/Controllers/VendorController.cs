@@ -52,10 +52,8 @@ namespace SCM2020___Server.Controllers
         }
         //Remove by id
         [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        public async Task<IActionResult> Remove(int id)
         {
-            var raw = await Helper.RawFromBody(this);
-            var id = JsonConvert.DeserializeObject<int>(raw);
             var obj = context.Vendors.FirstOrDefault(x => x.Id == id);
 
             if (context.MaterialInputByVendor.Any(x => x.VendorId == obj.Id))

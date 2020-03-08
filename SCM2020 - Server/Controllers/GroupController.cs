@@ -51,11 +51,9 @@ namespace SCM2020___Server.Controllers
             return Ok("Atualizado com sucesso.");
         }
         //Remove by id
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            var raw = await Helper.RawFromBody(this);
-            var id = JsonConvert.DeserializeObject<int>(raw);
             var obj = context.Groups.FirstOrDefault(x => x.Id == id);
 
             context.Groups.Remove(obj);

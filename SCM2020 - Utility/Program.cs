@@ -29,7 +29,7 @@ namespace SCM2020___Utility
 
             var start = Start();
             RegisterVendors(start);
-            APIClient client = new APIClient("http://localhost:52991/api/Vendor/", start);
+            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/"), start);
             var data = client.GETData<List<Vendor>>();
             Console.WriteLine("Dados resgatados.");
             
@@ -161,7 +161,7 @@ TableName: "Grupos");
                 TableName: "Fornecedor");
             var records = dbAccess.GetDataFromTable();
 
-            APIClient client = new APIClient("http://localhost:52991/api/Vendor/Add", Authentication);
+            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/Add"), Authentication);
 
             foreach (var employees in records)
             {

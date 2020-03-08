@@ -35,7 +35,7 @@ namespace SCM2020___Server.Controllers
             return Ok(record);
         }
         [HttpPost("Add")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Add()
         {
             var raw = await Helper.RawFromBody(this);
             string id = userManager.GetUserId(User);
@@ -59,11 +59,9 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("A entrada foi atualizada com sucesso.");
         }
-        [HttpDelete("Remove")]
-        public async Task<IActionResult> Remove()
+        [HttpDelete("Remove/{id}")]
+        public async Task<IActionResult> Remove(int id)
         {
-            var raw = await Helper.RawFromBody(this);
-            int id = int.Parse(raw);
             var input = context.MaterialInputByVendor.Find(id);
             context.MaterialInputByVendor.Remove(input);
             await context.SaveChangesAsync();
