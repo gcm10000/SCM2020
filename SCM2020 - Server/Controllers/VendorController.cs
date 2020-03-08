@@ -51,7 +51,7 @@ namespace SCM2020___Server.Controllers
             return Ok(vendor);
         }
         //Remove by id
-        [HttpDelete("Remove")]
+        [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var obj = context.Vendors.FirstOrDefault(x => x.Id == id);
