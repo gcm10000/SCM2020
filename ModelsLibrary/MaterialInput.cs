@@ -54,10 +54,10 @@ namespace ModelsLibrary
         /// </summary>
         public string WorkOrder { get; set; }
         /// <summary>
-        /// Materiais de entrada.
+        /// Materiais da devolução.
         /// </summary>
         [Required]
-        public ICollection<ConsumptionProduct> ConsumptionProducts { get; set; }
+        public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
     }
     public enum Regarding
     {

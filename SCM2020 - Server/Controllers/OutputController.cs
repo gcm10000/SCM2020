@@ -17,18 +17,24 @@ namespace SCM2020___Server.Controllers
         ControlDbContext context;
         public OutputController(ControlDbContext context) { this.context = context; }
         [HttpGet]
-        public IActionResult Show()
+        public IActionResult ShowAll()
         {
             var lOutput = context.MaterialOutput.ToList();
             return Ok(lOutput);
         }
         [HttpGet("{id}")]
-        public IActionResult Show(int id)
+        public IActionResult ShowById(int id)
         {
-            var lOutput = context.MaterialOutput.Find(id);
-            return Ok(lOutput);
+            var output = context.MaterialOutput.Find(id);
+            return Ok(output);
         }
-        [HttpGet("{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
+        [HttpGet("WorkOrder/{workorder}")]
+        public IActionResult ShowByWorkOrder(string workorder)
+        {
+            var output = context.MaterialOutput.SingleOrDefault(x => x.WorkOrder == workorder);
+            return Ok(output);
+        }
+        [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
@@ -41,7 +47,7 @@ namespace SCM2020___Server.Controllers
 
             return Ok(outputs.ToList());
         }
-        [HttpPost("New")]
+        [HttpPost("Add")]
         public async Task<IActionResult> NewOutput()
         {
             var raw = await Helper.RawFromBody(this);
@@ -54,7 +60,7 @@ namespace SCM2020___Server.Controllers
             var arrayConsumption = output.ConsumptionProducts.ToList();
             var arrayPermanent = output.PermanentProducts.ToList();
 
-            //Check if every objects of ConsumptionProduct (less) are inside list ConsumptionProduct (bigger)
+            //Check if every objects of arrayConsumption (less) are inside list ConsumptionProduct (bigger)
             bool MatchesConsumption = arrayConsumption
                 .All(x => context.ConsumptionProduct
                 .Any(y => y.Id == x.ProductId));
@@ -74,16 +80,33 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok(JsonConvert.SerializeObject(output));
         }
-        [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(int id)
+        [HttpPost("Update/{id}")]
+        public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var outputFromRaw = JsonConvert.DeserializeObject<MaterialOutput>(raw);
-            outputFromRaw.Id = id;
-            
-            context.MaterialOutput.Update(outputFromRaw);
+            var materialOutput = JsonConvert.DeserializeObject<MaterialOutput>(raw);
+            materialOutput.Id = id;
+
+            if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
+                return BadRequest("Ordem de serviço fechada.");
+
+            context.MaterialOutput.Update(materialOutput);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
+        }
+        [HttpDelete("Remove")]
+        public async Task<IActionResult> Remove()
+        {
+            var raw = await Helper.RawFromBody(this);
+            int id = int.Parse(raw);
+            var materialOutput = context.MaterialOutput.Find(id);
+
+            if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
+                return BadRequest("Ordem de serviço fechada.");
+
+            context.MaterialOutput.Remove(materialOutput);
+            await context.SaveChangesAsync();
+            return Ok("Movimentação de saída removida com sucesso.");
         }
     }
 }

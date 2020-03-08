@@ -16,7 +16,6 @@ namespace ModelsLibrary
             this.MovingDate = input.MovingDate;
             this.SCMEmployeeId = UserId;
         }
-
         /// <summary>
         /// Chave primária da entrada.
         /// </summary>
@@ -36,10 +35,9 @@ namespace ModelsLibrary
         /// Entrada por Id do produto.
         /// </summary>
         public ICollection<ConsumptionProduct> AuxiliarConsumptions { get; set; }
-        public ICollection<AuxiliarPermanent> AuxiliarPermanents { get; set; }
         //Colocar as informações do produto permanente
         //dentro da entrada por fornecedor?
-        //public ICollection<ConsumptionProduct> Products { get; set; }
+        //public ICollection<AuxiliarPermanent> AuxiliarPermanents { get; set; }
         public int VendorId { get; set; }
         /// <summary>
         /// Id do funcionário que cadastrou a entrada.

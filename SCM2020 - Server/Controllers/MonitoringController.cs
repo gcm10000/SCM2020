@@ -23,8 +23,14 @@ namespace SCM2020___Server.Controllers
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var list = context.Monitoring.Find(id);
-            return Ok(list);
+            var monitoring = context.Monitoring.Find(id);
+            return Ok(monitoring);
+        }
+        [HttpGet("WorkOrder/{workorder}")]
+        public IActionResult ShowByWorkOrder(string workorder)
+        {
+            var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
+            return Ok(monitoring);
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
