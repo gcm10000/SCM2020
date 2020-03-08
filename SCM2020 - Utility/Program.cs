@@ -21,6 +21,11 @@ namespace SCM2020___Utility
 
         static void Main(string[] args)
         {
+            //CRUD
+            //CREATE -> GENERIC POST V
+            //READ -> GENERIC GET V
+            //UPDATE -> GENERIC POST V
+            //DELETE -> INT DELETE
 
             var start = Start();
             RegisterVendors(start);
@@ -155,6 +160,9 @@ TableName: "Grupos");
                 ConnectionString: SCMAccess.ConnectionString,
                 TableName: "Fornecedor");
             var records = dbAccess.GetDataFromTable();
+
+            APIClient client = new APIClient("http://localhost:52991/api/Vendor/Add", Authentication);
+
             foreach (var employees in records)
             {
                 var vendor = new Vendor();
@@ -173,8 +181,9 @@ TableName: "Grupos");
                 }
                 try
                 {
-                    RegisterVendors newvendor = new RegisterVendors(Authentication);
-                    newvendor.AddVendor("http://localhost:52991/api/Vendor/Add", vendor);
+                    //RegisterVendors newvendor = new RegisterVendors(Authentication);
+                    //newvendor.AddVendor("http://localhost:52991/api/Vendor/Add", vendor);
+                    client.POSTData(vendor);
                 }
                 catch (AuthenticationException ex)
                 {
