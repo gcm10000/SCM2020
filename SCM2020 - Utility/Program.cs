@@ -32,7 +32,7 @@ namespace SCM2020___Utility
             APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/"), start);
             var data = client.GETData<List<Vendor>>();
             Console.WriteLine("Dados resgatados.");
-            
+            RegisterVendors(start);
             //SignUpAll();
             //AddGroup(start);
             //AddProduct(start);

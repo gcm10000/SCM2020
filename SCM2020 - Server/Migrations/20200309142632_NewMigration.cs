@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SCM2020___Server.Migrations.ApplicationDb
+namespace SCM2020___Server.Migrations
 {
-    public partial class NewMigration2 : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

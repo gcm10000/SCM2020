@@ -1,4 +1,10 @@
-﻿namespace ModelsLibrary
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ModelsLibrary
 {
     public class InfoEmployee
     {
@@ -14,14 +20,17 @@
         /// <summary>
         /// Nome do funcionário.
         /// </summary>
+        [Required(ErrorMessage = "Insira o nome.")]
         public string Name { get; set; }
         /// <summary>
         /// Cargo ocupado pelo funcionário.
         /// </summary>
+        [Required(ErrorMessage = "Insira o cargo.")]
         public string Occupation { get; set; }
         /// <summary>
         /// Setor do funcionário.
         /// </summary>
+        [Required(ErrorMessage = "Insira o setor.")]
         public string Role { get; set; }
     }
 }

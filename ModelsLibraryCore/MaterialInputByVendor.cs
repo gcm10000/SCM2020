@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
@@ -17,6 +19,8 @@ namespace ModelsLibrary
         /// <summary>
         /// Chave primária da entrada.
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
         /// Nota fiscal referente a entrada por fornecedor.

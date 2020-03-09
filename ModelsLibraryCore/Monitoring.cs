@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
@@ -16,6 +18,8 @@ namespace ModelsLibrary
             this.Situation = false;
             this.Work_Order = monitoringRaw.Work_Order;
         }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
         /// Data do fechamento da ordem de serviço.
@@ -24,10 +28,12 @@ namespace ModelsLibrary
         /// <summary>
         /// Funcionário que gerou a movimentação.
         /// </summary>
+        [Required]
         public string SCMEmployeeId { get; set; }
         /// <summary>
         /// Funcionário que solicitou a movimentação.
         /// </summary>
+        [Required]
         public string EmployeeId { get; set; }
         /// <summary>
         /// Situação da ordem de serviço.

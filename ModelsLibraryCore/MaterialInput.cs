@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
@@ -21,6 +23,8 @@ namespace ModelsLibrary
         /// <summary>
         /// Chave primária referente ao registro da devolução de material.
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
         /// Referência da movimentação.
@@ -29,14 +33,17 @@ namespace ModelsLibrary
         /// <summary>
         /// Funcionário que solicitou a entrada do material.
         /// </summary>
+        [Required]
         public string EmployeeId { get; set; }
         /// <summary>
         /// Funcionário que fez a entrada do material.
         /// </summary>
+        [Required]
         public string SCMEmployeeId { get; set; }
         /// <summary>
         /// Data da movimentação.
         /// </summary>
+        [Required]
         public DateTime MovingDate { get; set; }
         /// <summary>
         /// Data da Ordem de Serviço.
@@ -49,6 +56,7 @@ namespace ModelsLibrary
         /// <summary>
         /// Materiais da devolução.
         /// </summary>
+        [Required]
         public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
     }
     public enum Regarding

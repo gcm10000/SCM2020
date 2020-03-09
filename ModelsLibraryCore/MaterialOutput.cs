@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
@@ -31,6 +33,8 @@ namespace ModelsLibrary
         /// <summary>
         /// Chave primária referente ao registro do material.
         /// </summary>
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
         /// Data de quando a movimentação de saída foi requisitada do Sistema de Controle de Materiais.

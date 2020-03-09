@@ -9,7 +9,7 @@ namespace SCM2020___Utility
 {
     class SCMAccess
     {
-        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""C:\SCM\SISTEMA STK.mdb""";
+        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""E:\SCM2013\SISTEMA STK.MDB""";
         OleDbConnection aConnection;
         OleDbCommand aCommand;
         public SCMAccess(string ConnectionString, string TableName)
