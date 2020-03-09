@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
@@ -19,7 +20,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var list = context.MaterialInputByVendor.ToList();
+            var list = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).ToList();
             return Ok(list);
         }
         [HttpGet("{id}")]
@@ -43,8 +44,9 @@ namespace SCM2020___Server.Controllers
             if (context.MaterialInputByVendor.Any(x => x.Invoice == input.Invoice))
                 return BadRequest("Já existe uma entrada com esta nota fiscal. Caso queria adicionar um novo produto nesta nota fiscal, atualize a entrada.");
 
-            if (!context.ConsumptionProduct.All(x => x.Id == input.Id))
+            if (!input.AuxiliarConsumptions.All(x => context.ConsumptionProduct.Any(y => y.Id == x.ProductId)))
                 return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
+            //Incrementar +1 no produto
             context.MaterialInputByVendor.Add(input);
             await context.SaveChangesAsync();
             return Ok("Entrada por fornecedor foi adicionada com sucesso.");
@@ -62,7 +64,9 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
+
             var input = context.MaterialInputByVendor.Find(id);
+            //var ListAuxiliarConsumption = input.AuxiliarConsumptions;
             context.MaterialInputByVendor.Remove(input);
             await context.SaveChangesAsync();
             return Ok("Entrada foi removida com sucesso.");

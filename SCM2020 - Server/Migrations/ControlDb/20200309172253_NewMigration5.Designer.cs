@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200309172253_NewMigration5")]
+    partial class NewMigration5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,9 +64,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MaterialInputByVendorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MaterialOutputId")
                         .HasColumnType("int");
 
@@ -72,8 +71,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaterialInputByVendorId");
 
                     b.HasIndex("MaterialOutputId");
 
@@ -324,29 +321,28 @@ namespace SCM2020___Server.Migrations.ControlDb
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
+                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", null)
                         .WithMany("AuxiliarConsumptions")
                         .HasForeignKey("MaterialInputByVendorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ModelsLibraryCore.MaterialInput", null)
                         .WithMany("ConsumptionProducts")
-                        .HasForeignKey("MaterialInputId");
+                        .HasForeignKey("MaterialInputId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ModelsLibraryCore.MaterialOutput", null)
                         .WithMany("ConsumptionProducts")
-                        .HasForeignKey("MaterialOutputId");
+                        .HasForeignKey("MaterialOutputId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarPermanent", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
-                        .WithMany()
-                        .HasForeignKey("MaterialInputByVendorId");
-
                     b.HasOne("ModelsLibraryCore.MaterialOutput", null)
                         .WithMany("PermanentProducts")
-                        .HasForeignKey("MaterialOutputId");
+                        .HasForeignKey("MaterialOutputId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

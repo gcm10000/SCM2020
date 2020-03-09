@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SCM2020___Server.Context
 {
@@ -33,6 +35,18 @@ namespace SCM2020___Server.Context
             //    .WithOne()
             //    .HasForeignKey<Group>(e => e.Id)
             //    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AuxiliarConsumption>()
+                .HasOne(b => b.MaterialInputByVendor)
+                .WithMany(a => a.AuxiliarConsumptions)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            //{
+            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            //}
+
         }
+
     }
 }

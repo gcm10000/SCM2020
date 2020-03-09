@@ -58,9 +58,8 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var ArrayInfoProducts = context.ConsumptionProduct.ToList();
-            var tojson = JsonConvert.SerializeObject(ArrayInfoProducts, Formatting.Indented);
-            return Ok(tojson);
+            var lProduct = context.ConsumptionProduct.ToList();
+            return Ok(lProduct);
         }
         [AllowAnonymous]
         [HttpGet("{id}")]

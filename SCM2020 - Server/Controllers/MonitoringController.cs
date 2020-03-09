@@ -3,6 +3,7 @@ using SCM2020___Server.Context;
 using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace SCM2020___Server.Controllers
 {
@@ -37,6 +38,8 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var monitoring = new Monitoring(raw);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            monitoring.EmployeeId = userId;
             if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
                 return BadRequest("Ordem de serviço já existente.");
             context.Monitoring.Add(monitoring);

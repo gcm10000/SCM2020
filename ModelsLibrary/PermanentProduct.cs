@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
@@ -25,8 +23,6 @@ namespace ModelsLibrary
         /// <summary>
         /// Chave primária.
         /// </summary>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
         /// Id do produto como produto consumível.
@@ -35,7 +31,6 @@ namespace ModelsLibrary
         /// <summary>
         /// Como se encontra o produto.
         /// </summary>
-        [Required]
         public Status Status { get; set; }
         /// <summary>
         /// Data de quando o produto foi cadastrado na base de dados.

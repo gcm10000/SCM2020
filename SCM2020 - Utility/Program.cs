@@ -1,11 +1,8 @@
 ﻿using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCM2020___Utility
 {
@@ -28,21 +25,31 @@ namespace SCM2020___Utility
             //DELETE -> INT DELETE
 
             var start = Start();
-            //RegisterVendors(start);
-            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/"), start);
-            var data = client.GETData<List<Vendor>>();
-            Console.WriteLine("Dados resgatados.");
-            RegisterVendors(start);
-            //SignUpAll();
+            
+            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Monitoring/Add"), start);
+            ModelsLibrary.Monitoring monitoring = new ModelsLibrary.Monitoring
+            {
+                Work_Order = "370484/19",
+                Situation = false,
+                MovingDate = DateTime.Now,
+                EmployeeId = ""
+                
+            };
+
+
+            var result = client.POSTData(monitoring);
+            Console.WriteLine(result);
             //AddGroup(start);
+            //SignUpAll();
+            //RegisterVendors(start);
             //AddProduct(start);
             Pause();
         }
         static void AddGroup(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(
-ConnectionString: SCMAccess.ConnectionString,
-TableName: "Grupos");
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "Grupos");
             var records = dbAccess.GetDataFromTable();
             //var lgroup = new List<Group>();
             foreach (var group in records)
@@ -101,8 +108,6 @@ TableName: "Grupos");
                     }
                     else if (key == "npra gav")
                     {
-                        Console.WriteLine(records.IndexOf(product));
-                        
                         consumptionProduct.NumberLocalization = (uint.TryParse(row.Value, out uint result)) ? result : 0;
                     }
                     else if (key == "foto do produto")

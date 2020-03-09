@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200309155209_NewMigration3")]
+    partial class NewMigration3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,9 +64,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MaterialInputByVendorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MaterialOutputId")
                         .HasColumnType("int");
 
@@ -72,8 +71,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaterialInputByVendorId");
 
                     b.HasIndex("MaterialOutputId");
 
@@ -324,10 +321,9 @@ namespace SCM2020___Server.Migrations.ControlDb
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
+                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", null)
                         .WithMany("AuxiliarConsumptions")
-                        .HasForeignKey("MaterialInputByVendorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MaterialInputByVendorId");
 
                     b.HasOne("ModelsLibraryCore.MaterialInput", null)
                         .WithMany("ConsumptionProducts")
@@ -340,10 +336,6 @@ namespace SCM2020___Server.Migrations.ControlDb
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarPermanent", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
-                        .WithMany()
-                        .HasForeignKey("MaterialInputByVendorId");
-
                     b.HasOne("ModelsLibraryCore.MaterialOutput", null)
                         .WithMany("PermanentProducts")
                         .HasForeignKey("MaterialOutputId");

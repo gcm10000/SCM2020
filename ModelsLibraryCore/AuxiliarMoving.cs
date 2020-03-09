@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ModelsLibraryCore
 {
@@ -20,8 +21,10 @@ namespace ModelsLibraryCore
         /// </summary>
         [Required]
         public int ProductId { get; set; }
+        [JsonIgnore]
+        public MaterialInputByVendor MaterialInputByVendor { get; set; }
         /// <summary>
-        /// Data de quando foi realizada saída do material.
+        /// Data de quando foi realizada a movimentação.
         /// </summary>
         [Required]
         public DateTime Date { get; set; }
