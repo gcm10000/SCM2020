@@ -91,6 +91,11 @@
   <ItemGroup>
     <Content Include="DeleteAllTables.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ModelsLibrary\ModelsLibrary.csproj">
+      <Project>{7b56b28c-7831-40a0-bb50-402734bb50a4}</Project>
+      <Name>ModelsLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,7 +28,7 @@ namespace SCM2020___Utility
             //DELETE -> INT DELETE
 
             var start = Start();
-            RegisterVendors(start);
+            //RegisterVendors(start);
             APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/"), start);
             var data = client.GETData<List<Vendor>>();
             Console.WriteLine("Dados resgatados.");
