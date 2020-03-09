@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibrary
 {
-    public class ProductFromJson<T> where T : class
+    public class ProductFromJson<T>
     {
         public T Product { get; set; }
     }
