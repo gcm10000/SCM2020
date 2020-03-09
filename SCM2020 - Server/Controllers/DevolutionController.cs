@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SCM2020___Server.Context;
-using ModelsLibrary;
+using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;

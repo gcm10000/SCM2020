@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ModelsLibrary;
+using ModelsLibraryCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

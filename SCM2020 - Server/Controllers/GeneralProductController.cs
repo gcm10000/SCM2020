@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
-using ModelsLibrary;
+using ModelsLibraryCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

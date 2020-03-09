@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModelsLibrary;
+using ModelsLibraryCore;
 
 namespace SCM2020___Server.Context
 {
