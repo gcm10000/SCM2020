@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsLibrary
+namespace ModelsLibraryCore
 {
     /// <summary>
     /// Informações sobre o produto. Esta classe contém números sobre o produto.

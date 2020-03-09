@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ModelsLibrary
+namespace ModelsLibraryCore
 {
     public class SignUpUserInfo : InfoEmployee
     {

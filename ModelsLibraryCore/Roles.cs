@@ -1,4 +1,4 @@
-﻿namespace ModelsLibrary
+﻿namespace ModelsLibraryCore
 {
     public class Roles
     {

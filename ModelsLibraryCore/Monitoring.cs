@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsLibrary
+namespace ModelsLibraryCore
 {
     public class Monitoring : WorkOrder
     {

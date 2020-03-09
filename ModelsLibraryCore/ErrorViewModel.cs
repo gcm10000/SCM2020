@@ -1,6 +1,6 @@
 using System;
 
-namespace ModelsLibrary
+namespace ModelsLibraryCore
 {
     public class ErrorViewModel
     {

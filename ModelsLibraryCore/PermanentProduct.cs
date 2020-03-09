@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModelsLibrary
+namespace ModelsLibraryCore
 {
     /// <summary>
     /// Esta classe serve para uma visão individual do produto permanente.
