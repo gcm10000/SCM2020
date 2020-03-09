@@ -4,6 +4,10 @@ using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SCM2020___Server.Controllers
 {
@@ -13,7 +17,8 @@ namespace SCM2020___Server.Controllers
     public class MonitoringController : ControllerBase
     {
         ControlDbContext context;
-        public MonitoringController(ControlDbContext context) { this.context = context; }
+        UserManager<ApplicationUser> userManager;
+        public MonitoringController(UserManager<ApplicationUser> userManager, ControlDbContext context) { this.userManager = userManager; this.context = context; }
 
         [HttpGet]
         public IActionResult ShowAll()
@@ -36,14 +41,23 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
         {
-            var raw = await Helper.RawFromBody(this);
-            var monitoring = new Monitoring(raw);
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            monitoring.EmployeeId = userId;
-            if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
-                return BadRequest("Ordem de serviço já existente.");
-            context.Monitoring.Add(monitoring);
-            await context.SaveChangesAsync();
+            var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            //var raw = await Helper.RawFromBody(this);
+            //var monitoring = new Monitoring(raw);
+
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(accessToken);
+            var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+            var unique = tokenS.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            //FUNCIONANDO AGORA!!
+
+
+            //salling
+
+            //if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
+            //    return BadRequest("Ordem de serviço já existente.");
+            //context.Monitoring.Add(monitoring);
+            //await context.SaveChangesAsync();
             return Ok("Monitoramento adicionada com sucesso.");
         }
         [HttpPost("Update/{id}")]

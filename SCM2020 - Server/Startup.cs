@@ -35,7 +35,6 @@ namespace SCM2020___Server
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
 
 
             services.AddControllersWithViews();
