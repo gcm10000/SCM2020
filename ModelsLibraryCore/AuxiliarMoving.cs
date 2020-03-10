@@ -9,10 +9,14 @@ namespace ModelsLibraryCore
     {
         public T Product { get; set; }
     }
-    public class AuxiliarConsumption : ProductBase { }
+    public class AuxiliarConsumption : ProductBase
+    {
+        public double Quantity { get; set; }
+    }
     public class AuxiliarPermanent : ProductBase { }
     public abstract class ProductBase
     {
+        [JsonIgnore]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

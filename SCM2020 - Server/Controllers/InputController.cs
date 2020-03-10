@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SCM2020___Server.Controllers
@@ -26,28 +28,36 @@ namespace SCM2020___Server.Controllers
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var list = context.MaterialInputByVendor.Find(id);
+            var list = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Id == id);
             return Ok(list);
         }
         [HttpGet("Invoice/{invoice}")]
         public IActionResult ShowByInvoice(string invoice)
         {
-            var record = context.MaterialInputByVendor.SingleOrDefault(x => x.Invoice == invoice);
+            var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
+            var token = Helper.GetToken(this);
+            var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
             var raw = await Helper.RawFromBody(this);
-            string id = userManager.GetUserId(User);
             var input = new MaterialInputByVendor(raw, id);
             if (context.MaterialInputByVendor.Any(x => x.Invoice == input.Invoice))
                 return BadRequest("Já existe uma entrada com esta nota fiscal. Caso queria adicionar um novo produto nesta nota fiscal, atualize a entrada.");
 
             if (!input.AuxiliarConsumptions.All(x => context.ConsumptionProduct.Any(y => y.Id == x.ProductId)))
                 return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
-            //Incrementar +1 no produto
             context.MaterialInputByVendor.Add(input);
+            //Incrementar +1 no produto
+            foreach (var item in input.AuxiliarConsumptions)
+            {
+                var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
+                product.Stock += 1;
+                context.ConsumptionProduct.Update(product);
+            }
             await context.SaveChangesAsync();
             return Ok("Entrada por fornecedor foi adicionada com sucesso.");
         }
@@ -55,8 +65,35 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
+            var oldInput = context.MaterialInputByVendor.Find(id);
             var input = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
             input.Id = id;
+            if (oldInput.AuxiliarConsumptions.Count != input.AuxiliarConsumptions.Count)
+            {
+                List<int> productIds = new List<int>();
+                foreach (var p in input.AuxiliarConsumptions)
+                {
+                    if (!productIds.Contains(p.ProductId))
+                        productIds.Add(p.ProductId);
+                }
+                foreach (var currentId in productIds)
+                {
+                    var products = oldInput.AuxiliarConsumptions.Where(x => x.ProductId == currentId);
+                    double quantityProduct = 0d;
+                    foreach (var p in products)
+                    {
+                        quantityProduct += p.Quantity;
+                    }
+                    double quantityNewProduct = 0d;
+                    foreach (var p in input.AuxiliarConsumptions)
+                    {
+                        quantityNewProduct += p.Quantity;
+                    }
+                    var product = context.ConsumptionProduct.Find(currentId);
+                    product.Stock += (quantityNewProduct - quantityProduct);
+                    context.ConsumptionProduct.Update(product);
+                }
+            }
             context.MaterialInputByVendor.Update(input);
             await context.SaveChangesAsync();
             return Ok("A entrada foi atualizada com sucesso.");
@@ -66,10 +103,15 @@ namespace SCM2020___Server.Controllers
         {
 
             var input = context.MaterialInputByVendor.Find(id);
-            //var ListAuxiliarConsumption = input.AuxiliarConsumptions;
             context.MaterialInputByVendor.Remove(input);
+            foreach (var item in input.AuxiliarConsumptions)
+            {
+                var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
+                product.Stock -= 1;
+                context.ConsumptionProduct.Update(product);
+            }
             await context.SaveChangesAsync();
-            return Ok("Entrada foi removida com sucesso.");
+            return Ok($"Entrada foi removida com sucesso.\n{input.AuxiliarConsumptions.Count} produtos foram descontados no sistema.");
         }
 
 

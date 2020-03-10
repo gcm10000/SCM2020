@@ -50,23 +50,24 @@ namespace SCM2020___Server.Controllers
             var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
             var user = new ApplicationUser { UserName = username, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration };
             
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, username),
-                new Claim(ClaimTypes.Name, postData.Name),
-                new Claim(ClaimTypes.Role, postData.Role),
-                new Claim("Occupation", postData.Occupation),
-            };
-
             var r1 = UserManager.FindByPJERJRegistrationAsync(postData.PJERJRegistration);
             var r2 = UserManager.FindByPJERJRegistrationAsync(postData.CPFRegistration);
             if ((r1 != null) || (r2 != null))
                 return BadRequest("Já existe um usuário com algum dos dois registros.");
 
             var result = await UserManager.CreateAsync(user, postData.Password);
-            
+
             if (result.Succeeded)
             {
+
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
+                    new Claim(ClaimTypes.Name, postData.Name),
+                    new Claim(ClaimTypes.Role, postData.Role),
+                    new Claim("Occupation", postData.Occupation),
+                };
+
                 //var resultclaims = 
                 await UserManager.AddClaimsAsync(
                 user: user,

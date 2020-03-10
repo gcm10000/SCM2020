@@ -5,12 +5,13 @@ using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace SCM2020___Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.SCM)]
+    //[Authorize(Roles = Roles.SCM)]
     public class DevolutionController : ControllerBase
     {
         ControlDbContext context;
@@ -18,19 +19,19 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var devolution = context.MaterialInput.ToList();
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).ToList();
             return Ok(devolution);
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var devolution = context.MaterialInput.Find(id);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             return Ok(devolution);
         }
         [HttpGet("WorkOrder/{workorder}")]
         public IActionResult ShowByWorkOrder(string workorder)
         {
-            var devolution = context.MaterialInput.SingleOrDefault(x => x.WorkOrder == workorder);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(devolution);
         }
         [HttpPost("Add")]
@@ -48,6 +49,7 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Existem itens que estão na entrada e que não pertencem a saída.");
 
             context.MaterialInput.Add(materialInput);
+            //Incrementar um produto
             await context.SaveChangesAsync();
             return Ok("Nova devolução registrada com sucesso.");
         }

@@ -8,11 +8,11 @@ namespace ModelsLibraryCore
     public class Monitoring : WorkOrder
     {
         public Monitoring() { }
-        public Monitoring(string raw)
+        public Monitoring(string raw, string SCMEmployeeId)
         {
             Monitoring monitoringRaw = JsonConvert.DeserializeObject<Monitoring>(raw);
             this.EmployeeId = monitoringRaw.EmployeeId;
-            this.SCMEmployeeId = monitoringRaw.SCMEmployeeId;
+            this.SCMEmployeeId = SCMEmployeeId;
             this.MovingDate = monitoringRaw.MovingDate;
             this.ClosingDate = monitoringRaw.ClosingDate;
             this.Situation = false;
@@ -26,12 +26,12 @@ namespace ModelsLibraryCore
         /// </summary>
         public DateTime ClosingDate { get; set; }
         /// <summary>
-        /// Funcionário que gerou a movimentação.
+        /// Funcionário que gerou o monitoramento da movimentação.
         /// </summary>
         [Required]
         public string SCMEmployeeId { get; set; }
         /// <summary>
-        /// Funcionário que solicitou a movimentação.
+        /// Funcionário que solicitou o monitoramento da movimentação.
         /// </summary>
         [Required]
         public string EmployeeId { get; set; }

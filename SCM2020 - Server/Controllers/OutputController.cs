@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SCM2020___Server.Controllers
 {
@@ -19,19 +20,19 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var lOutput = context.MaterialOutput.ToList();
+            var lOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             return Ok(lOutput);
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var output = context.MaterialOutput.Find(id);
+            var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
             return Ok(output);
         }
         [HttpGet("WorkOrder/{workorder}")]
         public IActionResult ShowByWorkOrder(string workorder)
         {
-            var output = context.MaterialOutput.SingleOrDefault(x => x.WorkOrder == workorder);
+            var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(output);
         }
         [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]

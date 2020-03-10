@@ -41,31 +41,30 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
         {
-            var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            //var raw = await Helper.RawFromBody(this);
-            //var monitoring = new Monitoring(raw);
+            var token = Helper.GetToken(this);
+            var unique = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(accessToken);
-            var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
-            var unique = tokenS.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
-            //FUNCIONANDO AGORA!!
-
-
+            var raw = await Helper.RawFromBody(this);
+            var user = userManager.Users.SingleOrDefault(u => u.Id == unique);
+            var monitoring = new Monitoring(raw, user.Id);
+            if (!context.Monitoring.Any(x => x.EmployeeId == monitoring.EmployeeId))
+                return BadRequest("Funcionário do qual solicitou não está cadastrado.");
             //salling
 
-            //if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
-            //    return BadRequest("Ordem de serviço já existente.");
-            //context.Monitoring.Add(monitoring);
-            //await context.SaveChangesAsync();
+            if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
+                return BadRequest("Ordem de serviço já existente.");
+            context.Monitoring.Add(monitoring);
+            await context.SaveChangesAsync();
             return Ok("Monitoramento adicionada com sucesso.");
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var monitoring = new Monitoring(raw);
+            var monitoring = new Monitoring();
             monitoring.Id = id;
+            monitoring.SCMEmployeeId = context.Monitoring.Find(id).SCMEmployeeId;
+            
             context.Monitoring.Update(monitoring);
             await context.SaveChangesAsync();
             return Ok("Monitoramento atualizada com sucesso.");
@@ -81,14 +80,5 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Monitoramento removida com sucesso.");
         }
-        //[HttpGet("{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
-        //public async Task<ActionResult> ShowBeetweenTwoDates(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
-        //{
-        //    DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
-        //    DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
-        //    var list = context.Monitoring.ToList().Where(t => t.ClosingDate >= dateStart && t.);
-        //    return Ok(list);
-        //}
-
     }
 }

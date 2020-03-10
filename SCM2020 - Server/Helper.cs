@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,15 @@ namespace SCM2020___Server
                 postData = await sr.ReadToEndAsync();
             }
             return postData;
+        }
+        public static JwtSecurityToken GetToken(ControllerBase controllerBase)
+        {
+            var header = controllerBase.Request.Headers["Authorization"].ToString();
+            var bearer = "Bearer ";
+            var accessToken = header.Substring(bearer.Length);
+            var handler = new JwtSecurityTokenHandler();
+            var tokenS = handler.ReadToken(accessToken) as JwtSecurityToken;
+            return tokenS;
         }
         public static Int32 Levenshtein(String a, String b)
         {
