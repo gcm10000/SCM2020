@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace SCM2020___Server.Controllers
 {
@@ -51,8 +52,13 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> NewOutput()
         {
+            var b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
+            if (!b)
+                return BadRequest("Por favor, faça login.");
+            var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
             var raw = await Helper.RawFromBody(this);
-            var output = new MaterialOutput(raw);
+            var output = new MaterialOutput(raw, id);
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == output.WorkOrder);
             if (monitoring == null)
                 return BadRequest("Ordem de serviço inexistente.");
@@ -75,11 +81,23 @@ namespace SCM2020___Server.Controllers
 
             context.MaterialOutput.Add(output);
 
-            arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
-            arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
+            //arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
+            //arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
 
+            foreach (var p in arrayConsumption)
+            {
+                var c = context.ConsumptionProduct.Find(p.ProductId);
+                c.Stock -= p.Quantity;
+                context.ConsumptionProduct.Update(c);
+            }
+            foreach (var p in arrayPermanent)
+            {
+                var c = context.ConsumptionProduct.Find(p.ProductId);
+                c.Stock -= 1;
+                context.ConsumptionProduct.Update(c);
+            }
             await context.SaveChangesAsync();
-            return Ok(JsonConvert.SerializeObject(output));
+            return Ok("Saída feita com sucesso.");
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
@@ -102,6 +120,19 @@ namespace SCM2020___Server.Controllers
 
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
+            //Products reallocation
+            foreach (var c in materialOutput.ConsumptionProducts)
+            {
+                var p = context.ConsumptionProduct.Find(c.ProductId);
+                p.Stock += c.Quantity;
+                context.ConsumptionProduct.Update(p);
+            }
+            foreach (var c in materialOutput.PermanentProducts)
+            {
+                var p = context.ConsumptionProduct.Find(c.ProductId);
+                p.Stock += 1;
+                context.ConsumptionProduct.Update(p);
+            }
 
             context.MaterialOutput.Remove(materialOutput);
             await context.SaveChangesAsync();

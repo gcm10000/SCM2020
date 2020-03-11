@@ -38,9 +38,8 @@ namespace SCM2020___Utility.RequestingClient
                 return content;
             }
         }
-        public string DELETEData(int id)
+        public string DELETEData()
         {
-            Uri uri = new Uri(baseUri, new Uri(id.ToString()));
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -48,7 +47,7 @@ namespace SCM2020___Utility.RequestingClient
                     new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = authentication;
 
-                HttpResponseMessage respToken = client.DeleteAsync(uri).Result;
+                HttpResponseMessage respToken = client.DeleteAsync(baseUri).Result;
                 string content = respToken.Content.ReadAsStringAsync().Result;
                 return content;
             }

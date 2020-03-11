@@ -8,23 +8,23 @@ namespace ModelsLibraryCore
 {
     public class MaterialOutput
     {
-        public MaterialOutput(string raw)
+        public MaterialOutput(string raw, string UserId)
         {
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
             this.EmployeeRegistration = productFromRaw.Value<string>("EmployeeRegistration");
-            this.SCMRegistration = productFromRaw.Value<string>("SCMRegistration");
+            this.SCMRegistration = UserId;
             this.RequestingSector = productFromRaw.Value<int>("RequestingSector");
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
-            List<ProductFromJson<AuxiliarConsumption>> arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<ProductFromJson<AuxiliarConsumption>>>();
-            List<ProductFromJson<AuxiliarPermanent>> arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<ProductFromJson<AuxiliarPermanent>>>();
-            this.ConsumptionProducts = new List<AuxiliarConsumption>();
-            this.PermanentProducts = new List<AuxiliarPermanent>();
-            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.Product.ProductId,  Date = x.Product.Date }));
-            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new AuxiliarPermanent() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
+            this.ConsumptionProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<AuxiliarConsumption>>();
+            this.PermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<AuxiliarPermanent>>();
+            //this.ConsumptionProducts = new List<AuxiliarConsumption>();
+            //this.PermanentProducts = new List<AuxiliarPermanent>();
+            //arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.,  Date = x.Product.Date }));
+            //arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new AuxiliarPermanent() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
         }
         public MaterialOutput()
         {

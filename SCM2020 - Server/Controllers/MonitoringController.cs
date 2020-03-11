@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json;
 
 namespace SCM2020___Server.Controllers
 {
@@ -41,13 +42,15 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
         {
-            var token = Helper.GetToken(this);
+            bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
+            if (!b)
+                return BadRequest("Por favor, faça login.");
             var unique = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
             var user = userManager.Users.SingleOrDefault(u => u.Id == unique);
             var monitoring = new Monitoring(raw, user.Id);
-            if (!context.Monitoring.Any(x => x.EmployeeId == monitoring.EmployeeId))
+            if (!userManager.Users.Any(x => x.Id == monitoring.EmployeeId))
                 return BadRequest("Funcionário do qual solicitou não está cadastrado.");
             //salling
 
@@ -61,9 +64,14 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var monitoring = new Monitoring();
-            monitoring.Id = id;
-            monitoring.SCMEmployeeId = context.Monitoring.Find(id).SCMEmployeeId;
+            var monitoringFromJson = JsonConvert.DeserializeObject<Monitoring>(raw);
+            var monitoring = context.Monitoring.Find(id);
+            monitoring.ClosingDate = monitoringFromJson.ClosingDate;
+            monitoring.EmployeeId = monitoringFromJson.EmployeeId;
+            monitoring.MovingDate = monitoringFromJson.MovingDate;
+            //monitoring.SCMEmployeeId = monitoringFromJson.SCMEmployeeId;
+            //monitoring.Situation = monitoringFromJson.Situation;
+            monitoring.Work_Order = monitoringFromJson.Work_Order;
             
             context.Monitoring.Update(monitoring);
             await context.SaveChangesAsync();
@@ -75,7 +83,7 @@ namespace SCM2020___Server.Controllers
             //Check output with these order work
             var monitoring = context.Monitoring.Find(id);
             if (context.MaterialOutput.Any(x => x.WorkOrder == monitoring.Work_Order))
-                return BadRequest("Já contém monitoramento nesta ordem de serviço. Para remover o monitoramento, remova as movimentações.");
+                return BadRequest("Já contém movimentações nesta ordem de serviço. Para remover o monitoramento, remova as movimentações.");
             context.Monitoring.Remove(monitoring);
             await context.SaveChangesAsync();
             return Ok("Monitoramento removida com sucesso.");

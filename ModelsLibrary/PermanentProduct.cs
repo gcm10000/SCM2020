@@ -25,7 +25,7 @@ namespace ModelsLibrary
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Id do produto como produto consumível.
+        /// Id do produto como produto genérico.
         /// </summary>
         public int InformationProduct { get; set; }
         /// <summary>

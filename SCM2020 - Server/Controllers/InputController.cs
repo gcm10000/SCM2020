@@ -17,8 +17,7 @@ namespace SCM2020___Server.Controllers
     public class InputController : ControllerBase
     {
         ControlDbContext context;
-        UserManager<ApplicationUser> userManager;
-        public InputController(UserManager<ApplicationUser> userManager, ControlDbContext context) { this.userManager = userManager; this.context = context; }
+        public InputController(ControlDbContext context) { this.context = context; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -37,10 +36,13 @@ namespace SCM2020___Server.Controllers
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
+        
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            var token = Helper.GetToken(this);
+            bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
+            if (!b)
+                return BadRequest("Por favor, faça login.");
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
@@ -55,7 +57,7 @@ namespace SCM2020___Server.Controllers
             foreach (var item in input.AuxiliarConsumptions)
             {
                 var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
-                product.Stock += 1;
+                product.Stock += item.Quantity;
                 context.ConsumptionProduct.Update(product);
             }
             await context.SaveChangesAsync();
@@ -65,35 +67,50 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var oldInput = context.MaterialInputByVendor.Find(id);
-            var input = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
-            input.Id = id;
-            if (oldInput.AuxiliarConsumptions.Count != input.AuxiliarConsumptions.Count)
+            var inputFromJson = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
+            var oldInput = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).ToList().Single(x => x.Id == id);
+            List<AuxiliarConsumption> AuxProducts = oldInput.AuxiliarConsumptions.ToList();
+            var input = oldInput;
+            input.Invoice = inputFromJson.Invoice;
+            input.MovingDate = inputFromJson.MovingDate;
+            input.VendorId = inputFromJson.VendorId;
+            input.AuxiliarConsumptions = inputFromJson.AuxiliarConsumptions;
+
+            List<ConsumptionProduct> listProduct = null;
+            bool allEquals = input.AuxiliarConsumptions.All(x => AuxProducts
+            .Any(y => (x.Date == y.Date) && (x.ProductId == y.ProductId) && (x.Quantity == y.Quantity)));
+            if (!allEquals)
             {
+                listProduct = new List<ConsumptionProduct>();
                 List<int> productIds = new List<int>();
                 foreach (var p in input.AuxiliarConsumptions)
                 {
                     if (!productIds.Contains(p.ProductId))
                         productIds.Add(p.ProductId);
                 }
+
                 foreach (var currentId in productIds)
                 {
-                    var products = oldInput.AuxiliarConsumptions.Where(x => x.ProductId == currentId);
+                    var products = AuxProducts.Where(x => x.ProductId == currentId);
                     double quantityProduct = 0d;
                     foreach (var p in products)
                     {
                         quantityProduct += p.Quantity;
                     }
                     double quantityNewProduct = 0d;
-                    foreach (var p in input.AuxiliarConsumptions)
+                    var newProducts = input.AuxiliarConsumptions.ToList().Where(x => x.ProductId == currentId);
+                    foreach (var p in newProducts)
                     {
                         quantityNewProduct += p.Quantity;
                     }
-                    var product = context.ConsumptionProduct.Find(currentId);
-                    product.Stock += (quantityNewProduct - quantityProduct);
-                    context.ConsumptionProduct.Update(product);
+                    var productModify = context.ConsumptionProduct.Find(currentId);
+                    productModify.Stock += (quantityNewProduct - quantityProduct);
+                    listProduct.Add(productModify);
+                    //context.ConsumptionProduct.Update(productModify);
                 }
             }
+            if (listProduct != null)
+                context.ConsumptionProduct.UpdateRange(listProduct.ToArray());
             context.MaterialInputByVendor.Update(input);
             await context.SaveChangesAsync();
             return Ok("A entrada foi atualizada com sucesso.");
@@ -101,15 +118,14 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-
-            var input = context.MaterialInputByVendor.Find(id);
-            context.MaterialInputByVendor.Remove(input);
+            var input = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Id == id);
             foreach (var item in input.AuxiliarConsumptions)
             {
                 var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
-                product.Stock -= 1;
+                product.Stock -= item.Quantity;
                 context.ConsumptionProduct.Update(product);
             }
+            context.MaterialInputByVendor.Remove(input);
             await context.SaveChangesAsync();
             return Ok($"Entrada foi removida com sucesso.\n{input.AuxiliarConsumptions.Count} produtos foram descontados no sistema.");
         }

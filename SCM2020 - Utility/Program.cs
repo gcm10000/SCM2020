@@ -1,6 +1,7 @@
 ﻿using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 
@@ -24,20 +25,69 @@ namespace SCM2020___Utility
             //UPDATE -> GENERIC POST V
             //DELETE -> INT DELETE
 
-            var start = Start();
-            
-            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Monitoring/Add"), start);
-            ModelsLibrary.Monitoring monitoring = new ModelsLibrary.Monitoring
-            {
-                Work_Order = "370484/19",
-                Situation = false,
-                MovingDate = DateTime.Now,
-                EmployeeId = ""
-                
-            };
+            //var start = Start();
 
+            //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
+            //{
+            //    Date = DateTime.Now,
+            //    ProductId = 2,
+            //    Quantity = 3d,
+            //};
+            //ModelsLibrary.AuxiliarConsumption auxiliar2 = new ModelsLibrary.AuxiliarConsumption()
+            //{
+            //    Date = DateTime.Now,
+            //    ProductId = 41,
+            //    Quantity = 21d,
+            //};
+            //List<ModelsLibrary.AuxiliarConsumption> auxiliarConsumptions = new List<ModelsLibrary.AuxiliarConsumption>()
+            //{
+            //    auxiliar1,
+            //    auxiliar2
+            //};
+            //ModelsLibrary.MaterialInputByVendor input = new ModelsLibrary.MaterialInputByVendor()
+            //{
+            //    Invoice = "0271867",
+            //    MovingDate = DateTime.Now,
+            //    VendorId = 2,
 
-            var result = client.POSTData(monitoring);
+            //    AuxiliarConsumptions = auxiliarConsumptions
+            //};
+
+            //ModelsLibrary.Monitoring monitoring = new ModelsLibrary.Monitoring()
+            //{
+            //    EmployeeId = "c7f5aef6-b8c7-4b73-b815-07d9d9eb7b52",
+            //    MovingDate = DateTime.Now,
+            //    Situation = false,
+            //    Work_Order = "123456/20",
+            //};
+
+            //ModelsLibrary.MaterialOutput output = new ModelsLibrary.MaterialOutput()
+            //{
+            //    WorkOrder = "123456/20",
+            //    MovingDate = DateTime.Now,
+            //    ServiceLocation = "",
+            //    RequestingSector = 2,
+            //    EmployeeRegistration = "",
+            //    ConsumptionProducts = new List<ModelsLibrary.AuxiliarConsumption>()
+            //    {
+            //        auxiliar1,
+            //        auxiliar2
+            //    },
+            //    PermanentProducts = new List<ModelsLibrary.AuxiliarPermanent>()
+            //    {
+            //        new ModelsLibrary.AuxiliarPermanent() { Date = DateTime.Now, ProductId = 2 }
+            //    }
+            //};
+
+            APIClient client1 = new APIClient(new Uri("http://localhost:52991/api/Output/Remove"),
+                null);
+            //var data = client1.GETData<ModelsLibrary.Monitoring>();
+            //data.Work_Order = "TESTE1234";
+
+            //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
+            //    null);
+
+            var result = client1.DELETEData();
             Console.WriteLine(result);
             //AddGroup(start);
             //SignUpAll();

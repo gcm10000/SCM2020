@@ -40,9 +40,6 @@ namespace ModelsLibraryCore
         /// </summary>
         [Required]
         public ICollection<AuxiliarConsumption> AuxiliarConsumptions { get; set; }
-        //Colocar as informações do produto permanente
-        //dentro da entrada por fornecedor?
-        //public ICollection<AuxiliarPermanent> AuxiliarPermanents { get; set; }
         [Required]
         public int VendorId { get; set; }
         /// <summary>

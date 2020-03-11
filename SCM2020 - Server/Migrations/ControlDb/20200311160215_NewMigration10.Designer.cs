@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200311160215_NewMigration10")]
+    partial class NewMigration10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,8 +345,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                 {
                     b.HasOne("ModelsLibraryCore.MaterialOutput", "MaterialOutput")
                         .WithMany("PermanentProducts")
-                        .HasForeignKey("MaterialOutputId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("MaterialOutputId");
                 });
 #pragma warning restore 612, 618
         }
