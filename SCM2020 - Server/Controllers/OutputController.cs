@@ -103,22 +103,22 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var materialOutput = JsonConvert.DeserializeObject<MaterialOutput>(raw);
+            var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
-            output.MovingDate = materialOutput.MovingDate;
-            output.EmployeeRegistration = materialOutput.EmployeeRegistration;
-            output.RequestingSector = materialOutput.RequestingSector;
-            output.ServiceLocation = materialOutput.ServiceLocation;
-            output.WorkOrder = materialOutput.WorkOrder;
+            output.MovingDate = materialOutputFromJson.MovingDate;
+            output.EmployeeRegistration = materialOutputFromJson.EmployeeRegistration;
+            output.RequestingSector = materialOutputFromJson.RequestingSector;
+            output.ServiceLocation = materialOutputFromJson.ServiceLocation;
+            output.WorkOrder = materialOutputFromJson.WorkOrder;
             
             var lConsumpter = new List<AuxiliarConsumption>();
             lConsumpter.AddRange(output.ConsumptionProducts);
             var lPermanent = new List<AuxiliarPermanent>();
             lPermanent.AddRange(output.PermanentProducts);
-            output.ConsumptionProducts = materialOutput.ConsumptionProducts;
-            output.PermanentProducts = materialOutput.PermanentProducts;
+            output.ConsumptionProducts = materialOutputFromJson.ConsumptionProducts;
+            output.PermanentProducts = materialOutputFromJson.PermanentProducts;
 
-            if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
+            if (context.Monitoring.Any(x => (x.Work_Order == materialOutputFromJson.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
             List<int> ConsumpterProductIds = new List<int>();
             List<int> PermanentsProductIds = new List<int>();
@@ -168,7 +168,7 @@ namespace SCM2020___Server.Controllers
                     context.ConsumptionProduct.Update(productModify);
                 }
             }
-            context.MaterialOutput.Update(materialOutput);
+            context.MaterialOutput.Update(materialOutputFromJson);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
         }

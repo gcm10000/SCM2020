@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace SCM2020___Server.Controllers
 {
@@ -76,12 +77,14 @@ namespace SCM2020___Server.Controllers
                 product.Stock += item.Quantity;
                 context.ConsumptionProduct.Update(product);
             }
-            foreach (var p in materialInput.PermanentProducts)
-            {
-                var c = context.ConsumptionProduct.Find(p.ProductId);
-                c.Stock += 1;
-                context.ConsumptionProduct.Update(c);
-            }
+
+            if (materialInput.PermanentProducts != null)
+                foreach (var p in materialInput.PermanentProducts)
+                {
+                    var c = context.ConsumptionProduct.Find(p.ProductId);
+                    c.Stock += 1;
+                    context.ConsumptionProduct.Update(c);
+                }
 
             await context.SaveChangesAsync();
             return Ok("Nova devolução registrada com sucesso.");
@@ -90,12 +93,73 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var materialInput = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            materialInput.Id = id;
-            if (context.Monitoring.Any(x => (x.Work_Order == materialInput.WorkOrder) && (x.Situation == true)))
+            var devolution = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            var oldMaterialInput = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
+            if (context.Monitoring.Any(x => (x.Work_Order == devolution.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
+            List<AuxiliarConsumption> AuxProducts = new List<AuxiliarConsumption>();
+            AuxProducts.AddRange(oldMaterialInput.ConsumptionProducts);
 
-            context.MaterialInput.Update(materialInput);
+            devolution.ConsumptionProducts = oldMaterialInput.ConsumptionProducts;
+            devolution.DocDate = oldMaterialInput.DocDate;
+            //devolution.EmployeeId = oldMaterialInput.EmployeeId;
+            devolution.MovingDate = oldMaterialInput.MovingDate;
+            devolution.PermanentProducts = oldMaterialInput.PermanentProducts;
+            devolution.Regarding = oldMaterialInput.Regarding;
+            //devolution.WorkOrder = oldMaterialInput.WorkOrder;
+
+            //List<ConsumptionProduct> listProduct = new List<ConsumptionProduct>();
+
+            List<int> ConsumpterProductIds = new List<int>();
+            List<int> PermanentsProductIds = new List<int>();
+
+            foreach (var p in devolution.ConsumptionProducts)
+            {
+                if (!ConsumpterProductIds.Contains(p.ProductId))
+                    ConsumpterProductIds.Add(p.ProductId);
+            }
+            foreach (var p in devolution.PermanentProducts)
+            {
+                if (!PermanentsProductIds.Contains(p.ProductId))
+                    PermanentsProductIds.Add(p.ProductId);
+            }
+
+            foreach (var currentId in ConsumpterProductIds)
+            {
+                var products = AuxProducts.Where(x => x.ProductId == currentId);
+                double quantityProduct = 0d;
+                foreach (var p in products)
+                {
+                    quantityProduct += p.Quantity;
+                }
+                double quantityNewProduct = 0d;
+                var newProducts = devolution.ConsumptionProducts.Where(x => x.ProductId == currentId);
+                foreach (var p in newProducts)
+                {
+                    quantityNewProduct += p.Quantity;
+                }
+                var productModify = context.ConsumptionProduct.Find(currentId);
+                productModify.Stock += (quantityNewProduct - quantityProduct);
+                //listProduct.Add(productModify);
+                context.ConsumptionProduct.Update(productModify);
+            }
+
+            var lPermanent = new List<AuxiliarPermanent>();
+            lPermanent.AddRange(devolution.PermanentProducts);
+            //permanent
+            foreach (var currentId in PermanentsProductIds)
+            {
+                //oldder - newest
+                var productModify = await context.ConsumptionProduct.FindAsync(currentId);
+                double oldder = lPermanent.Count(x => x.ProductId == currentId);
+                double newest = devolution.PermanentProducts.Count(x => x.ProductId == currentId);
+                if (oldder != newest)
+                {
+                    productModify.Stock += newest - oldder;
+                    context.ConsumptionProduct.Update(productModify);
+                }
+            }
+            context.MaterialInput.Update(devolution);
             return Ok("Devolução atualizada com sucesso.");
         }
         [HttpDelete("Remove/{id}")]

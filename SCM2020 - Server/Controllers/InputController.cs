@@ -69,7 +69,9 @@ namespace SCM2020___Server.Controllers
             var raw = await Helper.RawFromBody(this);
             var inputFromJson = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
             var oldInput = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).ToList().Single(x => x.Id == id);
-            List<AuxiliarConsumption> AuxProducts = oldInput.AuxiliarConsumptions.ToList();
+            List<AuxiliarConsumption> AuxProducts = new List<AuxiliarConsumption>();
+            AuxProducts.AddRange(oldInput.AuxiliarConsumptions);
+
             var input = oldInput;
             input.Invoice = inputFromJson.Invoice;
             input.MovingDate = inputFromJson.MovingDate;
@@ -98,7 +100,7 @@ namespace SCM2020___Server.Controllers
                         quantityProduct += p.Quantity;
                     }
                     double quantityNewProduct = 0d;
-                    var newProducts = input.AuxiliarConsumptions.ToList().Where(x => x.ProductId == currentId);
+                    var newProducts = input.AuxiliarConsumptions.Where(x => x.ProductId == currentId);
                     foreach (var p in newProducts)
                     {
                         quantityNewProduct += p.Quantity;
@@ -110,7 +112,7 @@ namespace SCM2020___Server.Controllers
                 }
             }
             if (listProduct != null)
-                context.ConsumptionProduct.UpdateRange(listProduct.ToArray());
+                context.ConsumptionProduct.UpdateRange(listProduct);
             context.MaterialInputByVendor.Update(input);
             await context.SaveChangesAsync();
             return Ok("A entrada foi atualizada com sucesso.");
