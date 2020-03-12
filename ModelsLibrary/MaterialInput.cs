@@ -50,6 +50,10 @@ namespace ModelsLibrary
         /// Materiais da devolução.
         /// </summary>
         public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
+        /// <summary>
+        /// Materiais permanentes da devolução.
+        /// </summary>
+        public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
     }
     public enum Regarding
     {
