@@ -9,7 +9,7 @@ namespace ModelsLibraryCore
     public class MaterialInput
     {
         public MaterialInput() { }
-        public MaterialInput(string raw)
+        public MaterialInput(string raw, string UserId)
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
             this.DocDate = input.DocDate;
@@ -17,7 +17,7 @@ namespace ModelsLibraryCore
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
             this.Regarding = input.Regarding;
-            this.SCMEmployeeId = input.SCMEmployeeId;
+            this.SCMEmployeeId = UserId;
             this.WorkOrder = input.WorkOrder;
         }
         /// <summary>
@@ -54,10 +54,14 @@ namespace ModelsLibraryCore
         /// </summary>
         public string WorkOrder { get; set; }
         /// <summary>
-        /// Materiais da devolução.
+        /// Materiais consumíveis da devolução.
         /// </summary>
         [Required]
         public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
+        /// <summary>
+        /// Materiais permanentes da devolução.
+        /// </summary>
+        public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
     }
     public enum Regarding
     {

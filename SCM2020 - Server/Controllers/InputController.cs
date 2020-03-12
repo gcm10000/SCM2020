@@ -53,7 +53,7 @@ namespace SCM2020___Server.Controllers
             if (!input.AuxiliarConsumptions.All(x => context.ConsumptionProduct.Any(y => y.Id == x.ProductId)))
                 return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
             context.MaterialInputByVendor.Add(input);
-            //Incrementar +1 no produto
+            //Incrementar um produto
             foreach (var item in input.AuxiliarConsumptions)
             {
                 var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);

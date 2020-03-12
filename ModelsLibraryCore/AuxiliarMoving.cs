@@ -35,5 +35,7 @@ namespace ModelsLibraryCore
         public DateTime Date { get; set; }
         [JsonIgnore]
         public MaterialOutput MaterialOutput { get; set; }
+        [JsonIgnore]
+        public MaterialInput MaterialInput { get; set; }
     }
 }

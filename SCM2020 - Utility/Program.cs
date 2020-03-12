@@ -79,7 +79,7 @@ namespace SCM2020___Utility
             //    }
             //};
 
-            APIClient client1 = new APIClient(new Uri("http://localhost:52991/api/Output/Remove"),
+            APIClient client1 = new APIClient(new Uri("http://localhost:52991/api/Output/Remove/1"),
                 null);
             //var data = client1.GETData<ModelsLibrary.Monitoring>();
             //data.Work_Order = "TESTE1234";

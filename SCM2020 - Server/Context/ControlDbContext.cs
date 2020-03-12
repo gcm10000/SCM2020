@@ -50,6 +50,16 @@ namespace SCM2020___Server.Context
                 .HasOne(b => b.MaterialOutput)
                 .WithMany(a => a.PermanentProducts)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            modelBuilder.Entity<AuxiliarConsumption>()
+                .HasOne(b => b.MaterialInput)
+                .WithMany(a => a.ConsumptionProducts)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AuxiliarPermanent>()
+                .HasOne(b => b.MaterialInput)
+                .WithMany(a => a.PermanentProducts)
+                .OnDelete(DeleteBehavior.Cascade);
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             //{

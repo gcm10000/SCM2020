@@ -104,11 +104,70 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var materialOutput = JsonConvert.DeserializeObject<MaterialOutput>(raw);
-            materialOutput.Id = id;
+            var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
+            output.MovingDate = materialOutput.MovingDate;
+            output.EmployeeRegistration = materialOutput.EmployeeRegistration;
+            output.RequestingSector = materialOutput.RequestingSector;
+            output.ServiceLocation = materialOutput.ServiceLocation;
+            output.WorkOrder = materialOutput.WorkOrder;
+            
+            var lConsumpter = new List<AuxiliarConsumption>();
+            lConsumpter.AddRange(output.ConsumptionProducts);
+            var lPermanent = new List<AuxiliarPermanent>();
+            lPermanent.AddRange(output.PermanentProducts);
+            output.ConsumptionProducts = materialOutput.ConsumptionProducts;
+            output.PermanentProducts = materialOutput.PermanentProducts;
 
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
+            List<int> ConsumpterProductIds = new List<int>();
+            List<int> PermanentsProductIds = new List<int>();
+            foreach (var p in output.ConsumptionProducts)
+            {
+                if (!ConsumpterProductIds.Contains(p.ProductId))
+                    ConsumpterProductIds.Add(p.ProductId);
+            }
+            foreach (var p in output.PermanentProducts)
+            {
+                if (!PermanentsProductIds.Contains(p.ProductId))
+                    PermanentsProductIds.Add(p.ProductId);
+            }
 
+            //bool allEquals = output.ConsumptionProducts.All(x => lConsumpter
+            //.Any(y => (x.Date == y.Date) && (x.ProductId == y.ProductId) && (x.Quantity == y.Quantity)));
+
+            foreach (var currentId in ConsumpterProductIds)
+            {
+                var products = lConsumpter.Where(x => x.ProductId == currentId);
+                double quantityProduct = 0d;
+                foreach (var p in products)
+                {
+                    quantityProduct += p.Quantity;
+                }
+                double quantityNewProduct = 0d;
+                var newProducts = output.ConsumptionProducts.ToList().Where(x => x.ProductId == currentId);
+                foreach (var p in newProducts)
+                {
+                    quantityNewProduct += p.Quantity;
+                }
+                var productModify = context.ConsumptionProduct.Find(currentId);
+                productModify.Stock += (quantityProduct - quantityNewProduct);
+                context.ConsumptionProduct.Update(productModify);
+            }
+
+            //permanent
+            foreach (var currentId in PermanentsProductIds)
+            {
+                //oldder - newest
+                var productModify = await context.ConsumptionProduct.FindAsync(currentId);
+                double oldder = lPermanent.Count(x => x.ProductId == currentId);
+                double newest = output.PermanentProducts.Count(x => x.ProductId == currentId);
+                if (oldder != newest)
+                {
+                    productModify.Stock += oldder - newest;
+                    context.ConsumptionProduct.Update(productModify);
+                }
+            }
             context.MaterialOutput.Update(materialOutput);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
@@ -116,7 +175,7 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var materialOutput = context.MaterialOutput.Find(id);
+            var materialOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
 
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
