@@ -21,19 +21,19 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).ToList();
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             return Ok(devolution);
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
             return Ok(devolution);
         }
         [HttpGet("WorkOrder/{workorder}")]
         public IActionResult ShowByWorkOrder(string workorder)
         {
-            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.WorkOrder == workorder);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(devolution);
         }
         [HttpPost("Add")]
@@ -93,19 +93,24 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var devolution = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            var oldMaterialInput = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
+            var devolutionFromJson = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
+                .SingleOrDefault(x => x.Id == id);
             if (context.Monitoring.Any(x => (x.Work_Order == devolution.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
-            List<AuxiliarConsumption> AuxProducts = new List<AuxiliarConsumption>();
-            AuxProducts.AddRange(oldMaterialInput.ConsumptionProducts);
 
-            devolution.ConsumptionProducts = oldMaterialInput.ConsumptionProducts;
-            devolution.DocDate = oldMaterialInput.DocDate;
+            var lConsumpter = new List<AuxiliarConsumption>();
+            lConsumpter.AddRange(devolution.ConsumptionProducts);
+            var lPermanent = new List<AuxiliarPermanent>();
+            if (devolution.PermanentProducts != null)
+                lPermanent.AddRange(devolution.PermanentProducts);
+
+            devolution.ConsumptionProducts = devolutionFromJson.ConsumptionProducts;
+            devolution.DocDate = devolutionFromJson.DocDate;
             //devolution.EmployeeId = oldMaterialInput.EmployeeId;
-            devolution.MovingDate = oldMaterialInput.MovingDate;
-            devolution.PermanentProducts = oldMaterialInput.PermanentProducts;
-            devolution.Regarding = oldMaterialInput.Regarding;
+            devolution.MovingDate = devolutionFromJson.MovingDate;
+            devolution.PermanentProducts = devolutionFromJson.PermanentProducts;
+            devolution.Regarding = devolutionFromJson.Regarding;
             //devolution.WorkOrder = oldMaterialInput.WorkOrder;
 
             //List<ConsumptionProduct> listProduct = new List<ConsumptionProduct>();
@@ -113,12 +118,12 @@ namespace SCM2020___Server.Controllers
             List<int> ConsumpterProductIds = new List<int>();
             List<int> PermanentsProductIds = new List<int>();
 
-            foreach (var p in devolution.ConsumptionProducts)
+            foreach (var p in devolutionFromJson.ConsumptionProducts)
             {
                 if (!ConsumpterProductIds.Contains(p.ProductId))
                     ConsumpterProductIds.Add(p.ProductId);
             }
-            foreach (var p in devolution.PermanentProducts)
+            foreach (var p in devolutionFromJson.PermanentProducts)
             {
                 if (!PermanentsProductIds.Contains(p.ProductId))
                     PermanentsProductIds.Add(p.ProductId);
@@ -126,7 +131,7 @@ namespace SCM2020___Server.Controllers
 
             foreach (var currentId in ConsumpterProductIds)
             {
-                var products = AuxProducts.Where(x => x.ProductId == currentId);
+                var products = lConsumpter.Where(x => x.ProductId == currentId);
                 double quantityProduct = 0d;
                 foreach (var p in products)
                 {
@@ -144,8 +149,6 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(productModify);
             }
 
-            var lPermanent = new List<AuxiliarPermanent>();
-            lPermanent.AddRange(devolution.PermanentProducts);
             //permanent
             foreach (var currentId in PermanentsProductIds)
             {
@@ -160,6 +163,7 @@ namespace SCM2020___Server.Controllers
                 }
             }
             context.MaterialInput.Update(devolution);
+            await context.SaveChangesAsync();
             return Ok("Devolução atualizada com sucesso.");
         }
         [HttpDelete("Remove/{id}")]

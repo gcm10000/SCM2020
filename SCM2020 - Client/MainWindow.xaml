@@ -1,0 +1,24 @@
+﻿<Window x:Class="SCM2020___Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCM2020___Client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid Width="70" HorizontalAlignment="Left" Background="#FFEFEFEF">
+            <StackPanel>
+                <ListView>
+                    <ListViewItem Height="60" Foreground="BlueViolet">
+                        <StackPanel Orientation="Horizontal">
+                            <UserControl xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
+                            </UserControl>
+                            <Path Data="M143.17,255.91a4.89,4.89,0,1,1-4.89,4.89,4.89,4.89,0,0,1,4.89-4.89m0-3a7.89,7.89,0,1,0,7.89,7.89,7.9,7.9,0,0,0-7.89-7.89Z" Fill="#0039b7" />
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
