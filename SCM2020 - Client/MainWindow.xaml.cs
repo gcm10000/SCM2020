@@ -20,9 +20,35 @@ namespace SCM2020___Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        bool menuIsOpened = false;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void BtnOpenMenu_Click(object sender, RoutedEventArgs e)
+        {
+            menuIsOpened = true;
+            BtnOpenMenu.Visibility = Visibility.Collapsed;
+            BtnCloseMenu.Visibility = Visibility.Visible;
+        }
+        private void BtnCloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+            menuIsOpened = false;
+            BtnOpenMenu.Visibility = Visibility.Visible;
+            BtnCloseMenu.Visibility = Visibility.Collapsed;
+        }
+        private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //var item = (sender as ListView).SelectedItem;
+            var index = (sender as ListView).SelectedIndex;
+
+            if (index == 1)
+            {
+                popup.HorizontalOffset = (menuIsOpened) ? 20 : -150;
+                popup.VerticalOffset = -8;
+                popup.IsOpen = true;
+            }
         }
     }
 }
