@@ -41,6 +41,7 @@ namespace SCM2020___Client
             var index = listView.SelectedIndex;
             var item = listView.SelectedItem as ListViewItem;
 
+            //ERRO EM SUB LISTVIEW
             for (int i = 0; i < listView.Items.Count; i++)
             {
                 var lvItem = listView.Items[i] as ListViewItem;
