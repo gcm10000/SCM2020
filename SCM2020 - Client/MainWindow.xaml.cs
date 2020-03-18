@@ -20,50 +20,53 @@ namespace SCM2020___Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool menuIsOpened = false;
         public MainWindow()
         {
             InitializeComponent();
+            PopupMovement.VerticalOffset = -8;
+            PopupRegister.VerticalOffset = -8;
+            PopupQueries.VerticalOffset = -8;
+            PopupReport.VerticalOffset = -8;
+
+            PopupMovement.HorizontalOffset = 21;
+            PopupRegister.HorizontalOffset = 76;
+            PopupQueries.HorizontalOffset = 70;
+            PopupReport.HorizontalOffset = 68;
+
         }
 
-        private void BtnOpenMenu_Click(object sender, RoutedEventArgs e)
-        {
-            menuIsOpened = true;
-            BtnOpenMenu.Visibility = Visibility.Collapsed;
-            BtnCloseMenu.Visibility = Visibility.Visible;
-        }
-        private void BtnCloseMenu_Click(object sender, RoutedEventArgs e)
-        {
-            menuIsOpened = false;
-            BtnOpenMenu.Visibility = Visibility.Visible;
-            BtnCloseMenu.Visibility = Visibility.Collapsed;
-        }
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var index = (sender as ListView).SelectedIndex;
+            var listView = sender as ListView;
+            var index = listView.SelectedIndex;
+            var item = listView.SelectedItem as ListViewItem;
 
+            for (int i = 0; i < listView.Items.Count; i++)
+            {
+                var lvItem = listView.Items[i] as ListViewItem;
+                lvItem.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+                lvItem.Background = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
+                lvItem.IsSelected = false;
+            }
+            item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
+            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
+
+            
+            
             if (index == 1)
             {
-                PopupMovement.HorizontalOffset = (menuIsOpened) ? 21 : -149;
-                PopupMovement.VerticalOffset = -8;
                 PopupMovement.IsOpen = true;
             }
             else if (index == 2)
             {
-                PopupRegister.HorizontalOffset = (menuIsOpened) ? 76 : -93;
-                PopupRegister.VerticalOffset = -8;
                 PopupRegister.IsOpen = true;
             }
             else if (index == 3)
             {
-                PopupQueries.HorizontalOffset = (menuIsOpened) ? 70 : -100;
-                PopupQueries.VerticalOffset = -8;
                 PopupQueries.IsOpen = true;
             }
             else if (index == 4)
             {
-                PopupReport.HorizontalOffset = (menuIsOpened) ? 68 : -102;
-                PopupReport.VerticalOffset = -8;
                 PopupReport.IsOpen = true;
             }
         }
