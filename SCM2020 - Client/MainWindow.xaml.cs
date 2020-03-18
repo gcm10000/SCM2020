@@ -40,14 +40,31 @@ namespace SCM2020___Client
         }
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //var item = (sender as ListView).SelectedItem;
             var index = (sender as ListView).SelectedIndex;
 
             if (index == 1)
             {
-                popup.HorizontalOffset = (menuIsOpened) ? 20 : -150;
-                popup.VerticalOffset = -8;
-                popup.IsOpen = true;
+                PopupMovement.HorizontalOffset = (menuIsOpened) ? 21 : -149;
+                PopupMovement.VerticalOffset = -8;
+                PopupMovement.IsOpen = true;
+            }
+            else if (index == 2)
+            {
+                PopupRegister.HorizontalOffset = (menuIsOpened) ? 76 : -93;
+                PopupRegister.VerticalOffset = -8;
+                PopupRegister.IsOpen = true;
+            }
+            else if (index == 3)
+            {
+                PopupQueries.HorizontalOffset = (menuIsOpened) ? 70 : -100;
+                PopupQueries.VerticalOffset = -8;
+                PopupQueries.IsOpen = true;
+            }
+            else if (index == 4)
+            {
+                PopupReport.HorizontalOffset = (menuIsOpened) ? 68 : -102;
+                PopupReport.VerticalOffset = -8;
+                PopupReport.IsOpen = true;
             }
         }
     }

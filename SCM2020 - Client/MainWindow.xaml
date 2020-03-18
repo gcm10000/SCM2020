@@ -63,50 +63,108 @@
                             <TextBlock Text="Painel de Controle" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60" Name="Movimentacoes">
+                    <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
                             <!-- Popup Movimentações -->
-                            <Popup x:Name="popup" StaysOpen="False" Placement="Right" Margin="0">
-                                <ListBox Background="White">
+
+                            <Popup x:Name="PopupMovement" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" Padding="15, 15, 15, 15">
                                     <ListBoxItem>
-                                        <Button Content="Entrada por fornecedor"></Button>
+                                        <TextBlock Text="Entrada por fornecedor"></TextBlock>
                                     </ListBoxItem>
                                     <ListBoxItem>
-                                        <Button Content="Devolução"></Button>
+                                        <TextBlock Text="Devolução"></TextBlock>
                                     </ListBoxItem>
                                     <ListBoxItem>
-                                        <Button Content="Saída"></Button>
+                                        <TextBlock Text="Saída"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Fechamento"></TextBlock>
                                     </ListBoxItem>
                                 </ListBox>
                             </Popup>
-                            <materialDesign:PackIcon Kind="ViewDashboard" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
-                            <!--<materialDesign:PopupBox PlacementMode="RightAndAlignTopEdges" StaysOpen="True" Margin="10" VerticalAlignment="Center">
-                                <materialDesign:PopupBox.ToggleContent>
-                                    <materialDesign:PackIcon Width="25" Height="25" Kind="ViewDashboard"></materialDesign:PackIcon>
-                                </materialDesign:PopupBox.ToggleContent>
-                                <StackPanel>
-                                    <Button Content="Entrada por fornecedor"></Button>
-                                    <Button Content="Entrada de material"></Button>
-                                    <Button Content="Saída de material"></Button>
-                                </StackPanel>
-                            </materialDesign:PopupBox>-->
+                            <materialDesign:PackIcon Kind="ImportExport"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock Text="Movimentações" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem x:Name="Menu" Height="60">
                         <StackPanel Orientation="Horizontal">
+                            <Popup x:Name="PopupRegister" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" Padding="15, 15, 15, 15">
+                                    <ListBoxItem>
+                                        <TextBlock Text="Funcionário"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Produtos"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Grupos"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Fornecedores"></TextBlock>
+                                    </ListBoxItem>
+                                    <!--<ListBoxItem>
+                                        <TextBlock Text="Solicitantes"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Fechamento"></TextBlock>
+                                    </ListBoxItem>-->
+                                </ListBox>
+                            </Popup>
                             <materialDesign:PackIcon Kind="ViewDashboard" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock Text="Cadastro" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                            <Popup x:Name="PopupQueries" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" Padding="15, 15, 15, 15">
+                                    <ListBoxItem>
+                                        <TextBlock Text="Entrada/Saída"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Estoque"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Histórico do Funcionário"></TextBlock>
+                                    </ListBoxItem>
+                                </ListBox>
+                            </Popup>
+                            <materialDesign:PackIcon Kind="Search"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock Text="Consultas" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60">
                         <StackPanel Orientation="Horizontal">
+                            <!--
+                                    Inventário rotativo -> Alguns itens do estoque (selecionados)
+                                    Inventário oficial -> todos os itens do estoque
+                            -->
+                            <Popup x:Name="PopupReport" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" Padding="15, 15, 15, 15">
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Balanço"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Conferência"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Produtos"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Produtos por Grupo"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário oficial"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário rotativo"></TextBlock>
+                                    </ListBoxItem>
+                                </ListBox>
+                            </Popup>
                             <materialDesign:PackIcon Kind="ViewDashboard" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
