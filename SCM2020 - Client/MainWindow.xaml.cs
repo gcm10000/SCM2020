@@ -50,9 +50,7 @@ namespace SCM2020___Client
                 lvItem.IsSelected = false;
             }
             item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
-            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
-
-            
+            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));            
             
             if (index == 1)
             {
