@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dragablz.NetCore" Version="0.3.3" />
     <PackageReference Include="MaterialDesignThemes" Version="3.0.1" />
   </ItemGroup>
 
