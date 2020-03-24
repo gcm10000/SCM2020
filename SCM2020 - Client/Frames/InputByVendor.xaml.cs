@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,17 +13,134 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using ModelsLibraryCore;
+using ModelsLibraryCore.RequestingClient;
 
 namespace SCM2020___Client.Frames
 {
     /// <summary>
     /// Interação lógica para InputByVendor.xam
     /// </summary>
-    public partial class InputByVendor : Page
+    public partial class InputByVendor : UserControl
     {
+        static Uri server = new Uri("http://gabriel-laptop:52991/api/");
+        class ProductsToInput
+        {
+            //public string Image { get; set; }
+            public int Id { get; set; }
+            public int Code { get; set; }
+            public double QuantityAddorRemove { get; set; }
+            public double Quantity { get; set; }
+            public string Description { get; set; }
+        }
+
+
         public InputByVendor()
         {
             InitializeComponent();
+            Uri vendorUri = new Uri(server, "vendor/");
+            //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
+            //var nameVendors = vendors.Select(x => x.Name).ToList();
+            //this.VendorComboBox.ItemsSource = nameVendors;
+
+            ProductsToInput productsToInput = new ProductsToInput()
+            {
+                Id = 1,
+                Code = 1,
+                Description = "TESTE",
+                Quantity = 10
+            };
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+            ProductToAddDataGrid.Items.Add(productsToInput);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+            GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
+        }
+        private void FillingDateGrid()
+        {
+            DataTable dt = new DataTable();
+            DataColumn cod = new DataColumn("Código", typeof(int));
+            DataColumn description = new DataColumn("Descrição", typeof(string));
+            DataColumn stock = new DataColumn("Quantidade Atual", typeof(int));
+
+            dt.Columns.Add(cod);
+            dt.Columns.Add(description);
+            dt.Columns.Add(stock);
+            
+
+            Uri products = new Uri(server, "api/generalproducts");
+            var data = new List<ConsumptionProduct>();
+            data.Add(new ConsumptionProduct() { Code = 1, Description = "teste", Group = 2, Localization = "a", NumberLocalization = 2, MaximumStock = 2, MininumStock = 1, Stock = 1, Unity = "UN", Id = 1, Photo = null });
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            new Task(() => Search()).Start();
+        }
+        private void Search()
+        {
+            string textBoxValue = string.Empty;
+            this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
+
+            Uri uriProductsSearch = new Uri(server, "generalproduct/search/");
+            Uri uriProducts = new Uri(uriProductsSearch, textBoxValue);
+
+            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProducts.ToString());
+            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+
+            foreach (var item in data)
+            {
+                ProductsToInput productsToInput = new ProductsToInput()
+                {
+                    Id = item.Id,
+                    Code = item.Code,
+                    Description = item.Description,
+                    Quantity = item.Stock
+                };
+                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToInput); }));
+            }
+        }
+
+        private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                new Task(() => Search()).Start();
+            }
+        }
+
+        private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
+        }
+
+        private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
+        {
+            var obj = ((FrameworkElement)sender).DataContext as ProductsToInput;
+            //MessageBox shows numeric textBox and OK button
+            //obj.QuantityAddorRemove
         }
     }
 }
