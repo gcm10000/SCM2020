@@ -43,7 +43,7 @@ namespace SCM2020___Server.Controllers
             bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
             if (!b)
                 return BadRequest("Por favor, faça login.");
-            var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            var userId = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
             var input = new MaterialInputByVendor(raw, id);
