@@ -30,7 +30,8 @@ namespace SCM2020___Client.Frames
             //public string Image { get; set; }
             public int Id { get; set; }
             public int Code { get; set; }
-            public double QuantityAddorRemove { get; set; }
+            public double QuantityFuture { get => Quantity + QuantityAdded; }
+            public double QuantityAdded { get; set; }
             public double Quantity { get; set; }
             public string Description { get; set; }
         }
@@ -70,24 +71,9 @@ namespace SCM2020___Client.Frames
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int index = int.Parse(((Button)e.Source).Uid);
-            GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
-        }
-        private void FillingDateGrid()
-        {
-            DataTable dt = new DataTable();
-            DataColumn cod = new DataColumn("Código", typeof(int));
-            DataColumn description = new DataColumn("Descrição", typeof(string));
-            DataColumn stock = new DataColumn("Quantidade Atual", typeof(int));
-
-            dt.Columns.Add(cod);
-            dt.Columns.Add(description);
-            dt.Columns.Add(stock);
-            
-
-            Uri products = new Uri(server, "api/generalproducts");
-            var data = new List<ConsumptionProduct>();
-            data.Add(new ConsumptionProduct() { Code = 1, Description = "teste", Group = 2, Localization = "a", NumberLocalization = 2, MaximumStock = 2, MininumStock = 1, Stock = 1, Unity = "UN", Id = 1, Photo = null });
+            //int index = int.Parse(((Button)e.Source).Uid);
+           
+            //GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -99,13 +85,37 @@ namespace SCM2020___Client.Frames
             string textBoxValue = string.Empty;
             this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
 
-            Uri uriProductsSearch = new Uri(server, "generalproduct/search/");
-            Uri uriProducts = new Uri(uriProductsSearch, textBoxValue);
+            Uri uriProductsSearch = new Uri(server, $"generalproduct/search/{textBoxValue}");
 
-            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProducts.ToString());
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
-            foreach (var item in data)
+            List<ConsumptionProduct> products = new List<ConsumptionProduct>();
+
+            int index = -1;
+            if (int.TryParse(textBoxValue, out _))
+            {
+                Uri uriProductsCode = new Uri(server, $"generalproduct/code/{textBoxValue}");
+                new Task(() => 
+                    {
+                        var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
+                        products.Add(singleProduct);
+                        index = products.FindIndex(x => x.Id == singleProduct.Id);
+                        
+                    }).Start();
+
+            }
+
+            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
+            products.AddRange(data);
+
+            if (index > -1)
+            {
+                var myProduct = products[index];
+                products[index] = products[0];
+                products[0] = myProduct;
+            }
+
+            foreach (var item in products.ToList())
             {
                 ProductsToInput productsToInput = new ProductsToInput()
                 {
@@ -136,11 +146,57 @@ namespace SCM2020___Client.Frames
             //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
         }
 
+        private void BtnInformation_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonInformation.IsHitTestVisible = false;
+            ButtonProducts.IsHitTestVisible = true;
+            InfoScrollViewer.Visibility = Visibility.Visible;
+            InfoDockPanel.Visibility = Visibility.Visible;
+            ProductsDockPanel.Visibility = Visibility.Collapsed;
+        }
+        private void BtnProducts_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonInformation.IsHitTestVisible = true;
+            ButtonProducts.IsHitTestVisible = false;
+
+            InfoScrollViewer.Visibility = Visibility.Collapsed;
+            InfoDockPanel.Visibility = Visibility.Collapsed;
+            ProductsDockPanel.Visibility = Visibility.Visible;
+
+        }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
-            var obj = ((FrameworkElement)sender).DataContext as ProductsToInput;
-            //MessageBox shows numeric textBox and OK button
-            //obj.QuantityAddorRemove
+            var product = ((FrameworkElement)sender).DataContext as ProductsToInput;
+            var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
+
+            if (dialog.ShowDialog() == true)
+            {
+                product.QuantityAdded = dialog.QuantityAdded;
+                int index = ProductToAddDataGrid.SelectedIndex;
+                ProductToAddDataGrid.Items.Refresh();
+                ProductsAddedDataGrid.Items.Refresh();
+                if (!ProductsAddedDataGrid.Items.Contains(product))
+                    ProductsAddedDataGrid.Items.Add(product);
+                else
+                {
+                    if (dialog.QuantityAdded == 0)
+                        ProductsAddedDataGrid.Items.Remove(product);
+                    else
+                        product.QuantityAdded = dialog.QuantityAdded;
+                }
+                ProductToAddDataGrid.UnselectAll();
+                ProductsAddedDataGrid.UnselectAll();
+            }
+        }
+        private void ProductToAddDataGrid_Selected(object sender, RoutedEventArgs e)
+        {
+            var currentRowIndex = ProductToAddDataGrid.Items.IndexOf(ProductToAddDataGrid.CurrentItem);
+            MessageBox.Show(currentRowIndex.ToString());
+        }
+
+        private void BtnFinish_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
