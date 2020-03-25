@@ -69,7 +69,7 @@
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <TextBox Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox x:Name="InvoiceTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Fornecedor" FontSize="18"></TextBlock>
                     <ComboBox Width="188" x:Name="VendorComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged">
                         <ComboBox.Resources>
@@ -85,7 +85,7 @@
                         </ComboBox.Resources>
                     </ComboBox>
                     <TextBlock Margin="0 20 0 5" Text="Data da Movimentação" FontSize="18"></TextBlock>
-                    <DatePicker Style="{x:Null}" SelectedDate="{x:Static sys:DateTime.Now}" Height="30" FontSize="16"></DatePicker>
+                    <DatePicker x:Name="MovingDateDatePicker" Style="{x:Null}" SelectedDate="{x:Static sys:DateTime.Now}" Height="30" FontSize="16"></DatePicker>
                 </StackPanel>
             </Border>
         </ScrollViewer>

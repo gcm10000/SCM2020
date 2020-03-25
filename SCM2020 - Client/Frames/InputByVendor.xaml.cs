@@ -24,8 +24,7 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class InputByVendor : UserControl
     {
-        static Uri server = new Uri("http://gabriel-laptop:52991/api/");
-        class ProductsToInput
+        class ProductToInput
         {
             //public string Image { get; set; }
             public int Id { get; set; }
@@ -40,12 +39,12 @@ namespace SCM2020___Client.Frames
         public InputByVendor()
         {
             InitializeComponent();
-            Uri vendorUri = new Uri(server, "vendor/");
+            Uri vendorUri = new Uri(Helper.Server, "vendor/");
             //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             //var nameVendors = vendors.Select(x => x.Name).ToList();
             //this.VendorComboBox.ItemsSource = nameVendors;
 
-            ProductsToInput productsToInput = new ProductsToInput()
+            ProductToInput productsToInput = new ProductToInput()
             {
                 Id = 1,
                 Code = 1,
@@ -85,7 +84,7 @@ namespace SCM2020___Client.Frames
             string textBoxValue = string.Empty;
             this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
 
-            Uri uriProductsSearch = new Uri(server, $"generalproduct/search/{textBoxValue}");
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
 
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
@@ -94,7 +93,7 @@ namespace SCM2020___Client.Frames
             int index = -1;
             if (int.TryParse(textBoxValue, out _))
             {
-                Uri uriProductsCode = new Uri(server, $"generalproduct/code/{textBoxValue}");
+                Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
                 new Task(() => 
                     {
                         var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
@@ -117,7 +116,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in products.ToList())
             {
-                ProductsToInput productsToInput = new ProductsToInput()
+                ProductToInput productsToInput = new ProductToInput()
                 {
                     Id = item.Id,
                     Code = item.Code,
@@ -166,7 +165,7 @@ namespace SCM2020___Client.Frames
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
-            var product = ((FrameworkElement)sender).DataContext as ProductsToInput;
+            var product = ((FrameworkElement)sender).DataContext as ProductToInput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
@@ -196,7 +195,25 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
+            MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
+            materialInputByVendor.Invoice = InvoiceTextBox.Text;
+            materialInputByVendor.MovingDate = MovingDateDatePicker.DisplayDate;
 
+            List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
+
+            foreach (var item in ProductsAddedDataGrid.Items)
+            {
+                ProductToInput product = item as ProductToInput;
+                AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
+                { 
+                    Date = materialInputByVendor.MovingDate,
+                    ProductId = product.Id,
+                    Quantity = product.QuantityAdded
+                };
+                p.Add(auxiliarConsumption);
+            }
+            materialInputByVendor.AuxiliarConsumptions = p;
+            APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), null);
         }
     }
 }
