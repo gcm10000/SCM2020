@@ -4,13 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      xmlns:local="clr-namespace:SCM2020___Client.Frames"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:Controls="clr-namespace:System.Windows.Controls.Ribbon.Primitives;assembly=System.Windows.Controls.Ribbon"
-      ScrollViewer.HorizontalScrollBarVisibility="Visible"
-      ScrollViewer.VerticalScrollBarVisibility="Visible">
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
         <Storyboard x:Key="InformationUnderLine">
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="GridCursor">
@@ -70,7 +66,11 @@
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="InvoiceTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                    <TextBlock Margin="0 20 0 5" Text="Fornecedor" FontSize="18"></TextBlock>
+                    <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <DatePicker x:Name="OSDateTextBox" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
+                    <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <TextBox x:Name="ApplicantTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Tipo de Saída" FontSize="18"></TextBlock>
                     <ComboBox Width="188" x:Name="VendorComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged">
                         <ComboBox.Resources>
                             <Style TargetType="{x:Type ComboBoxItem}">

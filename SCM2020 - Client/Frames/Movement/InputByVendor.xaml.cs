@@ -20,7 +20,7 @@ using ModelsLibraryCore.RequestingClient;
 namespace SCM2020___Client.Frames
 {
     /// <summary>
-    /// Interação lógica para InputByVendor.xam
+    /// Interação lógica para InputByVendor.xaml
     /// </summary>
     public partial class InputByVendor : UserControl
     {

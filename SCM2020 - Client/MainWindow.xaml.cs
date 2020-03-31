@@ -33,6 +33,8 @@ namespace SCM2020___Client
             PopupQueries.HorizontalOffset = 70;
             PopupReport.HorizontalOffset = 68;
 
+            LoginScreen screen = new LoginScreen();
+            screen.ShowDialog();
         }
 
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
