@@ -16,11 +16,36 @@ namespace SCM2020___Client.Frames.Listing
     /// <summary>
     /// Interação lógica para ListPermanentProduct.xam
     /// </summary>
-    public partial class ListPermanentProduct : Page
+    public partial class ListPermanentProduct : UserControl
     {
         public ListPermanentProduct()
         {
             InitializeComponent();
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
         }
     }
 }

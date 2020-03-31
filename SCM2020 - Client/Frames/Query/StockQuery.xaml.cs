@@ -16,11 +16,41 @@ namespace SCM2020___Client.Frames.Query
     /// <summary>
     /// Interação lógica para StockQuery.xam
     /// </summary>
-    public partial class StockQuery : Page
+    public partial class StockQuery : UserControl
     {
         public StockQuery()
         {
             InitializeComponent();
+        }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void QueryDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
