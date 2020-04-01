@@ -11,19 +11,29 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SCM2020___Client.Frames.Listing
+namespace SCM2020___Client.Frames.Query
 {
     /// <summary>
-    /// Interação lógica para ConferenceListing.xam
+    /// Interação lógica para screen.xam
     /// </summary>
-    public partial class ConferenceListing : UserControl
+    public partial class screen : UserControl
     {
-        public ConferenceListing()
+        public screen()
         {
             InitializeComponent();
         }
 
-        private void ConferenceListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
 
         }
@@ -38,7 +48,7 @@ namespace SCM2020___Client.Frames.Listing
 
         }
 
-        private void ListingPermantentDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }

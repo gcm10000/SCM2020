@@ -79,6 +79,7 @@
                     <DataGridTextColumn Header=" Código" Binding="{Binding Code}"/>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"/>
+                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Patrimony}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
