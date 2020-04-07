@@ -4,7 +4,6 @@ using SCM2020___Server.Context;
 using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
-using SCM2020___Server.Extensions;
 using System.Security.Claims;
 
 namespace SCM2020___Server.Controllers
