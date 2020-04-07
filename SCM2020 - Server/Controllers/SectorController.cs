@@ -4,6 +4,8 @@ using SCM2020___Server.Context;
 using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
+using SCM2020___Server.Extensions;
+using System.Security.Claims;
 
 namespace SCM2020___Server.Controllers
 {
@@ -45,6 +47,20 @@ namespace SCM2020___Server.Controllers
             var sector = new Sector(raw);
             sector.Id = id;
             //ATUALIZAR TODAS AS CLAIMS TAMBÉM
+            var listUsers = await userManager.GetUsersForClaimAsync(new System.Security.Claims.Claim(ClaimTypes.Role, sector.NameSector));
+            foreach (var user in listUsers)
+            {
+                var claims = await userManager.GetClaimsAsync(user);
+                foreach (var claim in claims)
+                {
+                    if (claim.Type == ClaimTypes.Role)
+                    {
+                        await userManager.RemoveClaimAsync(user, claim);
+                        Claim sectorClaim = new Claim(ClaimTypes.Role, sector.NameSector);
+                        await userManager.AddClaimAsync(user, sectorClaim);
+                    }
+                }
+            }
             context.Sectors.Update(sector);
             await context.SaveChangesAsync();
             return Ok("Setor atualizada com sucesso.");
@@ -57,6 +73,18 @@ namespace SCM2020___Server.Controllers
 
             if (list.Count > 0)
                 return BadRequest("Existe funcionários neste setor. Atualize e tente novamente.");
+            var listUsers = await userManager.GetUsersForClaimAsync(new System.Security.Claims.Claim(ClaimTypes.Role, sector.NameSector));
+            foreach (var user in listUsers)
+            {
+                var claims = await userManager.GetClaimsAsync(user);
+                foreach (var claim in claims)
+                {
+                    if (claim.Type == ClaimTypes.Role)
+                    {
+                        await userManager.RemoveClaimAsync(user, claim);
+                    }
+                }
+            }
             context.Sectors.Remove(sector);
             await context.SaveChangesAsync();
             return Ok("Setor removido com sucesso.");
