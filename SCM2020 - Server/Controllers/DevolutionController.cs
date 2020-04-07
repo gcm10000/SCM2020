@@ -45,12 +45,13 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Migrate()
         {
             var raw = await Helper.RawFromBody(this);
-            var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            var SCMId = userManager.FindByPJERJRegistrationAsync(input.SCMEmployeeId).Id;
+            var deserialized = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             MaterialInput materialInput = new MaterialInput(raw, SCMId);
-            materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(input.EmployeeId).Id;
+            materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
             context.MaterialInput.Add(materialInput);
-            return Ok("Migração de dados feita com sucesso.");
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Add()

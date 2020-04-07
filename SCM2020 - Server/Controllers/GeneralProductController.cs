@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using SCM2020___Server.Extensions;
 
 namespace SCM2020___Server.Controllers
 {
@@ -17,8 +19,19 @@ namespace SCM2020___Server.Controllers
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
+        UserManager<ApplicationUser> userManager;
         public GeneralProductController(ControlDbContext context) { this.context = context; }
 
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            ConsumptionProduct product = new ConsumptionProduct(raw);
+            context.ConsumptionProduct.Add(product);
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
+        }
         //Add new consumpter product content every information about
         [HttpPost("Add")]
         public async Task<IActionResult> Add()

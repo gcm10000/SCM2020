@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using SCM2020___Server.Extensions;
 
 namespace SCM2020___Server.Controllers
 {
@@ -38,6 +40,19 @@ namespace SCM2020___Server.Controllers
         {
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
             return Ok(monitoring);
+        }
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            var deserialized = JsonConvert.DeserializeObject<Monitoring>(raw);
+            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            Monitoring monitoring = new Monitoring(raw, SCMId);
+            monitoring.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
+            context.Monitoring.Add(monitoring);
+            await context.SaveChangesAsync();
+            return Ok("Migração de dados feita com sucesso.");
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
