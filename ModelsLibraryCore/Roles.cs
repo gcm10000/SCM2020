@@ -10,5 +10,9 @@
         /// Indicar esta role para os funcionários DGSEI - DETEL.
         /// </summary>
         public const string NonSCM = "NonSCM";
+        /// <summary>
+        /// Administrador do projeto.
+        /// </summary>
+        public const string Administrator = "Administrator";
     }
 }

@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using SCM2020___Server.Extensions;
+
 
 namespace SCM2020___Server.Controllers
 {
@@ -17,7 +20,8 @@ namespace SCM2020___Server.Controllers
     public class DevolutionController : ControllerBase
     {
         ControlDbContext context;
-        public DevolutionController(ControlDbContext context) { this.context = context; }
+        UserManager<ApplicationUser> userManager;
+        public DevolutionController(ControlDbContext context, UserManager<ApplicationUser> userManager) { this.context = context; this.userManager = userManager; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -35,6 +39,18 @@ namespace SCM2020___Server.Controllers
         {
             var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(devolution);
+        }
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            var SCMId = userManager.FindByPJERJRegistrationAsync(input.SCMEmployeeId).Id;
+            MaterialInput materialInput = new MaterialInput(raw, SCMId);
+            materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(input.EmployeeId).Id;
+            context.MaterialInput.Add(materialInput);
+            return Ok("Migração de dados feita com sucesso.");
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
