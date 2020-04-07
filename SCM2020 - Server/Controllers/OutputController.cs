@@ -123,7 +123,7 @@ namespace SCM2020___Server.Controllers
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
-            output.EmployeeRegistration = materialOutputFromJson.EmployeeRegistration;
+            output.EmployeeId = materialOutputFromJson.EmployeeId;
             output.RequestingSector = materialOutputFromJson.RequestingSector;
             output.ServiceLocation = materialOutputFromJson.ServiceLocation;
             output.WorkOrder = materialOutputFromJson.WorkOrder;

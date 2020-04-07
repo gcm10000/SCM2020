@@ -4,12 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using ModelsLibraryCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using SCM2020___Server.Extensions;
 
 namespace SCM2020___Server.Controllers
 {
@@ -19,7 +16,6 @@ namespace SCM2020___Server.Controllers
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
-        UserManager<ApplicationUser> userManager;
         public GeneralProductController(ControlDbContext context) { this.context = context; }
 
         [Authorize(Roles = Roles.Administrator)]
