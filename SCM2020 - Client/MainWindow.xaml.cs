@@ -148,6 +148,9 @@ namespace SCM2020___Client
                     case 2:
                         //FrameContent.Source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
                         break;
+                    case 3:
+                        FrameContent.Source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);
+                        break;
                 }
                 PopupQueries.IsOpen = false;
             }
