@@ -57,10 +57,10 @@ namespace SCM2020___Server.Controllers
             bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
             if (!b)
                 return BadRequest("Por favor, faça login.");
-            var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            var userId = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
-            var input = new MaterialInputByVendor(raw, id);
+            var input = new MaterialInputByVendor(raw, userId);
             if (context.MaterialInputByVendor.Any(x => x.Invoice == input.Invoice))
                 return BadRequest("Já existe uma entrada com esta nota fiscal. Caso queria adicionar um novo produto nesta nota fiscal, atualize a entrada.");
 
