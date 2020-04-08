@@ -23,6 +23,16 @@ namespace SCM2020___Server.Controllers
         {
             this.context = context;
         }
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            ConsumptionProduct product = new ConsumptionProduct(raw);
+            context.ConsumptionProduct.Add(product);
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
+        }
         //Add new product content every information about
         [HttpPost("Add")]
         public async Task<IActionResult> Add()

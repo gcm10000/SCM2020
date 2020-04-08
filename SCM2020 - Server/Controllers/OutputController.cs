@@ -8,6 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using SCM2020___Server.Extensions;
 
 namespace SCM2020___Server.Controllers
 {
@@ -17,7 +20,8 @@ namespace SCM2020___Server.Controllers
     public class OutputController : ControllerBase
     {
         ControlDbContext context;
-        public OutputController(ControlDbContext context) { this.context = context; }
+        UserManager<ApplicationUser> userManager;
+        public OutputController(UserManager<ApplicationUser> userManager, ControlDbContext context) { this.userManager = userManager; this.context = context; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -48,6 +52,19 @@ namespace SCM2020___Server.Controllers
             }
 
             return Ok(outputs.ToList());
+        }
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            var deserialized = JsonConvert.DeserializeObject<MaterialOutput>(raw);
+            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            MaterialOutput output = new MaterialOutput(raw, SCMId);
+            output.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
+            context.MaterialOutput.Add(output);
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
         }
         [HttpPost("Add")]
         public async Task<IActionResult> NewOutput()
@@ -106,7 +123,7 @@ namespace SCM2020___Server.Controllers
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
-            output.EmployeeRegistration = materialOutputFromJson.EmployeeRegistration;
+            output.EmployeeId = materialOutputFromJson.EmployeeId;
             output.RequestingSector = materialOutputFromJson.RequestingSector;
             output.ServiceLocation = materialOutputFromJson.ServiceLocation;
             output.WorkOrder = materialOutputFromJson.WorkOrder;

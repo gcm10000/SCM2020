@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using ModelsLibraryCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +18,16 @@ namespace SCM2020___Server.Controllers
         ControlDbContext context;
         public GeneralProductController(ControlDbContext context) { this.context = context; }
 
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            ConsumptionProduct product = new ConsumptionProduct(raw);
+            context.ConsumptionProduct.Add(product);
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
+        }
         //Add new consumpter product content every information about
         [HttpPost("Add")]
         public async Task<IActionResult> Add()

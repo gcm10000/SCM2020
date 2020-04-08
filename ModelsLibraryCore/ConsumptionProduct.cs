@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -50,6 +51,7 @@ namespace ModelsLibraryCore
         /// Nome e descrição do produto.
         /// </summary>
         [Required]
+        [DisplayName("Descrição")]
         public string Description { get; set; }
         /// <summary>
         /// Imagem do produto.

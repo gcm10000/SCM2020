@@ -13,8 +13,8 @@ namespace ModelsLibraryCore
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
-            this.EmployeeRegistration = productFromRaw.Value<string>("EmployeeRegistration");
-            this.SCMRegistration = UserId;
+            this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
+            this.SCMEmployeeId = UserId;
             this.RequestingSector = productFromRaw.Value<int>("RequestingSector");
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
@@ -41,13 +41,13 @@ namespace ModelsLibraryCore
         /// </summary>
         public DateTime MovingDate { get; set; }
         /// <summary>
-        /// Matrícula do funcionário do Sistema de Controle de Materiais.
+        /// Funcionário do Sistema de Controle de Materiais.
         /// </summary>
-        public string SCMRegistration { get; set; }
+        public string SCMEmployeeId { get; set; }
         /// <summary>
-        /// Matrícula do funcionário que solicitou a movimentação de saída.
+        /// Funcionário que solicitou a movimentação de saída.
         /// </summary>
-        public string EmployeeRegistration { get; set; }
+        public string EmployeeId { get; set; }
         /// <summary>
         /// Setor do qual solicitou a movimentação de saída.
         /// Será tratado como ID da tabela Sectors.

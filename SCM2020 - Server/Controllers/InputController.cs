@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
+using SCM2020___Server.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -17,7 +19,8 @@ namespace SCM2020___Server.Controllers
     public class InputController : ControllerBase
     {
         ControlDbContext context;
-        public InputController(ControlDbContext context) { this.context = context; }
+        UserManager<ApplicationUser> userManager;
+        public InputController(ControlDbContext context, UserManager<ApplicationUser> userManager) { this.context = context; this.userManager = userManager; }
         [HttpGet]
         public IActionResult ShowAll()
         {
@@ -36,7 +39,18 @@ namespace SCM2020___Server.Controllers
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
-        
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("Migrate")]
+        public async Task<IActionResult> Migrate()
+        {
+            var raw = await Helper.RawFromBody(this);
+            var deserialized = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
+            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            MaterialInputByVendor input = new MaterialInputByVendor(raw, SCMId);
+            context.MaterialInputByVendor.Add(input);
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
+        }
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
