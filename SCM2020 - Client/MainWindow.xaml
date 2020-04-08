@@ -47,9 +47,8 @@
                         <ListViewItem Height="60">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Popup Movimentações -->
-
                                 <Popup x:Name="PopupMovement" StaysOpen="False" Placement="Right" Margin="0">
-                                    <ListBox materialDesign:RippleAssist.Feedback="Transparent" Background="White" Padding="15, 15, 15, 15">
+                                <ListBox materialDesign:RippleAssist.Feedback="Transparent" Background="White" PreviewMouseLeftButtonUp="ListViewMoving_MouseLeftButtonUp"  Padding="15, 15, 15, 15">
                                         <ListBoxItem>
                                             <TextBlock Text="Entrada por fornecedor"></TextBlock>
                                         </ListBoxItem>
@@ -70,8 +69,8 @@
                         </ListViewItem>
                         <ListViewItem x:Name="Menu" Height="60">
                             <StackPanel Orientation="Horizontal">
-                                <Popup x:Name="PopupRegister" StaysOpen="False" Placement="Right" Margin="0">
-                                    <ListBox Background="White" Padding="15, 15, 15, 15">
+                            <Popup x:Name="PopupRegister" StaysOpen="False"  Placement="Right" Margin="0">
+                                <ListBox Background="White" Padding="15, 15, 15, 15" x:Name="ListBoxRegister" PreviewMouseLeftButtonUp="ListBoxRegister_PreviewMouseLeftButtonUp">
                                         <ListBoxItem>
                                             <TextBlock Text="Funcionário"></TextBlock>
                                         </ListBoxItem>
@@ -95,8 +94,8 @@
                         </ListViewItem>
                         <ListViewItem Height="60">
                             <StackPanel Orientation="Horizontal">
-                                <Popup x:Name="PopupQueries" StaysOpen="False" Placement="Right" Margin="0">
-                                    <ListBox Background="White" Padding="15, 15, 15, 15">
+                                <Popup x:Name="PopupQueries" StaysOpen="False"  Placement="Right" Margin="0">
+                                <ListBox Background="White" x:Name="ListBoxQueries"  PreviewMouseLeftButtonUp="ListBoxQueries_PreviewMouseLeftButtonUp" Padding="15, 15, 15, 15">
                                         <ListBoxItem>
                                             <TextBlock Text="Entrada/Saída"></TextBlock>
                                         </ListBoxItem>
@@ -118,8 +117,8 @@
                                     Inventário rotativo -> Alguns itens do estoque (selecionados)
                                     Inventário oficial -> todos os itens do estoque
                             -->
-                                <Popup x:Name="PopupReport" StaysOpen="False" Placement="Right" Margin="0">
-                                    <ListBox Background="White" Padding="15, 15, 15, 15">
+                            <Popup x:Name="PopupReport" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" x:Name="ListBoxReport" PreviewMouseLeftButtonUp="ListBoxReport_PreviewMouseLeftButtonUp"  Padding="15, 15, 15, 15">
                                         <ListBoxItem>
                                             <TextBlock Text="Listagem de Balanço"></TextBlock>
                                         </ListBoxItem>
@@ -152,7 +151,7 @@
             </Grid>
             <Grid Background="#FFFFFFFF" Margin="10 0 0 0" Height="Auto" DockPanel.Dock="Right">
                 <DockPanel>
-                <Frame x:Name="ContentFrame" NavigationUIVisibility="Automatic" Source="Frames\Movement\Closure.xaml"></Frame>
+                <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden"  Source="Frames\Movement\Closure.xaml"></Frame>
                 </DockPanel>
             </Grid>
     </DockPanel>

@@ -16,9 +16,9 @@ namespace SCM2020___Client.Frames.Query
     /// <summary>
     /// Interação lógica para screen.xam
     /// </summary>
-    public partial class screen : UserControl
+    public partial class QueryByDate : UserControl
     {
-        public screen()
+        public QueryByDate()
         {
             InitializeComponent();
         }

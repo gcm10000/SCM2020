@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SCM2020___Client.Frames.Movement
+namespace SCM2020___Client.Frames.Query
 {
     /// <summary>
-    /// Interação lógica para Devolution.xam
+    /// Interação lógica para InventoryTurnover.xam
     /// </summary>
-    public partial class Devolution : UserControl
+    public partial class InventoryTurnover : UserControl
     {
-        public Devolution()
+        public InventoryTurnover()
         {
             InitializeComponent();
         }
