@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,7 +27,13 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-
+            DateTime dateTime = ClosureOSDateTextBox.DisplayDate;
+            Uri uriClosure = new Uri(Helper.Server, $"Closure/{OSTextBox.Text}/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
+            Task.Run(() =>
+            {
+                var result = APIClient.PostData(uriClosure.ToString(), null, Helper.Authentication);
+                MessageBox.Show(result);
+            });
         }
     }
 }

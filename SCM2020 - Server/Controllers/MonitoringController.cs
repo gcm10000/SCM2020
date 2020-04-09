@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using SCM2020___Server.Extensions;
+using System;
 
 namespace SCM2020___Server.Controllers
 {
@@ -88,6 +89,16 @@ namespace SCM2020___Server.Controllers
             //monitoring.Situation = monitoringFromJson.Situation;
             monitoring.Work_Order = monitoringFromJson.Work_Order;
             
+            context.Monitoring.Update(monitoring);
+            await context.SaveChangesAsync();
+            return Ok("Monitoramento atualizada com sucesso.");
+        }
+        [HttpPost("Closure/{workOrder}/{year}/{month}/{day}")]
+        public async Task<IActionResult> Closure(string workOrder, int year, int month, int day)
+        {
+            var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
+            DateTime dateTime = new DateTime(year, month, day);
+            monitoring.Situation = true;
             context.Monitoring.Update(monitoring);
             await context.SaveChangesAsync();
             return Ok("Monitoramento atualizada com sucesso.");

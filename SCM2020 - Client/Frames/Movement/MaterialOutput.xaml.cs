@@ -68,13 +68,6 @@ namespace SCM2020___Client.Frames
             ProductToAddDataGrid.Items.Add(productsToInput);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //int index = int.Parse(((Button)e.Source).Uid);
-
-            //GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
-        }
-
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             new Task(() => Search()).Start();
@@ -195,25 +188,19 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
-            materialInputByVendor.Invoice = InvoiceTextBox.Text;
-            materialInputByVendor.MovingDate = MovingDateDatePicker.DisplayDate;
+            var materialOutput = new ModelsLibraryCore.MaterialOutput();
+            materialOutput.WorkOrder = InvoiceTextBox.Text;
+            materialOutput.MovingDate = OSDatePicker.DisplayDate;
+            //EDITAR
+            materialOutput.EmployeeId = ApplicantTextBox.Text;
 
-            List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
 
-            foreach (var item in ProductsAddedDataGrid.Items)
+            Task.Run(() => 
             {
-                ProductToInput product = item as ProductToInput;
-                AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
-                {
-                    Date = materialInputByVendor.MovingDate,
-                    ProductId = product.Id,
-                    Quantity = product.QuantityAdded
-                };
-                p.Add(auxiliarConsumption);
-            }
-            materialInputByVendor.AuxiliarConsumptions = p;
-            APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), null);
+                var result = APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), , Helper.Authentication);
+                MessageBox.Show(result);
+            }).Start();
+
         }
     }
 }

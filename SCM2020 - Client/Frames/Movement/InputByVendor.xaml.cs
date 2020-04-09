@@ -213,7 +213,7 @@ namespace SCM2020___Client.Frames
                 p.Add(auxiliarConsumption);
             }
             materialInputByVendor.AuxiliarConsumptions = p;
-            APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), null);
+            APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), materialInputByVendor, Helper.Authentication);
         }
     }
 }

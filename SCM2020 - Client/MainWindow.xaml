@@ -154,7 +154,7 @@
             </Grid>
             <Grid Background="#FFFFFFFF" Margin="10 0 0 0" Height="Auto" DockPanel.Dock="Right">
                 <DockPanel>
-                <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden"  Source="Frames\Movement\Closure.xaml"></Frame>
+                <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden"  Source="Frames\Dashboard.xaml"></Frame>
                 </DockPanel>
             </Grid>
     </DockPanel>
