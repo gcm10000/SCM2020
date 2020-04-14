@@ -197,7 +197,7 @@ namespace SCM2020___Client.Frames
 
             Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), , Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), null, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
 

@@ -158,6 +158,13 @@ namespace SCM2020___Server.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("UserId/{register}")]
+        //[Authorize]
+        [AllowAnonymous]
+        public string GetUserIdByPJERJRegister(string register)
+        {
+            return UserManager.FindByPJERJRegistrationAsync(register).Id;
+        }
         [HttpDelete("Delete")]
         [Authorize(Roles = Roles.SCM)]
         public IActionResult DeleteUser()
