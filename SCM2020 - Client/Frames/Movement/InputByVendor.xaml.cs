@@ -24,16 +24,7 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class InputByVendor : UserControl
     {
-        class ProductToInput
-        {
-            //public string Image { get; set; }
-            public int Id { get; set; }
-            public int Code { get; set; }
-            public double QuantityFuture { get => Quantity + QuantityAdded; }
-            public double QuantityAdded { get; set; }
-            public double Quantity { get; set; }
-            public string Description { get; set; }
-        }
+
 
 
         public InputByVendor()
@@ -44,7 +35,7 @@ namespace SCM2020___Client.Frames
             //var nameVendors = vendors.Select(x => x.Name).ToList();
             //this.VendorComboBox.ItemsSource = nameVendors;
 
-            ProductToInput productsToInput = new ProductToInput()
+            ProductDataGrid productsToInput = new ProductDataGrid()
             {
                 Id = 1,
                 Code = 1,
@@ -116,7 +107,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in products.ToList())
             {
-                ProductToInput productsToInput = new ProductToInput()
+                ProductDataGrid productsToInput = new ProductDataGrid()
                 {
                     Id = item.Id,
                     Code = item.Code,
@@ -165,8 +156,8 @@ namespace SCM2020___Client.Frames
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
-            var product = ((FrameworkElement)sender).DataContext as ProductToInput;
-            var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
+            var product = ((FrameworkElement)sender).DataContext as ProductDataGrid;
+            var dialog = new DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
             {
@@ -203,7 +194,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in ProductsAddedDataGrid.Items)
             {
-                ProductToInput product = item as ProductToInput;
+                ProductDataGrid product = item as ProductDataGrid;
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 { 
                     Date = materialInputByVendor.MovingDate,

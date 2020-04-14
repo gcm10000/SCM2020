@@ -13,18 +13,24 @@ namespace ModelsLibraryCore
     public class AuxiliarConsumption : ProductBase
     {
         public double Quantity { get; set; }
+        /// <summary>
+        /// JsonIgnore.
+        /// </summary>
         [JsonIgnore]
         public MaterialInputByVendor MaterialInputByVendor { get; set; }
     }
     public class AuxiliarPermanent : ProductBase { }
     public abstract class ProductBase
     {
+        /// <summary>
+        /// JsonIgnore.
+        /// </summary>
         [JsonIgnore]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
-        /// Produtos retirado na movimentação.
+        /// Produto retirado na movimentação.
         /// </summary>
         [Required]
         public int ProductId { get; set; }
@@ -33,8 +39,14 @@ namespace ModelsLibraryCore
         /// </summary>
         [Required]
         public DateTime Date { get; set; }
+        /// <summary>
+        /// JsonIgnore.
+        /// </summary>
         [JsonIgnore]
         public MaterialOutput MaterialOutput { get; set; }
+        /// <summary>
+        /// JsonIgnore.
+        /// </summary>
         [JsonIgnore]
         public MaterialInput MaterialInput { get; set; }
     }

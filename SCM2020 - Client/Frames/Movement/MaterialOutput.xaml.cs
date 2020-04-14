@@ -191,13 +191,29 @@ namespace SCM2020___Client.Frames
             var materialOutput = new ModelsLibraryCore.MaterialOutput();
             materialOutput.WorkOrder = InvoiceTextBox.Text;
             materialOutput.MovingDate = OSDatePicker.DisplayDate;
+            var register = ApplicantTextBox.Text;
             //EDITAR
-            materialOutput.EmployeeId = ApplicantTextBox.Text;
+            var userId = APIClient.GetData<string>(new Uri(Helper.Server, new Uri($"UserId/{register}")).ToString());
+            materialOutput.EmployeeId = userId;
+
+            foreach (var item in ProductToAddDataGrid.Items)
+            {
+                ProductDataGrid outputProduct = item as ProductDataGrid;
+                var code = outputProduct.Code;
+                var ConsumpterProduct = APIClient.GetData<ConsumptionProduct>(new Uri(Helper.Server, new Uri($"GeneralProduct/Code/{code}")).ToString());
+
+                AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
+                {
+                    Date = materialOutput.MovingDate,
+                    Quantity = outputProduct.Quantity,
+                    ProductId = ConsumpterProduct.Id
+                };
+            }
 
 
             Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), null, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), null, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
 
