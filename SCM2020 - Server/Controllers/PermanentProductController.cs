@@ -69,7 +69,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
-            var product = context.ConsumptionProduct.FirstOrDefault(x => x.Id == id);
+            var product = context.PermanentProduct.FirstOrDefault(x => x.Id == id);
             if (product != null)
             {
                 var tojson = JsonConvert.SerializeObject(product);
@@ -78,6 +78,20 @@ namespace SCM2020___Server.Controllers
             else
             {
                 return BadRequest($"O registro com o id {id} não existe.");
+            }
+        }
+        [HttpGet("{patrimony}")]
+        public IActionResult ShowByRegister(string patrimony)
+        {
+            var product = context.PermanentProduct.FirstOrDefault(x => x.Patrimony == patrimony);
+            if (product != null)
+            {
+                var tojson = JsonConvert.SerializeObject(product);
+                return Ok(tojson);
+            }
+            else
+            {
+                return BadRequest($"O registro com o patrimônio {patrimony} não existe.");
             }
         }
 

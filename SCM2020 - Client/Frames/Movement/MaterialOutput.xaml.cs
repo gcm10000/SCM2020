@@ -140,21 +140,35 @@ namespace SCM2020___Client.Frames
 
         private void BtnInformation_Click(object sender, RoutedEventArgs e)
         {
-            ButtonInformation.IsHitTestVisible = false;
-            ButtonProducts.IsHitTestVisible = true;
-            InfoScrollViewer.Visibility = Visibility.Visible;
-            InfoDockPanel.Visibility = Visibility.Visible;
-            ProductsDockPanel.Visibility = Visibility.Collapsed;
+            this.ButtonInformation.IsHitTestVisible = false;
+            this.ButtonPermanentProducts.IsHitTestVisible = true;
+            this.ButtonFinish.IsHitTestVisible = true;
+
+            this.InfoScrollViewer.Visibility = Visibility.Visible;
+            this.InfoDockPanel.Visibility = Visibility.Visible;
+            this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
+            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
-        private void BtnProducts_Click(object sender, RoutedEventArgs e)
+        private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
         {
-            ButtonInformation.IsHitTestVisible = true;
-            ButtonProducts.IsHitTestVisible = false;
+            this.ButtonInformation.IsHitTestVisible = true;
+            this.ButtonPermanentProducts.IsHitTestVisible = false;
+            this.ButtonFinish.IsHitTestVisible = true;
 
             InfoScrollViewer.Visibility = Visibility.Collapsed;
             InfoDockPanel.Visibility = Visibility.Collapsed;
-            ProductsDockPanel.Visibility = Visibility.Visible;
+            PermanentDockPanel.Visibility = Visibility.Visible;
+        }
+        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        {
+            this.ButtonInformation.IsHitTestVisible = true;
+            this.ButtonPermanentProducts.IsHitTestVisible = true;
+            this.ButtonFinish.IsHitTestVisible = false;
 
+            this.InfoScrollViewer.Visibility = Visibility.Collapsed;
+            this.InfoDockPanel.Visibility = Visibility.Collapsed;
+            this.FinalProductsDockPanel.Visibility = Visibility.Visible;
+            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
@@ -166,18 +180,18 @@ namespace SCM2020___Client.Frames
                 product.QuantityAdded = dialog.QuantityAdded;
                 int index = ProductToAddDataGrid.SelectedIndex;
                 ProductToAddDataGrid.Items.Refresh();
-                ProductsAddedDataGrid.Items.Refresh();
-                if (!ProductsAddedDataGrid.Items.Contains(product))
-                    ProductsAddedDataGrid.Items.Add(product);
+                FinalConsumpterProductsAddedDataGrid.Items.Refresh();
+                if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
+                    FinalConsumpterProductsAddedDataGrid.Items.Add(product);
                 else
                 {
                     if (dialog.QuantityAdded == 0)
-                        ProductsAddedDataGrid.Items.Remove(product);
+                        FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
                     else
                         product.QuantityAdded = dialog.QuantityAdded;
                 }
                 ProductToAddDataGrid.UnselectAll();
-                ProductsAddedDataGrid.UnselectAll();
+                FinalConsumpterProductsAddedDataGrid.UnselectAll();
             }
         }
         private void ProductToAddDataGrid_Selected(object sender, RoutedEventArgs e)
@@ -185,7 +199,6 @@ namespace SCM2020___Client.Frames
             var currentRowIndex = ProductToAddDataGrid.Items.IndexOf(ProductToAddDataGrid.CurrentItem);
             MessageBox.Show(currentRowIndex.ToString());
         }
-
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
             var materialOutput = new ModelsLibraryCore.MaterialOutput();
@@ -216,6 +229,27 @@ namespace SCM2020___Client.Frames
                 var result = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), null, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
+
+        }
+
+        private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
+        {
+            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
+            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
+        {
+            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
+            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+        }
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }
