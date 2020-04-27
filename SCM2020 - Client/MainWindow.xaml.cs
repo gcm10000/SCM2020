@@ -106,25 +106,16 @@ namespace SCM2020___Client
                 switch (index)
                 {
                     case 0:
-                        //FrameContent.Source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/Employee.xaml", UriKind.Relative);
                         break;
                     case 1:
-                        //FrameContent.Source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        //FrameContent.Source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
                         break;
                     case 3:
-                        //FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
-                        break;
-                    case 4:
-                        //FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
-                        break;
-                    case 5:
-                        FrameContent.Source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
-                        break;
-                    case 6:
-                        FrameContent.Source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
                         break;
                 }
                 PopupRegister.IsOpen = false;

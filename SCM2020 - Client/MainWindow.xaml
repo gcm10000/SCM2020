@@ -75,13 +75,13 @@
                                             <TextBlock Text="Funcionário"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>
-                                            <TextBlock Text="Produtos"></TextBlock>
+                                            <TextBlock Text="Produto"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>
-                                            <TextBlock Text="Grupos"></TextBlock>
+                                            <TextBlock Text="Grupo"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>
-                                            <TextBlock Text="Fornecedores"></TextBlock>
+                                            <TextBlock Text="Fornecedor"></TextBlock>
                                         </ListBoxItem>
                                         <!--<ListBoxItem>
                                         <TextBlock Text="Solicitantes"></TextBlock>
