@@ -35,7 +35,10 @@ namespace SCM2020___Client
 
             LoginScreen screen = new LoginScreen();
             screen.ShowDialog();
+
+
         }
+
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var listView = sender as ListView;

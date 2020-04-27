@@ -10,9 +10,15 @@
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
                 <!--EDITAR-->
-                <TextBlock Text="Nome do grupo" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="GroupTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <Button VerticalAlignment="Bottom" Content="Salvar Grupo" Padding="5" Width="200" x:Name="BtnSaveGroup" Click="BtnSaveGroup_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
+                <TextBlock Text="Nome do funcionário" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBox x:Name="NameTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <TextBlock Text="Matrícula" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBox x:Name="RegisterTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <TextBlock Text="CPF" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBox x:Name="CPFTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <TextBlock Text="Senha" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <PasswordBox x:Name="PasswordBoxTextBox" Style="{x:Null}" Height="30" FontSize="16"></PasswordBox>
+                <Button VerticalAlignment="Bottom" Content="Salvar Funcionário" Padding="5" Width="200" x:Name="BtnSaveGroup" Click="BtnSaveGroup_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">

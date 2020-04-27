@@ -7,6 +7,7 @@ namespace ModelsLibraryCore
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
+        public string Name { get; set; }
         public string PJERJRegistration { get; set; }
         public string CPFRegistration { get; set; }
     }
