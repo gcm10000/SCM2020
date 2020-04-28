@@ -9,6 +9,7 @@
       Title="Dashboard">
 
     <Grid Background="CadetBlue">
-        
+        <WebBrowser x:Name="webBrowser"></WebBrowser>
+
     </Grid>
 </Page>
