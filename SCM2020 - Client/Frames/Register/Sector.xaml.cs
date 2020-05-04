@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,7 +27,16 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveSector_Click(object sender, RoutedEventArgs e)
         {
-
+            new Task(() => 
+            {
+                ModelsLibraryCore.Sector sector = new ModelsLibraryCore.Sector()
+                {
+                    NameSector = SectorTextBox.Text,
+                    NumberSector = int.Parse(NumberSectorTextBox.Text)
+                };
+                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("Sector/Add/")).ToString(), sector, Helper.Authentication);
+                MessageBox.Show(result);
+            }).Start();
         }
     }
 }

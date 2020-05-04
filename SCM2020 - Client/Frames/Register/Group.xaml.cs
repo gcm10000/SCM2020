@@ -27,7 +27,7 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveGroup_Click(object sender, RoutedEventArgs e)
         {
-
+            SaveGroup();
         }
         private void SaveGroup()
         {
@@ -35,8 +35,7 @@ namespace SCM2020___Client.Frames.Register
             {
                 ModelsLibraryCore.Group group = new ModelsLibraryCore.Group()
                 { GroupName = GroupTextBox.Text };
-                //EDITAR
-                var result = APIClient.PostData("", group, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("/Group/Add")).ToString(), group, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
         }

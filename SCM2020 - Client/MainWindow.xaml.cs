@@ -120,6 +120,9 @@ namespace SCM2020___Client
                     case 3:
                         FrameContent.Source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
                         break;
+                    case 4:
+                        FrameContent.Source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
+                        break;
                 }
                 PopupRegister.IsOpen = false;
             }

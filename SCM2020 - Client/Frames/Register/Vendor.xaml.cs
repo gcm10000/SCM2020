@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,7 +27,16 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveVendor_Click(object sender, RoutedEventArgs e)
         {
-
+            new Task(() =>
+            {
+                ModelsLibraryCore.Vendor vendor = new ModelsLibraryCore.Vendor()
+                {
+                    Name = VendorTextBox.Text,
+                    Telephone = TelephoneTextBox.Text
+                };
+                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("Vendor/Add/")).ToString(), vendor, Helper.Authentication);
+                MessageBox.Show(result);
+            }).Start();
         }
     }
 }

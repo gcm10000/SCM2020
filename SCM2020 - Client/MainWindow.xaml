@@ -83,6 +83,9 @@
                                         <ListBoxItem>
                                             <TextBlock Text="Fornecedor"></TextBlock>
                                         </ListBoxItem>
+                                        <ListBoxItem>
+                                            <TextBlock Text="Setor"></TextBlock>
+                                        </ListBoxItem>
                                         <!--<ListBoxItem>
                                         <TextBlock Text="Solicitantes"></TextBlock>
                                     </ListBoxItem>-->

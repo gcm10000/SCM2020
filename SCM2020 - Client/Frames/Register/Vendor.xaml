@@ -10,7 +10,7 @@
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
                 <TextBlock Text="Nome do Fornecedor" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="GroupTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <TextBox x:Name="VendorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Telefone" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="TelephoneTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <Button VerticalAlignment="Bottom" Content="Salvar Fornecedor" Padding="5" Width="200" x:Name="BtnSaveVendor" Click="BtnSaveVendor_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
