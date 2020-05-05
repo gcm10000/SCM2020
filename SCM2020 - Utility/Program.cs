@@ -1,4 +1,5 @@
-﻿using SCM2020___Utility.RequestingClient;
+﻿using ModelsLibrary;
+using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,16 +80,17 @@ namespace SCM2020___Utility
             //    }
             //};
 
-            APIClient client1 = new APIClient(new Uri("http://localhost:52991/api/Output/Remove/1"),
-                null);
+            //APIClient client1 = new APIClient(new Uri("http://localhost:52991/api/Output/Remove/1"),
+            //    null);
             //var data = client1.GETData<ModelsLibrary.Monitoring>();
             //data.Work_Order = "TESTE1234";
 
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
-            var result = client1.DELETEData();
-            Console.WriteLine(result);
+            AddMonitoring(null);
+            //var result = client1.DELETEData();
+            //Console.WriteLine(result);
             //AddGroup(start);
             //SignUpAll();
             //RegisterVendors(start);
@@ -113,6 +115,75 @@ namespace SCM2020___Utility
                 }
                 Group.AddOnServer(urlAddGroup, newgroup);
             }
+        }
+        static void AddMonitoring(AuthenticationHeaderValue Authentication)
+        {
+            SCMAccess dbAccess = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "Monitoramento");
+            var records = dbAccess.GetDataFromTable();
+
+            var lMonitoring = new List<ModelsLibrary.Monitoring>();
+            foreach (var oldMonitoring in records)
+            {
+                ModelsLibrary.Monitoring monitoring = new ModelsLibrary.Monitoring();
+                monitoring.Work_Order = oldMonitoring.First(x => x.Key.ToLower() == "ordem de seriço").Value;
+                if (DateTime.TryParse(oldMonitoring.First(x => x.Key.ToLower() == "data da movimentação").Value, out DateTime movingDate))
+                    monitoring.MovingDate = movingDate;
+                if (DateTime.TryParse(oldMonitoring.First(x => x.Key.ToLower() == "data do fechamento").Value, out DateTime closingDate))
+                    monitoring.ClosingDate = closingDate;
+                monitoring.SCMEmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "mat do tecnico").Value;
+                monitoring.Situation = oldMonitoring.First(x => x.Key.ToLower() == "situação").Value == "FECHADA";
+
+                    //EDITAR
+                lMonitoring.Add(monitoring);
+            }
+        }
+        static void AddInputByVendor(AuthenticationHeaderValue Authentication)
+        {
+            SCMAccess dbAccess = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "EntradaNovo");
+            var records = dbAccess.GetDataFromTable();
+
+            List<string> NFs = new List<string>();
+            List<MaterialInputByVendor> InputByVendors = new List<MaterialInputByVendor>();
+            foreach (var oldInputByVendor in records)
+            {
+                var NF = oldInputByVendor.First(x => x.Key.ToLower() == "nfdoc").Value;
+                if (!InputByVendors.Any(x => x.Invoice == NF))
+                {
+                    MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
+                    materialInputByVendor.Invoice = NF;
+                    materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                    materialInputByVendor.AuxiliarConsumptions = new List<AuxiliarConsumption>();
+                    
+
+                    var auxiliarConsumption = new AuxiliarConsumption();
+                    //EDITAR MODELO DE DADOS DE ID PARA CÓDIGO
+                    auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                    auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                    
+                    materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+
+                    InputByVendors.Add(materialInputByVendor);
+                }
+                else
+                {
+                    MaterialInputByVendor materialInputByVendor = InputByVendors.First(x => x.Invoice == NF);
+
+                    var auxiliarConsumption = new AuxiliarConsumption();
+                    auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                    auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+
+                    materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+
+                }
+            }
+
         }
         static void AddProduct(AuthenticationHeaderValue Authentication)
         {

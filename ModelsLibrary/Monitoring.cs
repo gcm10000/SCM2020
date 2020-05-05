@@ -20,7 +20,7 @@ namespace ModelsLibrary
         /// <summary>
         /// Data do fechamento da ordem de serviço.
         /// </summary>
-        public DateTime ClosingDate { get; set; }
+        public DateTime? ClosingDate { get; set; }
         /// <summary>
         /// Funcionário que gerou a movimentação.
         /// </summary>
