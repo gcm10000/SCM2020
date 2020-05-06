@@ -6,22 +6,22 @@ namespace ModelsLibrary
 {
     public class MaterialOutput
     {
-        public MaterialOutput(string raw)
+        public MaterialOutput(string raw, string UserId)
         {
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
-            this.EmployeeRegistration = productFromRaw.Value<string>("EmployeeRegistration");
-            this.SCMRegistration = productFromRaw.Value<string>("SCMRegistration");
+            this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
+            this.SCMEmployeeId = UserId;
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
-            List<ProductFromJson<AuxiliarConsumption>> arrayConsumpterProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<ProductFromJson<AuxiliarConsumption>>>();
-            List<ProductFromJson<AuxiliarPermanent>> arrayPermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<ProductFromJson<AuxiliarPermanent>>>();
-            this.ConsumptionProducts = new List<AuxiliarConsumption>();
-            this.PermanentProducts = new List<AuxiliarPermanent>();
-            arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.Product.ProductId,  Date = x.Product.Date }));
-            arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new AuxiliarPermanent() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
+            this.ConsumptionProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<AuxiliarConsumption>>();
+            this.PermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<AuxiliarPermanent>>();
+            //this.ConsumptionProducts = new List<AuxiliarConsumption>();
+            //this.PermanentProducts = new List<AuxiliarPermanent>();
+            //arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.,  Date = x.Product.Date }));
+            //arrayPermanentProducts.ForEach(x => this.PermanentProducts.Add(new AuxiliarPermanent() { ProductId = x.Product.ProductId, Date = x.Product.Date }));
         }
         public MaterialOutput()
         {
@@ -36,13 +36,13 @@ namespace ModelsLibrary
         /// </summary>
         public DateTime MovingDate { get; set; }
         /// <summary>
-        /// Matrícula do funcionário do Sistema de Controle de Materiais.
+        /// Funcionário do Sistema de Controle de Materiais.
         /// </summary>
-        public string SCMRegistration { get; set; }
+        public string SCMEmployeeId { get; set; }
         /// <summary>
-        /// Matrícula do funcionário que solicitou a movimentação de saída.
+        /// Funcionário que solicitou a movimentação de saída.
         /// </summary>
-        public string EmployeeRegistration { get; set; }
+        public string EmployeeId { get; set; }
         /// <summary>
         /// Ordem de serviço.
         /// </summary>
@@ -59,5 +59,6 @@ namespace ModelsLibrary
         /// Somente produtos permanentes retirados na movimentação de saída.
         /// </summary>
         public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
+
     }
 }

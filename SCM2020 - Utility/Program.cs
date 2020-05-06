@@ -215,7 +215,7 @@ namespace SCM2020___Utility
         {
             SCMAccess dbAccess = new SCMAccess(
                 ConnectionString: SCMAccess.ConnectionString,
-                TableName: "EntradaNovo");
+                TableName: "Saida");
             var records = dbAccess.GetDataFromTable();
             List<MaterialOutput> materialOutputs = new List<MaterialOutput>();
 
@@ -225,13 +225,18 @@ namespace SCM2020___Utility
                 var code = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
                 var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
 
+                var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMEmployeeRegistration}")), Authentication);
+                var EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value;
+                var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMEmployeeRegistration}")), Authentication);
+
                 if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
                 {
                     MaterialOutput materialOutput = new MaterialOutput()
                     {
                         MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
-                        SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
-                        EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value,
+                        SCMEmployeeId = resultSCMId,
+                        EmployeeId = resultEmployeeId,
                         ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
                         WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
                         ConsumptionProducts = new List<AuxiliarConsumption>()
@@ -242,9 +247,8 @@ namespace SCM2020___Utility
                                 Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
                                 SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
                                 ProductId = resultProductId
-                }
+                            }
                         }
-
                     };
                 }
                 else
@@ -260,7 +264,60 @@ namespace SCM2020___Utility
                 }
             }
         }
-        
+        static void AddInput(AuthenticationHeaderValue Authentication)
+        {
+            SCMAccess dbAccess = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "Saida");
+            var records = dbAccess.GetDataFromTable();
+            List<MaterialInput> materialInputs = new List<MaterialInput>();
+
+            foreach (var oldMaterialInput in records)
+            {
+                var workOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
+
+                var SCMregister = oldMaterialInput.First(x => x.Key.ToLower() == "fun setor").Value;
+                var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMregister}")), Authentication);
+
+                if (!materialInputs.Any(x => x.WorkOrder == workOrder))
+                {
+                    var register = oldMaterialInput.First(x => x.Key.ToLower() == "resp os").Value;
+                    var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
+
+                    var dbRegarding = oldMaterialInput.First(x => x.Key.ToLower() == "referente a").Value;
+                    Regarding regarding = Regarding.NotUsed;
+                    if (dbRegarding == "Transferência Interna")
+                    {
+                        regarding = Regarding.InternalTransfer;
+                    }
+                    else if (dbRegarding == "Outra Comarca")
+                    {
+                        regarding = Regarding.AnotherCounty;
+                    }
+
+                    var code = int.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "codigo").Value);
+                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
+                    MaterialInput materialInput = new MaterialInput()
+                    {
+                        MovingDate = DateTime.Parse(oldMaterialInput.First(x => x.Key == "data da movimentação").Value),
+                        WorkOrder = oldMaterialInput.First(x => x.Key == "ordem de seriço").Value,
+                        SCMEmployeeId = resultSCMId,
+                        EmployeeId = resultEmployeeId,
+                        Regarding = regarding,
+                        ConsumptionProducts = new List<AuxiliarConsumption>()
+                        {
+                            new AuxiliarConsumption()
+                            {
+                                Date = DateTime.Parse(oldMaterialInput.First(x => x.Key == "data da movimentação").Value),
+                                ProductId = resultProductId,
+                                Quantity = double.Parse(oldMaterialInput.First(x => x.Key == "qtd").Value),
+                                //ERRO -> SCMRegistration = ""
+                            }
+                        }
+                    };
+                }
+            }
+        }
         static void AddProduct(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(

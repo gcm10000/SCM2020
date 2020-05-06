@@ -10,7 +10,6 @@ namespace ModelsLibrary
         public MaterialInput(string raw)
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            this.DocDate = input.DocDate;
             this.EmployeeId = input.EmployeeId;
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
@@ -38,10 +37,6 @@ namespace ModelsLibrary
         /// Data da movimentação.
         /// </summary>
         public DateTime MovingDate { get; set; }
-        /// <summary>
-        /// Data da Ordem de Serviço.
-        /// </summary>
-        public DateTime DocDate { get; set; }
         /// <summary>
         /// Ordem de serviço.
         /// </summary>
