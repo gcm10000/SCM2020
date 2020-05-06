@@ -135,8 +135,8 @@ namespace SCM2020___Utility
                 monitoring.SCMEmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "matricula do almo").Value;
                 monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "mat do tecnico").Value;
                 monitoring.Situation = oldMonitoring.First(x => x.Key.ToLower() == "situação").Value == "FECHADA";
-
-                    //EDITAR
+                monitoring.RequestingSector = int.Parse(oldMonitoring.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                //EDITAR
                 lMonitoring.Add(monitoring);
             }
         }
@@ -157,14 +157,17 @@ namespace SCM2020___Utility
                     materialInputByVendor.Invoice = NF;
                     materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     materialInputByVendor.AuxiliarConsumptions = new List<AuxiliarConsumption>();
-                    
-
+                    /* FALTA VENDORID
+                     * MATRICULA DO FUNCIONARIO DO SCM
+                     * PRODUCTID PELO CÓDIGO
+                     * materialInputByVendor.VendorId = 
+                    */
                     var auxiliarConsumption = new AuxiliarConsumption();
                     //EDITAR MODELO DE DADOS DE ID PARA CÓDIGO
                     auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
                     auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
-                    
+                    //auxiliarConsumption.SCMRegistration = 
                     materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
                     InputByVendors.Add(materialInputByVendor);
@@ -199,19 +202,19 @@ namespace SCM2020___Utility
                 {
                     MaterialOutput materialOutput = new MaterialOutput()
                     {
-                        MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
+                        MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
                         SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
                         EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value,
                         ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
                         WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
-                        a
                         ConsumptionProducts = new List<AuxiliarConsumption>()
                         {
                             new AuxiliarConsumption()
                             {
-                                Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
+                                Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
                                 Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
-                                ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value)
+                                ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value),
+                                SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
                             }
                         }
 
@@ -224,6 +227,7 @@ namespace SCM2020___Utility
                     auxiliarConsumption.ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
                     auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
+                    auxiliarConsumption.SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
 
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }

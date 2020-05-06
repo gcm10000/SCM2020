@@ -13,7 +13,6 @@ namespace ModelsLibrary
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
             this.EmployeeRegistration = productFromRaw.Value<string>("EmployeeRegistration");
             this.SCMRegistration = productFromRaw.Value<string>("SCMRegistration");
-            this.RequestingSector = productFromRaw.Value<int>("RequestingSector");
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
@@ -45,11 +44,6 @@ namespace ModelsLibrary
         /// </summary>
         public string EmployeeRegistration { get; set; }
         /// <summary>
-        /// Setor do qual solicitou a movimentação de saída.
-        /// Será tratado como ID da tabela Sectors.
-        /// </summary>
-        public int RequestingSector { get; set; }
-        /// <summary>
         /// Ordem de serviço.
         /// </summary>
         public string WorkOrder { get; set; }
@@ -65,6 +59,5 @@ namespace ModelsLibrary
         /// Somente produtos permanentes retirados na movimentação de saída.
         /// </summary>
         public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
-
     }
 }

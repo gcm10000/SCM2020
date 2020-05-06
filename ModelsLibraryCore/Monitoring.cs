@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading;
 
 namespace ModelsLibraryCore
 {
@@ -20,23 +21,20 @@ namespace ModelsLibraryCore
             this.RequestingSector = monitoringRaw.RequestingSector;
 
         }
-        public Monitoring(bool Migrate, string raw, string UserId)
+        /// <summary>
+        /// Migração de dados.
+        /// </summary>
+        /// <param name="raw"></param>
+        public Monitoring(string raw)
         {
-            if (Migrate)
-            {
-                Monitoring monitoringRaw = JsonConvert.DeserializeObject<Monitoring>(raw);
-                this.EmployeeId = monitoringRaw.EmployeeId;
-                this.SCMEmployeeId = UserId;
-                this.MovingDate = monitoringRaw.MovingDate;
-                this.ClosingDate = monitoringRaw.ClosingDate;
-                this.Situation = false;
-                this.Work_Order = monitoringRaw.Work_Order;
-                this.RequestingSector = monitoringRaw.RequestingSector;
-            }
-            else
-            {
-                new Monitoring(raw, UserId);
-            }
+            Monitoring monitoringRaw = JsonConvert.DeserializeObject<Monitoring>(raw);
+            this.EmployeeId = monitoringRaw.EmployeeId;
+            this.SCMEmployeeId = monitoringRaw.SCMEmployeeId;
+            this.MovingDate = monitoringRaw.MovingDate;
+            this.ClosingDate = monitoringRaw.ClosingDate;
+            this.Situation = monitoringRaw.Situation;
+            this.Work_Order = monitoringRaw.Work_Order;
+            this.RequestingSector = monitoringRaw.RequestingSector;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
