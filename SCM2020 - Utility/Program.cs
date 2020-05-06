@@ -147,7 +147,6 @@ namespace SCM2020___Utility
                 TableName: "EntradaNovo");
             var records = dbAccess.GetDataFromTable();
 
-            List<string> NFs = new List<string>();
             List<MaterialInputByVendor> InputByVendors = new List<MaterialInputByVendor>();
             foreach (var oldInputByVendor in records)
             {
@@ -177,7 +176,7 @@ namespace SCM2020___Utility
                     var auxiliarConsumption = new AuxiliarConsumption();
                     auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
                     auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
-                    auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                    auxiliarConsumption.Quantity = double.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
 
                     materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
@@ -185,6 +184,52 @@ namespace SCM2020___Utility
             }
 
         }
+        static void AddOutput(AuthenticationHeaderValue Authentication)
+        {
+            SCMAccess dbAccess = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "EntradaNovo");
+            var records = dbAccess.GetDataFromTable();
+            List<MaterialOutput> materialOutputs = new List<MaterialOutput>();
+
+            foreach (var oldMaterialOutput in records)
+            {
+                var WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
+                if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
+                {
+                    MaterialOutput materialOutput = new MaterialOutput()
+                    {
+                        MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
+                        SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
+                        EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value,
+                        ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
+                        WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
+                        a
+                        ConsumptionProducts = new List<AuxiliarConsumption>()
+                        {
+                            new AuxiliarConsumption()
+                            {
+                                Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
+                                Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
+                                ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value)
+                            }
+                        }
+
+                    };
+                }
+                else
+                {
+                    MaterialOutput materialOutput = materialOutputs.First(x => x.WorkOrder == WorkOrder);
+                    var auxiliarConsumption = new AuxiliarConsumption();
+                    auxiliarConsumption.ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
+                    auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                    auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
+
+                    materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
+                }
+            }
+        }
+
         static void AddProduct(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(

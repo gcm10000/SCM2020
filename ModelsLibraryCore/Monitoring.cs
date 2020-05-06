@@ -17,6 +17,26 @@ namespace ModelsLibraryCore
             this.ClosingDate = monitoringRaw.ClosingDate;
             this.Situation = false;
             this.Work_Order = monitoringRaw.Work_Order;
+            this.RequestingSector = monitoringRaw.RequestingSector;
+
+        }
+        public Monitoring(bool Migrate, string raw, string UserId)
+        {
+            if (Migrate)
+            {
+                Monitoring monitoringRaw = JsonConvert.DeserializeObject<Monitoring>(raw);
+                this.EmployeeId = monitoringRaw.EmployeeId;
+                this.SCMEmployeeId = UserId;
+                this.MovingDate = monitoringRaw.MovingDate;
+                this.ClosingDate = monitoringRaw.ClosingDate;
+                this.Situation = false;
+                this.Work_Order = monitoringRaw.Work_Order;
+                this.RequestingSector = monitoringRaw.RequestingSector;
+            }
+            else
+            {
+                new Monitoring(raw, UserId);
+            }
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -36,10 +56,15 @@ namespace ModelsLibraryCore
         [Required]
         public string EmployeeId { get; set; }
         /// <summary>
-        /// Situação da ordem de serviço.
-        /// False = Em aberto.
+        /// Situação da ordem de serviço.  
+        /// False = Em aberto.  
         /// True = Fechada.
         /// </summary>
         public bool Situation { get; set; }
+        /// <summary>
+        /// Setor do qual solicitou a movimentação de saída.  
+        /// Será tratado como ID da tabela Sectors.
+        /// </summary>
+        public int RequestingSector { get; set; }
     }
 }

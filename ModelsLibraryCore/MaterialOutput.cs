@@ -15,7 +15,6 @@ namespace ModelsLibraryCore
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
             this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
             this.SCMEmployeeId = UserId;
-            this.RequestingSector = productFromRaw.Value<int>("RequestingSector");
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
@@ -48,11 +47,6 @@ namespace ModelsLibraryCore
         /// Funcionário que solicitou a movimentação de saída.
         /// </summary>
         public string EmployeeId { get; set; }
-        /// <summary>
-        /// Setor do qual solicitou a movimentação de saída.
-        /// Será tratado como ID da tabela Sectors.
-        /// </summary>
-        public int RequestingSector { get; set; }
         /// <summary>
         /// Ordem de serviço.
         /// </summary>
