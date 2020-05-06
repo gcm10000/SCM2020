@@ -10,6 +10,7 @@ namespace SCM2020___Utility
 {
     class Program
     {
+        static Uri uriServer = new Uri("http://gabriel-pc:52991/api/");
         const string urlLogin = "http://localhost:52991/api/User/Login";
         const string urlAddUser = "http://localhost:52991/api/User/NewUser";
         const string urlGroups = "http://localhost:52991/api/Group/";
@@ -136,7 +137,6 @@ namespace SCM2020___Utility
                 monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "mat do tecnico").Value;
                 monitoring.Situation = oldMonitoring.First(x => x.Key.ToLower() == "situação").Value == "FECHADA";
                 monitoring.RequestingSector = int.Parse(oldMonitoring.First(x => x.Key.ToLower() == "tipo de saida").Value);
-                //EDITAR
                 lMonitoring.Add(monitoring);
             }
         }
@@ -157,17 +157,36 @@ namespace SCM2020___Utility
                     materialInputByVendor.Invoice = NF;
                     materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     materialInputByVendor.AuxiliarConsumptions = new List<AuxiliarConsumption>();
-                    /* FALTA VENDORID
-                     * MATRICULA DO FUNCIONARIO DO SCM
-                     * PRODUCTID PELO CÓDIGO
-                     * materialInputByVendor.VendorId = 
-                    */
+                    var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
+                    materialInputByVendor.SCMEmployeeId = resultSCMId;
+                    var vendor = oldInputByVendor.First(x => x.Key.ToLower() == "nome").Value;
+                    Vendor resultVendor = null;
+                    try
+                    {
+                        //OK
+                        resultVendor = APIClient.GETData<Vendor>(new Uri(uriServer, new Uri($"Vendor/Name/{vendor}")), Authentication);
+                    }
+                    catch
+                    {
+                        //BAD REQUEST
+                        //ADD VENDOR
+                        Vendor newVendor = new Vendor();
+                        newVendor.Name = vendor;
+                        newVendor.Telephone = string.Empty;
+                        var resultPOST = APIClient.POSTData(new Uri(uriServer, new Uri($"Vendor/Add/")), newVendor, Authentication);
+                        Console.WriteLine(resultPOST);
+                        resultVendor = APIClient.GETData<Vendor>(new Uri(uriServer, new Uri($"Vendor/Name/{vendor}")), Authentication);
+                    }
+                    materialInputByVendor.VendorId = resultVendor.Id;
+
                     var auxiliarConsumption = new AuxiliarConsumption();
-                    //EDITAR MODELO DE DADOS DE ID PARA CÓDIGO
-                    auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    var code = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
+                    auxiliarConsumption.ProductId = resultProductId;
                     auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
-                    //auxiliarConsumption.SCMRegistration = 
+                    auxiliarConsumption.SCMRegistration = resultSCMId;
                     materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
                     InputByVendors.Add(materialInputByVendor);
@@ -177,9 +196,14 @@ namespace SCM2020___Utility
                     MaterialInputByVendor materialInputByVendor = InputByVendors.First(x => x.Invoice == NF);
 
                     var auxiliarConsumption = new AuxiliarConsumption();
-                    auxiliarConsumption.ProductId = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    var code = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
+                    auxiliarConsumption.ProductId = resultProductId;
                     auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = double.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                    var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
+                    materialInputByVendor.SCMEmployeeId = resultSCMId;
 
                     materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
@@ -198,6 +222,9 @@ namespace SCM2020___Utility
             foreach (var oldMaterialOutput in records)
             {
                 var WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
+                var code = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
+                var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
+
                 if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
                 {
                     MaterialOutput materialOutput = new MaterialOutput()
@@ -213,9 +240,9 @@ namespace SCM2020___Utility
                             {
                                 Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
                                 Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
-                                ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value),
                                 SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
-                            }
+                                ProductId = resultProductId
+                }
                         }
 
                     };
@@ -224,7 +251,7 @@ namespace SCM2020___Utility
                 {
                     MaterialOutput materialOutput = materialOutputs.First(x => x.WorkOrder == WorkOrder);
                     var auxiliarConsumption = new AuxiliarConsumption();
-                    auxiliarConsumption.ProductId = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
+                    auxiliarConsumption.ProductId = resultProductId;
                     auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
                     auxiliarConsumption.SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
@@ -233,7 +260,7 @@ namespace SCM2020___Utility
                 }
             }
         }
-
+        
         static void AddProduct(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(
@@ -336,8 +363,6 @@ namespace SCM2020___Utility
                 TableName: "Fornecedor");
             var records = dbAccess.GetDataFromTable();
 
-            APIClient client = new APIClient(new Uri("http://localhost:52991/api/Vendor/Add"), Authentication);
-
             foreach (var employees in records)
             {
                 var vendor = new Vendor();
@@ -358,7 +383,7 @@ namespace SCM2020___Utility
                 {
                     //RegisterVendors newvendor = new RegisterVendors(Authentication);
                     //newvendor.AddVendor("http://localhost:52991/api/Vendor/Add", vendor);
-                    client.POSTData(vendor);
+                    APIClient.POSTData(new Uri("http://localhost:52991/api/Vendor/Add"), vendor, Authentication);
                 }
                 catch (AuthenticationException ex)
                 {

@@ -10,16 +10,13 @@ using System.Threading.Tasks;
 
 namespace SCM2020___Utility.RequestingClient
 {
-    class APIClient
+    public static class APIClient
     {
         //http://localhost:52991/api/Vendor
 
-        Uri baseUri;
-        AuthenticationHeaderValue authentication;
-        public APIClient(Uri baseUri) { this.baseUri = baseUri; }
-        public APIClient(Uri baseUri, AuthenticationHeaderValue authentication) { this.baseUri = baseUri; this.authentication = authentication; }
-        public string POSTData(object ObjectData)
+        public static string POSTData(Uri requestUri, object ObjectData, AuthenticationHeaderValue authentication)
         {
+
             //CRUD
             //CREATE -> GENERIC POST
             //READ -> GENERIC GET
@@ -33,12 +30,12 @@ namespace SCM2020___Utility.RequestingClient
                 client.DefaultRequestHeaders.Authorization = authentication;
 
                 var objToJson = JsonConvert.SerializeObject(ObjectData);
-                HttpResponseMessage respToken = client.PostAsync(baseUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
+                HttpResponseMessage respToken = client.PostAsync(requestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
                 string content = respToken.Content.ReadAsStringAsync().Result;
                 return content;
             }
         }
-        public string DELETEData()
+        public static string DELETEData(Uri requestUri, AuthenticationHeaderValue authentication)
         {
             using (var client = new HttpClient())
             {
@@ -47,7 +44,7 @@ namespace SCM2020___Utility.RequestingClient
                     new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = authentication;
 
-                HttpResponseMessage respToken = client.DeleteAsync(baseUri).Result;
+                HttpResponseMessage respToken = client.DeleteAsync(requestUri).Result;
                 string content = respToken.Content.ReadAsStringAsync().Result;
                 return content;
             }
@@ -57,7 +54,7 @@ namespace SCM2020___Utility.RequestingClient
         /// </summary>
         /// <typeparam name="T">Modelo de dados em questão.</typeparam>
         /// <returns></returns>
-        public T GETData<T>() 
+        public static T GETData<T>(Uri requestUri, AuthenticationHeaderValue authentication) 
         {
             try
             {
@@ -69,7 +66,7 @@ namespace SCM2020___Utility.RequestingClient
                         new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Authorization = authentication;
 
-                    HttpResponseMessage respToken = client.GetAsync(baseUri).Result;
+                    HttpResponseMessage respToken = client.GetAsync(requestUri).Result;
 
                     string content = respToken.Content.ReadAsStringAsync().Result;
 
