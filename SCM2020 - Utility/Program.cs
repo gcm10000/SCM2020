@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 
 namespace SCM2020___Utility
@@ -123,6 +124,11 @@ namespace SCM2020___Utility
                 ConnectionString: SCMAccess.ConnectionString,
                 TableName: "Monitoramento");
             var records = dbAccess.GetDataFromTable();
+            
+            SCMAccess dbAccess2 = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "Saida");
+            var records2 = dbAccess2.GetDataFromTable();
 
             var lMonitoring = new List<ModelsLibrary.Monitoring>();
             foreach (var oldMonitoring in records)
@@ -136,7 +142,14 @@ namespace SCM2020___Utility
                 monitoring.SCMEmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "matricula do almo").Value;
                 monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "mat do tecnico").Value;
                 monitoring.Situation = oldMonitoring.First(x => x.Key.ToLower() == "situação").Value == "FECHADA";
-                monitoring.RequestingSector = int.Parse(oldMonitoring.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                //monitoring.RequestingSector = int.Parse(oldMonitoring.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                foreach (var oldOutput in records2)
+                {
+                    if (oldOutput.Any(x => (x.Key.ToLower() == "ordem de seriço") && (x.Value == monitoring.Work_Order)))
+                    {
+                        monitoring.RequestingSector = int.Parse(oldOutput.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                    }
+                }
                 lMonitoring.Add(monitoring);
             }
         }
@@ -169,8 +182,6 @@ namespace SCM2020___Utility
                     }
                     catch
                     {
-                        //BAD REQUEST
-                        //ADD VENDOR
                         Vendor newVendor = new Vendor();
                         newVendor.Name = vendor;
                         newVendor.Telephone = string.Empty;
@@ -186,7 +197,7 @@ namespace SCM2020___Utility
                     auxiliarConsumption.ProductId = resultProductId;
                     auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
-                    auxiliarConsumption.SCMRegistration = resultSCMId;
+                    auxiliarConsumption.SCMEmployeeId = resultSCMId;
                     materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
                     InputByVendors.Add(materialInputByVendor);
@@ -245,7 +256,7 @@ namespace SCM2020___Utility
                             {
                                 Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
                                 Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
-                                SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value,
+                                SCMEmployeeId = resultSCMId,
                                 ProductId = resultProductId
                             }
                         }
@@ -258,7 +269,7 @@ namespace SCM2020___Utility
                     auxiliarConsumption.ProductId = resultProductId;
                     auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
-                    auxiliarConsumption.SCMRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                    auxiliarConsumption.SCMEmployeeId = resultSCMId;
 
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
@@ -268,7 +279,7 @@ namespace SCM2020___Utility
         {
             SCMAccess dbAccess = new SCMAccess(
                 ConnectionString: SCMAccess.ConnectionString,
-                TableName: "Saida");
+                TableName: "Entrada");
             var records = dbAccess.GetDataFromTable();
             List<MaterialInput> materialInputs = new List<MaterialInput>();
 
@@ -311,7 +322,7 @@ namespace SCM2020___Utility
                                 Date = DateTime.Parse(oldMaterialInput.First(x => x.Key == "data da movimentação").Value),
                                 ProductId = resultProductId,
                                 Quantity = double.Parse(oldMaterialInput.First(x => x.Key == "qtd").Value),
-                                //ERRO -> SCMRegistration = ""
+                                SCMEmployeeId = resultSCMId,
                             }
                         }
                     };
