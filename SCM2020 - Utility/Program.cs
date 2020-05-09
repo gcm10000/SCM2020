@@ -11,13 +11,13 @@ namespace SCM2020___Utility
 {
     class Program
     {
-        static Uri uriServer = new Uri("http://gabriel-pc:52991/api/");
-        const string urlLogin = "http://localhost:52991/api/User/Login";
-        const string urlAddUser = "http://localhost:52991/api/User/NewUser";
-        const string urlGroups = "http://localhost:52991/api/Group/";
-        const string urlAddGroup = "http://localhost:52991/api/Group/Add";
-        const string urlAddProduct = "http://localhost:52991/api/GeneralProduct/Add";
-        const string urlVendor = "http://localhost:52991/api/GeneralProduct/Add";
+        static Uri uriServer = new Uri("http://192.168.1.2:52991/api/");
+        const string urlLogin = "http://192.168.1.2:52991/api/User/Login";
+        const string urlAddUser = "http://192.168.1.2:52991/api/User/NewUser";
+        const string urlGroups = "http://192.168.1.2:52991/api/Group/";
+        const string urlAddGroup = "http://192.168.1.2:52991/api/Group/Add";
+        const string urlAddProduct = "http://192.168.1.2:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://192.168.1.2:52991/api/GeneralProduct/Add";
 
 
         static void Main(string[] args)
@@ -28,7 +28,9 @@ namespace SCM2020___Utility
             //UPDATE -> GENERIC POST V
             //DELETE -> INT DELETE
 
-            //var start = Start();
+            //SignUpAdministrator();
+
+            var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
             //{
@@ -90,13 +92,20 @@ namespace SCM2020___Utility
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
-            AddMonitoring(null);
+            RegisterVendors(start);
+            //AddGroup(start);
+            //AddSector(start);
+            SignUpAll();
+            AddProduct(start);
+            AddMonitoring(start);
+            AddInputByVendor(start);
+            AddInput(start);
+            AddOutput(start);
+            AddInput(start);
+
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
-            //AddGroup(start);
-            //SignUpAll();
-            //RegisterVendors(start);
-            //AddProduct(start);
+            //
             Pause();
         }
         static void AddGroup(AuthenticationHeaderValue Authentication)
@@ -117,6 +126,15 @@ namespace SCM2020___Utility
                 }
                 Group.AddOnServer(urlAddGroup, newgroup);
             }
+        }
+        static void AddSector(AuthenticationHeaderValue Authentication)
+        {
+            //Sector sector = new Sector()
+            //{
+                
+            //}
+            //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Monitoring/Add")), monitoring, Authentication));
+
         }
         static void AddMonitoring(AuthenticationHeaderValue Authentication)
         {
@@ -151,6 +169,7 @@ namespace SCM2020___Utility
                     }
                 }
                 lMonitoring.Add(monitoring);
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Monitoring/Add")), monitoring, Authentication));
             }
         }
         static void AddInputByVendor(AuthenticationHeaderValue Authentication)
@@ -220,7 +239,10 @@ namespace SCM2020___Utility
 
                 }
             }
-
+            foreach (var item in InputByVendors)
+            {
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Input/Add")), item, Authentication));
+            }
         }
         static void AddOutput(AuthenticationHeaderValue Authentication)
         {
@@ -273,6 +295,11 @@ namespace SCM2020___Utility
 
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
+            }
+
+            foreach (var item in materialOutputs)
+            {
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Output/Add")), item, Authentication));
             }
         }
         static void AddInput(AuthenticationHeaderValue Authentication)
@@ -327,6 +354,10 @@ namespace SCM2020___Utility
                         }
                     };
                 }
+            }
+            foreach (var item in materialInputs)
+            {
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Devolution/Add")), item, Authentication));
             }
         }
         static void AddProduct(AuthenticationHeaderValue Authentication)
@@ -390,6 +421,7 @@ namespace SCM2020___Utility
             Console.WriteLine($"\nTotal de {lProducts.Count} produtos.");
             
         }
+
         static AuthenticationHeaderValue Start()
         {
             //Console.Write("Matrícula: ");
@@ -451,7 +483,7 @@ namespace SCM2020___Utility
                 {
                     //RegisterVendors newvendor = new RegisterVendors(Authentication);
                     //newvendor.AddVendor("http://localhost:52991/api/Vendor/Add", vendor);
-                    APIClient.POSTData(new Uri("http://localhost:52991/api/Vendor/Add"), vendor, Authentication);
+                    Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/Vendor/Add"), vendor, Authentication));
                 }
                 catch (AuthenticationException ex)
                 {
@@ -474,7 +506,7 @@ namespace SCM2020___Utility
                     IsPJERJRegistration = true,
                     Password = "@Tj_123456",
                     CPFRegistration = null,
-                    Occupation = "",
+                    Occupation = "Técnico",
                     Role = "DETEL"
                 };
 
@@ -500,6 +532,27 @@ namespace SCM2020___Utility
                 }
             }
             Console.WriteLine($"Total de {records.Count} funcionários.");
+        }
+        static void SignUpAdministrator()
+        {
+            var signUp = new SignUpUserInfo()
+            {
+                IsPJERJRegistration = true,
+                CPFRegistration = null,
+                Occupation = "Desenvolvedor",
+                Role = "Administrator",
+                Name = "Gabriel Machado",
+                PJERJRegistration = "59450",
+                Password = "SenhaSecreta#2020",
+            };
+            try
+            {
+                SignUp(signUp);
+            }
+            catch (AuthenticationException)
+            {
+                Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
+            }
         }
         static void SignUp(SignUpUserInfo userInfo)
         {

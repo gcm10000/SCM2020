@@ -5,11 +5,6 @@ namespace ModelsLibraryCore
     public class SignInUserInfo
     {
         /// <summary>
-        /// Nome do funcionário.
-        /// </summary>
-        [Required]
-        public string Name { get; set; }
-        /// <summary>
         /// Matrícula do funcionário cadastrado no Tribunal de Justiça.
         /// </summary>
         [Required]

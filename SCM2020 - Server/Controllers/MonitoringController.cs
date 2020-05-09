@@ -68,7 +68,6 @@ namespace SCM2020___Server.Controllers
             var monitoring = new Monitoring(raw, user.Id);
             if (!userManager.Users.Any(x => x.Id == monitoring.EmployeeId))
                 return BadRequest("Funcionário do qual solicitou não está cadastrado.");
-            //salling
 
             if (context.Monitoring.Any(x => x.Work_Order == monitoring.Work_Order))
                 return BadRequest("Ordem de serviço já existente.");
