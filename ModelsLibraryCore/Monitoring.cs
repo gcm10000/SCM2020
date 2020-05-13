@@ -31,8 +31,9 @@ namespace ModelsLibraryCore
             this.EmployeeId = monitoringRaw.EmployeeId;
             this.SCMEmployeeId = monitoringRaw.SCMEmployeeId;
             this.MovingDate = monitoringRaw.MovingDate;
-            this.ClosingDate = monitoringRaw.ClosingDate;
             this.Situation = monitoringRaw.Situation;
+            if (monitoringRaw.Situation)
+                this.ClosingDate = monitoringRaw.ClosingDate;
             this.Work_Order = monitoringRaw.Work_Order;
             this.RequestingSector = monitoringRaw.RequestingSector;
         }
