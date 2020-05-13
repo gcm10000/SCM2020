@@ -42,7 +42,8 @@ namespace SCM2020___Server.Controllers
             return "UsuariosController";
         }
         [HttpPost("NewUser")]
-        [Authorize(Roles = Roles.Administrator + "," + Roles.SCM)]
+        //[Authorize(Roles = Roles.Administrator + "," + Roles.SCM)]
+        [AllowAnonymous]
         public async Task<ActionResult<UserToken>> CreateUser()
         {
             var postData = await SignUpUserInfo();

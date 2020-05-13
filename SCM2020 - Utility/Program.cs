@@ -17,7 +17,7 @@ namespace SCM2020___Utility
         const string urlGroups = "http://192.168.1.2:52991/api/Group/";
         const string urlAddGroup = "http://192.168.1.2:52991/api/Group/Add";
         const string urlAddProduct = "http://192.168.1.2:52991/api/GeneralProduct/Add";
-        const string urlVendor = "http://192.168.1.2:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://192.168.1.2:52991/api/Vendor/Add";
 
 
         static void Main(string[] args)
@@ -29,7 +29,8 @@ namespace SCM2020___Utility
             //DELETE -> INT DELETE
 
             //SignUpAdministrator();
-
+            Console.Write("Pressione uma tecla para continuar");
+            Console.ReadLine();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
@@ -92,16 +93,15 @@ namespace SCM2020___Utility
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
-            RegisterVendors(start);
+            //RegisterVendors(start);
             //AddGroup(start);
             //AddSector(start);
-            SignUpAll();
-            AddProduct(start);
+            //SignUpAll();
+            //AddProduct(start);
             AddMonitoring(start);
-            AddInputByVendor(start);
-            AddInput(start);
-            AddOutput(start);
-            AddInput(start);
+            //AddInputByVendor(start);
+            //AddOutput(start);
+            //AddInput(start);
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
@@ -169,7 +169,9 @@ namespace SCM2020___Utility
                     }
                 }
                 lMonitoring.Add(monitoring);
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Monitoring/Add")), monitoring, Authentication));
+                //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "Vendor/Add/"), vendor, Authentication));
+
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "Monitoring/Migrate/"), monitoring, Authentication));
             }
         }
         static void AddInputByVendor(AuthenticationHeaderValue Authentication)
@@ -483,7 +485,7 @@ namespace SCM2020___Utility
                 {
                     //RegisterVendors newvendor = new RegisterVendors(Authentication);
                     //newvendor.AddVendor("http://localhost:52991/api/Vendor/Add", vendor);
-                    Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/Vendor/Add"), vendor, Authentication));
+                    Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "Vendor/Add/"), vendor, Authentication));
                 }
                 catch (AuthenticationException ex)
                 {

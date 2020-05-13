@@ -42,7 +42,8 @@ namespace SCM2020___Server.Controllers
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
             return Ok(monitoring);
         }
-        [Authorize(Roles = Roles.Administrator)]
+        //[Authorize(Roles = Roles.Administrator)]
+        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
