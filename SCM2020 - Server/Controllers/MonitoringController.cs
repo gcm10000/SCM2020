@@ -51,6 +51,7 @@ namespace SCM2020___Server.Controllers
             var deserialized = JsonConvert.DeserializeObject<Monitoring>(raw);
             var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             Monitoring monitoring = new Monitoring(raw);
+            //NOME DO FUNCIONÁRIO
             monitoring.EmployeeId = (await userManager.FindByNameAsync(deserialized.EmployeeId)).Id;
             context.Monitoring.Add(monitoring);
             await context.SaveChangesAsync();
