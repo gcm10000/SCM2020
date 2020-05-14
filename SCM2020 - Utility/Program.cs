@@ -11,13 +11,13 @@ namespace SCM2020___Utility
 {
     class Program
     {
-        static Uri uriServer = new Uri("http://192.168.1.2:52991/api/");
-        const string urlLogin = "http://192.168.1.2:52991/api/User/Login";
-        const string urlAddUser = "http://192.168.1.2:52991/api/User/NewUser";
-        const string urlGroups = "http://192.168.1.2:52991/api/Group/";
-        const string urlAddGroup = "http://192.168.1.2:52991/api/Group/Add";
-        const string urlAddProduct = "http://192.168.1.2:52991/api/GeneralProduct/Add";
-        const string urlVendor = "http://192.168.1.2:52991/api/Vendor/Add";
+        static Uri uriServer = new Uri("http://192.168.1.3:52991/api/");
+        const string urlLogin = "http://192.168.1.3:52991/api/User/Login";
+        const string urlAddUser = "http://192.168.1.3:52991/api/User/NewUser";
+        const string urlGroups = "http://192.168.1.3:52991/api/Group/";
+        const string urlAddGroup = "http://192.168.1.3:52991/api/Group/Add";
+        const string urlAddProduct = "http://192.168.1.3:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://192.168.1.3:52991/api/Vendor/Add";
 
 
         static void Main(string[] args)
@@ -29,8 +29,6 @@ namespace SCM2020___Utility
             //DELETE -> INT DELETE
 
             //SignUpAdministrator();
-            Console.Write("Pressione uma tecla para continuar");
-            Console.ReadLine();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
@@ -158,7 +156,7 @@ namespace SCM2020___Utility
                 if (DateTime.TryParse(oldMonitoring.First(x => x.Key.ToLower() == "data do fechamento").Value, out DateTime closingDate))
                     monitoring.ClosingDate = closingDate;
                 monitoring.SCMEmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "matricula do almo").Value;
-                monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "mat do tecnico").Value;
+                monitoring.EmployeeId = oldMonitoring.First(x => x.Key.ToLower() == "funcionario").Value.Trim();
                 monitoring.Situation = oldMonitoring.First(x => x.Key.ToLower() == "situação").Value == "FECHADA";
                 //monitoring.RequestingSector = int.Parse(oldMonitoring.First(x => x.Key.ToLower() == "tipo de saida").Value);
                 foreach (var oldOutput in records2)

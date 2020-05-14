@@ -104,6 +104,7 @@ namespace SCM2020___Server.Controllers
                 lockoutOnFailure: false
                 );
             var claims = await UserManager.GetClaimsAsync(user);
+            
 
             if (result.Succeeded)
             {

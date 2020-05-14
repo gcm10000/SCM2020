@@ -51,7 +51,7 @@ namespace SCM2020___Server.Controllers
             var deserialized = JsonConvert.DeserializeObject<Monitoring>(raw);
             var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             Monitoring monitoring = new Monitoring(raw);
-            monitoring.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
+            monitoring.EmployeeId = (await userManager.GetUserByNameClaim(deserialized.EmployeeId)).Id;
             context.Monitoring.Add(monitoring);
             await context.SaveChangesAsync();
             return Ok("Migração de dados feita com sucesso.");
