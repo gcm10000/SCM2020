@@ -48,7 +48,7 @@ namespace SCM2020___Server.Controllers
         {
             var postData = await SignUpUserInfo();
             var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
-            var user = new ApplicationUser { UserName = username, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration };
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration };
             
             var r1 = UserManager.FindByPJERJRegistrationAsync(postData.PJERJRegistration);
             var r2 = UserManager.FindByPJERJRegistrationAsync(postData.CPFRegistration);
