@@ -161,7 +161,7 @@ namespace SCM2020___Server.Controllers
             return BadRequest();
         }
         [HttpPost("ExistsName")]
-        [Authorize(Roles = Roles.Administrator)]
+        [AllowAnonymous]
         public async Task<ActionResult<bool>> ExistsName()
         {
             var raw = await Helper.RawFromBody(this);

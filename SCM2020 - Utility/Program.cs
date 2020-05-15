@@ -2,6 +2,7 @@
 using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -575,7 +576,17 @@ namespace SCM2020___Utility
                     Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
                 }
             }
-            Console.WriteLine($"Total de {records.Count} funcionários.");
+            foreach (var employees in records)
+            {
+                var nameEmployee = employees.First(x => x.Key == "Funcionario").Value.Trim();
+                Console.WriteLine(CheckIfExistsName(null, nameEmployee));
+            }
+                Console.WriteLine($"Total de {records.Count} funcionários.");
+        }
+        static bool CheckIfExistsName(AuthenticationHeaderValue Authentication, string name)
+        {
+            var result = APIClient.POSTData(new Uri(uriServer, "User/ExistsName/"), name, Authentication);
+            return bool.Parse(result);
         }
         static void SignUpAdministrator()
         {
