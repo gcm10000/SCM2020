@@ -96,9 +96,9 @@ namespace SCM2020___Utility
             //RegisterVendors(start);
             //AddGroup(start);
             //AddSector(start);
-            SignUpSCMEmployees();
+            //SignUpSCMEmployees();
             SignUpAll();
-            AddProduct(start);
+            //AddProduct(start);
             AddMonitoring(start);
             //AddInputByVendor(start);
             //AddOutput(start);
@@ -576,10 +576,28 @@ namespace SCM2020___Utility
                     Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
                 }
             }
+
             foreach (var employees in records)
             {
                 var nameEmployee = employees.First(x => x.Key == "Funcionario").Value.Trim();
-                Console.WriteLine(CheckIfExistsName(null, nameEmployee));
+                var registrationEmployee = employees.First(x => x.Key == "Matricula").Value;
+                if (!CheckIfExistsName(null, nameEmployee))
+                {
+                    Console.WriteLine($"O nome {nameEmployee} será cadastrado.");
+                    var signUp = new SignUpUserInfo()
+                    {
+                        IsPJERJRegistration = true,
+                        Password = "@Tj_123456",
+                        CPFRegistration = null,
+                        Occupation = "Técnico",
+                        Role = "DETEL",
+                        Name = nameEmployee,
+                        PJERJRegistration = "9" + registrationEmployee
+                    };
+                    SignUp(signUp);
+                    Console.WriteLine($"O nome {nameEmployee} foi cadastrado.");
+                }
+
             }
                 Console.WriteLine($"Total de {records.Count} funcionários.");
         }
