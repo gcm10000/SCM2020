@@ -52,7 +52,9 @@ namespace SCM2020___Server.Controllers
             var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             Monitoring monitoring = new Monitoring(raw);
             //NOME DO FUNCIONÁRIO
-            monitoring.EmployeeId = (await userManager.FindByNameAsync(deserialized.EmployeeId)).Id;
+            monitoring.SCMEmployeeId = SCMId;
+            var UserId = userManager.FindByCompleteNameAsync(deserialized.EmployeeId);
+            monitoring.EmployeeId = (UserId).Id;
             context.Monitoring.Add(monitoring);
             await context.SaveChangesAsync();
             return Ok("Migração de dados feita com sucesso.");
