@@ -64,12 +64,20 @@ namespace SCM2020___Utility
                 List<Group> g = JsonConvert.DeserializeObject<List<Group>>(content);
                 try
                 {
-                    int id = g.FirstOrDefault(x => x.GroupName == group).Id;
+                    int id = 0;
+                    if (g.Any(x => x.GroupName == group))
+                        id = g.FirstOrDefault(x => x.GroupName == group).Id;
+                    else
+                    {
+                        AddOnServer("http://192.168.1.30:52991/api/Group/Add", new Group() { GroupName = group });
+                        return GetGroup(url, group);
+                    }
+
                     return id;
                 }
                 catch (NullReferenceException)
                 {
-                    AddOnServer("http://localhost:52991/api/Group/Add", new Group() { GroupName = group});
+                    AddOnServer("http://192.168.1.30:52991/api/Group/Add", new Group() { GroupName = group});
                     return GetGroup(url, group);
                 }
             }

@@ -91,11 +91,13 @@ namespace SCM2020___Utility
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
+
             //RegisterVendors(start);
             //AddGroup(start);
             //AddSector(start);
-            //SignUpAll();
-            //AddProduct(start);
+            SignUpSCMEmployees();
+            SignUpAll();
+            AddProduct(start);
             AddMonitoring(start);
             //AddInputByVendor(start);
             //AddOutput(start);
@@ -493,11 +495,53 @@ namespace SCM2020___Utility
             Console.WriteLine($"Total de {records.Count} registros.");
 
         }
+        static void SignUpSCMEmployees()
+        {
+            SCMAccess dbAccess = new SCMAccess(
+                ConnectionString: SCMAccess.ConnectionString,
+                TableName: "[Func do almox]");
+            var records = dbAccess.GetDataFromTable();
+            foreach (var employees in records)
+            {
+                var signUp = new SignUpUserInfo()
+                {
+                    IsPJERJRegistration = true,
+                    Password = "@Tj_123456",
+                    CPFRegistration = null,
+                    Occupation = "Técnico",
+                    Role = "SCM"
+                };
+
+                foreach (var row in employees)
+                {
+                    Console.WriteLine($"{row.Key}: {row.Value}");
+                    if (row.Key == "Matricula")
+                    {
+                        signUp.PJERJRegistration = row.Value;
+                    }
+                    else if (row.Key == "Nonfunalm")
+                    {
+                        signUp.Name = row.Value.Trim();
+                    }
+                }
+                try
+                {
+                    SignUp(signUp);
+                }
+                catch (AuthenticationException)
+                {
+                    //NOMES NÃO CADASTRADOS PORQUE TEM MATRÍCULAS REPETIDAS!
+                    Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
+                    signUp.PJERJRegistration = "9" + signUp.PJERJRegistration;
+                }
+            }
+            Console.WriteLine($"Total de {records.Count} funcionários.");
+        }
         static void SignUpAll()
         {
             SCMAccess dbAccess = new SCMAccess(
                 ConnectionString: SCMAccess.ConnectionString,
-                TableName: "Funcionario");
+                SelectCommand: "SELECT * FROM Funcionario ORDER BY Matricula DESC", true);
             var records = dbAccess.GetDataFromTable();
             foreach (var employees in records)
             {
@@ -519,7 +563,7 @@ namespace SCM2020___Utility
                     }
                     else if (row.Key == "Funcionario")
                     {
-                        signUp.Name = row.Value;
+                        signUp.Name = row.Value.Trim();
                     }
                 }
                 try

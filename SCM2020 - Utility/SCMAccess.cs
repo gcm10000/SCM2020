@@ -17,6 +17,11 @@ namespace SCM2020___Utility
             this.aConnection = new OleDbConnection(ConnectionString);
             this.aCommand = new OleDbCommand($"SELECT * FROM {TableName}", aConnection);
         }
+        public SCMAccess(string ConnectionString, string SelectCommand, bool x)
+        {
+            this.aConnection = new OleDbConnection(ConnectionString);
+            this.aCommand = new OleDbCommand(SelectCommand, aConnection);
+        }
         public List<List<KeyValuePair<string, string>>> GetDataFromTable()
         {
             List<List<KeyValuePair<string, string>>> records = new List<List<KeyValuePair<string, string>>>();
