@@ -59,9 +59,9 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<MaterialOutput>(raw);
-            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
-            MaterialOutput output = new MaterialOutput(raw, SCMId);
-            output.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
+            //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            MaterialOutput output = new MaterialOutput(raw);
+            //output.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
             context.MaterialOutput.Add(output);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");
@@ -75,7 +75,8 @@ namespace SCM2020___Server.Controllers
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
-            var output = new MaterialOutput(raw, id);
+            //var output = new MaterialOutput(raw, id);
+            var output = new MaterialOutput(raw);
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == output.WorkOrder);
             if (monitoring == null)
                 return BadRequest("Ordem de serviço inexistente.");
@@ -123,7 +124,7 @@ namespace SCM2020___Server.Controllers
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
-            output.EmployeeId = materialOutputFromJson.EmployeeId;
+            //output.EmployeeId = materialOutputFromJson.EmployeeId;
             output.ServiceLocation = materialOutputFromJson.ServiceLocation;
             output.WorkOrder = materialOutputFromJson.WorkOrder;
             

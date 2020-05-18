@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,13 +9,13 @@ namespace ModelsLibraryCore
 {
     public class MaterialOutput
     {
-        public MaterialOutput(string raw, string UserId)
+        public MaterialOutput(string raw)
         {
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
-            this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
-            this.SCMEmployeeId = UserId;
+            //this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
+            //this.SCMEmployeeId = UserId;
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
@@ -39,14 +40,14 @@ namespace ModelsLibraryCore
         /// Data de quando a movimentação de saída foi requisitada do Sistema de Controle de Materiais.
         /// </summary>
         public DateTime MovingDate { get; set; }
-        /// <summary>
-        /// Funcionário do Sistema de Controle de Materiais.
-        /// </summary>
-        public string SCMEmployeeId { get; set; }
-        /// <summary>
-        /// Funcionário que solicitou a movimentação de saída.
-        /// </summary>
-        public string EmployeeId { get; set; }
+        ///// <summary>
+        ///// Funcionário do Sistema de Controle de Materiais.
+        ///// </summary>
+        //public string SCMEmployeeId { get; set; }
+        ///// <summary>
+        ///// Funcionário que solicitou a movimentação de saída.
+        ///// </summary>
+        //public string EmployeeId { get; set; }
         /// <summary>
         /// Ordem de serviço.
         /// </summary>
@@ -55,6 +56,8 @@ namespace ModelsLibraryCore
         /// Local onde será utilizado o produto.
         /// </summary>
         public string ServiceLocation { get; set; }
+        [JsonIgnore]
+        public Monitoring Monitoring { get; set; }
         /// <summary>
         /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>

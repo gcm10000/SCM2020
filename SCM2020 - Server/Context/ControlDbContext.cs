@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
+using System.Threading;
 
 namespace SCM2020___Server.Context
 {
@@ -57,6 +58,16 @@ namespace SCM2020___Server.Context
             modelBuilder.Entity<AuxiliarPermanent>()
                 .HasOne(b => b.MaterialInput)
                 .WithMany(a => a.PermanentProducts)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Monitoring>()
+                .HasOne(b => b.MaterialOutput)
+                .WithOne(a => a.Monitoring)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Monitoring>()
+                .HasOne(b => b.MaterialInput)
+                .WithOne(a => a.Monitoring)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))

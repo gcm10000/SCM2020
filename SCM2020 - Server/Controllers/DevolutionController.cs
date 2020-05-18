@@ -46,9 +46,10 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
-            MaterialInput materialInput = new MaterialInput(raw, SCMId);
-            materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
+            //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            //MaterialInput materialInput = new MaterialInput(raw, SCMId);
+            MaterialInput materialInput = new MaterialInput(raw);
+            //materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
             context.MaterialInput.Add(materialInput);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");
@@ -62,7 +63,8 @@ namespace SCM2020___Server.Controllers
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
-            MaterialInput materialInput = new MaterialInput(raw, id);
+            //MaterialInput materialInput = new MaterialInput(raw, id);
+            MaterialInput materialInput = new MaterialInput(raw);
             var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
                 .FirstOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
             if (output == null)

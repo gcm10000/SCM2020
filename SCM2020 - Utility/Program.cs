@@ -100,7 +100,7 @@ namespace SCM2020___Utility
             SignUpAll();
             //AddProduct(start);
             AddMonitoring(start);
-            //AddInputByVendor(start);
+            AddInputByVendor(start);
             //AddOutput(start);
             //AddInput(start);
 
@@ -254,7 +254,8 @@ namespace SCM2020___Utility
                 TableName: "Saida");
             var records = dbAccess.GetDataFromTable();
             List<MaterialOutput> materialOutputs = new List<MaterialOutput>();
-
+            //MATRICULA DO ALMO -> TROCAR
+            //a ideia é que confira na ordem de serviço 
             foreach (var oldMaterialOutput in records)
             {
                 var WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
@@ -271,8 +272,8 @@ namespace SCM2020___Utility
                     MaterialOutput materialOutput = new MaterialOutput()
                     {
                         MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
-                        SCMEmployeeId = resultSCMId,
-                        EmployeeId = resultEmployeeId,
+                        //SCMEmployeeId = resultSCMId,
+                        //EmployeeId = resultEmployeeId,
                         ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
                         WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
                         ConsumptionProducts = new List<AuxiliarConsumption>()
@@ -311,6 +312,8 @@ namespace SCM2020___Utility
                 ConnectionString: SCMAccess.ConnectionString,
                 TableName: "Entrada");
             var records = dbAccess.GetDataFromTable();
+            //MATRICULA DO ALMO -> TROCAR
+            //a ideia é que confira na ordem de serviço 
             List<MaterialInput> materialInputs = new List<MaterialInput>();
 
             foreach (var oldMaterialInput in records)

@@ -9,15 +9,15 @@ namespace ModelsLibraryCore
     public class MaterialInput
     {
         public MaterialInput() { }
-        public MaterialInput(string raw, string UserId)
+        public MaterialInput(string raw)
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
             this.DocDate = input.DocDate;
-            this.EmployeeId = input.EmployeeId;
+            //this.EmployeeId = input.EmployeeId;
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
             this.Regarding = input.Regarding;
-            this.SCMEmployeeId = UserId;
+            //this.SCMEmployeeId = UserId;
             this.WorkOrder = input.WorkOrder;
         }
         /// <summary>
@@ -33,13 +33,13 @@ namespace ModelsLibraryCore
         /// <summary>
         /// Funcionário que solicitou a entrada do material.
         /// </summary>
-        [Required]
-        public string EmployeeId { get; set; }
-        /// <summary>
-        /// Funcionário que fez a entrada do material.
-        /// </summary>
-        [Required]
-        public string SCMEmployeeId { get; set; }
+        //[Required]
+        //public string EmployeeId { get; set; }
+        ///// <summary>
+        ///// Funcionário que fez a entrada do material.
+        ///// </summary>
+        //[Required]
+        //public string SCMEmployeeId { get; set; }
         /// <summary>
         /// Data da movimentação.
         /// </summary>
@@ -62,6 +62,8 @@ namespace ModelsLibraryCore
         /// Materiais permanentes da devolução.
         /// </summary>
         public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
+        [JsonIgnore]
+        public Monitoring Monitoring { get; set; }
     }
     public enum Regarding
     {

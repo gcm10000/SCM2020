@@ -65,5 +65,9 @@ namespace ModelsLibraryCore
         /// Será tratado como ID da tabela Sectors.
         /// </summary>
         public int RequestingSector { get; set; }
+        [JsonIgnore]
+        public MaterialOutput MaterialOutput { get; set; }
+        [JsonIgnore]
+        public MaterialInput MaterialInput { get; set; }
     }
 }

@@ -207,7 +207,7 @@ namespace SCM2020___Client.Frames
             var register = ApplicantTextBox.Text;
             //EDITAR
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, new Uri($"UserId/{register}")).ToString());
-            materialOutput.EmployeeId = userId;
+            //materialOutput.EmployeeId = userId;
 
             foreach (var item in ProductToAddDataGrid.Items)
             {
