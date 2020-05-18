@@ -187,7 +187,7 @@ namespace SCM2020___Utility
             {
                 var NF = oldInputByVendor.First(x => x.Key.ToLower() == "nfdoc").Value;
                 if (!InputByVendors.Any(x => x.Invoice == NF))
-                {
+                { 
                     MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
                     materialInputByVendor.Invoice = NF;
                     materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
