@@ -39,14 +39,14 @@ namespace SCM2020___Server.Controllers
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
-        [Authorize(Roles = Roles.Administrator)]
+        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
-            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
-            MaterialInputByVendor input = new MaterialInputByVendor(raw, SCMId);
+            //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            MaterialInputByVendor input = new MaterialInputByVendor(raw);
             context.MaterialInputByVendor.Add(input);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");

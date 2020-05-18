@@ -18,6 +18,15 @@ namespace ModelsLibraryCore
             this.SCMEmployeeId = UserId;
             this.AuxiliarConsumptions = input.AuxiliarConsumptions;
         }
+        public MaterialInputByVendor(string raw)
+        {
+            var input = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
+            this.Invoice = input.Invoice;
+            this.VendorId = input.VendorId;
+            this.MovingDate = input.MovingDate;
+            this.SCMEmployeeId = input.SCMEmployeeId;
+            this.AuxiliarConsumptions = input.AuxiliarConsumptions;
+        }
         /// <summary>
         /// Chave primária da entrada.
         /// </summary>
