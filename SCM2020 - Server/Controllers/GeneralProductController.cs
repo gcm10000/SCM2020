@@ -92,8 +92,7 @@ namespace SCM2020___Server.Controllers
             var product = context.ConsumptionProduct.SingleOrDefault(x => x.Code == code);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product, Formatting.Indented);
-                return Ok(tojson);
+                return Ok(product);
             }
             else
             {

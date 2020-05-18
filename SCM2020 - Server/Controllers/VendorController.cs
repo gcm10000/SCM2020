@@ -50,9 +50,12 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o id {id} não existe.");
             return Ok(vendor);
         }
-        [HttpGet("Name/{name}")]
-        public IActionResult ShowByName(string name)
+        [HttpPost("Name")]
+        public async Task<IActionResult> ShowByName()
         {
+            var raw = await Helper.RawFromBody(this);
+            var name = JsonConvert.DeserializeObject<string>(raw);
+
             var vendor = context.Vendors.FirstOrDefault(x => x.Name == name);
             if (vendor == null)
                 return BadRequest($"O registro com o nome {name} não existe.");

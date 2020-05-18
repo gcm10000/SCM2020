@@ -1,8 +1,10 @@
 ﻿using ModelsLibrary;
+using Newtonsoft.Json;
 using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -97,9 +99,9 @@ namespace SCM2020___Utility
             //AddGroup(start);
             //AddSector(start);
             //SignUpSCMEmployees();
-            SignUpAll();
+            //SignUpAll();
             //AddProduct(start);
-            AddMonitoring(start);
+            //AddMonitoring(start);
             AddInputByVendor(start);
             //AddOutput(start);
             //AddInput(start);
@@ -193,36 +195,53 @@ namespace SCM2020___Utility
                     materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                     materialInputByVendor.AuxiliarConsumptions = new List<AuxiliarConsumption>();
                     var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
-                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
+                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{register}"), Authentication);
                     materialInputByVendor.SCMEmployeeId = resultSCMId;
                     var vendor = oldInputByVendor.First(x => x.Key.ToLower() == "nome").Value;
-                    Vendor resultVendor = null;
+                    string strResultVendor = null;
+                    
                     try
                     {
                         //OK
-                        resultVendor = APIClient.GETData<Vendor>(new Uri(uriServer, new Uri($"Vendor/Name/{vendor}")), Authentication);
+                        strResultVendor = APIClient.POSTData(new Uri(uriServer, $"Vendor/Name/"), vendor, Authentication);
                     }
                     catch
                     {
                         Vendor newVendor = new Vendor();
                         newVendor.Name = vendor;
                         newVendor.Telephone = string.Empty;
-                        var resultPOST = APIClient.POSTData(new Uri(uriServer, new Uri($"Vendor/Add/")), newVendor, Authentication);
+                        var resultPOST = APIClient.POSTData(new Uri(uriServer, $"Vendor/Add/"), newVendor, Authentication);
                         Console.WriteLine(resultPOST);
-                        resultVendor = APIClient.GETData<Vendor>(new Uri(uriServer, new Uri($"Vendor/Name/{vendor}")), Authentication);
+                        strResultVendor = APIClient.POSTData(new Uri(uriServer, $"Vendor/Name/"), newVendor.Name, Authentication);
                     }
-                    materialInputByVendor.VendorId = resultVendor.Id;
+                    Vendor _vendor = JsonConvert.DeserializeObject<Vendor>(strResultVendor);
+                    materialInputByVendor.VendorId = _vendor.Id;
 
-                    var auxiliarConsumption = new AuxiliarConsumption();
-                    var code = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
-                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
-                    auxiliarConsumption.ProductId = resultProductId;
-                    auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
-                    auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
-                    auxiliarConsumption.SCMEmployeeId = resultSCMId;
-                    materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+                    try
+                    {
+                        var auxiliarConsumption = new AuxiliarConsumption();
+                        var code = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
+                        var resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
+                        var resultProductId = resultProduct.Id;
+                        auxiliarConsumption.ProductId = resultProductId;
+                        auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                        auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                        auxiliarConsumption.SCMEmployeeId = resultSCMId;
+                        materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
 
-                    InputByVendors.Add(materialInputByVendor);
+                        InputByVendors.Add(materialInputByVendor);
+                    }
+                    catch (System.Net.Http.HttpRequestException ex)
+                    {
+                        string error = JsonConvert.SerializeObject(new
+                        {
+                            Message = ex.Message,
+                            Invoice = materialInputByVendor.Invoice,
+                        });
+                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"log-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                        File.WriteAllText(fullName, error);
+                    }
+                    
                 }
                 else
                 {
@@ -230,21 +249,38 @@ namespace SCM2020___Utility
 
                     var auxiliarConsumption = new AuxiliarConsumption();
                     var code = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "codigo").Value);
-                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
-                    auxiliarConsumption.ProductId = resultProductId;
-                    auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
-                    auxiliarConsumption.Quantity = double.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
-                    var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
-                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
-                    materialInputByVendor.SCMEmployeeId = resultSCMId;
+                    ConsumptionProduct resultProduct = null;
 
-                    materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+                    try
+                    {
+                        resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
+                        var resultProductId = resultProduct.Id;
+                        auxiliarConsumption.ProductId = resultProductId;
+                        auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                        auxiliarConsumption.Quantity = double.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                        var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                        var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{register}"), Authentication);
+                        materialInputByVendor.SCMEmployeeId = resultSCMId;
+
+                        materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+                    }
+                    catch (System.Net.Http.HttpRequestException ex)
+                    {
+                        string error = JsonConvert.SerializeObject(new 
+                        { 
+                            Message = ex.Message,
+                            Invoice = materialInputByVendor.Invoice,
+                        });
+                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                        File.WriteAllText(fullName, error);
+                    }
+
 
                 }
             }
             foreach (var item in InputByVendors)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Input/Add")), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/api/Input/Add"), item, Authentication));
             }
         }
         static void AddOutput(AuthenticationHeaderValue Authentication)
