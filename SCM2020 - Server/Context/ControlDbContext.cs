@@ -60,14 +60,14 @@ namespace SCM2020___Server.Context
                 .WithMany(a => a.PermanentProducts)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Monitoring>()
-                .HasOne(b => b.MaterialOutput)
-                .WithOne(a => a.Monitoring)
+            modelBuilder.Entity<MaterialOutput>()
+                .HasOne(b => b.Monitoring)
+                .WithMany(a => a.MaterialOutput)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Monitoring>()
-                .HasOne(b => b.MaterialInput)
-                .WithOne(a => a.Monitoring)
+            modelBuilder.Entity<MaterialInput>()
+                .HasOne(b => b.Monitoring)
+                .WithMany(a => a.MaterialInput)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))

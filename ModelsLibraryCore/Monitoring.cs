@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading;
@@ -66,8 +67,8 @@ namespace ModelsLibraryCore
         /// </summary>
         public int RequestingSector { get; set; }
         [JsonIgnore]
-        public MaterialOutput MaterialOutput { get; set; }
+        public ICollection<MaterialOutput> MaterialOutput { get; set; }
         [JsonIgnore]
-        public MaterialInput MaterialInput { get; set; }
+        public ICollection<MaterialInput> MaterialInput { get; set; }
     }
 }
