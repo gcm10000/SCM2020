@@ -62,7 +62,7 @@ namespace SCM2020___Server.Controllers
             //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             MaterialOutput output = new MaterialOutput(raw);
             //output.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
-            output.Monitoring = context.Monitoring.First(x => x.Work_Order == output.WorkOrder);
+            //output.Monitoring = context.Monitoring.First(x => x.Work_Order == output.WorkOrder);
             context.MaterialOutput.Add(output);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");

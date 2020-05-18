@@ -199,11 +199,15 @@ namespace SCM2020___Utility
                     materialInputByVendor.SCMEmployeeId = resultSCMId;
                     var vendor = oldInputByVendor.First(x => x.Key.ToLower() == "nome").Value;
                     string strResultVendor = null;
-                    
+                    Vendor _vendor = null;
+
+
                     try
                     {
                         //OK
                         strResultVendor = APIClient.POSTData(new Uri(uriServer, $"Vendor/Name/"), vendor, Authentication);
+                        _vendor = JsonConvert.DeserializeObject<Vendor>(strResultVendor);
+
                     }
                     catch
                     {
@@ -213,8 +217,10 @@ namespace SCM2020___Utility
                         var resultPOST = APIClient.POSTData(new Uri(uriServer, $"Vendor/Add/"), newVendor, Authentication);
                         Console.WriteLine(resultPOST);
                         strResultVendor = APIClient.POSTData(new Uri(uriServer, $"Vendor/Name/"), newVendor.Name, Authentication);
+                        _vendor = JsonConvert.DeserializeObject<Vendor>(strResultVendor);
+
                     }
-                    Vendor _vendor = JsonConvert.DeserializeObject<Vendor>(strResultVendor);
+                    //Vendor _vendor = JsonConvert.DeserializeObject<Vendor>(strResultVendor);
                     materialInputByVendor.VendorId = _vendor.Id;
 
                     try
@@ -280,7 +286,7 @@ namespace SCM2020___Utility
             }
             foreach (var item in InputByVendors)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/api/Input/Add"), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/api/Input/Migrate"), item, Authentication));
             }
         }
         static void AddOutput(AuthenticationHeaderValue Authentication)

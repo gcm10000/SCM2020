@@ -49,7 +49,7 @@ namespace SCM2020___Server.Controllers
             //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
             //MaterialInput materialInput = new MaterialInput(raw, SCMId);
             MaterialInput materialInput = new MaterialInput(raw);
-            materialInput.Monitoring = context.Monitoring.First(x => x.Work_Order == materialInput.WorkOrder);
+            //materialInput.Monitoring = context.Monitoring.First(x => x.Work_Order == materialInput.WorkOrder);
             //materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
             context.MaterialInput.Add(materialInput);
             await context.SaveChangesAsync();
