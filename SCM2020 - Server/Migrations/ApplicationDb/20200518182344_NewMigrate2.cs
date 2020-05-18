@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SCM2020___Server.Migrations
+namespace SCM2020___Server.Migrations.ApplicationDb
 {
-    public partial class NewMigration : Migration
+    public partial class NewMigrate2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,8 @@ namespace SCM2020___Server.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     PJERJRegistration = table.Column<string>(nullable: true),
-                    CPFRegistration = table.Column<string>(nullable: true)
+                    CPFRegistration = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

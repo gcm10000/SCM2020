@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations.ControlDb
+namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20200309165110_NewMigration4")]
-    partial class NewMigration4
+    partial class ControlDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +41,12 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SCMRegistration")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MaterialInputByVendorId");
@@ -64,13 +68,21 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("MaterialInputId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MaterialOutputId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SCMRegistration")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MaterialInputId");
 
                     b.HasIndex("MaterialOutputId");
 
@@ -147,19 +159,11 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("DocDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Regarding")
                         .HasColumnType("int");
-
-                    b.Property<string>("SCMEmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WorkOrder")
                         .HasColumnType("nvarchar(max)");
@@ -177,12 +181,14 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Invoice")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SCMEmployeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VendorId")
@@ -200,17 +206,8 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("EmployeeRegistration")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("RequestingSector")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SCMRegistration")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ServiceLocation")
                         .HasColumnType("nvarchar(max)");
@@ -230,7 +227,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ClosingDate")
+                    b.Property<DateTime?>("ClosingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EmployeeId")
@@ -239,6 +236,9 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("RequestingSector")
+                        .HasColumnType("int");
 
                     b.Property<string>("SCMEmployeeId")
                         .IsRequired()
@@ -321,28 +321,33 @@ namespace SCM2020___Server.Migrations.ControlDb
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", null)
+                    b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
                         .WithMany("AuxiliarConsumptions")
                         .HasForeignKey("MaterialInputByVendorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ModelsLibraryCore.MaterialInput", null)
+                    b.HasOne("ModelsLibraryCore.MaterialInput", "MaterialInput")
                         .WithMany("ConsumptionProducts")
                         .HasForeignKey("MaterialInputId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ModelsLibraryCore.MaterialOutput", null)
+                    b.HasOne("ModelsLibraryCore.MaterialOutput", "MaterialOutput")
                         .WithMany("ConsumptionProducts")
                         .HasForeignKey("MaterialOutputId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarPermanent", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.MaterialOutput", null)
+                    b.HasOne("ModelsLibraryCore.MaterialInput", "MaterialInput")
+                        .WithMany("PermanentProducts")
+                        .HasForeignKey("MaterialInputId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ModelsLibraryCore.MaterialOutput", "MaterialOutput")
                         .WithMany("PermanentProducts")
                         .HasForeignKey("MaterialOutputId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -56,8 +56,6 @@ namespace ModelsLibraryCore
         /// Local onde será utilizado o produto.
         /// </summary>
         public string ServiceLocation { get; set; }
-        [JsonIgnore]
-        public Monitoring Monitoring { get; set; }
         /// <summary>
         /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>

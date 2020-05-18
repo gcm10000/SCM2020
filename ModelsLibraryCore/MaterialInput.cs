@@ -62,8 +62,6 @@ namespace ModelsLibraryCore
         /// Materiais permanentes da devolução.
         /// </summary>
         public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
-        [JsonIgnore]
-        public Monitoring Monitoring { get; set; }
     }
     public enum Regarding
     {

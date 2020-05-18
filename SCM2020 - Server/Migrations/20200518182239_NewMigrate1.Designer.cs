@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations.ControlDb
+namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20200508214821_NewMigration13")]
-    partial class NewMigration13
+    [Migration("20200518182239_NewMigrate1")]
+    partial class NewMigrate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,19 +161,11 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<DateTime>("DocDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Regarding")
                         .HasColumnType("int");
-
-                    b.Property<string>("SCMEmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WorkOrder")
                         .HasColumnType("nvarchar(max)");
@@ -216,14 +208,8 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("SCMEmployeeId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ServiceLocation")
                         .HasColumnType("nvarchar(max)");
@@ -243,7 +229,7 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("ClosingDate")
+                    b.Property<DateTime?>("ClosingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EmployeeId")
