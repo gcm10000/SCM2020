@@ -345,7 +345,7 @@ namespace SCM2020___Utility
 
             foreach (var item in materialOutputs)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Output/Add")), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Output/Migrate")), item, Authentication));
             }
         }
         static void AddInput(AuthenticationHeaderValue Authentication)
