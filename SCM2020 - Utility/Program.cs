@@ -102,9 +102,9 @@ namespace SCM2020___Utility
             //SignUpAll();
             //AddProduct(start);
             //AddMonitoring(start);
-            AddInputByVendor(start);
+            //AddInputByVendor(start);
             //AddOutput(start);
-            //AddInput(start);
+            AddInput(start);
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
@@ -201,7 +201,6 @@ namespace SCM2020___Utility
                     string strResultVendor = null;
                     Vendor _vendor = null;
 
-
                     try
                     {
                         //OK
@@ -277,7 +276,7 @@ namespace SCM2020___Utility
                             Message = ex.Message,
                             Invoice = materialInputByVendor.Invoice,
                         });
-                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALINPUTBYVENDORLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
                         File.WriteAllText(fullName, error);
                     }
 
@@ -302,23 +301,30 @@ namespace SCM2020___Utility
             {
                 var WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
                 var code = int.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "codigo").Value);
-                var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
-
-                var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
-                var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMEmployeeRegistration}")), Authentication);
-                var EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value;
-                var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMEmployeeRegistration}")), Authentication);
-
-                if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
+                ConsumptionProduct resultProduct = null;
+                try
                 {
-                    MaterialOutput materialOutput = new MaterialOutput()
+                    resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
+
+
+
+                    var resultProductId = resultProduct.Id;
+
+                    var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
+                    var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMEmployeeRegistration}"), Authentication);
+                    var EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value;
+                    var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMEmployeeRegistration}"), Authentication);
+
+                    if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
                     {
-                        MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data de movimentação").Value),
-                        //SCMEmployeeId = resultSCMId,
-                        //EmployeeId = resultEmployeeId,
-                        ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
-                        WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
-                        ConsumptionProducts = new List<AuxiliarConsumption>()
+                        MaterialOutput materialOutput = new MaterialOutput()
+                        {
+                            MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value),
+                            //SCMEmployeeId = resultSCMId,
+                            //EmployeeId = resultEmployeeId,
+                            ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
+                            WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
+                            ConsumptionProducts = new List<AuxiliarConsumption>()
                         {
                             new AuxiliarConsumption()
                             {
@@ -328,24 +334,37 @@ namespace SCM2020___Utility
                                 ProductId = resultProductId
                             }
                         }
-                    };
-                }
-                else
-                {
-                    MaterialOutput materialOutput = materialOutputs.First(x => x.WorkOrder == WorkOrder);
-                    var auxiliarConsumption = new AuxiliarConsumption();
-                    auxiliarConsumption.ProductId = resultProductId;
-                    auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
-                    auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
-                    auxiliarConsumption.SCMEmployeeId = resultSCMId;
+                        };
+                        materialOutputs.Add(materialOutput);
+                        Console.WriteLine($"Total de movimentação de saída resgatadas: {materialOutputs.Count}");
+                    }
+                    else
+                    {
+                        MaterialOutput materialOutput = materialOutputs.First(x => x.WorkOrder == WorkOrder);
+                        var auxiliarConsumption = new AuxiliarConsumption();
+                        auxiliarConsumption.ProductId = resultProductId;
+                        auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                        auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
+                        auxiliarConsumption.SCMEmployeeId = resultSCMId;
 
-                    materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
+                        materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
+                    }
+                }
+                catch (System.Net.Http.HttpRequestException ex)
+                {
+                    string error = JsonConvert.SerializeObject(new
+                    {
+                        Message = ex.Message,
+                        WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço"),
+                    });
+                    string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALOUTPUTLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                    File.WriteAllText(fullName, error);
                 }
             }
 
             foreach (var item in materialOutputs)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Output/Migrate")), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/api/Output/Migrate"), item, Authentication));
             }
         }
         static void AddInput(AuthenticationHeaderValue Authentication)
@@ -363,12 +382,13 @@ namespace SCM2020___Utility
                 var workOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
 
                 var SCMregister = oldMaterialInput.First(x => x.Key.ToLower() == "fun setor").Value;
-                var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{SCMregister}")), Authentication);
+                var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMregister}"), Authentication);
+                var code = int.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "codigo").Value);
 
                 if (!materialInputs.Any(x => x.WorkOrder == workOrder))
                 {
                     var register = oldMaterialInput.First(x => x.Key.ToLower() == "resp os").Value;
-                    var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, new Uri($"User/UserId/{register}")), Authentication);
+                    var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{register}"), Authentication);
 
                     var dbRegarding = oldMaterialInput.First(x => x.Key.ToLower() == "referente a").Value;
                     Regarding regarding = Regarding.NotUsed;
@@ -381,31 +401,72 @@ namespace SCM2020___Utility
                         regarding = Regarding.AnotherCounty;
                     }
 
-                    var code = int.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "codigo").Value);
-                    var resultProductId = APIClient.GETData<int>(new Uri(uriServer, new Uri($"Code/{code}")), Authentication);
-                    MaterialInput materialInput = new MaterialInput()
+                    try
                     {
-                        MovingDate = DateTime.Parse(oldMaterialInput.First(x => x.Key == "data da movimentação").Value),
-                        WorkOrder = oldMaterialInput.First(x => x.Key == "ordem de seriço").Value,
-                        SCMEmployeeId = resultSCMId,
-                        EmployeeId = resultEmployeeId,
-                        Regarding = regarding,
-                        ConsumptionProducts = new List<AuxiliarConsumption>()
+
+                        var resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
+                        var resultProductId = resultProduct.Id;
+                        MaterialInput materialInput = new MaterialInput()
+                        {
+                            MovingDate = DateTime.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "data da movimentação").Value),
+                            WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
+                            SCMEmployeeId = resultSCMId,
+                            EmployeeId = resultEmployeeId,
+                            Regarding = regarding,
+                            ConsumptionProducts = new List<AuxiliarConsumption>()
                         {
                             new AuxiliarConsumption()
                             {
-                                Date = DateTime.Parse(oldMaterialInput.First(x => x.Key == "data da movimentação").Value),
+                                Date = DateTime.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "data da movimentação").Value),
                                 ProductId = resultProductId,
-                                Quantity = double.Parse(oldMaterialInput.First(x => x.Key == "qtd").Value),
+                                Quantity = double.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "qtd").Value),
                                 SCMEmployeeId = resultSCMId,
                             }
                         }
-                    };
+                        };
+                        materialInputs.Add(materialInput);
+                        Console.WriteLine($"Total de movimentação de entrada resgatadas: {materialInputs.Count}");
+                    }
+                    catch (System.Net.Http.HttpRequestException ex)
+                    {
+                        string error = JsonConvert.SerializeObject(new
+                        {
+                            Message = ex.Message,
+                            WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço"),
+                        });
+                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALINPUTLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                        File.WriteAllText(fullName, error);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        MaterialInput materialInput = materialInputs.First(x => x.WorkOrder == workOrder);
+                        var auxiliarConsumption = new AuxiliarConsumption();
+                        var resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
+                        var resultProductId = resultProduct.Id;
+                        auxiliarConsumption.ProductId = resultProductId;
+                        auxiliarConsumption.Date = DateTime.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "data da movimentação").Value);
+                        auxiliarConsumption.Quantity = double.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "qtd").Value);
+                        auxiliarConsumption.SCMEmployeeId = resultSCMId;
+                        materialInput.ConsumptionProducts.Add(auxiliarConsumption);
+                    }
+                    catch (System.Net.Http.HttpRequestException ex)
+                    {
+                        string error = JsonConvert.SerializeObject(new
+                        {
+                            Message = ex.Message,
+                            WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço"),
+                        });
+                        string fullName = Path.Combine(Directory.GetCurrentDirectory(), $"MATERIALINPUTLOG-{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}.txt");
+                        File.WriteAllText(fullName, error);
+                    }
                 }
             }
             foreach (var item in materialInputs)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Devolution/Add")), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "Devolution/Migrate"), item, Authentication));
             }
         }
         static void AddProduct(AuthenticationHeaderValue Authentication)
