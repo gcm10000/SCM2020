@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RazorEngine;
+using RazorEngine.Templating;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -35,7 +37,10 @@ namespace SCM2020___Client.Frames.Query
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-
+            string template = "Hello @Model.Name, welcome to RazorEngine!";
+            var result =
+                Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
         }
+
     }
 }
