@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using SCM2020___Server.Extensions;
-
+using System;
 
 namespace SCM2020___Server.Controllers
 {
@@ -39,6 +39,19 @@ namespace SCM2020___Server.Controllers
         {
             var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(devolution);
+        }
+        [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
+        public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
+        {
+            DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
+            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
+            List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
+            foreach (var input in context.MaterialInput.ToList())
+            {
+                inputs.AddRange(input.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
+            }
+
+            return Ok(inputs.ToList());
         }
         [Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]

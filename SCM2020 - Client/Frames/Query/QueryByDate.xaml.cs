@@ -30,7 +30,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-
+            ModelsLibraryCore.RequestingClient.APIClient.GetData<>()
         }
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -49,6 +49,16 @@ namespace SCM2020___Client.Frames.Query
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void InitialDate_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void FinalDate_KeyDown(object sender, KeyEventArgs e)
         {
 
         }

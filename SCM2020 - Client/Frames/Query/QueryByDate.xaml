@@ -29,8 +29,8 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <DatePicker Width="200" x:Name="TxtSearch" materialDesign:HintAssist.Hint="Data inicial" KeyDown="TxtSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></DatePicker>
-            <DatePicker Width="200" x:Name="asd" materialDesign:HintAssist.Hint="Data final" KeyDown="TxtSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></DatePicker>
+            <DatePicker Width="200" x:Name="InitialDate" materialDesign:HintAssist.Hint="Data inicial" KeyDown="InitialDate_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></DatePicker>
+            <DatePicker Width="200" x:Name="FinalDate" materialDesign:HintAssist.Hint="Data final" KeyDown="FinalDate_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></DatePicker>
             <Button Style="{x:Null}" Cursor="Hand" Grid.Column="2" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" x:Name="BtnSearch" Click="BtnSearch_Click">
                 <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
             </Button>

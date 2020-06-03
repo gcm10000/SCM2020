@@ -137,13 +137,13 @@ namespace SCM2020___Client
                 switch (index)
                 {
                     case 0:
-                        //FrameContent.Source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Query/Movement.xaml", UriKind.Relative);
                         break;
                     case 1:
-                        FrameContent.Source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        //FrameContent.Source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
                         break;
                     case 3:
                         FrameContent.Source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);

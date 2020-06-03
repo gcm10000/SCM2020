@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.WorkOrder - Movimentação</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+        }
+
+        th {
+            background: #F0F0F0;
+        }
+
+        tr:nth-child(even) {
+            background: #F0F0F0;
+        }
+
+        tr:nth-child(odd) {
+            background: #FFF;
+        }
+    </style>
+    <style type="text/css" media="print">
+        @@page {
+            size: auto; /* auto is the initial value */
+            margin: 0; /* this affects the margin in the printer settings */
+        }
+
+        .table_print {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <p style="text-align: right;">26/05/2020</p>
+    <table style="width: 100%;">
+        <tr>
+            <th>Número da Matrícula</th>
+            <th>Nome do Solicitante</th>
+            <th>Ordem de Serviço</th>
+            <th>SITUAÇÃO</th>
+        </tr>
+        <tr>
+            <td>56450</td>
+            <td>Gabriel Machado</td>
+            <td>@Model.WorkOrder</td>
+            <td>EM ABERTO</td>
+        </tr>
+    </table>
+    <br />
+    <table class="table_print">
+        <colgroup>
+            <col span="1" style="width: 5%;">
+            <col span="1" style="width: 50%;">
+            <col span="1" style="width: 5%;">
+            <col span="1" style="width: 5%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 15%;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Unidade</th>
+                <th>Patrimônio</th>
+                <th>Movimentação</th>
+                <th>Data da Movimentação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1120</td>
+                <td>PARAFUSO 1/2 MM</td>
+                <td>10</td>
+                <td>UN</td>
+                <td style="text-align: center;">-</td>
+                <td>SAÍDA</td>
+                <td>26/05/2020</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        // self executing function here
+        (function () {
+            // your page initialization code here
+            // the DOM will be available here
+            window.print();
+        })();
+    </script>
+</body>
+</html>

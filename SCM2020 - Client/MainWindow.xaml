@@ -100,14 +100,17 @@
                                 <Popup x:Name="PopupQueries" StaysOpen="False"  Placement="Right" Margin="0">
                                 <ListBox Background="White" x:Name="ListBoxQueries"  PreviewMouseLeftButtonUp="ListBoxQueries_PreviewMouseLeftButtonUp" Padding="15, 15, 15, 15">
                                         <ListBoxItem>
-                                            <TextBlock Text="Entrada/Saída"></TextBlock>
+                                            <TextBlock Text="Movimentação"></TextBlock>
+                                        </ListBoxItem>
+                                        <ListBoxItem>
+                                            <TextBlock Text="Entrada por Fornecedor"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>
                                             <TextBlock Text="Estoque"></TextBlock>
                                         </ListBoxItem>
-                                        <ListBoxItem>
+                                        <!--<ListBoxItem>
                                             <TextBlock Text="Histórico do Funcionário"></TextBlock>
-                                        </ListBoxItem>
+                                        </ListBoxItem>-->
                                         <ListBoxItem>
                                             <TextBlock Text="Estoque pela Data"></TextBlock>
                                         </ListBoxItem>

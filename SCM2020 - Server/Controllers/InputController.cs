@@ -6,6 +6,7 @@ using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using SCM2020___Server.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -38,6 +39,19 @@ namespace SCM2020___Server.Controllers
         {
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
+        }
+        [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
+        public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
+        {
+            DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
+            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
+            List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
+            foreach (var input in context.MaterialInputByVendor.ToList())
+            {
+                inputs.AddRange(input.AuxiliarConsumptions.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
+            }
+
+            return Ok(inputs.ToList());
         }
         [AllowAnonymous]
         [HttpPost("Migrate")]

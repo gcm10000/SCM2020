@@ -77,8 +77,7 @@ namespace SCM2020___Server.Controllers
             var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Id == id);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product, Formatting.Indented);
-                return Ok(tojson);
+                return Ok(product);
             }
             else
             {
@@ -99,7 +98,6 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o código {code} não existe.");
             }
         }
-        //Levensthein distance or .Where(Contains(bool))
         [AllowAnonymous]
         [HttpGet("Search/{description}")]
         public IActionResult Search(string description)
