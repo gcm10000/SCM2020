@@ -24,7 +24,7 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class MaterialOutput : UserControl
     {
-        class ProductToInput
+        class ProductToOutput
         {
             //public string Image { get; set; }
             public int Id { get; set; }
@@ -44,28 +44,28 @@ namespace SCM2020___Client.Frames
             //var nameVendors = vendors.Select(x => x.Name).ToList();
             //this.VendorComboBox.ItemsSource = nameVendors;
 
-            ProductToInput productsToInput = new ProductToInput()
-            {
-                Id = 1,
-                Code = 1,
-                Description = "TESTE",
-                Quantity = 10
-            };
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToOutput ProductToOutput = new ProductToOutput()
+            //{
+            //    Id = 1,
+            //    Code = 1,
+            //    Description = "TESTE",
+            //    Quantity = 10
+            //};
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -109,7 +109,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in products.ToList())
             {
-                ProductToInput productsToInput = new ProductToInput()
+                ProductToOutput productsToInput = new ProductToOutput()
                 {
                     Id = item.Id,
                     Code = item.Code,
@@ -172,7 +172,7 @@ namespace SCM2020___Client.Frames
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
-            var product = ((FrameworkElement)sender).DataContext as ProductToInput;
+            var product = ((FrameworkElement)sender).DataContext as ProductToOutput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
@@ -201,13 +201,38 @@ namespace SCM2020___Client.Frames
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            var materialOutput = new ModelsLibraryCore.MaterialOutput();
-            materialOutput.WorkOrder = InvoiceTextBox.Text;
-            materialOutput.MovingDate = OSDatePicker.DisplayDate;
+            //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
+
+            DateTime dateTime = OSDatePicker.DisplayDate;
+            if (OSDatePicker.DisplayDate == DateTime.Today)
+            {
+                dateTime = DateTime.Now;
+            }
             var register = ApplicantTextBox.Text;
-            //EDITAR
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, new Uri($"UserId/{register}")).ToString());
-            //materialOutput.EmployeeId = userId;
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+
+            Monitoring monitoring = new Monitoring()
+            {
+                SCMEmployeeId = Helper.SCMEmployee,
+                Situation = false,
+                ClosingDate = null,
+                EmployeeId = userId,
+                RequestingSector = 0,
+                MovingDate = dateTime,
+                Work_Order = OSTextBox.Text
+            };
+
+            //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
+
+            var materialOutput = new ModelsLibraryCore.MaterialOutput
+            {
+                WorkOrder = OSTextBox.Text,
+                MovingDate = dateTime,
+                ServiceLocation = ServiceLocalizationTextBox.Text,
+                
+            };
 
             foreach (var item in ProductToAddDataGrid.Items)
             {
@@ -219,15 +244,23 @@ namespace SCM2020___Client.Frames
                 {
                     Date = materialOutput.MovingDate,
                     Quantity = outputProduct.Quantity,
-                    ProductId = ConsumpterProduct.Id
+                    ProductId = ConsumpterProduct.Id,
+                    SCMRegistration = Helper.SCMRegistration
                 };
             }
 
 
             Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), null, Helper.Authentication);
-                MessageBox.Show(result);
+                //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+
+                var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), null, Helper.Authentication);
+                MessageBox.Show(result1);
+
+                //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
+
+                var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), null, Helper.Authentication);
+                MessageBox.Show(result2);
             }).Start();
 
         }

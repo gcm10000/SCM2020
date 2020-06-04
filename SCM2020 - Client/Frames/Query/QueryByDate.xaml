@@ -81,13 +81,13 @@
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                     <DataGridTextColumn Header=" Código" Binding="{Binding Code}"/>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"/>
-                    <DataGridTextColumn Header=" Entrada no Estoque" Binding="{Binding Description}"/>
-                    <DataGridTextColumn Header=" Situação" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Saída" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Saldo Atual" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Estoque mínimo" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Estoque máximo" Binding="{Binding Patrimony}"/>
+                    <DataGridTextColumn Header=" Entrada no Estoque" Binding="{Binding NumberInputVendor}"/>
+                    <!--<DataGridTextColumn Header=" Situação" Binding="{Binding Situation}"/>-->
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding CurrentStock}"/>
+                    <DataGridTextColumn Header=" Saída" Binding="{Binding Output}"/>
+                    <DataGridTextColumn Header=" Saldo Atual" Binding="{Binding CurrentOutput}"/>
+                    <DataGridTextColumn Header=" Estoque mínimo" Binding="{Binding MinimumStock}"/>
+                    <DataGridTextColumn Header=" Estoque máximo" Binding="{Binding MaximumStock}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

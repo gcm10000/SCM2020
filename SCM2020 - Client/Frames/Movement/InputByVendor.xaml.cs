@@ -24,46 +24,36 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class InputByVendor : UserControl
     {
-
-
-
         public InputByVendor()
         {
             InitializeComponent();
-            Uri vendorUri = new Uri(Helper.Server, "vendor/");
+            //Uri vendorUri = new Uri(Helper.Server, "vendor/");
             //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             //var nameVendors = vendors.Select(x => x.Name).ToList();
             //this.VendorComboBox.ItemsSource = nameVendors;
 
-            ProductDataGrid productsToInput = new ProductDataGrid()
-            {
-                Id = 1,
-                Code = 1,
-                Description = "TESTE",
-                Quantity = 10
-            };
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-            ProductToAddDataGrid.Items.Add(productsToInput);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //int index = int.Parse(((Button)e.Source).Uid);
-           
-            //GridCursor.Margin = new Thickness(10 + (150 * index), 0, 0, 0);
+            //ProductDataGrid productsToInput = new ProductDataGrid()
+            //{
+            //    Id = 1,
+            //    Code = 1,
+            //    Description = "TESTE",
+            //    Quantity = 10
+            //};
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
+            //ProductToAddDataGrid.Items.Add(productsToInput);
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)

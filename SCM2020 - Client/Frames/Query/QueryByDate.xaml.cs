@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -30,7 +31,18 @@ namespace SCM2020___Client.Frames.Query
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-            ModelsLibraryCore.RequestingClient.APIClient.GetData<>()
+            //ModelsLibraryCore.RequestingClient.APIClient.GetData<>()
+            /*
+             CODIGO -> GENERALPRODUCT
+             DESC -> GENERALPRODUCT
+             ENTRADA NO ESTOQUE -> AUXILIARPRODUCT INPUT BY VENDOR
+             ESTOQUE ATUAL -> GENERALPRODUCT
+             SAÍDA -> AUXILIARPRODUCT OUTPUT
+             ESTOQUE MÍNIMO -> GENERALPRODUCT
+             ESTOQUE MÁXIMO -> GENERALPRODUCT
+             */
+            int id = 0;
+            APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"/generalproduct/{id}").ToString(), Helper.Authentication);
         }
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
