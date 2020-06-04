@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -210,12 +211,13 @@ namespace SCM2020___Client.Frames
             }
             var register = ApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, new Uri($"UserId/{register}")).ToString());
+            var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, new Uri($"UserId/{Helper.SCMRegistration}")).ToString());
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
             Monitoring monitoring = new Monitoring()
             {
-                SCMEmployeeId = Helper.SCMEmployee,
+                SCMEmployeeId = userSCMId,
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
@@ -234,19 +236,31 @@ namespace SCM2020___Client.Frames
                 
             };
 
-            foreach (var item in ProductToAddDataGrid.Items)
+            foreach (var item in FinalConsumpterProductsAddedDataGrid.Items)
             {
-                ProductDataGrid outputProduct = item as ProductDataGrid;
-                var code = outputProduct.Code;
-                var ConsumpterProduct = APIClient.GetData<ConsumptionProduct>(new Uri(Helper.Server, new Uri($"GeneralProduct/Code/{code}")).ToString());
+                ConsumpterProductDataGrid outputProduct = item as ConsumpterProductDataGrid;
+                //var code = outputProduct.Code;
+                //var ConsumpterProduct = APIClient.GetData<ConsumptionProduct>(new Uri(Helper.Server, $"GeneralProduct/Code/{code}").ToString());
 
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
                     Date = materialOutput.MovingDate,
                     Quantity = outputProduct.Quantity,
-                    ProductId = ConsumpterProduct.Id,
+                    ProductId = outputProduct.Id, //verificar se o ID é o mesmo do produto...
                     SCMRegistration = Helper.SCMRegistration
                 };
+                materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
+            }
+            foreach (var item in FinalPermanentProductsAddedDataGrid.Items)
+            {
+                PermanentProductDataGrid outputPermanentProduct = item as PermanentProductDataGrid;
+                AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                {
+                    Date = materialOutput.MovingDate,
+                    SCMRegistration = Helper.SCMRegistration,
+                    ProductId = outputPermanentProduct.Id
+                };
+                materialOutput.PermanentProducts.Add(auxiliarPermanent);
             }
 
 

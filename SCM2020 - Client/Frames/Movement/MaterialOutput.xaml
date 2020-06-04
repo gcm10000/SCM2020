@@ -41,7 +41,7 @@
             </StackPanel>
         </Grid>
 
-        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Collapsed"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
@@ -71,7 +71,7 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
-        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
+        <DockPanel x:Name="InfoDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -197,7 +197,7 @@
                 </StackPanel>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Button Content="Finalizar Movimentação" Padding="5" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button Content="Finalizar Movimentação" Padding="5" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3" Height="28" VerticalAlignment="Top">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -241,7 +241,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Visibility="Collapsed" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalPermanentProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalPermanentProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -261,7 +261,6 @@
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
                                         <StackPanel Width="150" Orientation="Vertical">
-                                            <Button x:Name="BtnAdd" HorizontalAlignment="Stretch" Content="Adicionar" Click="BtnAdd_Click"/>
                                             <Button x:Name="BtnRemove" HorizontalAlignment="Stretch" Content="Remover" Click="BtnRemove_Click"/>
                                         </StackPanel>
                                     </materialDesign:PopupBox>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SCM2020___Client
 {
-    class ProductDataGrid
+    class ConsumpterProductDataGrid
     {
         //public string Image { get; set; }
         public int Id { get; set; }
@@ -13,5 +13,9 @@ namespace SCM2020___Client
         public double QuantityAdded { get; set; }
         public double Quantity { get; set; }
         public string Description { get; set; }
+    }
+    class PermanentProductDataGrid : ConsumpterProductDataGrid
+    {
+        public string Patrimony { get; set; }
     }
 }

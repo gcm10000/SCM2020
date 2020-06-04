@@ -97,7 +97,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in products.ToList())
             {
-                ProductDataGrid productsToInput = new ProductDataGrid()
+                ConsumpterProductDataGrid productsToInput = new ConsumpterProductDataGrid()
                 {
                     Id = item.Id,
                     Code = item.Code,
@@ -146,7 +146,7 @@ namespace SCM2020___Client.Frames
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
-            var product = ((FrameworkElement)sender).DataContext as ProductDataGrid;
+            var product = ((FrameworkElement)sender).DataContext as ConsumpterProductDataGrid;
             var dialog = new DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
@@ -184,7 +184,7 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in ProductsAddedDataGrid.Items)
             {
-                ProductDataGrid product = item as ProductDataGrid;
+                ConsumpterProductDataGrid product = item as ConsumpterProductDataGrid;
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 { 
                     Date = materialInputByVendor.MovingDate,
