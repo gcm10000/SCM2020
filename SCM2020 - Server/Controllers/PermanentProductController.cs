@@ -28,8 +28,8 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Migrate()
         {
             var raw = await Helper.RawFromBody(this);
-            ConsumptionProduct product = new ConsumptionProduct(raw);
-            context.ConsumptionProduct.Add(product);
+            PermanentProduct product = new PermanentProduct(raw);
+            context.PermanentProduct.Add(product);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");
         }
@@ -63,8 +63,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var tojson = JsonConvert.SerializeObject(context.PermanentProduct.ToArray());
-            return Ok(tojson);
+            return Ok(context.PermanentProduct.ToArray());
         }
         [HttpGet("{id}")]
         public IActionResult Show(int id)
@@ -72,22 +71,20 @@ namespace SCM2020___Server.Controllers
             var product = context.PermanentProduct.FirstOrDefault(x => x.Id == id);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product);
-                return Ok(tojson);
+                return Ok(product);
             }
             else
             {
                 return BadRequest($"O registro com o id {id} não existe.");
             }
         }
-        [HttpGet("{patrimony}")]
-        public IActionResult ShowByRegister(string patrimony)
+        [HttpGet("patrimony/{patrimony}")]
+        public IActionResult ShowByPatrimony(string patrimony)
         {
-            var product = context.PermanentProduct.FirstOrDefault(x => x.Patrimony == patrimony);
+            var product = context.PermanentProduct.Where(x => x.Patrimony == patrimony);
             if (product != null)
             {
-                var tojson = JsonConvert.SerializeObject(product);
-                return Ok(tojson);
+                return Ok(product);
             }
             else
             {

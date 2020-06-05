@@ -14,8 +14,10 @@ namespace SCM2020___Client
         public double Quantity { get; set; }
         public string Description { get; set; }
     }
-    class PermanentProductDataGrid : ConsumpterProductDataGrid
-    {
-        public string Patrimony { get; set; }
-    }
+    //É aconselhável que seja dado as classes internamentes por cada classe GUI pois é fundamental que siga as especificações de entrada e saída.
+    //A variável QuantityFuture por exemplo, na saída deveria apresentar uma subtração das duas variáveis, ao contrário das entradas.
+    //class PermanentProductDataGrid : ConsumpterProductDataGrid
+    //{
+    //    public string Patrimony { get; set; }
+    //}
 }

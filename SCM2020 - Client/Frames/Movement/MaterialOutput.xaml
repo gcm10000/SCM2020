@@ -41,7 +41,7 @@
             </StackPanel>
         </Grid>
 
-        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Collapsed"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
@@ -71,14 +71,14 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
-        <DockPanel x:Name="InfoDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
+        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Produtos consumíveis a adicionar..." KeyDown="TxtSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
-                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="SearchButton_Click">
+                <TextBox x:Name="TxtSearchConsumpterProduct" materialDesign:HintAssist.Hint="Produtos consumíveis a adicionar..." KeyDown="TxtSearchConsumpterProduct_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
+                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" x:Name="SearchConsumpterProduct" Click="SearchConsumpterProduct_Click">
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
@@ -114,7 +114,7 @@
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
@@ -131,13 +131,13 @@
 
         </DockPanel>
         <DockPanel x:Name="PermanentDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
-            <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
+            <Grid Margin="10 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TxtSearch2" materialDesign:HintAssist.Hint="Pesquisar pelo patrimônio..." KeyDown="TxtSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
-                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="SearchButton_Click">
+                <TextBox x:Name="TxtPermanentProductSearch" materialDesign:HintAssist.Hint="Pesquisar pelo patrimônio..." KeyDown="TxtPermanentProductSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
+                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" x:Name="PermanentProductSearchButton" Click="PermanentProductSearchButton_Click">
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
@@ -161,7 +161,7 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
                 </Grid.Resources>
-                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductToAddDataGrid3" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="PermanentProductToAddDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -170,17 +170,17 @@
                                   VirtualizingStackPanel.IsVirtualizing="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Códigdo" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
-                                        <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                        <Button x:Name="BtnAddRemovePermanent" Cursor="Hand" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -189,7 +189,7 @@
                 </DataGrid>
             </Grid>
         </DockPanel>
-        <DockPanel x:Name="FinalProductsDockPanel" Visibility="Visible" Margin="10 0 10 30">
+        <DockPanel x:Name="FinalProductsDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="60">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
                     <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click"  Cursor="Hand"/>
@@ -228,7 +228,7 @@
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
@@ -254,14 +254,14 @@
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
                                         <StackPanel Width="150" Orientation="Vertical">
-                                            <Button x:Name="BtnRemove" HorizontalAlignment="Stretch" Content="Remover" Click="BtnRemove_Click"/>
+                                            <Button x:Name="BtnRemove" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                         </StackPanel>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
