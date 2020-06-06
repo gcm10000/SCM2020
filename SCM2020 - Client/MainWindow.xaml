@@ -78,6 +78,9 @@
                                             <TextBlock Text="Produto"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>
+                                            <TextBlock Text="Produto Permanente"></TextBlock>
+                                        </ListBoxItem>
+                                        <ListBoxItem>
                                             <TextBlock Text="Grupo"></TextBlock>
                                         </ListBoxItem>
                                         <ListBoxItem>

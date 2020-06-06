@@ -115,12 +115,15 @@ namespace SCM2020___Client
                         FrameContent.Source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        FrameContent.Source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative);
                         break;
                     case 3:
-                        FrameContent.Source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
+                        FrameContent.Source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
                         break;
                     case 4:
+                        FrameContent.Source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
+                        break;
+                    case 5:
                         FrameContent.Source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
                         break;
                 }
