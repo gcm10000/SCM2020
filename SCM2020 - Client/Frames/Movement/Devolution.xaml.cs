@@ -194,10 +194,6 @@ namespace SCM2020___Client.Frames.Movement
         {
 
         }
-        private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
             DateTime dateOS = OSDatePicker.SelectedDate ?? DateTime.Now;
@@ -239,40 +235,26 @@ namespace SCM2020___Client.Frames.Movement
         {
 
         }
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
-        private void BtnRemove_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
         {
 
         }
-
         private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
 
