@@ -257,6 +257,21 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
+            //TxtProductConsumpterSearch_KeyDown
+            //fazer com que filtre dentro do datagrid
+            //this.ConsumpterProductToAddDataGrid
+            List<ConsumpterProductDataGrid> list = new List<ConsumpterProductDataGrid>();
+            foreach (ConsumpterProductDataGrid item in this.ConsumpterProductToAddDataGrid.Items)
+            {
+                list.Add(item);
+            }
+            var newList = list.Where(x => (x.Description == TxtProductConsumpterSearch.Text) || (x.Code.ToString() == TxtProductConsumpterSearch.Text));
+            this.ConsumpterProductToAddDataGrid.Items.Clear();
+            this.ConsumpterProductToAddDataGrid.Items.Refresh();
+            foreach (var item in newList)
+            {
+                this.ConsumpterProductToAddDataGrid.Items.Add(item);
+            }
 
         }
     }
