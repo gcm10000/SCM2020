@@ -227,7 +227,7 @@ namespace SCM2020___Client.Frames
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
             //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
-
+            //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
             DateTime dateTime = OSDatePicker.DisplayDate;
             if (OSDatePicker.DisplayDate == DateTime.Today)
             {
@@ -292,12 +292,12 @@ namespace SCM2020___Client.Frames
             {
                 //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
-                var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), null, Helper.Authentication);
+                var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
                 MessageBox.Show(result1);
 
                 //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
 
-                var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), null, Helper.Authentication);
+                var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2);
             }).Start();
 
@@ -345,11 +345,14 @@ namespace SCM2020___Client.Frames
         }
         private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
-
+            new Task(() => PermanentProductSearch()).Start();
         }
         private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                new Task(() => PermanentProductSearch()).Start();
+            }
         }
     }
 }
