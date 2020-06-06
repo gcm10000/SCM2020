@@ -153,6 +153,11 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
             }
+            this.ConsumpterProductToAddDataGrid.Items.Refresh();
+            this.ConsumpterProductToAddDataGrid.UnselectAll();
+            this.PermanentProductToAddDataGrid.Items.Refresh();
+            this.PermanentProductToAddDataGrid.UnselectAll();
+
         }
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
         {
@@ -185,17 +190,22 @@ namespace SCM2020___Client.Frames.Movement
             this.InfoDockPanel.Visibility = Visibility.Collapsed;
             this.FinalProductsDockPanel.Visibility = Visibility.Visible;
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-            //this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
         }
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
         }
         private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
