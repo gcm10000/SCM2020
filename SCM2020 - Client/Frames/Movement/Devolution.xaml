@@ -148,7 +148,7 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
                 </Grid.Resources>
-                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductToAddDataGrid3" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="PermanentProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="PermanentProductToAddDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -163,7 +163,7 @@
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">

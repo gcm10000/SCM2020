@@ -1,7 +1,9 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using SCM2020___Client.Frames.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,7 +29,7 @@ namespace SCM2020___Client.Frames.Movement
             public int Id { get; set; }
             public int Code { get; set; }
             public double QuantityFuture { get => Quantity + QuantityAdded; }
-            public double QuantityRemoved { get; set; }
+            public double QuantityOutput { get; set; }
             public double QuantityAdded { get; set; }
             public double Quantity { get; set; }
             public string Description { get; set; }
@@ -111,16 +113,26 @@ namespace SCM2020___Client.Frames.Movement
             foreach (var item in outputProducts.ConsumptionProducts)
             {
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                //var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workorder}").ToString(), Helper.Authentication);
-                //infoInput.ConsumptionProducts
+                AuxiliarConsumption productInput;
+                double productInputQuantity = 0.00d;
+                try
+                {
+                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workorder}").ToString(), Helper.Authentication);
+                    productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
+                    productInputQuantity = productInput.Quantity;
+                }
+                catch (System.Net.Http.HttpRequestException ex)
+                {
+                    //Devolução de item na ordem de serviço é inexistente
+                }
                 ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
                 {
                     Code = infoProduct.Code,
                     Description = infoProduct.Description,
                     Id = item.ProductId,
                     Quantity = infoProduct.Stock,
-                    QuantityRemoved = item.Quantity
-                    //QuantityAdded
+                    QuantityOutput = item.Quantity,
+                    QuantityAdded = productInputQuantity
                 };
                 this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid);
             }
@@ -137,9 +149,9 @@ namespace SCM2020___Client.Frames.Movement
                     Id = item.ProductId,
                     Quantity = infoProduct.Stock,
                     Patrimony = infoPermanentProduct.Patrimony,
-                    QuantityRemoved = 1
+                    QuantityOutput = 1,
                 };
-
+                this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
             }
         }
 
@@ -221,6 +233,11 @@ namespace SCM2020___Client.Frames.Movement
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
