@@ -42,11 +42,12 @@ namespace SCM2020___Client.Frames.Movement
         public Devolution()
         {
             InitializeComponent();
+            //Fill combobox
             ReferenceComboBox.Items.Add("Não utilizado");
             ReferenceComboBox.Items.Add("Transferência Interna");
             ReferenceComboBox.Items.Add("Outra Comarca");
-        }
 
+        }
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {            
             if (e.Key == Key.Enter)
@@ -54,7 +55,6 @@ namespace SCM2020___Client.Frames.Movement
                 new Task(() => CheckOS()).Start();
             }
         }
-
         private void SearchOSButton_Click(object sender, RoutedEventArgs e)
         {
             new Task(() => CheckOS()).Start();
@@ -185,14 +185,17 @@ namespace SCM2020___Client.Frames.Movement
             this.InfoDockPanel.Visibility = Visibility.Collapsed;
             this.FinalProductsDockPanel.Visibility = Visibility.Visible;
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+            //this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
         }
-        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-
+            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
+            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
         }
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
-
+            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
@@ -237,23 +240,39 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
+            var product = ((FrameworkElement)sender).DataContext as ConsumpterProductDataGrid;
+            var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
+            if (dialog.ShowDialog() == true)
+            {
+                product.QuantityAdded = dialog.QuantityAdded;
+                //int index = ProductToAddDataGrid.SelectedIndex;
+                this.ConsumpterProductToAddDataGrid.Items.Refresh();
+                this.FinalConsumpterProductsAddedDataGrid.Items.Refresh();
+                if (!this.FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
+                    this.FinalConsumpterProductsAddedDataGrid.Items.Add(product);
+                else
+                {
+                    if (dialog.QuantityAdded == 0)
+                        this.FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
+                    else
+                        product.QuantityAdded = dialog.QuantityAdded;
+                }
+                this.ConsumpterProductToAddDataGrid.UnselectAll();
+                this.FinalConsumpterProductsAddedDataGrid.UnselectAll();
+            }
         }
-        private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
-        private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
         private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                ConsumpterProductSearchButton_Click(sender, e);
+            }
         }
         private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
@@ -272,7 +291,32 @@ namespace SCM2020___Client.Frames.Movement
             {
                 this.ConsumpterProductToAddDataGrid.Items.Add(item);
             }
-
+            this.ConsumpterProductToAddDataGrid.Items.Refresh();
+            this.ConsumpterProductToAddDataGrid.UnselectAll();
+        }
+        private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                PermanentProductButton_Click(sender, e);
+            }
+        }
+        private void PermanentProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<PermanentProductDataGrid> list = new List<PermanentProductDataGrid>();
+            foreach (PermanentProductDataGrid item in this.PermanentProductToAddDataGrid.Items)
+            {
+                list.Add(item);
+            }
+            var newList = list.Where(x => (x.Description == TxtProductConsumpterSearch.Text) || (x.Code.ToString() == TxtProductConsumpterSearch.Text));
+            this.PermanentProductToAddDataGrid.Items.Clear();
+            this.PermanentProductToAddDataGrid.Items.Refresh();
+            foreach (var item in newList)
+            {
+                this.PermanentProductToAddDataGrid.Items.Add(item);
+            }
+            this.PermanentProductToAddDataGrid.Items.Refresh();
+            this.PermanentProductToAddDataGrid.UnselectAll();
         }
     }
 }
