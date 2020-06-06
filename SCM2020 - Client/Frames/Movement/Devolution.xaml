@@ -41,19 +41,23 @@
                 <Button Uid="2" x:Name="ButtonFinish" Width="150" Content="FINALIZAÇÃO" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinish_Click"  Cursor="Hand"/>
             </StackPanel>
         </Grid>
-        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Collapsed"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
+                    <TextBlock Text="OS/DOC" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <TextBox x:Name="OSDisableTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Entrada Referente a" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <ComboBox Width="188" x:Name="ReferenceComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged" />
                     <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <DatePicker x:Name="OSDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
+                    <TextBlock Text="Número da Matrícula" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <TextBox x:Name="RegistrationApplicantTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="ApplicantTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 </StackPanel>
             </Border>
         </ScrollViewer>
-        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
+        <DockPanel x:Name="InfoDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -84,7 +88,7 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
                 </Grid.Resources>
-                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductToAddDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ConsumpterProductToAddDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -96,6 +100,7 @@
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Retirada" Binding="{Binding QuantityRemoved}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >
@@ -112,7 +117,7 @@
             </Grid>
 
         </DockPanel>
-        <DockPanel x:Name="PermanentDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
+        <DockPanel x:Name="PermanentDockPanel" Visibility="Visible" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -152,7 +157,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Códigdo" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
@@ -198,7 +203,7 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
                 </Grid.Resources>
-                <DataGrid Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalConsumpterProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid Visibility="Collapsed" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalConsumpterProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"

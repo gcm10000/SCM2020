@@ -85,7 +85,6 @@ namespace SCM2020___Client.Frames
                 Description = "TESTE2",
                 Quantity = 12,
                 Patrimony = "5621034",
-                BtnContent = "Adicionar"
             };
             PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
         }
@@ -203,7 +202,7 @@ namespace SCM2020___Client.Frames
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
-                int index = ProductToAddDataGrid.SelectedIndex;
+                //int index = ProductToAddDataGrid.SelectedIndex;
                 ProductToAddDataGrid.Items.Refresh();
                 FinalConsumpterProductsAddedDataGrid.Items.Refresh();
                 if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))

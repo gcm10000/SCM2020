@@ -30,7 +30,8 @@ namespace ModelsLibraryCore
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         /// <summary>
-        /// Produto retirado na movimentação.
+        /// Produto retirado na movimentação.  
+        /// Referencia objeto da classe de produto permanente.
         /// </summary>
         [Required]
         public int ProductId { get; set; }
