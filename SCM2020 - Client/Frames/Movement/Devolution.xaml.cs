@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -103,7 +104,6 @@ namespace SCM2020___Client.Frames.Movement
                 MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-YYYY")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private void GetProducts(string workorder)
         {
             //FALTA ADICIONAR USERCONTROL DE PRODUTO PERMANENTE!!
@@ -121,7 +121,7 @@ namespace SCM2020___Client.Frames.Movement
                     productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
                     productInputQuantity = productInput.Quantity;
                 }
-                catch (System.Net.Http.HttpRequestException ex)
+                catch (System.Net.Http.HttpRequestException)
                 {
                     //Devolução de item na ordem de serviço é inexistente
                 }
@@ -154,7 +154,6 @@ namespace SCM2020___Client.Frames.Movement
                 this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
             }
         }
-
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
         {
             this.ButtonInformation.IsHitTestVisible = false;
@@ -187,32 +186,59 @@ namespace SCM2020___Client.Frames.Movement
             this.FinalProductsDockPanel.Visibility = Visibility.Visible;
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
-
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
 
         }
-
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
-
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-
+            DateTime dateOS = OSDatePicker.SelectedDate ?? DateTime.Now;
+            MaterialInput materialInput = new MaterialInput()
+            {
+                MovingDate = dateOS,
+                Regarding = (Regarding)ReferenceComboBox.SelectedIndex,
+                WorkOrder = OSDisableTextBox.Text,
+                DocDate = DateTime.Now,
+            };
+            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+                materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
+            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+                materialInput.PermanentProducts = new List<AuxiliarPermanent>();
+            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
+            {
+                AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
+                {
+                    Date = DateTime.Now,
+                    ProductId = item.Id,
+                    Quantity = item.Quantity,
+                    SCMRegistration = Helper.SCMRegistration,
+                };
+                materialInput.ConsumptionProducts.Add(auxiliarConsumption);
+            }
+            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+            {
+                AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                {
+                    Date = DateTime.Now,
+                    ProductId = item.Id,
+                    SCMRegistration = Helper.SCMRegistration
+                };
+                materialInput.PermanentProducts.Add(auxiliarPermanent);
+            }
+            var result = APIClient.PostData(new Uri(Helper.Server, "input/add").ToString(), materialInput, Helper.Authentication);
         }
-
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 
         }
-
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
 
@@ -238,6 +264,16 @@ namespace SCM2020___Client.Frames.Movement
         }
 
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
+
+        private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
