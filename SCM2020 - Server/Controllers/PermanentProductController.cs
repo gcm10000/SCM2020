@@ -49,21 +49,18 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
         {
-            using (context)
-            {
-                var raw = await Helper.RawFromBody(this);
-                var permanentProduct = JsonConvert.DeserializeObject<PermanentProduct>(raw);
-                permanentProduct.Id = id;
+            var raw = await Helper.RawFromBody(this);
+            var permanentProduct = JsonConvert.DeserializeObject<PermanentProduct>(raw);
+            permanentProduct.Id = id;
 
-                context.PermanentProduct.Update(permanentProduct);
-                await context.SaveChangesAsync();
-                return Ok("Atualizado com sucesso.");
-            }
+            context.PermanentProduct.Update(permanentProduct);
+            await context.SaveChangesAsync();
+            return Ok("Atualizado com sucesso.");
         }
         [HttpGet]
         public IActionResult ShowAll()
         {
-            return Ok(context.PermanentProduct.ToArray());
+            return Ok(context.PermanentProduct.ToList());
         }
         [HttpGet("{id}")]
         public IActionResult Show(int id)
