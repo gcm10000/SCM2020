@@ -27,17 +27,17 @@
                 <Border Background="White" CornerRadius="10" BorderBrush="{x:Null}" BorderThickness="2" Width="270" Height="50" Margin="0 0 0 25" Padding="7 4 10 4">
                     <DockPanel>
                         <materialDesign:PackIcon Kind="User"  Foreground="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                        <TextBox x:Name="User" materialDesign:HintAssist.Hint="Usuário" BorderBrush="Transparent" Background="{x:Null}" HorizontalAlignment="Left" Foreground="Black" FontSize="14" Margin="10 0 0 0" VerticalAlignment="Center" Width="224" Height="30"></TextBox>
+                        <TextBox x:Name="UserTextBox" materialDesign:HintAssist.Hint="Usuário" BorderBrush="Transparent" Background="{x:Null}" HorizontalAlignment="Left" Foreground="Black" FontSize="14" Margin="10 0 0 0" VerticalAlignment="Center" Width="224" Height="30"></TextBox>
                     </DockPanel>
                 </Border>
                 <Border Background="White" CornerRadius="10" BorderBrush="{x:Null}" BorderThickness="2" Width="270" Height="50" Margin="0 0 0 25" Padding="7 4 10 4">
                     <DockPanel>
                         <materialDesign:PackIcon Kind="TextboxPassword"  Foreground="Black" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                        <PasswordBox x:Name="Password" materialDesign:HintAssist.Hint="Senha" BorderBrush="Transparent" Background="{x:Null}" HorizontalAlignment="Left" Foreground="Black" FontSize="14" Margin="10 -10 0 0" VerticalAlignment="Center" Width="224" Height="40"></PasswordBox>
+                        <PasswordBox x:Name="PasswordTextBox" materialDesign:HintAssist.Hint="Senha" BorderBrush="Transparent" Background="{x:Null}" HorizontalAlignment="Left" Foreground="Black" FontSize="14" Margin="10 -10 0 0" VerticalAlignment="Center" Width="224" Height="40"></PasswordBox>
                     </DockPanel>
                 </Border>
 
-                <Border CornerRadius="10" BorderBrush="{x:Null}" BorderThickness="2" Width="270" Height="50" Margin="0 0 0 0" Padding="7 4 10 4">
+                <Border CornerRadius="10" x:Name="SignInButton" MouseLeftButtonDown="SignInButton_MouseLeftButtonDown"  BorderBrush="{x:Null}" BorderThickness="2" Width="270" Height="50" Margin="0 0 0 0" Padding="7 4 10 4">
                     <Border.Style>
                         <Style>
                             <Setter Property="Border.Background" Value="#0039B7"/>

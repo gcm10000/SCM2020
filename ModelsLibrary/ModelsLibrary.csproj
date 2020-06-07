@@ -60,6 +60,7 @@
     <Compile Include="Sector.cs" />
     <Compile Include="SignInUserInfo.cs" />
     <Compile Include="SignUpUserInfo.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="UpdateUserInfo.cs" />
     <Compile Include="UserToken.cs" />
     <Compile Include="Vendor.cs" />

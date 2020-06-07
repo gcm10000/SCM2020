@@ -227,7 +227,7 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     Date = DateTime.Now,
                     ProductId = item.Id,
-                    Quantity = item.Quantity,
+                    Quantity = item.QuantityAdded,
                     SCMRegistration = Helper.SCMRegistration,
                 };
                 materialInput.ConsumptionProducts.Add(auxiliarConsumption);
@@ -243,6 +243,7 @@ namespace SCM2020___Client.Frames.Movement
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
             var result = APIClient.PostData(new Uri(Helper.Server, "input/add").ToString(), materialInput, Helper.Authentication);
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -272,7 +273,6 @@ namespace SCM2020___Client.Frames.Movement
                 this.FinalConsumpterProductsAddedDataGrid.UnselectAll();
             }
         }
-
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
 

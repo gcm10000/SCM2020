@@ -103,8 +103,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult Search(string description)
         {
             var lproduct = context.ConsumptionProduct.Where(x => x.Description.Contains(description));
-            var tojson = JsonConvert.SerializeObject(lproduct, Formatting.Indented);
-            return Ok(tojson);
+            return Ok(lproduct);
         }
         //Show information today about products
         [HttpGet("Inventory")]

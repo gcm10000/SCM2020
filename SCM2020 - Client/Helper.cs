@@ -7,7 +7,7 @@ namespace SCM2020___Client
 {
     static class Helper
     {
-        public static Uri Server = new Uri("http://gabriel-laptop:52991/api/");
+        public static Uri Server = new Uri("http://192.168.1.30:52991/api/");
         public static AuthenticationHeaderValue Authentication { get; set; } = null;
         private static readonly Regex NumberRegex = new Regex("[^0-9,]+"); //regex that matches disallowed text
         public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\"; //File.ReadAllText(System.IO.Path.Combine(Environment.CurrentDirectory, "movement.cshtml"));

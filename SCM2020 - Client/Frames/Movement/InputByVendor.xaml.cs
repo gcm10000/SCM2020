@@ -27,10 +27,10 @@ namespace SCM2020___Client.Frames
         public InputByVendor()
         {
             InitializeComponent();
-            //Uri vendorUri = new Uri(Helper.Server, "vendor/");
-            //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
-            //var nameVendors = vendors.Select(x => x.Name).ToList();
-            //this.VendorComboBox.ItemsSource = nameVendors;
+            Uri vendorUri = new Uri(Helper.Server, "vendor/");
+            var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
+            var nameVendors = vendors.Select(x => x.Name).ToList();
+            this.VendorComboBox.ItemsSource = nameVendors;
 
             //ProductDataGrid productsToInput = new ProductDataGrid()
             //{
@@ -77,15 +77,18 @@ namespace SCM2020___Client.Frames
                 Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
                 new Task(() => 
                     {
-                        var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
-                        products.Add(singleProduct);
-                        index = products.FindIndex(x => x.Id == singleProduct.Id);
-                        
+                        try
+                        {
+                            var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
+                            products.Add(singleProduct);
+                            index = products.FindIndex(x => x.Id == singleProduct.Id);
+                        }
+                        catch (System.Net.Http.HttpRequestException) { }
                     }).Start();
 
             }
 
-            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
+            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
             products.AddRange(data);
 
             if (index > -1)
@@ -176,9 +179,10 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
+            DateTime dateTime = (MovingDateDatePicker.DisplayDate == DateTime.Today) ? DateTime.Now : MovingDateDatePicker.DisplayDate;
             MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
             materialInputByVendor.Invoice = InvoiceTextBox.Text;
-            materialInputByVendor.MovingDate = MovingDateDatePicker.DisplayDate;
+            materialInputByVendor.MovingDate = dateTime;
 
             List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
 
@@ -194,7 +198,7 @@ namespace SCM2020___Client.Frames
                 p.Add(auxiliarConsumption);
             }
             materialInputByVendor.AuxiliarConsumptions = p;
-            APIClient.PostData(new Uri(Helper.Server, "generalproduct/Add").ToString(), materialInputByVendor, Helper.Authentication);
+            APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
         }
     }
 }

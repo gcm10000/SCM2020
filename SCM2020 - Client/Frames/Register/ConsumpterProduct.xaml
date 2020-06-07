@@ -14,7 +14,7 @@
                 <TextBlock Text="Descrição" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="DescriptionTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Grupo" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="GroupTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <ComboBox x:Name="GroupComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16"></ComboBox>
                 <TextBlock Text="Localização" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="LocalizationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Estoque mínimo" Margin="0 20 0 5" FontSize="18"></TextBlock>
