@@ -84,8 +84,18 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Ordem de serviço inexistente.");
             if (monitoring.Situation == true)
                 return BadRequest("Ordem de serviço fechada.");
-            var arrayConsumption = output.ConsumptionProducts.ToList();
-            var arrayPermanent = output.PermanentProducts.ToList();
+
+            List<AuxiliarConsumption> arrayConsumption = null;
+            if (output.ConsumptionProducts != null)
+                arrayConsumption = output.ConsumptionProducts.ToList();
+            else
+                arrayConsumption = new List<AuxiliarConsumption>();
+
+            List<AuxiliarPermanent> arrayPermanent = null;
+            if (output.PermanentProducts != null)
+                arrayPermanent = output.PermanentProducts.ToList();
+            else
+                arrayPermanent = new List<AuxiliarPermanent>();
 
             //Check if every objects of arrayConsumption (less) are inside list ConsumptionProduct (bigger)
             bool MatchesConsumption = arrayConsumption
