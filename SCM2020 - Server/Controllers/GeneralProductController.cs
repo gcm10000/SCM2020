@@ -32,20 +32,17 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            using (context)
-            {
-                var raw = await Helper.RawFromBody(this);
-                ConsumptionProduct newProduct = new ConsumptionProduct(raw);
+            var raw = await Helper.RawFromBody(this);
+            ConsumptionProduct newProduct = new ConsumptionProduct(raw);
 
-                //if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
-                //    return BadRequest("Não existe fornecedor com este id.");
-                if (!context.Groups.Any(x => x.Id == newProduct.Group))
-                    return BadRequest("Não existe grupo com este id.");
+            //if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
+            //    return BadRequest("Não existe fornecedor com este id.");
+            if (!context.Groups.Any(x => x.Id == newProduct.Group))
+                return BadRequest("Não existe grupo com este id.");
 
-                context.ConsumptionProduct.Add(newProduct);
-                await context.SaveChangesAsync();
-                return Ok("Produto adicionado com sucesso.");
-            }
+            context.ConsumptionProduct.Add(newProduct);
+            await context.SaveChangesAsync();
+            return Ok("Produto adicionado com sucesso.");
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
