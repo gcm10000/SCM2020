@@ -39,7 +39,7 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             PermanentProduct newProduct = new PermanentProduct(raw);
-            if (!context.PermanentProduct.Any(x => x.Id == newProduct.InformationProduct))
+            if (!context.ConsumptionProduct.Any(x => x.Id == newProduct.InformationProduct))
                 return BadRequest("Não existe informação de produto com este id.");
 
             context.PermanentProduct.Add(newProduct);
