@@ -36,9 +36,6 @@ namespace SCM2020___Server.Controllers
             {
                 var raw = await Helper.RawFromBody(this);
                 ConsumptionProduct newProduct = new ConsumptionProduct(raw);
-
-                //if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
-                //    return BadRequest("Não existe fornecedor com este id.");
                 if (!context.Groups.Any(x => x.Id == newProduct.Group))
                     return BadRequest("Não existe grupo com este id.");
 
