@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -355,6 +356,55 @@ namespace SCM2020___Client.Frames
             {
                 new Task(() => PermanentProductSearch()).Start();
             }
+        }
+
+        private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (CheckMonitoring())
+            {
+                if (CheckMaterialOutput())
+                {
+                    GetMaterialOutput();
+                    
+                    /*
+                     * QUANDO HOUVER ALGUMA SAÍDA ANTERIOR, NÃO SE USARÁ MAIS O MÉTODO /ADD/ DO SERVIDOR. SERÁ UTILIZADO O MÉTODO /UPDATE/ JUSTAMENTE PORQUE JÁ EXISTE UM UMA SAÍDA.
+                     * É UMA SAÍDA E UMA ENTRADA (DEVOLUÇÃO) PARA CADA MONITORAMENTO.
+                     * MONITORING -> MATERIALOUTPUT
+                     * MONITORING -> MATERIALINPUT
+                     */
+                }
+            }
+        }
+
+        private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            //if (e.Key == Key.Enter)
+            //{
+            //    new Task(() => GetOutputMovement()).Start();
+            //}
+        }
+        private bool CheckMonitoring()
+        {
+            var workOrder = OSTextBox.Text;
+            var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/{workOrder}").ToString(), Helper.Authentication);
+            return monitoring.Situation;
+        }
+        private bool CheckMaterialOutput()
+        {
+            var workOrder = OSTextBox.Text;
+            try
+            {
+                var monitoring = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private void GetMaterialOutput()
+        {
+
         }
     }
 }
