@@ -11,6 +11,8 @@ namespace ModelsLibraryCore
     {
         public MaterialOutput(string raw)
         {
+            var output = JsonConvert.DeserializeObject<MaterialOutput>(raw);
+
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
@@ -19,8 +21,11 @@ namespace ModelsLibraryCore
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
-            this.ConsumptionProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<AuxiliarConsumption>>();
-            this.PermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<AuxiliarPermanent>>();
+            this.ConsumptionProducts = output.ConsumptionProducts;
+            this.PermanentProducts = output.PermanentProducts;
+            
+            //this.ConsumptionProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<AuxiliarConsumption>>();
+            //this.PermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<AuxiliarPermanent>>();
             //this.ConsumptionProducts = new List<AuxiliarConsumption>();
             //this.PermanentProducts = new List<AuxiliarPermanent>();
             //arrayConsumpterProducts.ForEach(x => this.ConsumptionProducts.Add(new AuxiliarConsumption() { ProductId = x.,  Date = x.Product.Date }));

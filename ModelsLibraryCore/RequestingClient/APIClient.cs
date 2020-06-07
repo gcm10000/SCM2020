@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,15 +12,28 @@ using System.Threading.Tasks;
 
 namespace ModelsLibraryCore.RequestingClient
 {
+    public class SignIn
+    {
+        public HttpRequestHeaders Headers { get; private set; }
+        public Token Token { get; private set; }
+        public JwtSecurityToken JwtSecurityToken { get; private set; }
+        public SignIn(HttpRequestHeaders Headers, Token Token)
+        {
+            this.Headers = Headers;
+            this.Token = Token;
+            this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
+        }
+    }
     public static class APIClient
     {
+
         //http://localhost:52991/api/Vendor
         //CRUD
         //CREATE -> GENERIC POST
         //READ -> GENERIC GET
         //UPDATE -> GENERIC POST
         //DELETE -> INT DELETE
-        public static HttpRequestHeaders MakeSignIn(string url, string Registration, bool IsPJERJRegistration, string Password)
+        public static SignIn MakeSignIn(string url, string Registration, bool IsPJERJRegistration, string Password)
         {
             using (var client = new HttpClient())
             {
@@ -42,9 +56,46 @@ namespace ModelsLibraryCore.RequestingClient
 
                 //obtem o token gerado
                 string content = respToken.Content.ReadAsStringAsync().Result;
+                Token token = null;
 
-                Console.WriteLine("Token recebido:");
-                Console.WriteLine(content + "\n");
+                if (respToken.StatusCode == HttpStatusCode.OK)
+                {
+                    //deserializa o token e data de expiração para o objeto Token
+                    token = JsonConvert.DeserializeObject<Token>(content);
+                    // Associar o token aos headers do objeto
+                    // do tipo HttpClient
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.token);
+                }
+                else if (respToken.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new AuthenticationException(content);
+                }
+                return new SignIn(client.DefaultRequestHeaders, token);
+            }
+        }
+        private static HttpRequestHeaders MakeSignIn2(string url, string Registration, bool IsPJERJRegistration, string Password)
+        {
+            using (var client = new HttpClient())
+            {
+                //limpa o header
+                client.DefaultRequestHeaders.Accept.Clear();
+
+                //incluir o cabeçalho Accept que será envia na requisição             
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // Envio da requisição a fim de autenticar
+                // e obter o token de acesso
+                HttpResponseMessage respToken = client.PostAsync(url, new StringContent(
+                        JsonConvert.SerializeObject(new
+                        {
+                            Registration = Registration,
+                            IsPJERJRegistration = IsPJERJRegistration,
+                            Password = Password
+                        }), Encoding.UTF8, "application/json")).Result;
+
+                //obtem o token gerado
+                string content = respToken.Content.ReadAsStringAsync().Result;
 
                 if (respToken.StatusCode == HttpStatusCode.OK)
                 {

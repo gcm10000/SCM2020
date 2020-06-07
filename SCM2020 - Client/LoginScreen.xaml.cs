@@ -2,6 +2,8 @@
 using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +39,8 @@ namespace SCM2020___Client
                     Registration: user,
                     IsPJERJRegistration: true,
                     Password: password);
-                Helper.Authentication = signIn.Authorization;
+                Helper.Authentication = signIn.Headers.Authorization;
+                Helper.SCMId = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 MessageBox.Show("Login realizado com sucesso.", "Informação:", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (System.Net.Http.HttpRequestException ex)
