@@ -23,7 +23,7 @@ namespace SCM2020___Server.Controllers
         {
             this.context = context;
         }
-        [Authorize(Roles = Roles.Administrator)]
+        //[Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
@@ -57,11 +57,13 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Atualizado com sucesso.");
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ShowAll()
         {
             return Ok(context.PermanentProduct.ToList());
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult Show(int id)
         {
@@ -75,6 +77,7 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o id {id} não existe.");
             }
         }
+        [AllowAnonymous]
         [HttpGet("Search/{patrimony}")]
         public IActionResult SearchByPatrimony(string patrimony)
         {

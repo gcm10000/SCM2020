@@ -141,7 +141,7 @@ namespace SCM2020___Client.Frames
             string textBoxValue = string.Empty;
             this.TxtPermanentProductSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtPermanentProductSearch.Text; }));
             
-            Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/patrimony/{textBoxValue}");
+            Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
 
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
