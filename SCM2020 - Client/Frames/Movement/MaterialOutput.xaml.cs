@@ -70,23 +70,23 @@ namespace SCM2020___Client.Frames
             //var nameVendors = vendors.Select(x => x.Name).ToList();
             //this.VendorComboBox.ItemsSource = nameVendors;
 
-            ProductToOutput ProductToOutput = new ProductToOutput()
-            {
-                Id = 1,
-                Code = 1,
-                Description = "TESTE",
-                Quantity = 10
-            };
-            ProductToAddDataGrid.Items.Add(ProductToOutput);
-            PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
-            {
-                Id = 1,
-                Code = 2,
-                Description = "TESTE2",
-                Quantity = 12,
-                Patrimony = "5621034",
-            };
-            PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
+            //ProductToOutput ProductToOutput = new ProductToOutput()
+            //{
+            //    Id = 1,
+            //    Code = 1,
+            //    Description = "TESTE",
+            //    Quantity = 10
+            //};
+            //ProductToAddDataGrid.Items.Add(ProductToOutput);
+            //PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
+            //{
+            //    Id = 1,
+            //    Code = 2,
+            //    Description = "TESTE2",
+            //    Quantity = 12,
+            //    Patrimony = "5621034",
+            //};
+            //PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
         }
         private void ConsumpterProductSearch()
         {
@@ -125,14 +125,14 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in products.ToList())
             {
-                ProductToOutput productsToInput = new ProductToOutput()
+                ProductToOutput productsToOutput = new ProductToOutput()
                 {
                     Id = item.Id,
                     Code = item.Code,
                     Description = item.Description,
                     Quantity = item.Stock
                 };
-                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToInput); }));
+                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
 
             }
         }
@@ -227,11 +227,8 @@ namespace SCM2020___Client.Frames
         {
             //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
             //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
-            DateTime dateTime = OSDatePicker.DisplayDate;
-            if (OSDatePicker.DisplayDate == DateTime.Today)
-            {
-                dateTime = DateTime.Now;
-            }
+            DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
+
             var register = ApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
             //var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{Helper.SCMRegistration}").ToString());
@@ -259,9 +256,14 @@ namespace SCM2020___Client.Frames
                 
             };
 
+            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+                materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
+            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+                materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
+
             foreach (var item in FinalConsumpterProductsAddedDataGrid.Items)
             {
-                ConsumpterProductDataGrid outputProduct = item as ConsumpterProductDataGrid;
+                ProductToOutput outputProduct = item as ProductToOutput;
                 //var code = outputProduct.Code;
                 //var ConsumpterProduct = APIClient.GetData<ConsumptionProduct>(new Uri(Helper.Server, $"GeneralProduct/Code/{code}").ToString());
 
@@ -298,7 +300,7 @@ namespace SCM2020___Client.Frames
 
                 var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2);
-            }).Start();
+            }).Wait();
 
         }
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
