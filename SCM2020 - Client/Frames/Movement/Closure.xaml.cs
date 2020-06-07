@@ -34,7 +34,7 @@ namespace SCM2020___Client.Frames
             {
                 var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-            }).Start();
+            }).Wait();
         }
     }
 }
