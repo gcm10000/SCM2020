@@ -48,6 +48,7 @@ namespace SCM2020___Client.Frames.Register
             try
             {
                 product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/code/{CodeTextBox.Text.Trim()}").ToString(), Helper.Authentication);
+                DescriptionTextBox.Text = product.Description;
             }
             catch (System.Net.Http.HttpRequestException ex)
             {

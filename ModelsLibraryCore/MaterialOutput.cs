@@ -16,8 +16,6 @@ namespace ModelsLibraryCore
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
-            //this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
-            //this.SCMEmployeeId = UserId;
             this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 

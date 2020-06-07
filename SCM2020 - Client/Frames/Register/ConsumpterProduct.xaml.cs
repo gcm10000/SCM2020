@@ -36,7 +36,7 @@ namespace SCM2020___Client.Frames.Register
             {
                 Code = int.Parse(CodeTextBox.Text),
                 Description = DescriptionTextBox.Text,
-                Group = GroupComboBox.SelectedIndex,
+                Group = (GroupComboBox.SelectedIndex + 1),
                 Localization = LocalizationTextBox.Text,
                 MininumStock = double.Parse(MininumStockTextBox.Text),
                 MaximumStock = double.Parse(MaximumStockTextBox.Text),
