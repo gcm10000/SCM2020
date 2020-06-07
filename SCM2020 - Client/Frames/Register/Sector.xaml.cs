@@ -27,15 +27,17 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveSector_Click(object sender, RoutedEventArgs e)
         {
+            var sectorName = SectorTextBox.Text;
+            var numberSector = int.Parse(NumberSectorTextBox.Text);
             new Task(() => 
             {
                 ModelsLibraryCore.Sector sector = new ModelsLibraryCore.Sector()
                 {
-                    NameSector = SectorTextBox.Text,
-                    NumberSector = int.Parse(NumberSectorTextBox.Text)
+                    NameSector = sectorName,
+                    NumberSector = numberSector
                 };
-                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("Sector/Add/")).ToString(), sector, Helper.Authentication);
-                MessageBox.Show(result);
+                var result = APIClient.PostData(new Uri(Helper.Server, "Sector/Add/").ToString(), sector, Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             }).Start();
         }
     }

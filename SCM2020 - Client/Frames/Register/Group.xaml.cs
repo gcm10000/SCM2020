@@ -31,11 +31,12 @@ namespace SCM2020___Client.Frames.Register
         }
         private void SaveGroup()
         {
+            var groupName = GroupTextBox.Text;
             new Task(() => 
             {
                 ModelsLibraryCore.Group group = new ModelsLibraryCore.Group()
-                { GroupName = GroupTextBox.Text };
-                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("/Group/Add")).ToString(), group, Helper.Authentication);
+                { GroupName = groupName };
+                var result = APIClient.PostData(new Uri(Helper.Server, "Group/Add").ToString(), group, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
         }

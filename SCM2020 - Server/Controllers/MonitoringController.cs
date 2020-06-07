@@ -96,9 +96,12 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Monitoramento atualizada com sucesso.");
         }
-        [HttpPost("Closure/{workOrder}/{year}/{month}/{day}")]
-        public async Task<IActionResult> Closure(string workOrder, int year, int month, int day)
+        [HttpPost("Closure/{year}/{month}/{day}")]
+        public async Task<IActionResult> Closure(int year, int month, int day)
         {
+            var raw = await Helper.RawFromBody(this);
+            var workOrder = JsonConvert.DeserializeObject<string>(raw);
+
             var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
             DateTime dateTime = new DateTime(year, month, day);
             monitoring.Situation = true;

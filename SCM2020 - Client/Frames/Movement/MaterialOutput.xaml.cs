@@ -58,8 +58,9 @@ namespace SCM2020___Client.Frames
             public ModelsLibraryCore.ConsumptionProduct ConsumptionProduct { get; set; }
             public SearchPermanentProduct(ModelsLibraryCore.PermanentProduct PermanentProduct)
             {
-                int id = PermanentProduct.InformationProduct;
-                ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{id}").ToString(), Helper.Authentication);
+                this.InformationProduct = PermanentProduct.InformationProduct;
+                this.Patrimony = PermanentProduct.Patrimony;
+                ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);
             }
         }
         public MaterialOutput()
@@ -143,13 +144,13 @@ namespace SCM2020___Client.Frames
             
             Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
 
-            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
 
             List<PermanentProduct> products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
             foreach (var product in products)
             {
-                SearchPermanentProduct searchPermanentProduct = new SearchPermanentProduct(product);
-
+                PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid(new SearchPermanentProduct(product));
+                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
             }
         }
 

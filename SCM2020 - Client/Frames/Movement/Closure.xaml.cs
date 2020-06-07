@@ -28,12 +28,13 @@ namespace SCM2020___Client.Frames
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
             DateTime dateTime = ClosureOSDateTextBox.DisplayDate;
-            Uri uriClosure = new Uri(Helper.Server, $"Closure/{OSTextBox.Text}/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
+            var workOrder = OSTextBox.Text;
+            Uri uriClosure = new Uri(Helper.Server, $"Monitoring/Closure/{OSTextBox.Text}/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
             Task.Run(() =>
             {
-                var result = APIClient.PostData(uriClosure.ToString(), null, Helper.Authentication);
-                MessageBox.Show(result);
-            });
+                var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            }).Start();
         }
     }
 }

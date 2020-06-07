@@ -27,14 +27,16 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveVendor_Click(object sender, RoutedEventArgs e)
         {
+            var nameVendor = VendorTextBox.Text;
+            var telephoneVendor = TelephoneTextBox.Text;
             new Task(() =>
             {
                 ModelsLibraryCore.Vendor vendor = new ModelsLibraryCore.Vendor()
                 {
-                    Name = VendorTextBox.Text,
-                    Telephone = TelephoneTextBox.Text
+                    Name = nameVendor,
+                    Telephone = telephoneVendor
                 };
-                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("Vendor/Add/")).ToString(), vendor, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.Server, "Vendor/Add/").ToString(), vendor, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
         }
