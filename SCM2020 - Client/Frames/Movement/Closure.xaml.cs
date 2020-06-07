@@ -29,7 +29,7 @@ namespace SCM2020___Client.Frames
         {
             DateTime dateTime = ClosureOSDateTextBox.DisplayDate;
             var workOrder = OSTextBox.Text;
-            Uri uriClosure = new Uri(Helper.Server, $"Monitoring/Closure/{OSTextBox.Text}/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
+            Uri uriClosure = new Uri(Helper.Server, $"Monitoring/Closure/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
             Task.Run(() =>
             {
                 var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
