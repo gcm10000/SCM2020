@@ -51,8 +51,8 @@ namespace ModelsLibraryCore
         [JsonIgnore]
         public MaterialInput MaterialInput { get; set; }
         /// <summary>
-        /// Matrícula do funcionário do Sistema de Controle de Materiais.
+        /// Id do funcionário do Sistema de Controle de Materiais.
         /// </summary>
-        public string SCMRegistration { get; set; }
+        public string SCMEmployeeId { get; set; }
     }
 }

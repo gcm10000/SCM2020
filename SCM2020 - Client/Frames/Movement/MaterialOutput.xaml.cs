@@ -233,8 +233,8 @@ namespace SCM2020___Client.Frames
                 dateTime = DateTime.Now;
             }
             var register = ApplicantTextBox.Text;
-            var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"UserId/{register}").ToString());
-            var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"UserId/{Helper.SCMRegistration}").ToString());
+            var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+            var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{Helper.SCMRegistration}").ToString());
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 

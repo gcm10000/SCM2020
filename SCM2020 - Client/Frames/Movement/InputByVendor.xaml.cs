@@ -198,8 +198,11 @@ namespace SCM2020___Client.Frames
                 p.Add(auxiliarConsumption);
             }
             materialInputByVendor.AuxiliarConsumptions = p;
-            var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            new Task(() => 
+            {
+                var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            }).Start();
         }
     }
 }
