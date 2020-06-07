@@ -270,7 +270,7 @@ namespace SCM2020___Client.Frames
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
                     Date = materialOutput.MovingDate,
-                    Quantity = outputProduct.Quantity,
+                    Quantity = outputProduct.QuantityAdded,
                     ProductId = outputProduct.Id, //verificar se o ID é o mesmo do produto...
                     SCMEmployeeId = Helper.SCMId
                 };
