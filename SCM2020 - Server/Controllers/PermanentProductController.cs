@@ -75,8 +75,8 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o id {id} não existe.");
             }
         }
-        [HttpGet("patrimony/{patrimony}")]
-        public IActionResult ShowByPatrimony(string patrimony)
+        [HttpGet("Search/{patrimony}")]
+        public IActionResult SearchByPatrimony(string patrimony)
         {
             var product = context.PermanentProduct.Where(x => x.Patrimony == patrimony);
             if (product != null)
