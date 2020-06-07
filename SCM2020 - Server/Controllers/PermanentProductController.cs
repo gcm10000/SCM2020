@@ -81,10 +81,11 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Search/{patrimony}")]
         public IActionResult SearchByPatrimony(string patrimony)
         {
-            var product = context.PermanentProduct.Where(x => x.Patrimony == patrimony);
-            if (product != null)
+            var productPermanent = context.PermanentProduct.Where(x => x.Patrimony.Contains(patrimony));
+            //var productConsumpter = context.ConsumptionProduct.Where(x => productConsumpter)
+            if (productPermanent != null)
             {
-                return Ok(product);
+                return Ok(productPermanent);
             }
             else
             {
