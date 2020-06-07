@@ -41,8 +41,6 @@ namespace SCM2020___Client
                     Password: password);
                 Helper.Authentication = signIn.Headers.Authorization;
                 Helper.SCMId = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                //ClaimTypes.NameIdentifier
-                //Helper.SCMId
                 MessageBox.Show("Login realizado com sucesso.", "Informação:", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (System.Net.Http.HttpRequestException ex)

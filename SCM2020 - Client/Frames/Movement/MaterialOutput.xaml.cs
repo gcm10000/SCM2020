@@ -234,13 +234,13 @@ namespace SCM2020___Client.Frames
             }
             var register = ApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
-            var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{Helper.SCMRegistration}").ToString());
+            //var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{Helper.SCMRegistration}").ToString());
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
             Monitoring monitoring = new Monitoring()
             {
-                SCMEmployeeId = userSCMId,
+                SCMEmployeeId = Helper.SCMId,
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
@@ -270,7 +270,7 @@ namespace SCM2020___Client.Frames
                     Date = materialOutput.MovingDate,
                     Quantity = outputProduct.Quantity,
                     ProductId = outputProduct.Id, //verificar se o ID é o mesmo do produto...
-                    SCMRegistration = Helper.SCMRegistration
+                    SCMEmployeeId = Helper.SCMId
                 };
                 materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
             }
@@ -280,7 +280,7 @@ namespace SCM2020___Client.Frames
                 AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
                 {
                     Date = materialOutput.MovingDate,
-                    SCMRegistration = Helper.SCMRegistration,
+                    SCMEmployeeId = Helper.SCMId,
                     ProductId = outputPermanentProduct.Id
                 };
                 materialOutput.PermanentProducts.Add(auxiliarPermanent);

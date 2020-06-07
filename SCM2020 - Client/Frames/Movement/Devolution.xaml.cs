@@ -228,7 +228,7 @@ namespace SCM2020___Client.Frames.Movement
                     Date = DateTime.Now,
                     ProductId = item.Id,
                     Quantity = item.QuantityAdded,
-                    SCMRegistration = Helper.SCMRegistration,
+                    SCMEmployeeId = Helper.SCMId,
                 };
                 materialInput.ConsumptionProducts.Add(auxiliarConsumption);
             }
@@ -238,7 +238,7 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     Date = DateTime.Now,
                     ProductId = item.Id,
-                    SCMRegistration = Helper.SCMRegistration
+                    SCMEmployeeId = Helper.SCMId
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
