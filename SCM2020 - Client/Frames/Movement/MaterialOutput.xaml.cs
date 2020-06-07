@@ -360,51 +360,58 @@ namespace SCM2020___Client.Frames
 
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (CheckMonitoring())
-            {
-                if (CheckMaterialOutput())
-                {
-                    GetMaterialOutput();
-                    
-                    /*
-                     * QUANDO HOUVER ALGUMA SAÍDA ANTERIOR, NÃO SE USARÁ MAIS O MÉTODO /ADD/ DO SERVIDOR. SERÁ UTILIZADO O MÉTODO /UPDATE/ JUSTAMENTE PORQUE JÁ EXISTE UM UMA SAÍDA.
-                     * É UMA SAÍDA E UMA ENTRADA (DEVOLUÇÃO) PARA CADA MONITORAMENTO.
-                     * MONITORING -> MATERIALOUTPUT
-                     * MONITORING -> MATERIALINPUT
-                     */
-                }
-            }
+            var workOrder = OSTextBox.Text;
+            new Task(() => RescueData(workOrder)).Start();
         }
 
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Key == Key.Enter)
-            //{
-            //    new Task(() => GetOutputMovement()).Start();
-            //}
-        }
-        private bool CheckMonitoring()
-        {
             var workOrder = OSTextBox.Text;
-            var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/{workOrder}").ToString(), Helper.Authentication);
-            return monitoring.Situation;
+            if (e.Key == Key.Enter)
+            {
+                new Task(() => RescueData(workOrder)).Start();
+            }
         }
-        private bool CheckMaterialOutput()
+        private void RescueData(string workOrder)
         {
-            var workOrder = OSTextBox.Text;
+            /*
+             * QUANDO HOUVER ALGUMA SAÍDA ANTERIOR, NÃO SE USARÁ MAIS O MÉTODO /ADD/ DO SERVIDOR. SERÁ UTILIZADO O MÉTODO /UPDATE/ JUSTAMENTE PORQUE JÁ EXISTE UM UMA SAÍDA.
+             * É UMA SAÍDA E UMA ENTRADA (DEVOLUÇÃO) PARA CADA MONITORAMENTO.
+             * MONITORING -> MATERIALOUTPUT
+             * MONITORING -> MATERIALINPUT
+             */
             try
             {
-                var monitoring = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        private void GetMaterialOutput()
-        {
+                //Check monitoring
+                var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/{workOrder}").ToString(), Helper.Authentication);
+                if (monitoring.Situation) //WORKORDER IS CLOSED.
+                    return; //DISABLE FILLING DATA.
+                var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
+                //TROCAR ID PARA MATRÍCULA
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = monitoring.MovingDate; }));
 
+            }
+            catch (Exception ex)
+            {
+                //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
+                MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+        private void GetMaterialOutput(string workOrder)
+        {
+            try
+            {
+                var oldderOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                //this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
+
+            }
+            catch (Exception)
+            {
+                //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
+                return;
+            }
         }
     }
 }
