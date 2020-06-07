@@ -27,7 +27,7 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateTime = ClosureOSDateTextBox.DisplayDate;
+            DateTime dateTime = (ClosureOSDateTextBox.DisplayDate == DateTime.Today) ? DateTime.Now : ClosureOSDateTextBox.DisplayDate;
             var workOrder = OSTextBox.Text;
             Uri uriClosure = new Uri(Helper.Server, $"Monitoring/Closure/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
             Task.Run(() =>
