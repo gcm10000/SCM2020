@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,11 +13,11 @@ namespace ModelsLibraryCore
     {
         public PermanentProduct(string raw)
         {
-            var newproduct = JObject.Parse(raw);
-            this.InformationProduct = newproduct.Value<int>("InformationProduct");
-            this.Patrimony = newproduct.Value<string>("Patrimony");
-            this.Status = newproduct.Value<Status>("Status");
-            this.DateAdd = DateTime.Now;
+            var newproduct = JsonConvert.DeserializeObject<PermanentProduct>(raw);
+            this.InformationProduct = newproduct.InformationProduct;
+            this.Patrimony = newproduct.Patrimony;
+            this.Status = newproduct.Status;
+            this.DateAdd = newproduct.DateAdd;
         }
         public PermanentProduct()
         {
