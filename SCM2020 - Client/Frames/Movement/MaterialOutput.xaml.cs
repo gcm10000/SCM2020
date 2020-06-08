@@ -380,12 +380,14 @@ namespace SCM2020___Client.Frames
              * MONITORING -> MATERIALOUTPUT
              * MONITORING -> MATERIALINPUT
              */
-            if (OSTextBox.Text == string.Empty)
+            if (workOrder == string.Empty)
                 return;
             try
             {
+
+                workOrder = System.Uri.EscapeDataString(workOrder);
                 //Check monitoring
-                var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/{workOrder}").ToString(), Helper.Authentication);
+                var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
                     return; //DISABLE FILLING DATA.
                 //ID -> MATRÍCULA
