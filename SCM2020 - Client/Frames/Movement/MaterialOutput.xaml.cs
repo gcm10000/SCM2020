@@ -380,16 +380,29 @@ namespace SCM2020___Client.Frames
              * MONITORING -> MATERIALOUTPUT
              * MONITORING -> MATERIALINPUT
              */
+            if (OSTextBox.Text == string.Empty)
+                return;
             try
             {
                 //Check monitoring
                 var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/{workOrder}").ToString(), Helper.Authentication);
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
                     return; //DISABLE FILLING DATA.
+                //ID -> MATRÍCULA
                 var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
+                this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.MovingDateDatePicker.DisplayDate = materialOutput.MovingDate; }));
+
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => {
+                    var userId = monitoring.EmployeeId;
+                    var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
+                    this.ApplicantTextBox.Text = result;
+                }));
+                
+                
                 //TROCAR ID PARA MATRÍCULA
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = monitoring.MovingDate; }));
+                //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = monitoring.MovingDate; }));
 
             }
             catch (Exception ex)
@@ -398,20 +411,6 @@ namespace SCM2020___Client.Frames
                 MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-        }
-        private void GetMaterialOutput(string workOrder)
-        {
-            try
-            {
-                var oldderOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
-                //this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
-
-            }
-            catch (Exception)
-            {
-                //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
-                return;
-            }
         }
     }
 }

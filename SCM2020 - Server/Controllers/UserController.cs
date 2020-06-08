@@ -171,18 +171,23 @@ namespace SCM2020___Server.Controllers
             return result;
         }
         [HttpGet("UserId/{register}")]
-        //[Authorize]
         [AllowAnonymous]
         public string GetUserIdByPJERJRegister(string register)
         {
             return UserManager.FindByPJERJRegistrationAsync(register).Id;
         }
-        [HttpDelete("Delete")]
-        [Authorize(Roles = Roles.SCM)]
-        public IActionResult DeleteUser()
+        [HttpGet("RegisterId/{userId}")]
+        [AllowAnonymous]
+        public string GetPJERJRegisterByUserId(string userId)
         {
-            return Ok();
+            return UserManager.FindUserByIdAsync(userId).PJERJRegistration;
         }
+        //[HttpDelete("Delete")]
+        //[Authorize(Roles = Roles.SCM)]
+        //public IActionResult DeleteUser()
+        //{
+        //    return Ok();
+        //}
         private async Task<UpdateUserInfo> UpdateUserInfo()
         {
             var model = JsonConvert.DeserializeObject<UpdateUserInfo>(await Helper.RawFromBody(this));
