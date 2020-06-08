@@ -37,6 +37,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("WorkOrder/{workorder}")]
         public IActionResult ShowByWorkOrder(string workorder)
         {
+            workorder = System.Uri.UnescapeDataString(workorder);
             var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(output);
         }
