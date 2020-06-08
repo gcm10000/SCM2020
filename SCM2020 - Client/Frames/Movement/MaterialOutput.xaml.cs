@@ -386,30 +386,60 @@ namespace SCM2020___Client.Frames
             {
 
                 workOrder = System.Uri.EscapeDataString(workOrder);
+
                 //Check monitoring
-                var monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                var userId = monitoring.EmployeeId;
+                var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
+
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
+                {
+                    MessageBox.Show("Ordem de serviço fechada.", "Informação.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return; //DISABLE FILLING DATA.
+                }
                 //ID -> MATRÍCULA
                 var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
                 this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
                 this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.MovingDateDatePicker.DisplayDate = materialOutput.MovingDate; }));
 
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => {
-                    var userId = monitoring.EmployeeId;
-                    var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
-                    this.ApplicantTextBox.Text = result;
-                }));
-                
-                
-                //TROCAR ID PARA MATRÍCULA
-                //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = monitoring.MovingDate; }));
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = result; }));
 
+                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
+                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+                foreach (var item in materialOutput.ConsumptionProducts)
+                {
+                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ProductToOutput productToOutput = new ProductToOutput()
+                    {
+                        Id = item.ProductId,
+                        QuantityAdded = item.Quantity,
+                        Description = consumpterProduct.Description,
+                        Code = consumpterProduct.Code,
+                        Quantity = consumpterProduct.Stock
+                    };
+                    this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { FinalConsumpterProductsAddedDataGrid.Items.Add(productToOutput); }));
+                }
+                foreach (var item in materialOutput.PermanentProducts)
+                {
+                    var permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    PermanentProductDataGrid productDataGrid = new PermanentProductDataGrid()
+                    {
+                        Id = item.ProductId,
+                        Code = consumpterProduct.Code,
+                        Description = consumpterProduct.Description,
+                        Quantity = consumpterProduct.Stock,
+                        QuantityAdded = 1,
+                        Patrimony = permanentProduct.Patrimony,
+                    };
+                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
+                }
             }
+            catch (System.Net.Http.HttpRequestException) //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
+            { }
             catch (Exception ex)
             {
-                //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
                 MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
