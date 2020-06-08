@@ -14,9 +14,9 @@ namespace SCM2020___Server.Extensions
         {
             return UserManager.Users.FirstOrDefault(x => x.PJERJRegistration == PJERJRegistration);
         }
-        public static ApplicationUser FindUserByIdAsync(this UserManager<ApplicationUser> UserManager, string PJERJRegistration)
+        public static ApplicationUser FindUserByIdAsync(this UserManager<ApplicationUser> UserManager, string Id)
         {
-            return UserManager.Users.FirstOrDefault(x => x.PJERJRegistration == PJERJRegistration);
+            return UserManager.Users.FirstOrDefault(x => x.Id == Id);
         }
         public static ApplicationUser FindByCompleteNameAsync(this UserManager<ApplicationUser> UserManager, string Name)
         {
