@@ -182,11 +182,11 @@ namespace SCM2020___Server.Controllers
         {
             return UserManager.FindUserByIdAsync(userId).PJERJRegistration;
         }
-        [HttpGet("InfoUser/{register}")]
+        [HttpGet("InfoUser/{userId}")]
         [AllowAnonymous]
-        public InfoUser GetInfoUserByRegister(string register)
+        public InfoUser GetInfoUserByRegister(string userId)
         {
-            var user = UserManager.FindByPJERJRegistrationAsync(register);
+            var user = UserManager.FindUserByIdAsync(userId);
             return new InfoUser(user.Id, user.Name, user.PJERJRegistration);
         }
         //[HttpDelete("Delete")]
