@@ -66,7 +66,7 @@ namespace SCM2020___Client.Frames.Movement
         {
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
-
+            string teste = uriRequest.ToString();
             Monitoring resultMonitoring;
             try
             {
