@@ -221,7 +221,7 @@ namespace SCM2020___Client.Frames.Movement
             {
                 MovingDate = dateOS,
                 Regarding = (Regarding)ReferenceComboBox.SelectedIndex,
-                WorkOrder = OSDisableTextBox.Text,
+                WorkOrder = OSTextBox.Text,
                 DocDate = DateTime.Now,
             };
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
@@ -330,6 +330,21 @@ namespace SCM2020___Client.Frames.Movement
             }
             this.PermanentProductToAddDataGrid.Items.Refresh();
             this.PermanentProductToAddDataGrid.UnselectAll();
+        }
+
+        private void OSDisableTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OSTextBox_KeyDown_1(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

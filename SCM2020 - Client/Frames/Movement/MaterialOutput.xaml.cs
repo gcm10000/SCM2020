@@ -49,7 +49,7 @@ namespace SCM2020___Client.Frames
             {
                 this.Code = searchPermanentProduct.ConsumptionProduct.Code;
                 this.Description = searchPermanentProduct.ConsumptionProduct.Description;
-                this.Id = searchPermanentProduct.InformationProduct;
+                this.Id = searchPermanentProduct.Id;
                 this.Patrimony = searchPermanentProduct.Patrimony;
                 this.Quantity = searchPermanentProduct.ConsumptionProduct.Stock;
             }
@@ -59,6 +59,7 @@ namespace SCM2020___Client.Frames
             public ModelsLibraryCore.ConsumptionProduct ConsumptionProduct { get; set; }
             public SearchPermanentProduct(ModelsLibraryCore.PermanentProduct PermanentProduct)
             {
+                this.Id = PermanentProduct.Id;
                 this.InformationProduct = PermanentProduct.InformationProduct;
                 this.Patrimony = PermanentProduct.Patrimony;
                 ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);

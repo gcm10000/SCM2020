@@ -41,11 +41,11 @@
                 <Button Uid="2" x:Name="ButtonFinish" Width="150" Content="FINALIZAÇÃO" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinish_Click"  Cursor="Hand"/>
             </StackPanel>
         </Grid>
-        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Collapsed"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="OS/DOC" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <TextBox x:Name="OSDisableTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox x:Name="OSTextBox" LostFocus="OSTextBox_LostFocus" KeyDown="OSTextBox_KeyDown_1" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Entrada Referente a" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <ComboBox Width="188" x:Name="ReferenceComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" />
                     <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
@@ -57,7 +57,7 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
-        <DockPanel x:Name="InfoDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
+        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -176,7 +176,7 @@
                 </DataGrid>
             </Grid>
         </DockPanel>
-        <DockPanel x:Name="FinalProductsDockPanel" Visibility="Visible" Margin="10 0 10 30">
+        <DockPanel x:Name="FinalProductsDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="60">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
                     <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click"  Cursor="Hand"/>
@@ -258,7 +258,7 @@
                 </DataGrid>
             </Grid>
         </DockPanel>
-        <DockPanel x:Name="OSDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
+        <!--<DockPanel x:Name="OSDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -272,6 +272,6 @@
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
-        </DockPanel>
+        </DockPanel>-->
     </DockPanel>
 </UserControl>
