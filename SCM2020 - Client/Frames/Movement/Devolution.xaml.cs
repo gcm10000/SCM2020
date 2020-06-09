@@ -113,9 +113,6 @@ namespace SCM2020___Client.Frames.Movement
         List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
         private void GetProducts(string workorder)
         {
-            //FALTA ADICIONAR USERCONTROL DE PRODUTO PERMANENTE!!
-            //FALTA A SEGUNDA IDA NA SAÍDA...
-
             var outputProducts = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workorder}").ToString(), Helper.Authentication);
             foreach (var item in outputProducts.ConsumptionProducts)
             {
