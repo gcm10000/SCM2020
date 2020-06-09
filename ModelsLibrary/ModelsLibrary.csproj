@@ -50,6 +50,7 @@
     <Compile Include="DeleteUser.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="InfoEmployee.cs" />
+    <Compile Include="InfoUser.cs" />
     <Compile Include="MaterialInput.cs" />
     <Compile Include="MaterialInputByVendor.cs" />
     <Compile Include="MaterialOutput.cs" />

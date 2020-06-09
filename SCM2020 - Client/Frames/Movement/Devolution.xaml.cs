@@ -71,8 +71,12 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
-
-                this.RegistrationApplicantTextBox.Text = 
+                var register = resultMonitoring.EmployeeId;
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{register}").ToString(), Helper.Authentication);
+                this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
+                //this.RegisterApplicantTextBox.Text = infoUser.Register;
+                //this.ApplicantTextBox.Text = infoUser.Name;
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
