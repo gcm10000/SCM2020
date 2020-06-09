@@ -48,30 +48,21 @@ namespace SCM2020___Client.Frames.Movement
             ReferenceComboBox.Items.Add("Outra Comarca");
 
         }
-        private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
-        {            
-            if (e.Key == Key.Enter)
-            {
-                new Task(() => CheckOS()).Start();
-            }
-        }
-        private void SearchOSButton_Click(object sender, RoutedEventArgs e)
-        {
-            new Task(() => CheckOS()).Start();
-            //new Task(() => CheckOS()).Start();
-            //this.ButtonInformation.IsHitTestVisible = false;
-            //this.ButtonPermanentProducts.IsHitTestVisible = true;
-            //this.ButtonFinish.IsHitTestVisible = true;
+        //private void SearchOSButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    new Task(() => CheckOS()).Start();
+        //    //new Task(() => CheckOS()).Start();
+        //    //this.ButtonInformation.IsHitTestVisible = false;
+        //    //this.ButtonPermanentProducts.IsHitTestVisible = true;
+        //    //this.ButtonFinish.IsHitTestVisible = true;
 
-            //this.InfoScrollViewer.Visibility = Visibility.Visible;
-            //this.InfoDockPanel.Visibility = Visibility.Visible;
-            //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-            //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void CheckOS()
+        //    //this.InfoScrollViewer.Visibility = Visibility.Visible;
+        //    //this.InfoDockPanel.Visibility = Visibility.Visible;
+        //    //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
+        //    //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+        //}
+        private void CheckOS(string workorder)
         {
-            string workorder = OSTextBox.Text;
             var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workorder}");
 
             Monitoring resultMonitoring;
@@ -331,20 +322,22 @@ namespace SCM2020___Client.Frames.Movement
             this.PermanentProductToAddDataGrid.Items.Refresh();
             this.PermanentProductToAddDataGrid.UnselectAll();
         }
-
         private void OSDisableTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-
+            string workorder = OSTextBox.Text;
+            new Task(() => CheckOS(workorder)).Start();
         }
-
-        private void OSTextBox_KeyDown_1(object sender, KeyEventArgs e)
+        private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                string workorder = OSTextBox.Text;
+                new Task(() => CheckOS(workorder)).Start();
+            }
         }
     }
 }
