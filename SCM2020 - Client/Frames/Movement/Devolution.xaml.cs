@@ -148,6 +148,7 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
+                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
                 this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
             }
             foreach (var item in outputProducts.PermanentProducts)
