@@ -328,12 +328,8 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void PermanentProductButton_Click(object sender, RoutedEventArgs e)
         {
-            List<PermanentProductDataGrid> list = ListPermanentProductDataGrid;
-            foreach (PermanentProductDataGrid item in this.PermanentProductToAddDataGrid.Items)
-            {
-                list.Add(item);
-            }
-            var newList = list.Where(x => (x.Description.Contains(TxtProductConsumpterSearch.Text) ) || (x.Code.ToString().Contains(TxtProductConsumpterSearch.Text)));
+            List<PermanentProductDataGrid> list = new List<PermanentProductDataGrid>(ListPermanentProductDataGrid);
+            var newList = list.Where(x => (x.Description.Contains(TxtPermanentProductSearch.Text) ) || (x.Code.ToString().Contains(TxtPermanentProductSearch.Text) || (x.Patrimony.Contains(TxtPermanentProductSearch.Text))));
             this.PermanentProductToAddDataGrid.Items.Clear();
             this.PermanentProductToAddDataGrid.Items.Refresh();
             foreach (var item in newList)
