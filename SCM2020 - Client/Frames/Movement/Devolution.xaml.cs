@@ -122,6 +122,8 @@ namespace SCM2020___Client.Frames.Movement
         private void GetProducts(string workorder)
         {
             var outputProducts = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workorder}").ToString(), Helper.Authentication);
+            ListConsumpterProductDataGrid.Clear();
+            ListPermanentProductDataGrid.Clear();
             foreach (var item in outputProducts.ConsumptionProducts)
             {
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
@@ -307,7 +309,7 @@ namespace SCM2020___Client.Frames.Movement
             //fazer com que filtre dentro do datagrid
             //this.ConsumpterProductToAddDataGrid
             List<ConsumpterProductDataGrid> list = ListConsumpterProductDataGrid;
-            var newList = list.Where(x => (x.Description == TxtProductConsumpterSearch.Text) || (x.Code.ToString() == TxtProductConsumpterSearch.Text));
+            var newList = list.Where(x => (x.Description.Contains(TxtProductConsumpterSearch.Text)) || (x.Code.ToString().Contains(TxtProductConsumpterSearch.Text)));
             this.ConsumpterProductToAddDataGrid.Items.Clear();
             this.ConsumpterProductToAddDataGrid.Items.Refresh();
             foreach (var item in newList)
@@ -331,7 +333,7 @@ namespace SCM2020___Client.Frames.Movement
             {
                 list.Add(item);
             }
-            var newList = list.Where(x => (x.Description == TxtProductConsumpterSearch.Text) || (x.Code.ToString() == TxtProductConsumpterSearch.Text));
+            var newList = list.Where(x => (x.Description.Contains(TxtProductConsumpterSearch.Text) ) || (x.Code.ToString().Contains(TxtProductConsumpterSearch.Text)));
             this.PermanentProductToAddDataGrid.Items.Clear();
             this.PermanentProductToAddDataGrid.Items.Refresh();
             foreach (var item in newList)
