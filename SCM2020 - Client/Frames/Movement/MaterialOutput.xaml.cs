@@ -40,7 +40,7 @@ namespace SCM2020___Client.Frames
         class PermanentProductDataGrid : ProductToOutput
         {
             public string Patrimony { get; set; }
-            public string BtnContent { get; set; } = "Adicionar";
+            public string BtnContent { get  => (QuantityAdded == 1) ?  "Remover": "Adicionar"; }
             public PermanentProductDataGrid()
             {
 
@@ -154,7 +154,6 @@ namespace SCM2020___Client.Frames
                 this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
             }
         }
-
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
@@ -163,7 +162,6 @@ namespace SCM2020___Client.Frames
         {
             //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
         }
-
         private void BtnInformation_Click(object sender, RoutedEventArgs e)
         {
             this.ButtonInformation.IsHitTestVisible = false;
@@ -322,11 +320,11 @@ namespace SCM2020___Client.Frames
             {
                 this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
                 product.QuantityAdded += 1;
-                product.BtnContent = "Remover";
+                //product.BtnContent = "Remover";
             }
             else
             {
-                product.BtnContent = "Adicionar";
+                //product.BtnContent = "Adicionar";
                 product.QuantityAdded -= 1;
                 this.FinalPermanentProductsAddedDataGrid.Items.Remove(product);
             }
@@ -384,7 +382,6 @@ namespace SCM2020___Client.Frames
                 return;
             try
             {
-
                 workOrder = System.Uri.EscapeDataString(workOrder);
 
                 //Check monitoring
