@@ -68,6 +68,7 @@ namespace SCM2020___Client.Frames.Movement
             //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
             //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
+
         private void CheckOS()
         {
             string workorder = OSTextBox.Text;
@@ -77,11 +78,15 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
-
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             if (resultMonitoring.Situation == false)
@@ -104,6 +109,8 @@ namespace SCM2020___Client.Frames.Movement
                 MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-YYYY")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
+        List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
         private void GetProducts(string workorder)
         {
             //FALTA ADICIONAR USERCONTROL DE PRODUTO PERMANENTE!!
@@ -135,6 +142,7 @@ namespace SCM2020___Client.Frames.Movement
                     QuantityAdded = productInputQuantity
                 };
                 this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid);
+                this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
             }
             foreach (var item in outputProducts.PermanentProducts)
             {
@@ -150,8 +158,10 @@ namespace SCM2020___Client.Frames.Movement
                     Quantity = infoProduct.Stock,
                     Patrimony = infoPermanentProduct.Patrimony,
                     QuantityOutput = 1,
+                    //QuantityAdded = 1
                 };
                 this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
+                this.ListPermanentProductDataGrid.Add(permanentProductDataGrid);
             }
             this.ConsumpterProductToAddDataGrid.Items.Refresh();
             this.ConsumpterProductToAddDataGrid.UnselectAll();
