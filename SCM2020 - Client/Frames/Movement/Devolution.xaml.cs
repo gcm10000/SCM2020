@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SCM2020___Client.Frames.Movement
 {
@@ -61,9 +62,10 @@ namespace SCM2020___Client.Frames.Movement
         //    //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
         //    //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         //}
-        private void CheckOS(string workorder)
+        private void RescueData(string workOrder)
         {
-            var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workorder}");
+            workOrder = System.Uri.EscapeDataString(workOrder);
+            var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
 
             Monitoring resultMonitoring;
             try
@@ -83,7 +85,7 @@ namespace SCM2020___Client.Frames.Movement
             if (resultMonitoring.Situation == false)
             {
                 //ABERTA...
-                GetProducts(resultMonitoring.Work_Order);
+                GetProducts(workOrder);
 
                 this.ButtonInformation.IsHitTestVisible = false;
                 this.ButtonPermanentProducts.IsHitTestVisible = true;
@@ -129,7 +131,8 @@ namespace SCM2020___Client.Frames.Movement
                     QuantityOutput = item.Quantity,
                     QuantityAdded = productInputQuantity
                 };
-                this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid);
+                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
+                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
                 this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
             }
             foreach (var item in outputProducts.PermanentProducts)
@@ -151,10 +154,10 @@ namespace SCM2020___Client.Frames.Movement
                 this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
                 this.ListPermanentProductDataGrid.Add(permanentProductDataGrid);
             }
-            this.ConsumpterProductToAddDataGrid.Items.Refresh();
-            this.ConsumpterProductToAddDataGrid.UnselectAll();
-            this.PermanentProductToAddDataGrid.Items.Refresh();
-            this.PermanentProductToAddDataGrid.UnselectAll();
+            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Refresh(); }));
+            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.UnselectAll(); }));
+            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Refresh(); }));
+            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.UnselectAll(); }));
 
         }
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
@@ -240,7 +243,7 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
-            var result = APIClient.PostData(new Uri(Helper.Server, "input/add").ToString(), materialInput, Helper.Authentication);
+            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -322,21 +325,17 @@ namespace SCM2020___Client.Frames.Movement
             this.PermanentProductToAddDataGrid.Items.Refresh();
             this.PermanentProductToAddDataGrid.UnselectAll();
         }
-        private void OSDisableTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             string workorder = OSTextBox.Text;
-            new Task(() => CheckOS(workorder)).Start();
+            new Task(() => RescueData(workorder)).Start();
         }
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 string workorder = OSTextBox.Text;
-                new Task(() => CheckOS(workorder)).Start();
+                new Task(() => RescueData(workorder)).Start();
             }
         }
     }
