@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using Microsoft.AspNetCore.Http;
 using System.Web;
+using ModelsLibraryCore;
 
 
 namespace SCM2020___Server.Controllers
@@ -181,6 +182,10 @@ namespace SCM2020___Server.Controllers
         public string GetPJERJRegisterByUserId(string userId)
         {
             return UserManager.FindUserByIdAsync(userId).PJERJRegistration;
+        }
+        public InfoUser GetInfoUserByRegister(string register)
+        {
+            return UserManager.FindByPJERJRegistrationAsync(register);
         }
         //[HttpDelete("Delete")]
         //[Authorize(Roles = Roles.SCM)]

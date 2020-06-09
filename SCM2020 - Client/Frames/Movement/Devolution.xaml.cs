@@ -71,6 +71,8 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
+
+                this.RegistrationApplicantTextBox.Text = 
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
@@ -87,14 +89,23 @@ namespace SCM2020___Client.Frames.Movement
                 //ABERTA...
                 GetProducts(workOrder);
 
-                this.ButtonInformation.IsHitTestVisible = false;
-                this.ButtonPermanentProducts.IsHitTestVisible = true;
-                this.ButtonFinish.IsHitTestVisible = true;
+                this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
+                this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
+                this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
+                
+                this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
+                this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
+                this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
+                this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
 
-                this.InfoScrollViewer.Visibility = Visibility.Visible;
-                this.InfoDockPanel.Visibility = Visibility.Visible;
-                this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-                this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+                //this.ButtonInformation.IsHitTestVisible = false;
+                //this.ButtonPermanentProducts.IsHitTestVisible = true;
+                //this.ButtonFinish.IsHitTestVisible = true;
+
+                //this.InfoScrollViewer.Visibility = Visibility.Visible;
+                //this.InfoDockPanel.Visibility = Visibility.Visible;
+                //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
+                //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -151,7 +162,7 @@ namespace SCM2020___Client.Frames.Movement
                     QuantityOutput = 1,
                     //QuantityAdded = 1
                 };
-                this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
+                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
                 this.ListPermanentProductDataGrid.Add(permanentProductDataGrid);
             }
             this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Refresh(); }));
