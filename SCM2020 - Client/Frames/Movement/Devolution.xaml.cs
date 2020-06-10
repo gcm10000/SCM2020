@@ -93,7 +93,6 @@ namespace SCM2020___Client.Frames.Movement
             {
                 //ABERTA...
                 GetProducts(workOrder);
-                //MEXER NO SERVIDOR...
                 MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
                 this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1);
                 
