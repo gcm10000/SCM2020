@@ -91,7 +91,7 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Existem itens que estão na entrada e que não pertencem a saída.");
             var allMatches2 = materialInput.ConsumptionProducts
                 .Where(x => output.ConsumptionProducts
-                .Any(y => x.Quantity > y.Quantity));
+                .Any(y => x.Quantity.CompareTo(y.Quantity) > 0));
             if (allMatches2.Count() > 0)
             {
                 string names = string.Empty;
@@ -104,13 +104,13 @@ namespace SCM2020___Server.Controllers
             }
 
             context.MaterialInput.Add(materialInput);
-            //Adicionar produtos
-            foreach (var item in materialInput.ConsumptionProducts)
-            {
-                var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
-                product.Stock += item.Quantity;
-                context.ConsumptionProduct.Update(product);
-            }
+            if (materialInput.ConsumptionProducts != null)
+                foreach (var item in materialInput.ConsumptionProducts)
+                {
+                    var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
+                    product.Stock += item.Quantity;
+                    context.ConsumptionProduct.Update(product);
+                }
 
             if (materialInput.PermanentProducts != null)
                 foreach (var p in materialInput.PermanentProducts)

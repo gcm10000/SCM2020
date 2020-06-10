@@ -13,12 +13,10 @@ namespace ModelsLibraryCore
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
             this.DocDate = input.DocDate;
-            //this.EmployeeId = input.EmployeeId;
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
             this.PermanentProducts = input.PermanentProducts;
             this.Regarding = input.Regarding;
-            //this.SCMEmployeeId = UserId;
             this.WorkOrder = input.WorkOrder;
         }
         /// <summary>
