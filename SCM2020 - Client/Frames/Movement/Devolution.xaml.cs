@@ -126,6 +126,9 @@ namespace SCM2020___Client.Frames.Movement
             ListConsumpterProductDataGrid.Clear();
             ListPermanentProductDataGrid.Clear();
             
+            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
+            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
+
             foreach (var item in outputProducts.ConsumptionProducts)
             {
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
@@ -152,9 +155,7 @@ namespace SCM2020___Client.Frames.Movement
                     
                 };
 
-                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
-                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
                 this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
             }
             foreach (var item in outputProducts.PermanentProducts)
@@ -183,8 +184,6 @@ namespace SCM2020___Client.Frames.Movement
 
             try
             {
-
-
                 MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
                 this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
 
@@ -393,9 +392,14 @@ namespace SCM2020___Client.Frames.Movement
             this.PermanentProductToAddDataGrid.Items.Refresh();
             this.PermanentProductToAddDataGrid.UnselectAll();
         }
+        string oldOS = string.Empty;
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             string workorder = OSTextBox.Text;
+            if (oldOS == workorder)
+                return;
+            else
+                oldOS = workorder;
             new Task(() => RescueData(workorder)).Start();
         }
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -403,6 +407,10 @@ namespace SCM2020___Client.Frames.Movement
             if (e.Key == Key.Enter)
             {
                 string workorder = OSTextBox.Text;
+                if (oldOS == workorder)
+                    return;
+                else
+                    oldOS = workorder;
                 new Task(() => RescueData(workorder)).Start();
             }
         }
