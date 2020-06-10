@@ -92,9 +92,18 @@ namespace SCM2020___Client.Frames.Movement
             if (resultMonitoring.Situation == false)
             {
                 //ABERTA...
+
                 GetProducts(workOrder);
-                MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-                this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1);
+                try
+                {
+
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+
+                }
+                materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
                 
                 this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
                 this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
@@ -104,22 +113,6 @@ namespace SCM2020___Client.Frames.Movement
                 this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
                 this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
                 this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
-                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => 
-                {
-                    foreach (var item in materialInput.ConsumptionProducts)
-                    {
-                        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
-                        {
-                            Id = item.ProductId,
-                            Code = infoProduct.Code,
-                            Description = infoProduct.Description,
-                            Quantity = infoProduct.Stock,
-                            QuantityAdded = item.Quantity,
-                        };
-                        this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
-                    }
-                }));
 
             }
             else
@@ -161,6 +154,7 @@ namespace SCM2020___Client.Frames.Movement
                     QuantityAdded = productInputQuantity,
                     
                 };
+
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
                 this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
@@ -189,6 +183,47 @@ namespace SCM2020___Client.Frames.Movement
             this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.UnselectAll(); }));
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Refresh(); }));
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.UnselectAll(); }));
+
+            MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+
+            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                this.FinalConsumpterProductsAddedDataGrid.Items.Clear();
+                foreach (var item in materialInput.ConsumptionProducts)
+                {
+                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+                    {
+                        Id = item.ProductId,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Quantity = infoProduct.Stock,
+                        QuantityAdded = item.Quantity,
+                        //QuantityOutput
+                    };
+                    this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                }
+            }));
+            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                this.FinalPermanentProductsAddedDataGrid.Items.Clear();
+                foreach (var item in materialInput.PermanentProducts)
+                {
+                    var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
+                    {
+                        Id = item.ProductId,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Quantity = infoProduct.Stock,
+                        Patrimony = infoPermanentProduct.Patrimony,
+                        //QuantityOutput = 1,
+                        QuantityAdded = 1,
+                    };
+                    this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                }
+            }));
 
         }
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
