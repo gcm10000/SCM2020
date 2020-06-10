@@ -372,6 +372,7 @@ namespace SCM2020___Client.Frames.Movement
             }
             foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
             {
+                //MEXER
                 if (!materialInput.PermanentProducts.Any(x => x.ProductId == item.Id))
                 {
                     AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()

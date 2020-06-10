@@ -223,7 +223,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
-                                        <Button x:Name="BtnAdd" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                        <Button x:Name="BtnAdded" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
