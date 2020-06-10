@@ -337,16 +337,24 @@ namespace SCM2020___Client.Frames.Movement
         private void UpdateInput()
         {
             MaterialInput materialInput = this.previousMaterialInput;
-            materialInput = AddProducts(materialInput);
+            //materialInput = AddProducts(materialInput);
 
-            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+            //if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+            //    materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
+            //else
+            //    materialInput.ConsumptionProducts = null;
+            //if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+            //    materialInput.PermanentProducts = new List<AuxiliarPermanent>();
+            //else
+            //    materialInput.PermanentProducts = null;
+            if ((FinalConsumpterProductsAddedDataGrid.Items.Count > 0) && (materialInput.ConsumptionProducts == null))
+            {
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
-            else
-                materialInput.ConsumptionProducts = null;
-            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+            }
+            if ((FinalPermanentProductsAddedDataGrid.Items.Count > 0) && (materialInput.PermanentProducts == null))
+            {
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
-            else
-                materialInput.PermanentProducts = null;
+            }
             foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
             {
                 if (materialInput.ConsumptionProducts.Any(x => x.ProductId == item.Id))

@@ -113,7 +113,6 @@ namespace SCM2020___Client.Frames
                     index = products.FindIndex(x => x.Id == singleProduct.Id);
 
                 }).Start();
-
             }
 
             var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
