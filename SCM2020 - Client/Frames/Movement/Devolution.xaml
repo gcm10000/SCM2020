@@ -103,7 +103,7 @@
                         <DataGridTextColumn Header=" Quantidade Retirada" Binding="{Binding QuantityOutput}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -167,7 +167,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
-                                        <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                        <Button x:Name="BtnAddRemovePermanent" Cursor="Hand" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -217,7 +217,7 @@
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -248,7 +248,7 @@
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
                                         <StackPanel Width="150" Orientation="Vertical">
-                                            <Button x:Name="BtnAdd" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                            <Button x:Name="BtnAddRemovePermanent" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                         </StackPanel>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
