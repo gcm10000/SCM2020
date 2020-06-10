@@ -89,9 +89,22 @@ namespace SCM2020___Server.Controllers
                 .Any(y => y.ProductId == x.ProductId));
             if (!allMatches)
                 return BadRequest("Existem itens que estão na entrada e que não pertencem a saída.");
-            var allMatches2 = materialInput.ConsumptionProducts
-                .Where(x => output.ConsumptionProducts
-                .Any(y => x.Quantity.CompareTo(y.Quantity) > 0));
+            //var allMatches2 = materialInput.ConsumptionProducts
+            //    .Where(x => output.ConsumptionProducts
+            //    .Any(y => x.Quantity.CompareTo(y.Quantity) > 0));
+
+            var allMatches2 = new List<AuxiliarConsumption>();
+            foreach (var item in materialInput.ConsumptionProducts)
+            {
+                var y = output.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
+                if (item.Quantity.CompareTo(y.Quantity) > 0)
+                {
+                    if (item.Quantity.CompareTo(y.Quantity) > 0)
+                    {
+                        allMatches2.Add(item);
+                    }
+                }
+            }
             if (allMatches2.Count() > 0)
             {
                 string names = string.Empty;
