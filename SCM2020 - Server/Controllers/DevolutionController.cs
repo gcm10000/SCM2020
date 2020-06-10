@@ -96,6 +96,9 @@ namespace SCM2020___Server.Controllers
             var allMatches2 = new List<AuxiliarConsumption>();
             foreach (var item in materialInput.ConsumptionProducts)
             {
+                //Aqui só vai mostrar o PRIMEIRO registro do produto.
+                //Se por acaso houver mais de um registro do MESMO produto, não será contabilizado.
+                
                 var y = output.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
                 if (item.Quantity.CompareTo(y.Quantity) > 0)
                 {
