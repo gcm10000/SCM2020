@@ -41,6 +41,7 @@ namespace SCM2020___Client.Frames.Movement
             public string Patrimony { get; set; }
             public string BtnContent { get => (QuantityAdded == 1) ? "Remover" : "Adicionar"; }
         }
+        bool previousDevolutionExists = false;
         public Devolution()
         {
             InitializeComponent();
@@ -180,6 +181,7 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
+                previousDevolutionExists = true;
                 this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
 
                 this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
@@ -214,8 +216,8 @@ namespace SCM2020___Client.Frames.Movement
                             Description = infoProduct.Description,
                             Quantity = infoProduct.Stock,
                             Patrimony = infoPermanentProduct.Patrimony,
-                        //QuantityOutput = 1,
-                        QuantityAdded = 1,
+                            //QuantityOutput = 1,
+                            QuantityAdded = 1,
                         };
                         this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
                     }
@@ -223,7 +225,13 @@ namespace SCM2020___Client.Frames.Movement
             }
             catch (System.Net.Http.HttpRequestException)
             {
+                previousDevolutionExists = false;
                 //DOESNOT EXIST INPUT (DEVOLUTION) REFERENCE FOR WORKORDER
+            }
+            catch (Exception ex)
+            {
+                previousDevolutionExists = false;
+                MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
