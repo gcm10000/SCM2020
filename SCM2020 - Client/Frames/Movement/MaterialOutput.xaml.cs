@@ -36,6 +36,9 @@ namespace SCM2020___Client.Frames
             public double QuantityAdded { get; set; }
             public double Quantity { get; set; }
             public string Description { get; set; }
+            public bool NewProduct { get; set; }
+            public bool ProductChanged { get; set; }
+            public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
         }
         class PermanentProductDataGrid : ProductToOutput
         {
@@ -91,6 +94,8 @@ namespace SCM2020___Client.Frames
             //};
             //PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
         }
+        private bool previousOutputExists = false;
+        private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
         private void ConsumpterProductSearch()
         {
             string textBoxValue = string.Empty;
@@ -132,7 +137,7 @@ namespace SCM2020___Client.Frames
                     Id = item.Id,
                     Code = item.Code,
                     Description = item.Description,
-                    Quantity = item.Stock
+                    Quantity = item.Stock,
                 };
                 this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
 
@@ -225,14 +230,19 @@ namespace SCM2020___Client.Frames
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
+            if (previousOutputExists)
+                UpdateOutput();
+            else
+                AddOutput();
+        }
+        private void AddOutput()
+        {
             //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
             //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
             DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
 
             var register = ApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
-            //var userSCMId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{Helper.SCMRegistration}").ToString());
-
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
             Monitoring monitoring = new Monitoring()
@@ -253,7 +263,7 @@ namespace SCM2020___Client.Frames
                 WorkOrder = OSTextBox.Text,
                 MovingDate = dateTime,
                 ServiceLocation = ServiceLocalizationTextBox.Text,
-                
+
             };
 
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
@@ -288,8 +298,7 @@ namespace SCM2020___Client.Frames
                 materialOutput.PermanentProducts.Add(auxiliarPermanent);
             }
 
-
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
@@ -301,6 +310,9 @@ namespace SCM2020___Client.Frames
                 var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2);
             }).Wait();
+        }
+        private void UpdateOutput()
+        {
 
         }
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
@@ -396,6 +408,8 @@ namespace SCM2020___Client.Frames
                 }
                 //ID -> MATRÍCULA
                 var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                previousOutputExists = true;
+                this.previousMaterialOutput = materialOutput;
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
                 this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
 
@@ -412,7 +426,8 @@ namespace SCM2020___Client.Frames
                         QuantityAdded = item.Quantity,
                         Description = consumpterProduct.Description,
                         Code = consumpterProduct.Code,
-                        Quantity = consumpterProduct.Stock
+                        Quantity = consumpterProduct.Stock,
+                        ConsumptionProduct = item
                     };
                     this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { FinalConsumpterProductsAddedDataGrid.Items.Add(productToOutput); }));
                 }
