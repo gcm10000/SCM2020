@@ -99,7 +99,12 @@ namespace SCM2020___Server.Controllers
                 //Aqui só vai mostrar o PRIMEIRO registro do produto.
                 //Se por acaso houver mais de um registro do MESMO produto, não será contabilizado.
                 
-                var y = output.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
+                var consumptionProducts = output.ConsumptionProducts.Where(x => x.ProductId == item.ProductId);
+                double totalQuantity = 0.00d;
+                foreach (var product in consumptionProducts)
+                {
+                    totalQuantity += product.Quantity;
+                }
                 if (item.Quantity.CompareTo(y.Quantity) > 0)
                 {
                     allMatches2.Add(item);
