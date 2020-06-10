@@ -96,11 +96,13 @@ namespace SCM2020___Server.Controllers
             var allMatches2 = new List<AuxiliarConsumption>();
             foreach (var item in materialInput.ConsumptionProducts)
             {
-                //Aqui só vai mostrar o PRIMEIRO registro do produto.
+                //Utilizando o método linq first irá mostrar somente o PRIMEIRO registro do produto.
                 //Se por acaso houver mais de um registro do MESMO produto, não será contabilizado.
                 
                 var consumptionProducts = output.ConsumptionProducts.Where(x => x.ProductId == item.ProductId);
                 double totalQuantity = 0.00d;
+                //Se incrementar todas quantidades dentro da variável totalQuantity, o problema será erradicado
+                //baseando-se em todos os registros do MESMO produto.
                 foreach (var product in consumptionProducts)
                 {
                     totalQuantity += product.Quantity;
