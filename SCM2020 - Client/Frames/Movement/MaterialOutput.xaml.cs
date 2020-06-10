@@ -214,7 +214,7 @@ namespace SCM2020___Client.Frames
                 FinalConsumpterProductsAddedDataGrid.Items.Refresh();
                 if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
                 {
-                    product.NewProduct = button.Name == "BtnToAdd";
+                    product.NewProduct = button.Name == "BtnAdd";
                     FinalConsumpterProductsAddedDataGrid.Items.Add(product);
                 }
                 else
