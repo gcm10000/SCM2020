@@ -52,8 +52,6 @@
                         <ComboBoxItem>Transferência Interna</ComboBoxItem>
                         <ComboBoxItem>Outra Comarca</ComboBoxItem>
                     </ComboBox>
-                    <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <DatePicker x:Name="OSDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
                     <TextBlock Text="Número da Matrícula" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="RegisterApplicantTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>

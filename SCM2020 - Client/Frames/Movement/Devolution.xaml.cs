@@ -42,6 +42,7 @@ namespace SCM2020___Client.Frames.Movement
             public string BtnContent { get => (QuantityAdded == 1) ? "Remover" : "Adicionar"; }
         }
         bool previousDevolutionExists = false;
+        MaterialInput previousMaterialInput = null;
         public Devolution()
         {
             InitializeComponent();
@@ -181,7 +182,8 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
-                previousDevolutionExists = true;
+                this.previousDevolutionExists = true;
+                this.previousMaterialInput = materialInput;
                 this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
 
                 this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
@@ -225,8 +227,8 @@ namespace SCM2020___Client.Frames.Movement
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                previousDevolutionExists = false;
                 //DOESNOT EXIST INPUT (DEVOLUTION) REFERENCE FOR WORKORDER
+                previousDevolutionExists = false;
             }
             catch (Exception ex)
             {
@@ -284,14 +286,39 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateOS = OSDatePicker.SelectedDate ?? DateTime.Now;
+            if (previousDevolutionExists)
+                UpdateInput();
+            else
+                AddInput();
+
+        }
+        private void AddInput()
+        {
             MaterialInput materialInput = new MaterialInput()
             {
-                MovingDate = dateOS,
                 Regarding = (Regarding)ReferenceComboBox.SelectedIndex,
                 WorkOrder = OSTextBox.Text,
+                //DocDate não deveria existir. Tratamentos diretos sobre ordem de serviço constitui-se na classe Monitoring.
                 DocDate = DateTime.Now,
+                //Data da criação de objeto
+                //ou seja, da primeira movimentação
+                MovingDate = DateTime.Now,
             };
+            AddProducts(materialInput);
+            //TASK...
+            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void UpdateInput()
+        {
+            MaterialInput materialInput = this.previousMaterialInput;
+            materialInput = AddProducts(materialInput);
+
+            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update").ToString(), this.previousMaterialInput, Helper.Authentication) ;
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private ModelsLibraryCore.MaterialInput AddProducts(ModelsLibraryCore.MaterialInput materialInput)
+        {
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
             if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
@@ -317,8 +344,7 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
-            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            return materialInput;
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
