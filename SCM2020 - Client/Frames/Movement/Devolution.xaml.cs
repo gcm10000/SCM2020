@@ -44,11 +44,6 @@ namespace SCM2020___Client.Frames.Movement
         public Devolution()
         {
             InitializeComponent();
-            //Fill combobox
-            ReferenceComboBox.Items.Add("Não utilizado");
-            ReferenceComboBox.Items.Add("Transferência Interna");
-            ReferenceComboBox.Items.Add("Outra Comarca");
-
         }
         //private void SearchOSButton_Click(object sender, RoutedEventArgs e)
         //{
