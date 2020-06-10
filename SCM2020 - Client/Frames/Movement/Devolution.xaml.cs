@@ -304,21 +304,7 @@ namespace SCM2020___Client.Frames.Movement
                 //ou seja, da primeira movimentação
                 MovingDate = DateTime.Now,
             };
-            AddProducts(materialInput);
-            //TASK...
-            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private void UpdateInput()
-        {
-            MaterialInput materialInput = this.previousMaterialInput;
-            materialInput = AddProducts(materialInput);
 
-            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update").ToString(), this.previousMaterialInput, Helper.Authentication) ;
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private ModelsLibraryCore.MaterialInput AddProducts(ModelsLibraryCore.MaterialInput materialInput)
-        {
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
             if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
@@ -344,6 +330,57 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
+            //TASK...
+            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void UpdateInput()
+        {
+            MaterialInput materialInput = this.previousMaterialInput;
+            materialInput = AddProducts(materialInput);
+
+            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+                materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
+            else
+                materialInput.ConsumptionProducts = null;
+            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+                materialInput.PermanentProducts = new List<AuxiliarPermanent>();
+            else
+                materialInput.PermanentProducts = null;
+            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
+            {
+                if (materialInput.ConsumptionProducts.Any(x => x.ProductId == item.Id))
+                {
+                    AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
+                    {
+                        Date = DateTime.Now,
+                        ProductId = item.Id,
+                        Quantity = item.QuantityAdded,
+                        SCMEmployeeId = Helper.SCMId,
+                    };
+                    materialInput.ConsumptionProducts.Add(auxiliarConsumption);
+                }
+            }
+            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+            {
+                if (!materialInput.PermanentProducts.Any(x => x.ProductId == item.Id))
+                {
+                    AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                    {
+                        Date = DateTime.Now,
+                        ProductId = item.Id,
+                        SCMEmployeeId = Helper.SCMId
+                    };
+                    materialInput.PermanentProducts.Add(auxiliarPermanent);
+                }
+            }
+
+            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update").ToString(), this.previousMaterialInput, Helper.Authentication) ;
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private ModelsLibraryCore.MaterialInput AddProducts(ModelsLibraryCore.MaterialInput materialInput)
+        {
+
             return materialInput;
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
