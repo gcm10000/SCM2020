@@ -102,9 +102,6 @@ namespace SCM2020___Client.Frames.Movement
                 {
 
                 }
-                materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-                this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
-                
                 this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
                 this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
                 this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
@@ -184,47 +181,56 @@ namespace SCM2020___Client.Frames.Movement
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Refresh(); }));
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.UnselectAll(); }));
 
-            MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-
-            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            try
             {
-                this.FinalConsumpterProductsAddedDataGrid.Items.Clear();
-                foreach (var item in materialInput.ConsumptionProducts)
+
+
+                MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
+                this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
+
+                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
-                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+                    this.FinalConsumpterProductsAddedDataGrid.Items.Clear();
+                    foreach (var item in materialInput.ConsumptionProducts)
                     {
-                        Id = item.ProductId,
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Quantity = infoProduct.Stock,
-                        QuantityAdded = item.Quantity,
+                        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+                        {
+                            Id = item.ProductId,
+                            Code = infoProduct.Code,
+                            Description = infoProduct.Description,
+                            Quantity = infoProduct.Stock,
+                            QuantityAdded = item.Quantity,
                         //QuantityOutput
                     };
-                    this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
-                }
-            }));
-            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-            {
-                this.FinalPermanentProductsAddedDataGrid.Items.Clear();
-                foreach (var item in materialInput.PermanentProducts)
+                        this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                    }
+                }));
+                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
-                    var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
+                    this.FinalPermanentProductsAddedDataGrid.Items.Clear();
+                    foreach (var item in materialInput.PermanentProducts)
                     {
-                        Id = item.ProductId,
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Quantity = infoProduct.Stock,
-                        Patrimony = infoPermanentProduct.Patrimony,
+                        var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
+                        {
+                            Id = item.ProductId,
+                            Code = infoProduct.Code,
+                            Description = infoProduct.Description,
+                            Quantity = infoProduct.Stock,
+                            Patrimony = infoPermanentProduct.Patrimony,
                         //QuantityOutput = 1,
                         QuantityAdded = 1,
-                    };
-                    this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
-                }
-            }));
-
+                        };
+                        this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                    }
+                }));
+            }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                //DOESNOT EXIST INPUT (DEVOLUTION) REFERENCE FOR WORKORDER
+            }
         }
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
         {
