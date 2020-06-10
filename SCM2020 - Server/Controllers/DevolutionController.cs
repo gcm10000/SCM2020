@@ -105,7 +105,7 @@ namespace SCM2020___Server.Controllers
                 {
                     totalQuantity += product.Quantity;
                 }
-                if (item.Quantity.CompareTo(y.Quantity) > 0)
+                if (item.Quantity.CompareTo(totalQuantity) > 0)
                 {
                     allMatches2.Add(item);
                 }
