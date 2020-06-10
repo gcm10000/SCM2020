@@ -51,9 +51,10 @@
                     <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="ApplicantTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Tipo de Saída" FontSize="18"></TextBlock>
-                    <ComboBox Width="188" x:Name="OutputTypeComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged"></ComboBox>
-                    <TextBlock Margin="0 20 0 5" Text="Data da Movimentação" FontSize="18"></TextBlock>
-                    <DatePicker x:Name="MovingDateDatePicker" Style="{x:Null}" SelectedDate="{x:Static sys:DateTime.Now}" Height="30" FontSize="16"></DatePicker>
+                    <ComboBox Width="188" SelectedIndex="0" x:Name="OutputTypeComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged">
+                        <ComboBoxItem>Uso Interno</ComboBoxItem>
+                        <ComboBoxItem>Cautela</ComboBoxItem>
+                    </ComboBox>
                     <TextBlock Margin="0 20 0 5" Text="Local do Serviço" FontSize="18"></TextBlock>
                     <TextBox x:Name="ServiceLocalizationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 </StackPanel>

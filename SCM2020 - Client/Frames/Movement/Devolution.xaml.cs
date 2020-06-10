@@ -35,6 +35,9 @@ namespace SCM2020___Client.Frames.Movement
             public double QuantityAdded { get; set; }
             public double Quantity { get; set; }
             public string Description { get; set; }
+            public bool NewProduct { get; set; }
+            public bool ProductChanged { get; set; }
+            public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
         }
         class PermanentProductDataGrid : ConsumpterProductDataGrid
         {
@@ -149,7 +152,8 @@ namespace SCM2020___Client.Frames.Movement
                     Quantity = infoProduct.Stock,
                     QuantityOutput = item.Quantity,
                     QuantityAdded = productInputQuantity,
-                    
+                    NewProduct = false,
+                    ConsumptionProduct = item
                 };
 
                 this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
@@ -169,6 +173,7 @@ namespace SCM2020___Client.Frames.Movement
                     Quantity = infoProduct.Stock,
                     Patrimony = infoPermanentProduct.Patrimony,
                     QuantityOutput = 1,
+                    NewProduct = false
                     //QuantityAdded = 1
                 };
                 this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
@@ -199,8 +204,10 @@ namespace SCM2020___Client.Frames.Movement
                             Description = infoProduct.Description,
                             Quantity = infoProduct.Stock,
                             QuantityAdded = item.Quantity,
-                        //QuantityOutput
-                    };
+                            NewProduct = false,
+                            ConsumptionProduct = item
+                            //QuantityOutput
+                        };
                         this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
                     }
                 }));
@@ -337,16 +344,6 @@ namespace SCM2020___Client.Frames.Movement
         private void UpdateInput()
         {
             MaterialInput materialInput = this.previousMaterialInput;
-            //materialInput = AddProducts(materialInput);
-
-            //if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
-            //    materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
-            //else
-            //    materialInput.ConsumptionProducts = null;
-            //if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
-            //    materialInput.PermanentProducts = new List<AuxiliarPermanent>();
-            //else
-            //    materialInput.PermanentProducts = null;
             if ((FinalConsumpterProductsAddedDataGrid.Items.Count > 0) && (materialInput.ConsumptionProducts == null))
             {
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
@@ -357,7 +354,7 @@ namespace SCM2020___Client.Frames.Movement
             }
             foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
             {
-                if (materialInput.ConsumptionProducts.Any(x => x.ProductId == item.Id))
+                if (item.NewProduct)
                 {
                     AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                     {
@@ -367,6 +364,10 @@ namespace SCM2020___Client.Frames.Movement
                         SCMEmployeeId = Helper.SCMId,
                     };
                     materialInput.ConsumptionProducts.Add(auxiliarConsumption);
+                }
+                if (item.ProductChanged)
+                {
+                    item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
             foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
@@ -382,14 +383,8 @@ namespace SCM2020___Client.Frames.Movement
                     materialInput.PermanentProducts.Add(auxiliarPermanent);
                 }
             }
-
-            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update").ToString(), this.previousMaterialInput, Helper.Authentication) ;
+            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private ModelsLibraryCore.MaterialInput AddProducts(ModelsLibraryCore.MaterialInput materialInput)
-        {
-
-            return materialInput;
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -397,6 +392,7 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
+            var button = ((FrameworkElement)sender);
             var product = ((FrameworkElement)sender).DataContext as ConsumpterProductDataGrid;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
@@ -407,13 +403,22 @@ namespace SCM2020___Client.Frames.Movement
                 this.ConsumpterProductToAddDataGrid.Items.Refresh();
                 this.FinalConsumpterProductsAddedDataGrid.Items.Refresh();
                 if (!this.FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
+                {
+                    product.NewProduct = button.Name == "BtnToAdd";
                     this.FinalConsumpterProductsAddedDataGrid.Items.Add(product);
+                }
                 else
                 {
                     if (dialog.QuantityAdded == 0)
+                    {
+                        this.previousMaterialInput.ConsumptionProducts.Remove(product.ConsumptionProduct);
                         this.FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
+                    }
                     else
+                    {
                         product.QuantityAdded = dialog.QuantityAdded;
+                        product.ProductChanged = true;
+                    }
                 }
                 this.ConsumpterProductToAddDataGrid.UnselectAll();
                 this.FinalConsumpterProductsAddedDataGrid.UnselectAll();
