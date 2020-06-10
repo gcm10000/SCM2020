@@ -99,10 +99,7 @@ namespace SCM2020___Server.Controllers
                 var y = output.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
                 if (item.Quantity.CompareTo(y.Quantity) > 0)
                 {
-                    if (item.Quantity.CompareTo(y.Quantity) > 0)
-                    {
-                        allMatches2.Add(item);
-                    }
+                    allMatches2.Add(item);
                 }
             }
             if (allMatches2.Count() > 0)
