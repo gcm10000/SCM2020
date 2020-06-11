@@ -346,6 +346,7 @@ namespace SCM2020___Client.Frames.Movement
             {
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
             }
+            var listProduct = materialInput.ConsumptionProducts.ToList();
             foreach (ConsumpterProductDataGrid item in ConsumpterProductInput)
             {
                 if (item.NewProduct)
@@ -357,13 +358,16 @@ namespace SCM2020___Client.Frames.Movement
                         Quantity = item.QuantityAdded,
                         SCMEmployeeId = Helper.SCMId,
                     };
-                    materialInput.ConsumptionProducts.Add(auxiliarConsumption);
+                    item.NewProduct = false;
+                    listProduct.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
+                    listProduct[ConsumpterProductInput.IndexOf(item)].Quantity = 
                     item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
+            materialInput.ConsumptionProducts = listProduct;
             foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
             {
                 //MEXER
