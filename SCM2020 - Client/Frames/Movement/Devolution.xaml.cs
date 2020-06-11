@@ -94,14 +94,6 @@ namespace SCM2020___Client.Frames.Movement
                 //ABERTA...
 
                 GetProducts(workOrder);
-                try
-                {
-
-                }
-                catch (System.Net.Http.HttpRequestException)
-                {
-
-                }
                 this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
                 this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
                 this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
@@ -209,6 +201,7 @@ namespace SCM2020___Client.Frames.Movement
                             //QuantityOutput
                         };
                         this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                        ConsumpterProductInput.Add(consumpterProductDataGrid);
                     }
                 }));
                 this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
@@ -391,6 +384,7 @@ namespace SCM2020___Client.Frames.Movement
         {
 
         }
+        List<ConsumpterProductDataGrid> ConsumpterProductInput = new List<ConsumpterProductDataGrid>();
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
@@ -399,6 +393,7 @@ namespace SCM2020___Client.Frames.Movement
 
             if (dialog.ShowDialog() == true)
             {
+                var productInConsumpterProductInput = ConsumpterProductInput.Single(x => x == product);
                 product.QuantityAdded = dialog.QuantityAdded;
                 //int index = ProductToAddDataGrid.SelectedIndex;
                 this.ConsumpterProductToAddDataGrid.Items.Refresh();
@@ -407,12 +402,14 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     product.NewProduct = button.Name == "BtnToAdd";
                     this.FinalConsumpterProductsAddedDataGrid.Items.Add(product);
+                    ConsumpterProductInput.Add(product);
                 }
                 else
                 {
                     if (dialog.QuantityAdded == 0)
                     {
                         this.previousMaterialInput.ConsumptionProducts.Remove(product.ConsumptionProduct);
+                        //ConsumpterProductInput.Remove(product);
                         this.FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
                     }
                     else
@@ -420,6 +417,7 @@ namespace SCM2020___Client.Frames.Movement
                         product.QuantityAdded = dialog.QuantityAdded;
                         product.ProductChanged = true;
                     }
+                    productInConsumpterProductInput.QuantityAdded = product.QuantityAdded;
                 }
                 this.ConsumpterProductToAddDataGrid.UnselectAll();
                 this.FinalConsumpterProductsAddedDataGrid.UnselectAll();

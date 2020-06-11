@@ -199,6 +199,8 @@ namespace SCM2020___Client.Frames
             this.FinalProductsDockPanel.Visibility = Visibility.Visible;
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
+        List<ProductToOutput> FinalConsumpterProductsAdded = new List<ProductToOutput>();
+
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
@@ -216,6 +218,7 @@ namespace SCM2020___Client.Frames
                 {
                     product.NewProduct = button.Name == "BtnAdd";
                     FinalConsumpterProductsAddedDataGrid.Items.Add(product);
+                    FinalConsumpterProductsAdded.Add(product);
                 }
                 else
                 {
@@ -223,6 +226,7 @@ namespace SCM2020___Client.Frames
                     {
                         this.previousMaterialOutput.ConsumptionProducts.Remove(product.ConsumptionProduct);
                         FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
+                        //FinalConsumpterProductsAdded.Remove(product);
                     }
                     else
                     {
@@ -484,6 +488,7 @@ namespace SCM2020___Client.Frames
                         ConsumptionProduct = item
                     };
                     this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { FinalConsumpterProductsAddedDataGrid.Items.Add(productToOutput); }));
+                    FinalConsumpterProductsAdded.Add(productToOutput);
                 }
                 foreach (var item in materialOutput.PermanentProducts)
                 {
