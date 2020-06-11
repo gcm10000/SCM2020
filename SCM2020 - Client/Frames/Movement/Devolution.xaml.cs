@@ -200,7 +200,8 @@ namespace SCM2020___Client.Frames.Movement
                             ConsumptionProduct = item
                             //QuantityOutput
                         };
-                        this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+                        if (item.Quantity != 0)
+                            this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
                         ConsumpterProductInput.Add(consumpterProductDataGrid);
                     }
                 }));
@@ -345,7 +346,7 @@ namespace SCM2020___Client.Frames.Movement
             {
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
             }
-            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
+            foreach (ConsumpterProductDataGrid item in ConsumpterProductInput)
             {
                 if (item.NewProduct)
                 {
@@ -390,10 +391,11 @@ namespace SCM2020___Client.Frames.Movement
             var button = ((FrameworkElement)sender);
             var product = ((FrameworkElement)sender).DataContext as ConsumpterProductDataGrid;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
-
             if (dialog.ShowDialog() == true)
             {
-                var productInConsumpterProductInput = ConsumpterProductInput.Single(x => x == product);
+
+                //if (button.Name != "BtnToAdd")
+                //    productInConsumpterProductInput = ConsumpterProductInput.Single(x => x == product);
                 product.QuantityAdded = dialog.QuantityAdded;
                 //int index = ProductToAddDataGrid.SelectedIndex;
                 this.ConsumpterProductToAddDataGrid.Items.Refresh();
@@ -408,16 +410,17 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     if (dialog.QuantityAdded == 0)
                     {
-                        this.previousMaterialInput.ConsumptionProducts.Remove(product.ConsumptionProduct);
+                        //this.previousMaterialInput.ConsumptionProducts.Remove(product.ConsumptionProduct);
                         //ConsumpterProductInput.Remove(product);
                         this.FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
                     }
                     else
                     {
                         product.QuantityAdded = dialog.QuantityAdded;
-                        product.ProductChanged = true;
                     }
-                    productInConsumpterProductInput.QuantityAdded = product.QuantityAdded;
+                    product.ProductChanged = true;
+                    //if (productInConsumpterProductInput != null)
+                    //   productInConsumpterProductInput.QuantityAdded = product.QuantityAdded;
                 }
                 this.ConsumpterProductToAddDataGrid.UnselectAll();
                 this.FinalConsumpterProductsAddedDataGrid.UnselectAll();
@@ -425,7 +428,7 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            //e.Cancel = true;
         }
         private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
         {

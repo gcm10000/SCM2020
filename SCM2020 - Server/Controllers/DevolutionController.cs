@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using SCM2020___Server.Extensions;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SCM2020___Server.Controllers
 {
@@ -215,6 +216,12 @@ namespace SCM2020___Server.Controllers
                     productModify.Stock += newest - oldder;
                     context.ConsumptionProduct.Update(productModify);
                 }
+            }
+
+            //check quantity equals zero
+            foreach (var productZero in devolution.ConsumptionProducts.Where(x => x.Quantity == 0))
+            {
+                devolution.ConsumptionProducts.Remove(productZero);
             }
             context.MaterialInput.Update(devolution);
             await context.SaveChangesAsync();
