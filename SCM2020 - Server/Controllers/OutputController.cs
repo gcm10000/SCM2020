@@ -203,7 +203,7 @@ namespace SCM2020___Server.Controllers
             {
                 output.ConsumptionProducts.Remove(productZero);
             }
-            context.MaterialOutput.Update(materialOutputFromJson);
+            context.MaterialOutput.Update(output);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
         }
