@@ -224,15 +224,15 @@ namespace SCM2020___Client.Frames
                 {
                     if (dialog.QuantityAdded == 0)
                     {
-                        this.previousMaterialOutput.ConsumptionProducts.Remove(product.ConsumptionProduct);
+                        //this.previousMaterialOutput.ConsumptionProducts.Remove(product.ConsumptionProduct);
                         FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
                         //FinalConsumpterProductsAdded.Remove(product);
                     }
                     else
                     {
                         product.QuantityAdded = dialog.QuantityAdded;
-                        product.ProductChanged = true;
                     }
+                    product.ProductChanged = true;
                 }
                 ProductToAddDataGrid.UnselectAll();
                 FinalConsumpterProductsAddedDataGrid.UnselectAll();
@@ -337,8 +337,8 @@ namespace SCM2020___Client.Frames
             {
                 materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
             }
-
-            foreach (ProductToOutput item in FinalConsumpterProductsAddedDataGrid.Items)
+            var listProduct = materialOutput.ConsumptionProducts.ToList();
+            foreach (ProductToOutput item in FinalConsumpterProductsAdded)
             {
                 if (item.NewProduct)
                 {
@@ -349,11 +349,13 @@ namespace SCM2020___Client.Frames
                         Quantity = item.QuantityAdded,
                         SCMEmployeeId = Helper.SCMId,
                     };
+                    item.NewProduct = false;
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
-                    item.ConsumptionProduct.Quantity = item.QuantityAdded;
+                    listProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
+                        item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
             foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
@@ -429,12 +431,20 @@ namespace SCM2020___Client.Frames
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var workOrder = OSTextBox.Text;
+            if (previousOS == workOrder)
+                return;
+            else
+                previousOS = workOrder;
             new Task(() => RescueData(workOrder)).Start();
         }
-
+        string previousOS = string.Empty;
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             var workOrder = OSTextBox.Text;
+            if (previousOS == workOrder)
+                return;
+            else
+                previousOS = workOrder;
             if (e.Key == Key.Enter)
             {
                 new Task(() => RescueData(workOrder)).Start();

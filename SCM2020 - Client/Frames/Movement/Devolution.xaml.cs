@@ -382,6 +382,7 @@ namespace SCM2020___Client.Frames.Movement
                     materialInput.PermanentProducts.Add(auxiliarPermanent);
                 }
             }
+
             var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -423,8 +424,6 @@ namespace SCM2020___Client.Frames.Movement
                         product.QuantityAdded = dialog.QuantityAdded;
                     }
                     product.ProductChanged = true;
-                    //if (productInConsumpterProductInput != null)
-                    //   productInConsumpterProductInput.QuantityAdded = product.QuantityAdded;
                 }
                 this.ConsumpterProductToAddDataGrid.UnselectAll();
                 this.FinalConsumpterProductsAddedDataGrid.UnselectAll();

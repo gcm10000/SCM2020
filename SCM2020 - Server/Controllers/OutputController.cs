@@ -197,6 +197,12 @@ namespace SCM2020___Server.Controllers
                     context.ConsumptionProduct.Update(productModify);
                 }
             }
+
+            //check quantity equals zero
+            foreach (var productZero in output.ConsumptionProducts.Where(x => x.Quantity == 0))
+            {
+                output.ConsumptionProducts.Remove(productZero);
+            }
             context.MaterialOutput.Update(materialOutputFromJson);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída atualizada com sucesso.");
