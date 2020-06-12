@@ -463,7 +463,6 @@ namespace SCM2020___Client.Frames
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
-
                 //Check monitoring
                 Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 var userId = monitoring.EmployeeId;
