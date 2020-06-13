@@ -19,6 +19,8 @@
                     <TextBox IsEnabled="False" Width="188" x:Name="NumberRequesterTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Nome do Solicitante" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="RequesterTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Setor" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" Width="188" x:Name="SectorTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Situação" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="SituationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Data da Movimentação" FontSize="18"></TextBlock>
@@ -32,7 +34,7 @@
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Insira a ordem de serviço..." KeyDown="TxtSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
+                <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Insira ordem de serviço..." KeyDown="TxtSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
                 <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="SearchButton_Click">
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>

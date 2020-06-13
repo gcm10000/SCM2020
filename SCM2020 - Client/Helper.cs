@@ -13,6 +13,7 @@ namespace SCM2020___Client
         public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\"; //File.ReadAllText(System.IO.Path.Combine(Environment.CurrentDirectory, "movement.cshtml"));
         //public static string SCMRegistration { get; set; }
         public static string SCMId { get; set; }
+        public static ModelsLibraryCore.Sector CurrentSector { get; set; }
         public static bool IsTextAllowed(string text)
         {
             return !NumberRegex.IsMatch(text);

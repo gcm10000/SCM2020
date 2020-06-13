@@ -46,6 +46,10 @@ namespace ModelsLibraryCore
         /// Número de patrimônio.
         /// </summary>
         public string Patrimony { get; set; }
+        /// <summary>
+        /// Booleana que indica se o produto está sendo utilizado.
+        /// </summary>
+        public bool IsUsed { get; set; }
     }
     public enum Status
     {

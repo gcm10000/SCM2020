@@ -189,6 +189,12 @@ namespace SCM2020___Server.Controllers
             var user = UserManager.FindUserByIdAsync(userId);
             return new InfoUser(user.Id, user.Name, user.PJERJRegistration);
         }
+        [HttpGet("ListUser/{query}")]
+        public IActionResult GetListUser(string query)
+        {
+            var listUser = UserManager.Users.Where(x => x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query);
+            return Ok(listUser);
+        }
         //[HttpDelete("Delete")]
         //[Authorize(Roles = Roles.SCM)]
         //public IActionResult DeleteUser()
