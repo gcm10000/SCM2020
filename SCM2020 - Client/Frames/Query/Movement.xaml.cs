@@ -77,6 +77,9 @@ namespace SCM2020___Client.Frames.Query
             };
             var result = Engine.Razor.RunCompile(template, "templateKey", typeof(QueryMovement), templateMovement);
             this.webBrowser.NavigateToString(result);
+            //https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
+            //IOleServiceProvider x = this.webBrowser.Document as IOleServiceProvider;
+
             //this.webBrowser.Refresh(true);
         }
     }

@@ -21,7 +21,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10">
+    <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10" Background="White">
         <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -79,6 +79,7 @@
                     <DataGridTextColumn Header=" Código" Binding="{Binding Code}"/>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"/>
+                    <DataGridTextColumn Header=" Usado" Binding="{Binding IsUsed}"/>
                     <DataGridTextColumn Header=" Grupo" Binding="{Binding Patrimony}"/>
                 </DataGrid.Columns>
             </DataGrid>
