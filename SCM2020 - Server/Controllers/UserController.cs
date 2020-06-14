@@ -192,7 +192,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("ListUser/{query}")]
         public IActionResult GetListUser(string query)
         {
-            var listUser = UserManager.Users.Where(x => x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query);
+            var listUser = UserManager.Users.Where(x => x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query));
             return Ok(listUser);
         }
         //[HttpDelete("Delete")]
