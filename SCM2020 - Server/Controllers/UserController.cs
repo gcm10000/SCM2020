@@ -190,6 +190,7 @@ namespace SCM2020___Server.Controllers
             return new InfoUser(user.Id, user.Name, user.PJERJRegistration);
         }
         [HttpGet("ListUser/{query}")]
+        [AllowAnonymous]
         public IActionResult GetListUser(string query)
         {
             var listUser = UserManager.Users.Where(x => x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query));
