@@ -24,18 +24,18 @@ namespace SCM2020___Client
         }
         public void Print()
         {
-            PrintDialog printDialog = new PrintDialog();
-            if (DialogResult.OK == printDialog.ShowDialog())
-            {
-                PrintPreviewDialog printPreview = new PrintPreviewDialog();
-                printPreview.Document = printIssues;
+            //PrintDialog printDialog = new PrintDialog();
+            //if (DialogResult.OK == printDialog.ShowDialog())
+            //{
+            //    PrintPreviewDialog printPreview = new PrintPreviewDialog();
+            //    printPreview.Document = printIssues;
 
-                // this is were you take the printersettings from the printDialog
-                printPreview.Document.PrinterSettings = printDialog.PrinterSettings;
+            //    // this is were you take the printersettings from the printDialog
+            //    printPreview.Document.PrinterSettings = printDialog.PrinterSettings;
 
-                printIssues.DefaultPageSettings.Landscape = true;
-                printPreview.ShowDialog();
-            }
+            //    printIssues.DefaultPageSettings.Landscape = true;
+            //    printPreview.ShowDialog();
+            //}
         }
     }
 }
