@@ -119,11 +119,16 @@ namespace SCM2020___Client.Frames.Query
                       <DocumentViewer Name='dv1'/>
      </Window>";
 
+        private string flowDocumentXAML = "";
+
         internal void DoPreview(string title)
         {
             string fileName = "C:\\Users\\Gabriel\\Desktop\\template\\fevereiro.xps";
             //FlowDocumentScrollViewer visual = (FlowDocumentScrollViewer)(_parent.FindName("fdsv1"));
-
+            /*
+                Use Flow Document with template to set to Control DocumentViewer.
+                Cloud be interessent to use Flow Document in XAML
+             */
             try
             {
                 // write the XPS document
