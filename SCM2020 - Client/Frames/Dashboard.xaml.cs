@@ -21,8 +21,8 @@ namespace SCM2020___Client.Frames
         public Dashboard()
         {
             InitializeComponent();
-            string html = System.IO.File.ReadAllText("C:\\Users\\Gabriel\\Desktop\\test.html");
-            this.webBrowser.NavigateToString(html);
+            //string html = System.IO.File.ReadAllText("C:\\Users\\Gabriel\\Desktop\\test.html");
+            //this.webBrowser.NavigateToString(html);
         }
     }
 }

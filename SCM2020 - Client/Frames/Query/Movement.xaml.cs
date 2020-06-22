@@ -15,8 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
-using RazorEngine;
-using RazorEngine.Templating; // For extension methods.
+//using RazorEngine;
+//using RazorEngine.Templating; // For extension methods.
 
 
 namespace SCM2020___Client.Frames.Query
@@ -47,7 +47,7 @@ namespace SCM2020___Client.Frames.Query
     }
     public partial class Movement : UserControl
     {
-        static string template = File.ReadAllText(System.IO.Path.Combine(Helper.TemplatePath, "movement.html"));
+        //static string template = File.ReadAllText(System.IO.Path.Combine(Helper.TemplatePath, "movement.html"));
 
         public Movement()
         {
