@@ -119,7 +119,8 @@ namespace SCM2020___Client.Frames.Query
                       <DocumentViewer Name='dv1'/>
      </Window>";
 
-        private string flowDocumentXAML = "";
+        private string flowDocumentXAML = @"<FlowDocumentScrollViewer><FlowDocument><Paragraph>TESTE</Paragraph></FlowDocument></FlowDocumentScrollViewer>";
+        //private string flowDocumentXAML = @"<FlowDocument FontFamily=""Cambria"" FontSize=""14"" ColumnWidth=""999999"" Background=""White""><Table CellSpacing=""5""><TableRowGroup Background=""LightGray"" FontWeight=""Bold""><TableRow><TableCell><Paragraph>Ordem de Serviço</Paragraph></TableCell><TableCell><Paragraph>Matrícula do Fun.</Paragraph></TableCell><TableCell><Paragraph>Nome do Fun.</Paragraph></TableCell><TableCell><Paragraph>Setor</Paragraph></TableCell><TableCell><Paragraph>Situação</Paragraph></TableCell><TableCell><Paragraph>Data da O.S</Paragraph></TableCell></TableRow></TableRowGroup><TableRowGroup FontFamily=""Verdana"" FontSize=""12""><TableRow><TableCell><Paragraph>123456/20</Paragraph></TableCell><TableCell><Paragraph>59450</Paragraph></TableCell><TableCell><Paragraph>Gabriel Machado</Paragraph></TableCell><TableCell><Paragraph>Sistema de Controle de Materiais</Paragraph></TableCell><TableCell><Paragraph>Aberta</Paragraph></TableCell><TableCell><Paragraph>13/02/2020</Paragraph></TableCell></TableRow></TableRowGroup></Table><Table CellSpacing=""8""><Table.Columns><TableColumn Width=""1*"" /><TableColumn Width=""6*""/><TableColumn Width=""2*""/><TableColumn Width=""2*"" /><TableColumn Width=""2*"" /><TableColumn Width=""3*"" /><TableColumn Width=""2*"" /></Table.Columns><TableRowGroup Background=""LightGray"" FontWeight=""Bold""><TableRow><TableCell><Paragraph>SKU</Paragraph></TableCell><TableCell><Paragraph>Descrição</Paragraph></TableCell><TableCell><Paragraph>Quantidade</Paragraph></TableCell><TableCell><Paragraph>Unidade</Paragraph></TableCell><TableCell><Paragraph>Patrimônio</Paragraph></TableCell><TableCell><Paragraph>Movimentação</Paragraph></TableCell><TableCell><Paragraph>Data</Paragraph></TableCell></TableRow></TableRowGroup><TableRowGroup FontFamily=""Verdana"" FontSize=""12""><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>AP. TELEFÔNICO</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>CABO COXIAL</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>FONE DE OUVIDO</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>TELEVISÃO SAMSUNG</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>NOTEBOOK ACER</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>STANDALONE C2 asdas dasfas  qwepow k asd asd sad  ds</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow><TableRow><TableCell><Paragraph>1512</Paragraph></TableCell><TableCell><Paragraph>AP. TELEFÔNICO</Paragraph></TableCell><TableCell><Paragraph>12</Paragraph></TableCell><TableCell><Paragraph>UN</Paragraph></TableCell><TableCell><Paragraph>883488</Paragraph></TableCell><TableCell><Paragraph>SAÍDA</Paragraph></TableCell><TableCell><Paragraph>10/03/2020</Paragraph></TableCell></TableRow></TableRowGroup></Table></FlowDocument>";
 
         internal void DoPreview(string title)
         {
@@ -131,12 +132,16 @@ namespace SCM2020___Client.Frames.Query
              */
             try
             {
+                //Convert XAML to object
+                FlowDocumentScrollViewer flowDocument = System.Windows.Markup.XamlReader.Load(new System.Xml.XmlTextReader(new StringReader(flowDocumentXAML))) as FlowDocumentScrollViewer;
+
+
                 // write the XPS document
-                //using (XpsDocument doc = new XpsDocument(fileName, FileAccess.ReadWrite))
-                //{
-                //    XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
-                //    writer.Write(visual);
-                //}
+                using (XpsDocument doc = new XpsDocument(System.IO.Path.GetTempFileName(), FileAccess.ReadWrite))
+                {
+                    XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+                    writer.Write(flowDocument);
+                }
 
                 // Read the XPS document into a dynamically generated
                 // preview Window 
