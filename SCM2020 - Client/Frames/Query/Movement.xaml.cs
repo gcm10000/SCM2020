@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Printing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
+using System.Windows.Xps.Serialization;
 //using RazorEngine;
 //using RazorEngine.Templating; // For extension methods.
 
@@ -187,6 +189,25 @@ namespace SCM2020___Client.Frames.Query
                     }
                 }
             }
+        }
+        public void SaveAsXps(string fileName, System.Windows.Documents.FlowDocument document, string DocumentTitle, string DocumentFooter)
+        {
+            using (Package container = Package.Open(fileName + ".xps", FileMode.Create))
+            {
+                using (XpsDocument xpsDoc = new XpsDocument(container, CompressionOption.Maximum))
+                {
+                    XpsSerializationManager rsm = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
+
+                    DocumentPaginator paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
+
+                    // 8 inch x 6 inch, with half inch margin
+                    paginator = new DocumentPaginatorWrapper(paginator, new Size(768, 676), new Size(48, 48), DocumentTitle, DocumentFooter);
+
+                    rsm.SaveAsXaml(paginator);
+                }
+            }
+
+            Console.WriteLine("{0} generated.", fileName + ".xps");
         }
         private void PrintDocument()
         {
