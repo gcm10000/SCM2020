@@ -16,11 +16,14 @@ namespace SCM2020___Client
         Typeface m_Typeface;
         String m_DocumentTitle;
         String m_DocumentFooter;
-        public DocumentPaginatorWrapper(DocumentPaginator paginator, Size pageSize, Size margin)
+        public DocumentPaginatorWrapper(DocumentPaginator paginator, Size pageSize, Size margin, string DocumentTitle, string DocumentFooter)
         {
             m_PageSize = pageSize;
             m_Margin = margin;
             m_Paginator = paginator;
+            m_DocumentTitle = DocumentTitle;
+            m_DocumentFooter = DocumentFooter;
+
             m_Paginator.PageSize = new Size(m_PageSize.Width - margin.Width * 2, m_PageSize.Height - margin.Height * 2);
         }
         Rect Move(Rect rect)
@@ -40,7 +43,7 @@ namespace SCM2020___Client
             {
                 if (m_Typeface == null)
                 {
-                    m_Typeface = new Typeface("Times New Roman");
+                    m_Typeface = new Typeface("Arial");
                 }
 
                 FormattedText text = new FormattedText(drawContent,

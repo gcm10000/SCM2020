@@ -29,41 +29,41 @@ namespace SCM2020___Client
             var fileName = Guid.NewGuid().ToString() + extension;
             return Path.Combine(path, fileName);
         }
-        public static int SaveAsXps(string fileName, string XAML)
-        {
-            object doc;
-            //FileInfo fileInfo = new FileInfo(fileName);
-            //using (FileStream file = fileInfo.OpenRead())
-            //{
-            //    System.Windows.Markup.ParserContext context = new System.Windows.Markup.ParserContext();
-            //    context.BaseUri = new Uri(fileInfo.FullName, UriKind.Absolute);
-            //    doc = System.Windows.Markup.XamlReader.Load(file, context);
-            //}
+        //public static int SaveAsXps(string fileName, string XAML)
+        //{
+        //    object doc;
+        //    //FileInfo fileInfo = new FileInfo(fileName);
+        //    //using (FileStream file = fileInfo.OpenRead())
+        //    //{
+        //    //    System.Windows.Markup.ParserContext context = new System.Windows.Markup.ParserContext();
+        //    //    context.BaseUri = new Uri(fileInfo.FullName, UriKind.Absolute);
+        //    //    doc = System.Windows.Markup.XamlReader.Load(file, context);
+        //    //}
 
-            using (var reader = new System.Xml.XmlTextReader(new StringReader(XAML)))
-            {
-                doc = System.Windows.Markup.XamlReader.Load(reader);
-            }
+        //    using (var reader = new System.Xml.XmlTextReader(new StringReader(XAML)))
+        //    {
+        //        doc = System.Windows.Markup.XamlReader.Load(reader);
+        //    }
 
-            if (!(doc is IDocumentPaginatorSource))
-            {
-                throw new NotSupportedException("DocumentPaginatorSource expected");
-            }
-            using (Package container = Package.Open(fileName + ".xps", FileMode.Create))
-            {
-                using (XpsDocument xpsDoc = new XpsDocument(container, CompressionOption.Maximum))
-                {
-                    XpsSerializationManager rsm = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
+        //    if (!(doc is IDocumentPaginatorSource))
+        //    {
+        //        throw new NotSupportedException("DocumentPaginatorSource expected");
+        //    }
+        //    using (Package container = Package.Open(fileName + ".xps", FileMode.Create))
+        //    {
+        //        using (XpsDocument xpsDoc = new XpsDocument(container, CompressionOption.Maximum))
+        //        {
+        //            XpsSerializationManager rsm = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
 
-                    DocumentPaginator paginator = ((IDocumentPaginatorSource)doc).DocumentPaginator;
-                    // 8 inch x 6 inch, with half inch margin
-                    paginator = new DocumentPaginatorWrapper(paginator, new Size(768, 676), new Size(48, 48));
-                    rsm.SaveAsXaml(paginator);
-                }
-            }
+        //            DocumentPaginator paginator = ((IDocumentPaginatorSource)doc).DocumentPaginator;
+        //            // 8 inch x 6 inch, with half inch margin
+        //            paginator = new DocumentPaginatorWrapper(paginator, new Size(768, 676), new Size(48, 48));
+        //            rsm.SaveAsXaml(paginator);
+        //        }
+        //    }
 
-            Console.WriteLine("{0} generated.", fileName + ".xps");
-            return 0;
-        }
+        //    Console.WriteLine("{0} generated.", fileName + ".xps");
+        //    return 0;
+        //}
     }
 }

@@ -138,7 +138,8 @@ namespace SCM2020___Client.Frames.Query
                 Cloud be interessent to use Flow Document in XAML
              */
             // get random full name
-            string fileTemp = System.IO.Path.GetTempFileName();
+            //string fileTemp = System.IO.Path.GetTempFileName();
+            string fileTemp = "C:\\Users\\gabri\\Desktop\\scm\\teste8.xps.xps";
             try
             {
                 FlowDocumentScrollViewer visual;
@@ -148,12 +149,12 @@ namespace SCM2020___Client.Frames.Query
                     visual = System.Windows.Markup.XamlReader.Load(reader) as FlowDocumentScrollViewer;
                 }
 
-                // write the XPS document
-                using (XpsDocument doc = new XpsDocument(fileTemp, FileAccess.ReadWrite))
-                {
-                    XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
-                    writer.Write(visual);
-                }
+                //// write the XPS document
+                //using (XpsDocument doc = new XpsDocument(fileTemp, FileAccess.ReadWrite))
+                //{
+                //    XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+                //    writer.Write(visual);
+                //}
 
                 // Read the XPS document into a dynamically generated
                 // preview Window 
@@ -170,8 +171,9 @@ namespace SCM2020___Client.Frames.Query
 
                         DocumentViewer dv1 = LogicalTreeHelper.FindLogicalNode(preview, "dv1") as DocumentViewer;
                         dv1.Document = fds as IDocumentPaginatorSource;
-                        DocumentPaginatorWrapper wrapper = new DocumentPaginatorWrapper(dv1.Document.DocumentPaginator, dv1.Document.DocumentPaginator.PageSize, new Size(30, 30));
-                        dv1.Document = wrapper.Source;
+                        //SaveAsXps(fileTemp, dv1.Document.DocumentPaginator, "TESTE", "OUTRO TESTE");
+                        //DocumentPaginatorWrapper wrapper = new DocumentPaginatorWrapper(dv1.Document.DocumentPaginator, dv1.Document.DocumentPaginator.PageSize, new Size(30, 30));
+                        //dv1.Document = wrapper.Source;
                         preview.ShowDialog();
                     }
                 }
@@ -190,7 +192,7 @@ namespace SCM2020___Client.Frames.Query
                 }
             }
         }
-        public void SaveAsXps(string fileName, System.Windows.Documents.FlowDocument document, string DocumentTitle, string DocumentFooter)
+        public void SaveAsXps(string fileName, DocumentPaginator paginator, string DocumentTitle, string DocumentFooter)
         {
             using (Package container = Package.Open(fileName + ".xps", FileMode.Create))
             {
@@ -198,10 +200,10 @@ namespace SCM2020___Client.Frames.Query
                 {
                     XpsSerializationManager rsm = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
 
-                    DocumentPaginator paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
+                    //DocumentPaginator paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
 
                     // 8 inch x 6 inch, with half inch margin
-                    paginator = new DocumentPaginatorWrapper(paginator, new Size(768, 676), new Size(48, 48), DocumentTitle, DocumentFooter);
+                    paginator = new DocumentPaginatorWrapper(paginator, paginator.PageSize, new Size(0, 48), DocumentTitle, DocumentFooter);
 
                     rsm.SaveAsXaml(paginator);
                 }
