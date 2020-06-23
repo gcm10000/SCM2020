@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:SCM2020___Client.Templates"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <FlowDocument FontFamily="Arial" FontSize="14" ColumnWidth="999999" Background="White">
+    <!--<FlowDocument FontFamily="Arial" FontSize="14" ColumnWidth="999999" Background="White">
         <Paragraph TextAlignment="Center">Poder Judiciário do Estado do Rio de Janeiro - PJERJ</Paragraph>
         <Paragraph TextAlignment="Center">Departamento de Segurança Eletrônica e de Telecomunicações - DETEL</Paragraph>
         <Paragraph TextAlignment="Center">Serviço de Controle de Materiais</Paragraph>
         <Paragraph TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline">REQUISIÇÃO DE MATERIAIS</Paragraph>
-        <Table CellSpacing="5">
+        --><!--<Table CellSpacing="5">
             <TableRowGroup Background="LightGray" FontWeight="Bold">
                 <TableRow>
                     <TableCell>
@@ -255,6 +255,64 @@
                     </TableCell>
                 </TableRow>
             </TableRowGroup>
-        </Table>
-    </FlowDocument>
+        </Table>--><!--
+        
+        <Section>
+            <Paragraph TextAlignment="Center">Não há necessidade de assinatura do Supervisor Técnico, a não ser que haja algum dano na mesma.</Paragraph>
+            <Table CellSpacing="6">
+                <Table.Columns>
+                    <TableColumn Width="3*" />
+                    <TableColumn Width="4*" />
+                    <TableColumn Width="1*" />
+                    <TableColumn Width="2*" />
+                </Table.Columns>
+                <TableRowGroup>
+                    <TableRow>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Técnico responsável:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Matrícula:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Supervisor Técnico:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Matrícula:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Serviço de Controle de Materiais:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                        <TableCell TextAlignment="Right">
+                            <Paragraph>Matrícula:</Paragraph>
+                        </TableCell>
+                        <TableCell BorderThickness="0 0 0 1" BorderBrush="Black">
+                            --><!--Assinatura--><!--
+                        </TableCell>
+                    </TableRow>
+                </TableRowGroup>
+            </Table>
+        </Section>
+        
+    </FlowDocument>-->
+    
 </UserControl>

@@ -168,8 +168,8 @@ namespace SCM2020___Client.Frames.Query
 
                         DocumentViewer dv1 = LogicalTreeHelper.FindLogicalNode(preview, "dv1") as DocumentViewer;
                         dv1.Document = fds as IDocumentPaginatorSource;
-
-
+                        DocumentPaginatorWrapper wrapper = new DocumentPaginatorWrapper(dv1.Document.DocumentPaginator, dv1.Document.DocumentPaginator.PageSize, new Size(30, 30));
+                        dv1.Document = wrapper.Source;
                         preview.ShowDialog();
                     }
                 }
