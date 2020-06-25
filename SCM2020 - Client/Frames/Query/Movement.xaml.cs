@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SCM2020___Client.Templates;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Packaging;
@@ -35,7 +36,7 @@ namespace SCM2020___Client.Frames.Query
         public string SolicitationEmployee { get; set; }
         public string WorkOrder { get; set; }
         public string Situation { get; set; }
-        public Product Product { get; set; }
+        //public Product Product { get; set; }
     }
     public class Product
     {
@@ -81,30 +82,43 @@ namespace SCM2020___Client.Frames.Query
             //    RegistrationSolicitationEmployee = 123,
             //    WorkOrder = "TESTE12345QEA"
             //};
-            //var result = Engine.Razor.RunCompile(template, "templateKey", typeof(QueryMovement), templateMovement);
-            //this.webBrowser.NavigateToString(result);
+            List<Product> products = new List<Product>
+            {
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            };
+            DocumentMovement template = new DocumentMovement(products, null);
+            
+            var result = template.RenderizeHtml();
+
+            this.webBrowser.NavigateToString(result);
             //https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
 
-            //this.webBrowser.LoadCompleted += (sender, e) => 
-            //{
-            //    PrintDialog pd = new PrintDialog
-            //    {
-            //        PrintTicket = new PrintTicket
-            //        {
-            //            Duplexing = Duplexing.TwoSidedLongEdge,
-            //            OutputColor = OutputColor.Monochrome,
-            //            PageOrientation = PageOrientation.Portrait,
-            //            PageMediaSize = new PageMediaSize(794, 1122),
-            //            InputBin = InputBin.AutoSelect
-            //        }
-            //    };
-            //    //pd.PrintTicket.PageMediaSize.Height
-            //    //pd.PrintTicket.PageMediaSize.Width
-            //    PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
-            //    pd.ShowDialog();
-            //    pd.PrintDocument(paginator, "customDocument");
-            //};
-            DoPreview("MEU NOVO TESTE");
+            this.webBrowser.LoadCompleted += (sender, e) =>
+            {
+                //PrintDialog pd = new PrintDialog
+                //{
+                //    PrintTicket = new PrintTicket
+                //    {
+                //        Duplexing = Duplexing.TwoSidedLongEdge,
+                //        OutputColor = OutputColor.Monochrome,
+                //        PageOrientation = PageOrientation.Portrait,
+                //        PageMediaSize = new PageMediaSize(794, 1122),
+                //        InputBin = InputBin.AutoSelect
+                //    }
+                //};
+                ////pd.PrintTicket.PageMediaSize.Height
+                ////pd.PrintTicket.PageMediaSize.Width
+                //PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
+                //pd.ShowDialog();
+                //pd.PrintDocument(paginator, "customDocument");
+                PrintDocument();
+            };
+            //DoPreview("MEU NOVO TESTE");
             //PrintDialog pd = new PrintDialog();
 
             //PrintDocument();
@@ -216,7 +230,7 @@ namespace SCM2020___Client.Frames.Query
             
             // NOTE: this works only when the document as been loaded
             MSHTML.IHTMLDocument2 doc = webBrowser.Document as MSHTML.IHTMLDocument2;
-            doc.execCommand("PrintPreview", true, null);
+            doc.execCommand("Print", true, null);
         }
 
     }

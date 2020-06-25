@@ -523,5 +523,10 @@ namespace SCM2020___Client.Frames
             }
 
         }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            //DocumentMovement document = new DocumentMovement();
+        }
     }
 }

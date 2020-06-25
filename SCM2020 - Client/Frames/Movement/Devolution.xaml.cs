@@ -519,5 +519,10 @@ namespace SCM2020___Client.Frames.Movement
             this.PermanentProductToAddDataGrid.UnselectAll();
             this.FinalPermanentProductsAddedDataGrid.UnselectAll();
         }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
