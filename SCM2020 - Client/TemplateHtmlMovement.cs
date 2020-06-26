@@ -12,7 +12,7 @@ namespace SCM2020___Client
     {
         public class QueryMovement
         {
-            public int RegistrationSolicitationEmployee { get; set; }
+            public int RegisterApplication { get; set; }
             public string SolicitationEmployee { get; set; }
             public string WorkOrder { get; set; }
             public string Situation { get; set; }

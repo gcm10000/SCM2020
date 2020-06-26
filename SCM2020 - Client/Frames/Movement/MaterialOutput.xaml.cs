@@ -16,6 +16,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.VisualBasic;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.Frames.Query;
@@ -68,6 +69,8 @@ namespace SCM2020___Client.Frames
                 ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);
             }
         }
+        public Monitoring PrincipalMonitoring { get; set; }
+        public InfoUser InfoUser { get; set; }
         public MaterialOutput()
         {
             InitializeComponent();
@@ -324,6 +327,8 @@ namespace SCM2020___Client.Frames
 
                 var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2);
+
+                PrincipalMonitoring = monitoring;
             }).Wait();
         }
         private void UpdateOutput()
@@ -467,7 +472,9 @@ namespace SCM2020___Client.Frames
                 Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
-
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                
+                PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
                 {
                     MessageBox.Show("Ordem de serviço fechada.", "Informação.", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -480,7 +487,7 @@ namespace SCM2020___Client.Frames
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
                 this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
 
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = result; }));
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Register; }));
 
                 this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
                 this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
@@ -526,7 +533,15 @@ namespace SCM2020___Client.Frames
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
-            //DocumentMovement document = new DocumentMovement();
+            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            {
+                Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = PrincipalMonitoring.Work_Order,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+            List<DocumentMovement.Product> products = new List<DocumentMovement.Product>();
+            DocumentMovement document = new DocumentMovement(products, info);
         }
     }
 }

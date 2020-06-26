@@ -87,7 +87,7 @@ namespace SCM2020___Client.Frames.Query
             }
             catch //Doesn't exist input with that workorder
             {}
-            List<Product> productsToShow = new List<Product>();
+            List<DocumentMovement.Product> productsToShow = new List<DocumentMovement.Product>();
             
             //CONSUMPTERS
             if (output != null)
@@ -95,7 +95,7 @@ namespace SCM2020___Client.Frames.Query
                 {
                     //Task.Run for each
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    Product product = new Product()
+                    DocumentMovement.Product product = new DocumentMovement.Product()
                     {
                         code = infoProduct.Code,
                         description = infoProduct.Description,
@@ -113,7 +113,7 @@ namespace SCM2020___Client.Frames.Query
                 {
                     //Task.Run for each
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    Product product = new Product()
+                    DocumentMovement.Product product = new DocumentMovement.Product()
                     {
                         code = infoProduct.Code,
                         description = infoProduct.Description,
@@ -133,7 +133,7 @@ namespace SCM2020___Client.Frames.Query
                     //Task.Run for each
                     ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    Product product = new Product()
+                    DocumentMovement.Product product = new DocumentMovement.Product()
                     {
                         code = infoProduct.Code,
                         description = infoProduct.Description,
@@ -152,7 +152,7 @@ namespace SCM2020___Client.Frames.Query
                     //Task.Run for each
                     ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    Product product = new Product()
+                    DocumentMovement.Product product = new DocumentMovement.Product()
                     {
                         code = infoProduct.Code,
                         description = infoProduct.Description,
@@ -180,14 +180,14 @@ namespace SCM2020___Client.Frames.Query
             //    RegistrationSolicitationEmployee = 123,
             //    WorkOrder = "TESTE12345QEA"
             //};
-            List<Product> products = new List<Product>
+            List<DocumentMovement.Product> products = new List<DocumentMovement.Product>
             {
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
             };
             DocumentMovement template = new DocumentMovement(products, null);
             
@@ -214,7 +214,7 @@ namespace SCM2020___Client.Frames.Query
                 //PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
                 //pd.ShowDialog();
                 //pd.PrintDocument(paginator, "customDocument");
-                PrintDocument();
+                Helper.PrintDocument(this.webBrowser);
             };
             //DoPreview("MEU NOVO TESTE");
             //PrintDialog pd = new PrintDialog();
