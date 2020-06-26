@@ -117,9 +117,9 @@ namespace SCM2020___Server.Controllers
                     Stock = product.Stock,
                 });
             }
-            var tojson = JsonConvert.SerializeObject(listInventory, Formatting.Indented);
+            //var tojson = JsonConvert.SerializeObject(listInventory, Formatting.Indented);
 
-            return Ok(tojson);
+            return Ok(listInventory);
         }
         //Remove by ID
         [HttpDelete("Remove/{id}")]
