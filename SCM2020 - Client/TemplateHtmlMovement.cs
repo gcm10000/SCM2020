@@ -18,7 +18,6 @@ namespace SCM2020___Client
             public string Situation { get; set; }
             public string Sector { get; set; }
             public DateTime WorkOrderDate { get; set; }
-            //public Product Product { get; set; }
         }
         public class Product
         {
