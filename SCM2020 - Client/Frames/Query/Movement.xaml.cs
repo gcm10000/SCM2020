@@ -45,6 +45,8 @@ namespace SCM2020___Client.Frames.Query
         {
             InitializeComponent();
         }
+        ModelsLibraryCore.Monitoring Monitoring;
+        ModelsLibraryCore.InfoUser InfoUser;
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
@@ -62,14 +64,26 @@ namespace SCM2020___Client.Frames.Query
         }
         private void Search(string workOrder)
         {
+            string userId = string.Empty;
             try
             {
-                ModelsLibraryCore.Monitoring monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                userId = Monitoring.EmployeeId;
             }
             catch
             {
                 //If doesn't exist work order, then shows error inside MessageBox 
                 MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+            }
+            catch
+            {
+                //HttpRequestException -> BadRequest
+                MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             ModelsLibraryCore.MaterialOutput output = null;
@@ -168,7 +182,7 @@ namespace SCM2020___Client.Frames.Query
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
@@ -189,7 +203,15 @@ namespace SCM2020___Client.Frames.Query
                 new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
                 new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
             };
-            DocumentMovement template = new DocumentMovement(products, null);
+            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            {
+                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = Monitoring.Work_Order,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+
+            DocumentMovement template = new DocumentMovement(products, info);
             
             var result = template.RenderizeHtml();
 
