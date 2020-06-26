@@ -25,12 +25,14 @@ namespace SCM2020___Server.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserController : Controller
-    {
+    {   
+        ControlDbContext ControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
-        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
+        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
+            this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
@@ -187,7 +189,8 @@ namespace SCM2020___Server.Controllers
         public InfoUser GetInfoUserByRegister(string userId)
         {
             var user = UserManager.FindUserByIdAsync(userId);
-            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, user.);
+            var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
+            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
         }
         [HttpGet("ListUser/{query}")]
         [AllowAnonymous]
