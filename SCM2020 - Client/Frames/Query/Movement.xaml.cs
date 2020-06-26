@@ -209,7 +209,7 @@ namespace SCM2020___Client.Frames.Query
             {
                 Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
                 WorkOrder = Monitoring.Work_Order,
-                Sector = 
+                Sector = InfoUser.Sector.NameSector,
                 WorkOrderDate = Monitoring.MovingDate,
                 RegisterApplication = int.Parse(InfoUser.Register),
                 SolicitationEmployee = InfoUser.Name
