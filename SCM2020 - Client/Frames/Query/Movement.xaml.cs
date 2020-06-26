@@ -73,84 +73,114 @@ namespace SCM2020___Client.Frames.Query
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            //If doesn't exists work order, then shows error inside MessageBox 
+            //If doesn't exist work order, then shows error inside MessageBox 
             //MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         private void Search()
         {
             string workOrder = TxtSearch.Text;
-            ModelsLibraryCore.MaterialOutput output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
-            ModelsLibraryCore.MaterialInput input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+            try
+            {
+                ModelsLibraryCore.Monitoring monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+            }
+            catch
+            {
+                MessageBox.Show("Ordem de serviço inexistente.", "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ModelsLibraryCore.MaterialOutput output = null;
+            try
+            {
+                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
+            }
+            catch //Doesn't exist output with that workorder
+            {}
+
+            ModelsLibraryCore.MaterialInput input = null;
+            try
+            {
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+            }
+            catch //Doesn't exist input with that workorder
+            {}
             List<Product> productsToShow = new List<Product>();
-            foreach (var item in output.ConsumptionProducts.ToList())
-            {
-                //Task.Run em cada um
-                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                Product product = new Product()
-                {
-                    code = infoProduct.Code,
-                    description = infoProduct.Description,
-                    movement = "SAÍDA",
-                    quantity = item.Quantity,
-                    unity = infoProduct.Unity,
-                    MoveDate = item.Date,
-                    patrimony = ""
-                };
-                productsToShow.Add(product);
-            }
             
-            foreach (var item in input.ConsumptionProducts.ToList())
-            {
-                //Task.Run em cada um
-                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                Product product = new Product()
+            //CONSUMPTERS
+            if (output != null)
+                foreach (var item in output.ConsumptionProducts.ToList())
                 {
-                    code = infoProduct.Code,
-                    description = infoProduct.Description,
-                    movement = "ENTRADA",
-                    quantity = item.Quantity,
-                    unity = infoProduct.Unity,
-                    MoveDate = item.Date,
-                    patrimony = ""
-                };
-                productsToShow.Add(product);
-            }
+                    //Task.Run for each
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    Product product = new Product()
+                    {
+                        code = infoProduct.Code,
+                        description = infoProduct.Description,
+                        movement = "SAÍDA",
+                        quantity = item.Quantity,
+                        unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        patrimony = ""
+                    };
+                    productsToShow.Add(product);
+                }
 
-            foreach (var item in output.PermanentProducts.ToList())
-            {
-                //Task.Run em cada um
-                ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                Product product = new Product()
+            if (input != null)
+                foreach (var item in input.ConsumptionProducts.ToList())
                 {
-                    code = infoProduct.Code,
-                    description = infoProduct.Description,
-                    movement = "SAÍDA",
-                    quantity = 1,
-                    unity = infoProduct.Unity,
-                    MoveDate = item.Date,
-                    patrimony = infoPermanentProduct.Patrimony
-                };
-                productsToShow.Add(product);
-            }
+                    //Task.Run for each
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    Product product = new Product()
+                    {
+                        code = infoProduct.Code,
+                        description = infoProduct.Description,
+                        movement = "ENTRADA",
+                        quantity = item.Quantity,
+                        unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        patrimony = ""
+                    };
+                    productsToShow.Add(product);
+                }
 
-            foreach (var item in input.PermanentProducts.ToList())
-            {
-                //Task.Run em cada um
-                ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                Product product = new Product()
+            //PERMANENTS
+            if (output != null)
+                foreach (var item in output.PermanentProducts.ToList())
                 {
-                    code = infoProduct.Code,
-                    description = infoProduct.Description,
-                    movement = "ENTRADA",
-                    quantity = 1,
-                    unity = infoProduct.Unity,
-                    MoveDate = item.Date,
-                    patrimony = infoPermanentProduct.Patrimony
-                };
-                productsToShow.Add(product);
-            }
+                    //Task.Run for each
+                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    Product product = new Product()
+                    {
+                        code = infoProduct.Code,
+                        description = infoProduct.Description,
+                        movement = "SAÍDA",
+                        quantity = 1,
+                        unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        patrimony = infoPermanentProduct.Patrimony
+                    };
+                    productsToShow.Add(product);
+                }
+
+            if (input != null)
+                foreach (var item in input.PermanentProducts.ToList())
+                {
+                    //Task.Run for each
+                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    Product product = new Product()
+                    {
+                        code = infoProduct.Code,
+                        description = infoProduct.Description,
+                        movement = "ENTRADA",
+                        quantity = 1,
+                        unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        patrimony = infoPermanentProduct.Patrimony
+                    };
+                    productsToShow.Add(product);
+                }
+            productsToShow = productsToShow.OrderByDescending(x => x.MoveDate).ToList();
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
