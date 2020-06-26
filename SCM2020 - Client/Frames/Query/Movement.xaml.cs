@@ -33,24 +33,7 @@ namespace SCM2020___Client.Frames.Query
 
     //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
     //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
-    public class QueryMovement
-    {
-        public int RegistrationSolicitationEmployee { get; set; }
-        public string SolicitationEmployee { get; set; }
-        public string WorkOrder { get; set; }
-        public string Situation { get; set; }
-        //public Product Product { get; set; }
-    }
-    public class Product
-    {
-        public int code { get; set; }
-        public string description { get; set; }
-        public double quantity { get; set; }
-        public string unity { get; set; }
-        public string patrimony { get; set; }
-        public string movement { get; set; }
-        public DateTime MoveDate { get; set; }
-    }
+    
     public class AuxiliarConsumptionView : ModelsLibraryCore.AuxiliarConsumption
     {
         //Input or output.
@@ -58,8 +41,6 @@ namespace SCM2020___Client.Frames.Query
     }
     public partial class Movement : UserControl
     {
-        //static string template = File.ReadAllText(System.IO.Path.Combine(Helper.TemplatePath, "movement.html"));
-
         public Movement()
         {
             InitializeComponent();
@@ -67,25 +48,28 @@ namespace SCM2020___Client.Frames.Query
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            string workOrder = TxtSearch.Text;
+            if (e.Key == Key.Enter)
+                Search(workOrder);
         }
-        
+
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            //If doesn't exist work order, then shows error inside MessageBox 
-            //MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        private void Search()
-        {
             string workOrder = TxtSearch.Text;
+            Search(workOrder);
+
+        }
+        private void Search(string workOrder)
+        {
             try
             {
                 ModelsLibraryCore.Monitoring monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch
             {
-                MessageBox.Show("Ordem de serviço inexistente.", "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+                //If doesn't exist work order, then shows error inside MessageBox 
+                MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             ModelsLibraryCore.MaterialOutput output = null;
@@ -339,13 +323,7 @@ namespace SCM2020___Client.Frames.Query
 
             Console.WriteLine("{0} generated.", fileName + ".xps");
         }
-        private void PrintDocument()
-        {
-            
-            // NOTE: this works only when the document as been loaded
-            MSHTML.IHTMLDocument2 doc = webBrowser.Document as MSHTML.IHTMLDocument2;
-            doc.execCommand("Print", true, null);
-        }
+
 
     }
 

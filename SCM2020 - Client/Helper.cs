@@ -4,6 +4,7 @@ using System.IO.Packaging;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Xps.Packaging;
 using System.Windows.Xps.Serialization;
@@ -17,7 +18,8 @@ namespace SCM2020___Client
         private static readonly Regex NumberRegex = new Regex("[^0-9,]+"); //regex that matches disallowed text
         public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\"; //File.ReadAllText(System.IO.Path.Combine(Environment.CurrentDirectory, "movement.cshtml"));
         //public static string SCMRegistration { get; set; }
-        public static string SCMId { get; set; }
+        public static string NameIdentifier { get; set; }
+        public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }
         public static bool IsTextAllowed(string text)
         {
@@ -29,41 +31,14 @@ namespace SCM2020___Client
             var fileName = Guid.NewGuid().ToString() + extension;
             return Path.Combine(path, fileName);
         }
-        //public static int SaveAsXps(string fileName, string XAML)
-        //{
-        //    object doc;
-        //    //FileInfo fileInfo = new FileInfo(fileName);
-        //    //using (FileStream file = fileInfo.OpenRead())
-        //    //{
-        //    //    System.Windows.Markup.ParserContext context = new System.Windows.Markup.ParserContext();
-        //    //    context.BaseUri = new Uri(fileInfo.FullName, UriKind.Absolute);
-        //    //    doc = System.Windows.Markup.XamlReader.Load(file, context);
-        //    //}
 
-        //    using (var reader = new System.Xml.XmlTextReader(new StringReader(XAML)))
-        //    {
-        //        doc = System.Windows.Markup.XamlReader.Load(reader);
-        //    }
-
-        //    if (!(doc is IDocumentPaginatorSource))
-        //    {
-        //        throw new NotSupportedException("DocumentPaginatorSource expected");
-        //    }
-        //    using (Package container = Package.Open(fileName + ".xps", FileMode.Create))
-        //    {
-        //        using (XpsDocument xpsDoc = new XpsDocument(container, CompressionOption.Maximum))
-        //        {
-        //            XpsSerializationManager rsm = new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
-
-        //            DocumentPaginator paginator = ((IDocumentPaginatorSource)doc).DocumentPaginator;
-        //            // 8 inch x 6 inch, with half inch margin
-        //            paginator = new DocumentPaginatorWrapper(paginator, new Size(768, 676), new Size(48, 48));
-        //            rsm.SaveAsXaml(paginator);
-        //        }
-        //    }
-
-        //    Console.WriteLine("{0} generated.", fileName + ".xps");
-        //    return 0;
-        //}
+        /// <summary>
+        ///  Funciona apenas após a página estiver totalmente carregada.
+        /// </summary>
+        public static bool PrintDocument(WebBrowser webBrowser)
+        {
+            MSHTML.IHTMLDocument2 doc = webBrowser.Document as MSHTML.IHTMLDocument2;
+            return doc.execCommand("Print", true, null);
+        }
     }
 }

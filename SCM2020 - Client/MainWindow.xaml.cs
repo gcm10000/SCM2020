@@ -36,7 +36,13 @@ namespace SCM2020___Client
             LoginScreen screen = new LoginScreen();
             screen.ShowDialog();
 
-
+            ////Only users with role SCM and role Administrator have total access
+            //if (!(Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM))
+            //{
+            //    //Users with access restrited only does can access the Query and Listing menu
+            //    this.MovementItem.Visibility = Visibility.Collapsed;
+            //    this.RegisterItem.Visibility = Visibility.Collapsed;
+            //}
         }
 
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -46,7 +52,6 @@ namespace SCM2020___Client
             var item = listView.SelectedItem as ListViewItem;
             if (item == null)
                 return;
-            //ERRO EM SUB LISTVIEW
             for (int i = 0; i < listView.Items.Count; i++)
             {
                 var lvItem = listView.Items[i] as ListViewItem;

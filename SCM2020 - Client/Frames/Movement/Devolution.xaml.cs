@@ -317,7 +317,7 @@ namespace SCM2020___Client.Frames.Movement
                     Date = DateTime.Now,
                     ProductId = item.Id,
                     Quantity = item.QuantityAdded,
-                    SCMEmployeeId = Helper.SCMId,
+                    SCMEmployeeId = Helper.NameIdentifier,
                 };
                 materialInput.ConsumptionProducts.Add(auxiliarConsumption);
             }
@@ -327,7 +327,7 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     Date = DateTime.Now,
                     ProductId = item.Id,
-                    SCMEmployeeId = Helper.SCMId
+                    SCMEmployeeId = Helper.NameIdentifier
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
@@ -356,7 +356,7 @@ namespace SCM2020___Client.Frames.Movement
                         Date = DateTime.Now,
                         ProductId = item.Id,
                         Quantity = item.QuantityAdded,
-                        SCMEmployeeId = Helper.SCMId,
+                        SCMEmployeeId = Helper.NameIdentifier,
                     };
                     item.NewProduct = false;
                     listProduct.Add(auxiliarConsumption);
@@ -377,7 +377,7 @@ namespace SCM2020___Client.Frames.Movement
                     {
                         Date = DateTime.Now,
                         ProductId = item.Id,
-                        SCMEmployeeId = Helper.SCMId
+                        SCMEmployeeId = Helper.NameIdentifier
                     };
                     materialInput.PermanentProducts.Add(auxiliarPermanent);
                 }

@@ -262,7 +262,7 @@ namespace SCM2020___Client.Frames
 
             Monitoring monitoring = new Monitoring()
             {
-                SCMEmployeeId = Helper.SCMId,
+                SCMEmployeeId = Helper.NameIdentifier,
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
@@ -297,7 +297,7 @@ namespace SCM2020___Client.Frames
                     Date = materialOutput.MovingDate,
                     Quantity = outputProduct.QuantityAdded,
                     ProductId = outputProduct.Id, //verificar se o ID é o mesmo do produto...
-                    SCMEmployeeId = Helper.SCMId
+                    SCMEmployeeId = Helper.NameIdentifier
                 };
                 materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
             }
@@ -307,7 +307,7 @@ namespace SCM2020___Client.Frames
                 AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
                 {
                     Date = materialOutput.MovingDate,
-                    SCMEmployeeId = Helper.SCMId,
+                    SCMEmployeeId = Helper.NameIdentifier,
                     ProductId = outputPermanentProduct.Id
                 };
                 materialOutput.PermanentProducts.Add(auxiliarPermanent);
@@ -347,7 +347,7 @@ namespace SCM2020___Client.Frames
                         Date = DateTime.Now,
                         ProductId = item.Id,
                         Quantity = item.QuantityAdded,
-                        SCMEmployeeId = Helper.SCMId,
+                        SCMEmployeeId = Helper.NameIdentifier,
                     };
                     item.NewProduct = false;
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
@@ -367,7 +367,7 @@ namespace SCM2020___Client.Frames
                     {
                         Date = DateTime.Now,
                         ProductId = item.Id,
-                        SCMEmployeeId = Helper.SCMId
+                        SCMEmployeeId = Helper.NameIdentifier
                     };
                     materialOutput.PermanentProducts.Add(auxiliarPermanent);
                 }

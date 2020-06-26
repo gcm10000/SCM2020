@@ -10,20 +10,38 @@ namespace SCM2020___Client
     /// </summary>
     public class DocumentMovement
     {
+        public class QueryMovement
+        {
+            public int RegistrationSolicitationEmployee { get; set; }
+            public string SolicitationEmployee { get; set; }
+            public string WorkOrder { get; set; }
+            public string Situation { get; set; }
+            //public Product Product { get; set; }
+        }
+        public class Product
+        {
+            public int code { get; set; }
+            public string description { get; set; }
+            public double quantity { get; set; }
+            public string unity { get; set; }
+            public string patrimony { get; set; }
+            public string movement { get; set; }
+            public DateTime MoveDate { get; set; }
+        }
         /// <summary>
         /// Conjunto de produtos.
         /// </summary>
-        public List<Frames.Query.Product> Products { get; }
+        public List<DocumentMovement.Product> Products { get; }
         /// <summary>
         /// Informações da Ordem de Serviço.
         /// </summary>
-        public Frames.Query.QueryMovement Information { get; }
+        public QueryMovement Information { get; }
         public string MarginTop { get; set; } = "25 mm";
         public string MarginLeft { get; set; } = "25 mm";
         public string MarginRight { get; set; } = "25 mm";
         public string MarginBottom { get; set; } = "5 mm";
         private StringBuilder Html { get; set; }
-        public DocumentMovement(List<SCM2020___Client.Frames.Query.Product> Products, SCM2020___Client.Frames.Query.QueryMovement Information)
+        public DocumentMovement(List<DocumentMovement.Product> Products, QueryMovement Information)
         {
             this.Information = Information;
             this.Products = Products;

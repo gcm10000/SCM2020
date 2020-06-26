@@ -38,13 +38,13 @@
                         --><!--LOGO--><!--
                     </Grid>-->
                 <ListView MouseLeftButtonUp="ListView_MouseLeftButtonUp" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem Height="60" Background="#FFE9EDFF" Foreground="#FF4F68FF">
+                    <ListViewItem x:Name="DashboardItem" Height="60" Background="#FFE9EDFF" Foreground="#FF4F68FF">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ViewDashboardOutline" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                                 <TextBlock Text="Painel de Controle" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="60">
+                        <ListViewItem x:Name="MovementItem" Height="60">
                             <StackPanel Orientation="Horizontal">
                                 <!-- Popup Movimentações -->
                                 <Popup x:Name="PopupMovement" StaysOpen="False" Placement="Right" Margin="0">
@@ -67,7 +67,7 @@
                                 <TextBlock Text="Movimentações" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem x:Name="Menu" Height="60">
+                        <ListViewItem x:Name="RegisterItem" Height="60">
                             <StackPanel Orientation="Horizontal">
                             <Popup x:Name="PopupRegister" StaysOpen="False"  Placement="Right" Margin="0">
                                 <ListBox Background="White" Padding="15, 15, 15, 15" x:Name="ListBoxRegister" PreviewMouseLeftButtonUp="ListBoxRegister_PreviewMouseLeftButtonUp">
@@ -98,7 +98,7 @@
                                 <TextBlock Text="Cadastro" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="60">
+                        <ListViewItem x:Name="QueryItem" Height="60">
                             <StackPanel Orientation="Horizontal">
                                 <Popup x:Name="PopupQueries" StaysOpen="False"  Placement="Right" Margin="0">
                                 <ListBox Background="White" x:Name="ListBoxQueries"  PreviewMouseLeftButtonUp="ListBoxQueries_PreviewMouseLeftButtonUp" Padding="15, 15, 15, 15">
@@ -123,7 +123,7 @@
                                 <TextBlock Text="Consultas" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="60">
+                        <ListViewItem x:Name="ListingItem" Height="60">
                             <StackPanel Orientation="Horizontal">
                                 <!--
                                     Inventário rotativo -> Alguns itens do estoque (selecionados)

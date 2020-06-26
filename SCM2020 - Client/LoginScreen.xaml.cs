@@ -39,8 +39,10 @@ namespace SCM2020___Client
                     Registration: user,
                     IsPJERJRegistration: true,
                     Password: password);
+                
                 Helper.Authentication = signIn.Headers.Authorization;
-                Helper.SCMId = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
                 MessageBox.Show("Login realizado com sucesso.", "Informação:", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (System.Net.Http.HttpRequestException ex)
