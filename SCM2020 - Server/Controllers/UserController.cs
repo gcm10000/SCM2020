@@ -187,7 +187,7 @@ namespace SCM2020___Server.Controllers
         public InfoUser GetInfoUserByRegister(string userId)
         {
             var user = UserManager.FindUserByIdAsync(userId);
-            return new InfoUser(user.Id, user.Name, user.PJERJRegistration);
+            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, user.);
         }
         [HttpGet("ListUser/{query}")]
         [AllowAnonymous]

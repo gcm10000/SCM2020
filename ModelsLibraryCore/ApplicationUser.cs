@@ -10,5 +10,6 @@ namespace ModelsLibraryCore
         public string PJERJRegistration { get; set; }
         public string CPFRegistration { get; set; }
         public string Name { get; set; }
+        public int IdSector { get; set; }
     }
 }
