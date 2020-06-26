@@ -41,6 +41,7 @@ namespace SCM2020___Client.Frames.Query
     }
     public partial class Movement : UserControl
     {
+        List<DocumentMovement.Product> ProductsToShow;
         public Movement()
         {
             InitializeComponent();
@@ -67,6 +68,7 @@ namespace SCM2020___Client.Frames.Query
             string userId = string.Empty;
             try
             {
+                workOrder = System.Uri.EscapeDataString(workOrder);
                 Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 userId = Monitoring.EmployeeId;
             }
@@ -101,7 +103,7 @@ namespace SCM2020___Client.Frames.Query
             }
             catch //Doesn't exist input with that workorder
             {}
-            List<DocumentMovement.Product> productsToShow = new List<DocumentMovement.Product>();
+            ProductsToShow = new List<DocumentMovement.Product>();
             
             //CONSUMPTERS
             if (output != null)
@@ -119,7 +121,7 @@ namespace SCM2020___Client.Frames.Query
                         MoveDate = item.Date,
                         patrimony = ""
                     };
-                    productsToShow.Add(product);
+                    ProductsToShow.Add(product);
                 }
 
             if (input != null)
@@ -137,7 +139,7 @@ namespace SCM2020___Client.Frames.Query
                         MoveDate = item.Date,
                         patrimony = ""
                     };
-                    productsToShow.Add(product);
+                    ProductsToShow.Add(product);
                 }
 
             //PERMANENTS
@@ -157,7 +159,7 @@ namespace SCM2020___Client.Frames.Query
                         MoveDate = item.Date,
                         patrimony = infoPermanentProduct.Patrimony
                     };
-                    productsToShow.Add(product);
+                    ProductsToShow.Add(product);
                 }
 
             if (input != null)
@@ -176,9 +178,9 @@ namespace SCM2020___Client.Frames.Query
                         MoveDate = item.Date,
                         patrimony = infoPermanentProduct.Patrimony
                     };
-                    productsToShow.Add(product);
+                    ProductsToShow.Add(product);
                 }
-            productsToShow = productsToShow.OrderByDescending(x => x.MoveDate).ToList();
+            ProductsToShow = ProductsToShow.OrderByDescending(x => x.MoveDate).ToList();
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -194,15 +196,15 @@ namespace SCM2020___Client.Frames.Query
             //    RegistrationSolicitationEmployee = 123,
             //    WorkOrder = "TESTE12345QEA"
             //};
-            List<DocumentMovement.Product> products = new List<DocumentMovement.Product>
-            {
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-                new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            };
+            //List<DocumentMovement.Product> products = new List<DocumentMovement.Product>
+            //{
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
+            //};
             DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
             {
                 Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
@@ -211,7 +213,7 @@ namespace SCM2020___Client.Frames.Query
                 SolicitationEmployee = InfoUser.Name
             };
 
-            DocumentMovement template = new DocumentMovement(products, info);
+            DocumentMovement template = new DocumentMovement(ProductsToShow, info);
             
             var result = template.RenderizeHtml();
 

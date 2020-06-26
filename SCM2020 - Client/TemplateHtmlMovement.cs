@@ -16,6 +16,8 @@ namespace SCM2020___Client
             public string SolicitationEmployee { get; set; }
             public string WorkOrder { get; set; }
             public string Situation { get; set; }
+            public string Sector { get; set; }
+            public DateTime WorkOrderDate { get; set; }
             //public Product Product { get; set; }
         }
         public class Product
@@ -95,7 +97,7 @@ namespace SCM2020___Client
                                 "<td>" +
                                     "<div class=\"content\">" +
                                     "<p class=MsoNormal align=center style=\"text-align:center\">" +
-                                        "<b><u><span style=\"font-family:'Arial',sans-serif\">REQUISIÇÃO DE MATERIAIS</span></u></b>" +
+                                        "<b><u><span style=\"font-family:'Arial',sans-serif\">REQUISIÇÃO DE MATERIAL</span></u></b>" +
                                     "</p>" +
                                     "<p class=MsoNormal><span style=\"font-size:10.0pt;line-height:107%;font-family: 'Arial',sans-serif\">&nbsp;</span></p>" +
                                     "<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width=633 style=\"width:100%;border-collapse:collapse;border: none\">" +
@@ -104,6 +106,12 @@ namespace SCM2020___Client
                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\">" +
                                                 "<b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\"> Ordem de Serviço </span></b>" +
                                                 "</p>" +
+                                            "</td>" +
+                                            "<td width=104 valign=top style=\"width:77.7pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
+                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data da O.S</span></b></p>" +
+                                            "</td>" +
+                                            "<td width=70 valign=top style=\"width:52.5pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
+                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Situação</span></b></p>" +
                                             "</td>" +
                                             "<td width=132 valign=top style=\"width:99.2pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Matrícula do Fun.</span></b></p>" +
@@ -114,31 +122,25 @@ namespace SCM2020___Client
                                             "<td width=91 valign=top style=\"width:68.0pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Setor</span></b></p>" +
                                             "</td>" +
-                                            "<td width=70 valign=top style=\"width:52.5pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Situação</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.7pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data da O.S</span></b></p>" +
-                                            "</td>" +
                                         "</tr>" +
                                         "<tr style=\"height:3.5pt\">" +
                                             "<td width=133 valign=top style=\"width:99.55pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">123456/20</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrder}</span></p>" +
                                             "</td>" +
                                             "<td width=132 valign=top style=\"width:99.2pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">59450</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrderDate}</span></p>" +
                                             "</td>" +
                                             "<td width=104 valign=top style=\"width:77.95pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">Gabriel Machado</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Situation}</span></p>" +
                                             "</td>" +
                                             "<td width=91 valign=top style=\"width:68.0pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">Sistema de Controle de Materiais</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.RegisterApplication.ToString()}</span></p>" +
                                             "</td>" +
                                             "<td width=70 valign=top style=\"width:52.5pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">Aberta</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.RegisterApplication}</span></p>" +
                                             "</td>" +
                                             "<td width=104 valign=top style=\"width:77.7pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">13/02/2020</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Sector}</span></p>" +
                                             "</td>" +
                                         "</tr>" +
                                     "</table>" +
