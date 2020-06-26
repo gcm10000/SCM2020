@@ -137,6 +137,7 @@ namespace SCM2020___Server.Controllers
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
+            //output.EmployeeId = materialOutputFromJson.EmployeeId;
             output.ServiceLocation = materialOutputFromJson.ServiceLocation;
             output.WorkOrder = materialOutputFromJson.WorkOrder;
             
@@ -196,12 +197,6 @@ namespace SCM2020___Server.Controllers
                     productModify.Stock += oldder - newest;
                     context.ConsumptionProduct.Update(productModify);
                 }
-            }
-
-            //check quantity equals zero
-            foreach (var productZero in output.ConsumptionProducts.Where(x => x.Quantity == 0))
-            {
-                output.ConsumptionProducts.Remove(productZero);
             }
             context.MaterialOutput.Update(output);
             await context.SaveChangesAsync();
