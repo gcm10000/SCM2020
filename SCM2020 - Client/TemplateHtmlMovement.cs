@@ -127,7 +127,7 @@ namespace SCM2020___Client
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrder}</span></p>" +
                                             "</td>" +
                                             "<td width=132 valign=top style=\"width:99.2pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrderDate}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrderDate.ToString("dd/MM/yyyy")}</span></p>" +
                                             "</td>" +
                                             "<td width=104 valign=top style=\"width:77.95pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Situation}</span></p>" +
@@ -196,7 +196,7 @@ namespace SCM2020___Client
                 "<span style=\"font-family:'Arial',sans-serif\">Departamento de Segurança Eletrônica e de Telecomunicações – DETEL</span>" +
             "</p>" +
             "<p style=\"text-align:center\">" +
-                "<span style=\"font-family:'Arial',sans-serif\">Serviço de Controle de Materiais</span>" +
+                "<span style=\"font-family:'Arial',sans-serif\">Setor de Controle de Materiais</span>" +
              "</p>" +
          "</div>" +
      "</div>" +
@@ -251,7 +251,7 @@ namespace SCM2020___Client
                               "<tr style=\"height:8.1pt\">" +
                                   "<td valign=top style=\"height:8.1pt\">" +
                                       "<p class=MsoNormal align=right style=\"margin-bottom:0cm;margin-bottom:.0001pt;text-align:right;line-height:normal\">" +
-                                          "<span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">Serviço de Controle de Materiais:</span>" +
+                                          "<span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">Setor de Controle de Materiais:</span>" +
                                        "</p>" +
                                    "</td>" +
                                    "<td valign=top style=\"border:none;border-bottom:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt;height:8.1pt\">" +
