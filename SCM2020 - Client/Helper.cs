@@ -40,9 +40,11 @@ namespace SCM2020___Client
         ///  Imprimir documento a partir do WebBrowser. <para></para>
         ///  Este método funciona somente após a página estiver totalmente carregada.
         ///  Utilize este método dentro do evento LoadCompleted do WebBrowser.
+        ///  <para />Para mais informações: https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
         /// </summary>
         /// <param name="webBrowser">Navegador incorporado para realização da impressão do documento.</param>
         /// <returns></returns>
+        /// 
         public static bool PrintDocument(this WebBrowser webBrowser)
         {
             MSHTML.IHTMLDocument2 doc = webBrowser.Document as MSHTML.IHTMLDocument2;

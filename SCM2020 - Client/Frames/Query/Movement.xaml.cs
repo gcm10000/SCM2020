@@ -1,33 +1,17 @@
-﻿using Microsoft.Win32;
-using ModelsLibraryCore;
+﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
-using SCM2020___Client.Templates;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
-using System.Management;
-using System.Printing;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using System.Windows.Xps.Serialization;
-//using RazorEngine;
-//using RazorEngine.Templating; // For extension methods.
 
 
 namespace SCM2020___Client.Frames.Query
@@ -38,7 +22,7 @@ namespace SCM2020___Client.Frames.Query
 
     //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
     //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
-    
+
     public class AuxiliarConsumptionView : ModelsLibraryCore.AuxiliarConsumption
     {
         //Input or output.
@@ -47,6 +31,7 @@ namespace SCM2020___Client.Frames.Query
     public partial class Movement : UserControl
     {
         List<DocumentMovement.Product> ProductsToShow;
+        DocumentMovement.QueryMovement info = null;
         public Movement()
         {
             InitializeComponent();
@@ -111,12 +96,22 @@ namespace SCM2020___Client.Frames.Query
             {}
 
             //Show data in screen
-            OSText.Text = Monitoring.Work_Order;
-            RegisterApplicationTextBox.Text = InfoUser.Register;
-            ApplicationTextBox.Text = InfoUser.Name;
-            SectorTextBox.Text = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector;
-            SituationTextBox.Text = (Monitoring.Situation) ? "Fechada" : "Aberta";
-            MovingDateDatePicker.SelectedDate = Monitoring.MovingDate;
+            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            {
+                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = Monitoring.Work_Order,
+                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
+                WorkOrderDate = Monitoring.MovingDate,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+
+            OSText.Text = info.WorkOrder;
+            RegisterApplicationTextBox.Text = info.RegisterApplication.ToString();
+            ApplicationTextBox.Text = info.SolicitationEmployee;
+            SectorTextBox.Text = info.Sector;
+            SituationTextBox.Text = info.Situation;
+            WorkOrderDateDatePicker.SelectedDate = info.WorkOrderDate;
 
             ProductsToShow = new List<DocumentMovement.Product>();
             
@@ -204,70 +199,15 @@ namespace SCM2020___Client.Frames.Query
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-            //string template = "Hello @Model.Name, welcome to RazorEngine!";
-            //Se achou...
-            //var templateMovement = new QueryMovement()
-            //{
-            //    RegistrationSolicitationEmployee = 123,
-            //    WorkOrder = "TESTE12345QEA"
-            //};
-            //List<DocumentMovement.Product> products = new List<DocumentMovement.Product>
-            //{
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //};
-
-            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
-            {
-                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = Monitoring.Work_Order,
-                Sector = InfoUser.Sector.NameSector,
-                WorkOrderDate = Monitoring.MovingDate,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
-            
             var result = template.RenderizeHtml();
-            System.IO.File.WriteAllText(@"C:\Users\Gabriel\Desktop\template\pagina.txt", result);
-
-
             this.webBrowser.NavigateToString(result);
-            //https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
 
             this.webBrowser.LoadCompleted += (sender, e) =>
             {
                 string namePrinter = Helper.GetPrinter(new string[] {"XPS"});
-
-                //PrintDialog pd = new PrintDialog
-                //{
-                //    PrintTicket = new PrintTicket
-                //    {
-                //        Duplexing = Duplexing.TwoSidedLongEdge,
-                //        OutputColor = OutputColor.Monochrome,
-                //        PageOrientation = PageOrientation.Portrait,
-                //        PageMediaSize = new PageMediaSize(794, 1122),
-                //        InputBin = InputBin.AutoSelect
-                //    }
-                //};
-                ////pd.PrintTicket.PageMediaSize.Height
-                ////pd.PrintTicket.PageMediaSize.Width
-                PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
-                //pd.ShowDialog();
-                //pd.PrintDocument(paginator, "customDocument");
-
                 webBrowser.PrintDocument();
             };
-            //DoPreview("MEU NOVO TESTE");
-            //PrintDialog pd = new PrintDialog();
-
-            //PrintDocument();
-            //this.webBrowser.Refresh(true);
         }
 
         private void PrintPageHandler(object sender, PrintPageEventArgs e)
