@@ -22,15 +22,9 @@ namespace SCM2020___Client.Frames.Query
 
     //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
     //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
-
-    public class AuxiliarConsumptionView : ModelsLibraryCore.AuxiliarConsumption
-    {
-        //Input or output.
-        public string Movement { get; set; }
-    }
     public partial class Movement : UserControl
     {
-        List<DocumentMovement.Product> ProductsToShow;
+        List<DocumentMovement.Product> ProductsToShow = null;
         DocumentMovement.QueryMovement info = null;
         public Movement()
         {
@@ -96,7 +90,7 @@ namespace SCM2020___Client.Frames.Query
             {}
 
             //Show data in screen
-            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            this.info = new DocumentMovement.QueryMovement()
             {
                 Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
                 WorkOrder = Monitoring.Work_Order,
