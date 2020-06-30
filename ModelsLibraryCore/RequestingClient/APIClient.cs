@@ -17,10 +17,12 @@ namespace ModelsLibraryCore.RequestingClient
         public HttpRequestHeaders Headers { get; private set; }
         public Token Token { get; private set; }
         public JwtSecurityToken JwtSecurityToken { get; private set; }
+        public Sector Sector { get; private set; }
         public SignIn(HttpRequestHeaders Headers, Token Token)
         {
             this.Headers = Headers;
             this.Token = Token;
+            this.Sector = Sector;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
         }
     }
