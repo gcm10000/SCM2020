@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{293B64
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsLibrary", "ModelsLibrary\ModelsLibrary.csproj", "{18B7FB33-44B5-4817-80C5-7655EEF7D3CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCM2020 - Client", "SCM2020 - Client\SCM2020 - Client.csproj", "{46E76F46-1360-4E2E-AABA-D82F42830A1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCM2020 - Client", "SCM2020 - Client\SCM2020 - Client.csproj", "{46E76F46-1360-4E2E-AABA-D82F42830A1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

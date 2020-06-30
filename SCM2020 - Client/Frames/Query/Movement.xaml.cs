@@ -1,14 +1,19 @@
-﻿using ModelsLibraryCore;
+﻿using Microsoft.Win32;
+using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.Templates;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Management;
 using System.Printing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -46,6 +51,7 @@ namespace SCM2020___Client.Frames.Query
         {
             InitializeComponent();
         }
+
         ModelsLibraryCore.Monitoring Monitoring;
         ModelsLibraryCore.InfoUser InfoUser;
 
@@ -99,10 +105,19 @@ namespace SCM2020___Client.Frames.Query
             ModelsLibraryCore.MaterialInput input = null;
             try
             {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist input with that workorder
             {}
+
+            //Show data in screen
+            OSText.Text = Monitoring.Work_Order;
+            RegisterApplicationTextBox.Text = InfoUser.Register;
+            ApplicationTextBox.Text = InfoUser.Name;
+            SectorTextBox.Text = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector;
+            SituationTextBox.Text = (Monitoring.Situation) ? "Fechada" : "Aberta";
+            MovingDateDatePicker.SelectedDate = Monitoring.MovingDate;
+
             ProductsToShow = new List<DocumentMovement.Product>();
             
             //CONSUMPTERS
@@ -205,6 +220,7 @@ namespace SCM2020___Client.Frames.Query
             //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
             //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
             //};
+
             DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
             {
                 Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
@@ -218,12 +234,16 @@ namespace SCM2020___Client.Frames.Query
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
             
             var result = template.RenderizeHtml();
+            System.IO.File.WriteAllText(@"C:\Users\Gabriel\Desktop\template\pagina.txt", result);
+
 
             this.webBrowser.NavigateToString(result);
             //https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
 
             this.webBrowser.LoadCompleted += (sender, e) =>
             {
+                string namePrinter = Helper.GetPrinter(new string[] {"XPS"});
+
                 //PrintDialog pd = new PrintDialog
                 //{
                 //    PrintTicket = new PrintTicket
@@ -237,10 +257,11 @@ namespace SCM2020___Client.Frames.Query
                 //};
                 ////pd.PrintTicket.PageMediaSize.Height
                 ////pd.PrintTicket.PageMediaSize.Width
-                //PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
+                PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
                 //pd.ShowDialog();
                 //pd.PrintDocument(paginator, "customDocument");
-                Helper.PrintDocument(this.webBrowser);
+
+                webBrowser.PrintDocument();
             };
             //DoPreview("MEU NOVO TESTE");
             //PrintDialog pd = new PrintDialog();
@@ -248,6 +269,41 @@ namespace SCM2020___Client.Frames.Query
             //PrintDocument();
             //this.webBrowser.Refresh(true);
         }
+
+        private void PrintPageHandler(object sender, PrintPageEventArgs e)
+        {
+           
+        }
+
+     
+        //private void Print()
+        //{
+        //    //if (m_streams == null || m_streams.Count == 0)
+        //    //    throw new Exception(“Error: no stream to print.”);
+        //    PrintDocument printDoc = new PrintDocument();
+        //    if (!printDoc.PrinterSettings.IsValid)
+        //    {
+        //        throw new Exception("Error: cannot find the default printer.");
+        //    }
+        //    else
+        //    {
+        //        printDoc.PrintPage += new PrintPageEventHandler((sender, e) => 
+        //        {
+
+        //        });
+        //        int m_currentPageIndex = 0;
+        //        string filename = "";
+        //        if (printDoc.PrinterSettings.PrinterName == "Microsoft XPS Document Writer")
+        //        {
+        //            printDoc.PrinterSettings.PrintToFile = true;
+        //            if (filename == "")
+        //                printDoc.PrinterSettings.PrintFileName = DateTime.Now.Ticks.ToString() + ".xps";
+        //            else
+        //                printDoc.PrinterSettings.PrintFileName = filename;
+        //        }
+        //        printDoc.Print();
+        //    }
+        //}
 
         private string _previewWindowXaml =
     @"<Window
@@ -350,7 +406,10 @@ namespace SCM2020___Client.Frames.Query
             Console.WriteLine("{0} generated.", fileName + ".xps");
         }
 
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 
 }
