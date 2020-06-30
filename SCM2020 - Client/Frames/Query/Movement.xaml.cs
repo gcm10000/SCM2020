@@ -1,28 +1,17 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
-using SCM2020___Client.Templates;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
-using System.Printing;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
 using System.Windows.Xps.Serialization;
-//using RazorEngine;
-//using RazorEngine.Templating; // For extension methods.
 
 
 namespace SCM2020___Client.Frames.Query
@@ -33,7 +22,7 @@ namespace SCM2020___Client.Frames.Query
 
     //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
     //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
-    
+
     public class AuxiliarConsumptionView : ModelsLibraryCore.AuxiliarConsumption
     {
         //Input or output.
@@ -42,10 +31,12 @@ namespace SCM2020___Client.Frames.Query
     public partial class Movement : UserControl
     {
         List<DocumentMovement.Product> ProductsToShow;
+        DocumentMovement.QueryMovement info = null;
         public Movement()
         {
             InitializeComponent();
         }
+
         ModelsLibraryCore.Monitoring Monitoring;
         ModelsLibraryCore.InfoUser InfoUser;
 
@@ -99,10 +90,29 @@ namespace SCM2020___Client.Frames.Query
             ModelsLibraryCore.MaterialInput input = null;
             try
             {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist input with that workorder
             {}
+
+            //Show data in screen
+            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            {
+                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = Monitoring.Work_Order,
+                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
+                WorkOrderDate = Monitoring.MovingDate,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+
+            OSText.Text = info.WorkOrder;
+            RegisterApplicationTextBox.Text = info.RegisterApplication.ToString();
+            ApplicationTextBox.Text = info.SolicitationEmployee;
+            SectorTextBox.Text = info.Sector;
+            SituationTextBox.Text = info.Situation;
+            WorkOrderDateDatePicker.SelectedDate = info.WorkOrderDate;
+
             ProductsToShow = new List<DocumentMovement.Product>();
             
             //CONSUMPTERS
@@ -189,65 +199,48 @@ namespace SCM2020___Client.Frames.Query
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-            //string template = "Hello @Model.Name, welcome to RazorEngine!";
-            //Se achou...
-            //var templateMovement = new QueryMovement()
-            //{
-            //    RegistrationSolicitationEmployee = 123,
-            //    WorkOrder = "TESTE12345QEA"
-            //};
-            //List<DocumentMovement.Product> products = new List<DocumentMovement.Product>
-            //{
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //    new DocumentMovement.Product() {code = 1512, description = "AP. TELEFÔNICO", MoveDate = DateTime.Parse("25/06/2020"), movement = "SAÍDA", patrimony = "868852", quantity = 20, unity = "UN"},
-            //};
-            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
-            {
-                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = Monitoring.Work_Order,
-                Sector = InfoUser.Sector.NameSector,
-                WorkOrderDate = Monitoring.MovingDate,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
-            
             var result = template.RenderizeHtml();
-
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
-            //https://stackoverflow.com/questions/28889315/silent-print-html-file-in-c-sharp-using-wpf
 
-            this.webBrowser.LoadCompleted += (sender, e) =>
-            {
-                //PrintDialog pd = new PrintDialog
-                //{
-                //    PrintTicket = new PrintTicket
-                //    {
-                //        Duplexing = Duplexing.TwoSidedLongEdge,
-                //        OutputColor = OutputColor.Monochrome,
-                //        PageOrientation = PageOrientation.Portrait,
-                //        PageMediaSize = new PageMediaSize(794, 1122),
-                //        InputBin = InputBin.AutoSelect
-                //    }
-                //};
-                ////pd.PrintTicket.PageMediaSize.Height
-                ////pd.PrintTicket.PageMediaSize.Width
-                //PrintHtmlDocument paginator = new PrintHtmlDocument(webBrowser, 1089, 1122, 794);
-                //pd.ShowDialog();
-                //pd.PrintDocument(paginator, "customDocument");
-                Helper.PrintDocument(this.webBrowser);
-            };
-            //DoPreview("MEU NOVO TESTE");
-            //PrintDialog pd = new PrintDialog();
-
-            //PrintDocument();
-            //this.webBrowser.Refresh(true);
         }
+
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            webBrowser.PrintDocument();
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+        }
+
+
+        //private void Print()
+        //{
+        //    //if (m_streams == null || m_streams.Count == 0)
+        //    //    throw new Exception(“Error: no stream to print.”);
+        //    PrintDocument printDoc = new PrintDocument();
+        //    if (!printDoc.PrinterSettings.IsValid)
+        //    {
+        //        throw new Exception("Error: cannot find the default printer.");
+        //    }
+        //    else
+        //    {
+        //        printDoc.PrintPage += new PrintPageEventHandler((sender, e) => 
+        //        {
+
+        //        });
+        //        int m_currentPageIndex = 0;
+        //        string filename = "";
+        //        if (printDoc.PrinterSettings.PrinterName == "Microsoft XPS Document Writer")
+        //        {
+        //            printDoc.PrinterSettings.PrintToFile = true;
+        //            if (filename == "")
+        //                printDoc.PrinterSettings.PrintFileName = DateTime.Now.Ticks.ToString() + ".xps";
+        //            else
+        //                printDoc.PrinterSettings.PrintFileName = filename;
+        //        }
+        //        printDoc.Print();
+        //    }
+        //}
 
         private string _previewWindowXaml =
     @"<Window
@@ -350,7 +343,13 @@ namespace SCM2020___Client.Frames.Query
             Console.WriteLine("{0} generated.", fileName + ".xps");
         }
 
-
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
+            DocumentMovement template = new DocumentMovement(ProductsToShow, info);
+            var result = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(result);
+        }
     }
 
 }

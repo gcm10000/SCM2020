@@ -9,22 +9,22 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <DockPanel Background="White">
 
-        <WebBrowser x:Name="webBrowser" Visibility="Visible" Height="294" Width="291"></WebBrowser>
+        <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <TextBox IsEnabled="False" x:Name="InvoiceTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox IsEnabled="False" x:Name="OSText" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Matricula do Solicitante" FontSize="18"></TextBlock>
-                    <TextBox IsEnabled="False" Width="188" x:Name="NumberRequesterTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox IsEnabled="False" Width="188" x:Name="RegisterApplicationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Nome do Solicitante" FontSize="18"></TextBlock>
-                    <TextBox IsEnabled="False" Width="188" x:Name="RequesterTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox IsEnabled="False" Width="188" x:Name="ApplicationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Setor" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="SectorTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Situação" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="SituationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Data da OS" FontSize="18"></TextBlock>
-                    <DatePicker IsEnabled="False" x:Name="MovingDateDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
+                    <DatePicker IsEnabled="False" x:Name="WorkOrderDateDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
                 </StackPanel>
             </Border>
         </ScrollViewer>
@@ -40,7 +40,21 @@
                 </Button>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Button Content="Imprimir" Padding="5" x:Name="Print_Button" Click="Print_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button Content="Exportar" Padding="5" x:Name="Export_Button" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            <Button Content="Imprimir" Padding="5" x:Name="Print_Button" Click="Print_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">

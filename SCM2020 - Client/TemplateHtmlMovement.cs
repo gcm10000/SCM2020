@@ -37,10 +37,10 @@ namespace SCM2020___Client
         /// Informações da Ordem de Serviço.
         /// </summary>
         public QueryMovement Information { get; }
-        public string MarginTop { get; set; } = "25 mm";
-        public string MarginLeft { get; set; } = "25 mm";
-        public string MarginRight { get; set; } = "25 mm";
-        public string MarginBottom { get; set; } = "5 mm";
+        public string MarginTop { get; set; } = "25mm";
+        public string MarginLeft { get; set; } = "25mm";
+        public string MarginRight { get; set; } = "25mm";
+        public string MarginBottom { get; set; } = "5mm";
         private StringBuilder Html { get; set; }
         public DocumentMovement(List<DocumentMovement.Product> Products, QueryMovement Information)
         {
@@ -96,7 +96,7 @@ namespace SCM2020___Client
                                 "<td>" +
                                     "<div class=\"content\">" +
                                     "<p class=MsoNormal align=center style=\"text-align:center\">" +
-                                        "<b><u><span style=\"font-family:'Arial',sans-serif\">REQUISIÇÃO DE MATERIAL</span></u></b>" +
+                                        "<b><u><span style=\"font-family:'Arial',sans-serif\">LISTAGEM DE MATERIAL</span></u></b>" +
                                     "</p>" +
                                     "<p class=MsoNormal><span style=\"font-size:10.0pt;line-height:107%;font-family: 'Arial',sans-serif\">&nbsp;</span></p>" +
                                     "<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width=633 style=\"width:100%;border-collapse:collapse;border: none\">" +
@@ -136,7 +136,7 @@ namespace SCM2020___Client
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.RegisterApplication.ToString()}</span></p>" +
                                             "</td>" +
                                             "<td width=70 valign=top style=\"width:52.5pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.RegisterApplication}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.SolicitationEmployee}</span></p>" +
                                             "</td>" +
                                             "<td width=104 valign=top style=\"width:77.7pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Sector}</span></p>" +
@@ -161,11 +161,11 @@ namespace SCM2020___Client
                                             "<td width=67 valign=top style=\"width:50.05pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt; height:9.55pt\">" +
                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"> <b> <span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Unidade</span> </b> </p>" +
                                             "</td>" +
-                                            "<td width=84 valign=top style=\"width:62.85pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt; height:9.55pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"> <b> <span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Patrimônio</span> </b> </p>" +
-                                            "</td>" +
                                             "<td width=162 valign=top style=\"width:121.3pt;background:#C9C9C9;padding: 0cm 5.4pt 0cm 5.4pt;height:9.55pt\">" +
                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Movimentação</span> </b> </p>" +
+                                            "</td>" +
+                                            "<td width=84 valign=top style=\"width:62.85pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt; height:9.55pt\">" +
+                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"> <b> <span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Patrimônio</span> </b> </p>" +
                                             "</td>" +
                                         "</tr>" +
                                     "<!--BEGIN ITEMS-->" +
@@ -294,11 +294,11 @@ namespace SCM2020___Client
                                             "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.unity}</span></p>" +
                                             "</td>" +
-                                            "<td width=84 valign=top style=\"width:62.85pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.patrimony}</span></p>" +
-                                            "</td>" +
                                             "<td width=162 valign=top style=\"width:121.3pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.movement}</span></p>" +
+                                            "</td>" +
+                                            "<td width=84 valign=top style=\"width:62.85pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.patrimony}</span></p>" +
                                             "</td>" +
                                         "</tr>";
             }
