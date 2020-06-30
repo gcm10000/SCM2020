@@ -201,21 +201,18 @@ namespace SCM2020___Client.Frames.Query
         {
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
             var result = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
 
-            this.webBrowser.LoadCompleted += (sender, e) =>
-            {
-                string namePrinter = Helper.GetPrinter(new string[] {"XPS"});
-                webBrowser.PrintDocument();
-            };
         }
 
-        private void PrintPageHandler(object sender, PrintPageEventArgs e)
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-           
+            webBrowser.PrintDocument();
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
-     
+
         //private void Print()
         //{
         //    //if (m_streams == null || m_streams.Count == 0)
@@ -348,7 +345,10 @@ namespace SCM2020___Client.Frames.Query
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            DocumentMovement template = new DocumentMovement(ProductsToShow, info);
+            var result = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(result);
         }
     }
 
