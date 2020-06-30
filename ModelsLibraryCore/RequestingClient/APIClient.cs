@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,8 +23,9 @@ namespace ModelsLibraryCore.RequestingClient
         {
             this.Headers = Headers;
             this.Token = Token;
-            this.Sector = Sector;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
+            this.Sector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+            APIClient.GetData<Sector>
         }
     }
     public static class APIClient

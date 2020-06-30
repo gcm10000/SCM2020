@@ -31,6 +31,6 @@ namespace ModelsLibraryCore
         /// Setor do funcionário.
         /// </summary>
         [Required(ErrorMessage = "Insira o setor.")]
-        public string Role { get; set; }
+        public int IdSector { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace ModelsLibraryCore
         public string CPFRegistration { get; set; }
         public string Name { get; set; }
         public int IdSector { get; set; }
+        public string Occupation { get; set; }
     }
 }

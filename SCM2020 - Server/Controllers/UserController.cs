@@ -50,9 +50,10 @@ namespace SCM2020___Server.Controllers
         {
             var postData = await SignUpUserInfo();
             var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
-            var user = new ApplicationUser { UserName = username, Name = postData.Name, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration };
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration, IdSector = postData.IdSector, Occupation = postData.Occupation };
             
             var r1 = UserManager.FindByPJERJRegistrationAsync(postData.PJERJRegistration);
+            //MUDAR
             var r2 = UserManager.FindByPJERJRegistrationAsync(postData.CPFRegistration);
             if ((r1 != null) || (r2 != null))
                 return BadRequest("Já existe um usuário com algum dos dois registros.");
@@ -65,16 +66,16 @@ namespace SCM2020___Server.Controllers
                 var claims = new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
-                    new Claim(ClaimTypes.Name, postData.Name),
-                    new Claim(ClaimTypes.Role, postData.Role),
-                    new Claim("Occupation", postData.Occupation),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
+                    new Claim("Occupation", user.Occupation),
                 };
 
                 //var resultclaims = 
-                await UserManager.AddClaimsAsync(
-                user: user,
-                claims: claims
-                );
+                //await UserManager.AddClaimsAsync(
+                //user: user,
+                //claims: claims
+                //);
                 return BuildToken(claims);
             }
             else
@@ -105,12 +106,19 @@ namespace SCM2020___Server.Controllers
                 isPersistent: false,
                 lockoutOnFailure: false
                 );
-            var claims = await UserManager.GetClaimsAsync(user);
-            
+            //var claims = await UserManager.GetClaimsAsync(user);
+
+            var claims = new[]
+{
+                    new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
+                    new Claim("Occupation", user.Occupation),
+                };
 
             if (result.Succeeded)
             {
-                return BuildToken(claims.ToArray());
+                return BuildToken(claims);
             }
             return BadRequest("Usuário ou senha inválidos.");
         }
