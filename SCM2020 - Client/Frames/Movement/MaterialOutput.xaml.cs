@@ -269,7 +269,7 @@ namespace SCM2020___Client.Frames
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
-                RequestingSector = 0,
+                RequestingSector = Helper.CurrentSector.Id,
                 MovingDate = dateTime,
                 Work_Order = OSTextBox.Text
             };
