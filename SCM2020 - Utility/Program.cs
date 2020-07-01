@@ -283,7 +283,7 @@ namespace SCM2020___Utility
             }
             foreach (var item in InputByVendors)
             {
-                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "/api/Input/Migrate"), item, Authentication));
+                Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "Input/Migrate"), item, Authentication));
             }
         }
         static void AddOutput(AuthenticationHeaderValue Authentication)

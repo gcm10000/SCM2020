@@ -42,7 +42,7 @@ namespace SCM2020___Client
                 
                 Helper.Authentication = signIn.Headers.Authorization;
                 Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-                Helper.CurrentSector = signIn.;
+                Helper.CurrentSector = signIn.Sector;
                 Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
                 MessageBox.Show("Login realizado com sucesso.", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
             }

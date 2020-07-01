@@ -19,13 +19,15 @@ namespace ModelsLibraryCore.RequestingClient
         public Token Token { get; private set; }
         public JwtSecurityToken JwtSecurityToken { get; private set; }
         public Sector Sector { get; private set; }
-        public SignIn(HttpRequestHeaders Headers, Token Token)
+        public SignIn(HttpRequestHeaders Headers, Token Token, string url)
         {
+            Uri uri = new Uri(url);
+            
             this.Headers = Headers;
             this.Token = Token;
+            string idSector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
-            this.Sector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
-            APIClient.GetData<Sector>
+            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(uri.Host), $"sector/{idSector}" ).ToString(), Headers.Authorization);
         }
     }
     public static class APIClient
