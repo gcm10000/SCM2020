@@ -7,6 +7,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -197,6 +198,7 @@ namespace SCM2020___Client.Frames.Query
         }
         //True to print, False to export.
         bool PrintORExport = false;
+        string Document = string.Empty;
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -213,15 +215,38 @@ namespace SCM2020___Client.Frames.Query
             if (PrintORExport == true)
             {
                 webBrowser.PrintDocument();
-                webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
             }
             else
             {
-                //webBrowser.ExportDocument(Helper.GetPrinter("PDF"));
-                var p = new Process();
-                p.StartInfo.FileName = "notepad.exe";
-                p.Start();
+                string printer = Helper.GetPrinter("PDF");
+                string tempFile = string.Empty;
+                try
+                {
+                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                    //File.Create(tempFile);
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    {
+                        file.Write(Document);
+                        file.Flush();
+                    }
+
+                    //"f=" The input file
+                    //"p=" The temporary default printer
+                    var p = new Process();
+                    p.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    //Fazer com que o document-exporter apague o arquivo após a impressão.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" ";
+                    p.Start();
+                }
+                finally
+                {
+                    //if (File.Exists(tempFile))
+                    //{
+                    //    File.Delete(tempFile);
+                    //}
+                }
             }
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
 
@@ -359,9 +384,9 @@ namespace SCM2020___Client.Frames.Query
         {
             PrintORExport = false;
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
-            var result = template.RenderizeHtml();
+            Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(result);
+            this.webBrowser.NavigateToString(Document);
         }
     }
 

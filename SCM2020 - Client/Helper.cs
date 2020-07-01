@@ -32,7 +32,10 @@ namespace SCM2020___Client
         {
             var path = Path.GetTempPath();
             var fileName = Guid.NewGuid().ToString() + extension;
-            return Path.Combine(path, fileName);
+            var directory = Path.Combine(path, "SCM");
+            if (!Directory.Exists(directory)) 
+                Directory.CreateDirectory(directory);
+            return Path.Combine(directory, fileName);
         }
 
         /// <summary>

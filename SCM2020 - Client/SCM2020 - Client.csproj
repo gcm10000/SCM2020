@@ -50,4 +50,13 @@
     <ProjectReference Include="..\ModelsLibraryCore\ModelsLibraryCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Exporter\Document-Exporter.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Exporter\NDesk.Options.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
