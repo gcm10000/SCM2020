@@ -223,7 +223,6 @@ namespace SCM2020___Client.Frames.Query
                 try
                 {
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
-                    //File.Create(tempFile);
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
                         file.Write(Document);
