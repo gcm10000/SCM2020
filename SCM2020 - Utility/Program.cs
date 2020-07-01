@@ -97,7 +97,7 @@ namespace SCM2020___Utility
 
             RegisterVendors(start);
             AddGroup(start);
-            AddSector(start);
+            //AddSector(start);
             SignUpSCMEmployees();
             SignUpAll();
             AddProduct(start);
@@ -130,15 +130,13 @@ namespace SCM2020___Utility
                 Group.AddOnServer(urlAddGroup, newgroup);
             }
         }
-        static void AddSector(AuthenticationHeaderValue Authentication)
-        {
-            //Sector sector = new Sector()
-            //{
+        //static void AddSector(AuthenticationHeaderValue Authentication)
+        //{
+        //    //Sector sector = new Sector()
+        //    //{
                 
-            //}
-            //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, new Uri("/api/Monitoring/Add")), monitoring, Authentication));
-
-        }
+        //    //}
+        //}
         static void AddMonitoring(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(
@@ -608,6 +606,15 @@ namespace SCM2020___Utility
                 ConnectionString: SCMAccess.ConnectionString,
                 TableName: "[Func do almox]");
             var records = dbAccess.GetDataFromTable();
+
+            Sector sector = new Sector()
+            {
+                NameSector = "Setor de Controle de Materiais",
+                NumberSector = 90
+            };
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/"), sector, null);
+            Console.WriteLine(result);
+
             foreach (var employees in records)
             {
                 var signUp = new SignUpUserInfo()
@@ -616,7 +623,7 @@ namespace SCM2020___Utility
                     Password = "@Tj_123456",
                     CPFRegistration = null,
                     Occupation = "Técnico",
-                    Role = "SCM"
+                    IdSector = result.Id,
                 };
 
                 foreach (var row in employees)
@@ -650,6 +657,14 @@ namespace SCM2020___Utility
                 ConnectionString: SCMAccess.ConnectionString,
                 SelectCommand: "SELECT * FROM Funcionario ORDER BY Matricula DESC", true);
             var records = dbAccess.GetDataFromTable();
+
+            Sector sector = new Sector()
+            {
+                NameSector = "DETEL",
+                NumberSector = 0
+            };
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/"), sector, null);
+
             foreach (var employees in records)
             {
                 var signUp = new SignUpUserInfo()
@@ -658,7 +673,7 @@ namespace SCM2020___Utility
                     Password = "@Tj_123456",
                     CPFRegistration = null,
                     Occupation = "Técnico",
-                    Role = "DETEL"
+                    IdSector = result.Id,
                 };
 
                 foreach (var row in employees)
@@ -696,7 +711,7 @@ namespace SCM2020___Utility
                         Password = "@Tj_123456",
                         CPFRegistration = null,
                         Occupation = "Técnico",
-                        Role = "DETEL",
+                        IdSector = result.Id,
                         Name = nameEmployee,
                         PJERJRegistration = "9" + registrationEmployee
                     };
@@ -719,18 +734,20 @@ namespace SCM2020___Utility
                 NameSector = "Administrador",
                 NumberSector = 100
             };
-            APIClient.POSTData(new Uri(uriServer, "sector"), sector, null);
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector"), sector, null);
+            Console.WriteLine(result);
             var signUp = new SignUpUserInfo()
             {
                 IsPJERJRegistration = true,
                 CPFRegistration = null,
                 Occupation = "Desenvolvedor",
                 //O PRIMEIRO "SETOR" SERÁ ADMINISTRADOR
-                IdSector = 1,
+                IdSector = result.Id,
                 Name = "Gabriel Machado",
                 PJERJRegistration = "59450",
                 Password = "SenhaSecreta#2020",
             };
+
             try
             {
                 SignUp(signUp);

@@ -28,7 +28,7 @@ namespace SCM2020___Server.Controllers
             return Ok(list);
         }
         [HttpPost("Add")]
-        public async Task<IActionResult> Create()
+        public async Task<ActionResult<ModelsLibraryCore.Response>> Create()
         {
             var raw = await Helper.RawFromBody(this);
             var sector = new Sector(raw);
@@ -37,7 +37,9 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Número ou nome do setor já existente.");
             context.Sectors.Add(sector);
             await context.SaveChangesAsync();
-            return Ok($"Setor {sector.NumberSector} - {sector.NameSector} adicionado com sucesso.");
+            var sectoroutput = context.Sectors.Single(x => (x.NameSector == sector.NameSector) && (x.NumberSector == sector.NumberSector));
+            //return Ok($"Setor {sector.NumberSector} - {sector.NameSector} adicionado com sucesso.");
+            return new ModelsLibraryCore.Response() { Id = sectoroutput.Id, Message = $"Setor {sector.NumberSector} - {sector.NameSector} adicionado com sucesso." };
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)

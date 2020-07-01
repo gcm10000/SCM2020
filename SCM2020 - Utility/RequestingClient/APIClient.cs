@@ -12,8 +12,6 @@ namespace SCM2020___Utility.RequestingClient
 {
     public static class APIClient
     {
-        //http://localhost:52991/api/Vendor
-
         public static string POSTData(Uri requestUri, object ObjectData, AuthenticationHeaderValue authentication)
         {
 
@@ -33,6 +31,28 @@ namespace SCM2020___Utility.RequestingClient
                 HttpResponseMessage respToken = client.PostAsync(requestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
                 string content = respToken.Content.ReadAsStringAsync().Result;
                 return content;
+            }
+        }
+        public static ModelsLibrary.Response POSTDataSector(Uri requestUri, object ObjectData, AuthenticationHeaderValue authentication)
+        {
+
+            //CRUD
+            //CREATE -> GENERIC POST
+            //READ -> GENERIC GET
+            //UPDATE -> GENERIC POST
+            //DELETE -> INT DELETE
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = authentication;
+
+                var objToJson = JsonConvert.SerializeObject(ObjectData);
+                HttpResponseMessage respToken = client.PostAsync(requestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
+                string content = respToken.Content.ReadAsStringAsync().Result;
+                ModelsLibrary.Response response = JsonConvert.DeserializeObject<ModelsLibrary.Response>(content);
+                return response;
             }
         }
         public static string DELETEData(Uri requestUri, AuthenticationHeaderValue authentication)
