@@ -234,7 +234,7 @@ namespace SCM2020___Client.Frames.Query
                     //"p=" The temporary default printer
                     var p = new Process();
                     p.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
-                    //Fazer com que o document-exporter apague o arquivo após a impressão.
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo: O arquivo é apagado antes do Exporter poder lê-lo.
                     p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" ";
                     p.Start();
                 }
