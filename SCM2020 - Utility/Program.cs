@@ -714,12 +714,19 @@ namespace SCM2020___Utility
         }
         static void SignUpAdministrator()
         {
+            Sector sector = new Sector() 
+            {
+                NameSector = "Administrador",
+                NumberSector = 100
+            };
+            APIClient.POSTData(new Uri(uriServer, "sector"), sector, null);
             var signUp = new SignUpUserInfo()
             {
                 IsPJERJRegistration = true,
                 CPFRegistration = null,
                 Occupation = "Desenvolvedor",
-                Role = "Administrator",
+                //O PRIMEIRO "SETOR" SERÁ ADMINISTRADOR
+                IdSector = 1,
                 Name = "Gabriel Machado",
                 PJERJRegistration = "59450",
                 Password = "SenhaSecreta#2020",

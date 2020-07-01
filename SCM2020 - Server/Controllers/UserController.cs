@@ -163,10 +163,18 @@ namespace SCM2020___Server.Controllers
             IdentityResult passwordChangeResult = await UserManager.ResetPasswordAsync(user, resetToken, newPassword);
 
             var updateUser = await UserManager.UpdateAsync(user);
-            var claims = await UserManager.GetClaimsAsync(user);
+
+            var claims = new[]
+            {
+                    new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
+                    new Claim("Occupation", user.Occupation),
+            }
+            ;
             if (passwordChangeResult.Succeeded)
             {
-                return BuildToken(claims.ToArray());
+                return BuildToken(claims);
             }
             return BadRequest();
         }
