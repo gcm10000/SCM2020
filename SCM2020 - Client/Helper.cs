@@ -150,7 +150,7 @@ namespace SCM2020___Client
 
             return maxVer;
         } // End Function GetBrowserVersion 
-        public static string GetPrinter(string[] content)
+        public static string GetPrinter(params string[] content)
         {
             foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {

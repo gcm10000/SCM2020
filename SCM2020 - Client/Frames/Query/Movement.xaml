@@ -84,10 +84,10 @@
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Unidade" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Movimentação" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Movimentação" Binding="{Binding Movement}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding MoveDate}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

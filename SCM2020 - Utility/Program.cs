@@ -612,7 +612,7 @@ namespace SCM2020___Utility
                 NameSector = "Setor de Controle de Materiais",
                 NumberSector = 90
             };
-            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/"), sector, null);
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
             Console.WriteLine(result);
 
             foreach (var employees in records)
@@ -663,7 +663,7 @@ namespace SCM2020___Utility
                 NameSector = "DETEL",
                 NumberSector = 0
             };
-            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/"), sector, null);
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
 
             foreach (var employees in records)
             {
@@ -734,7 +734,7 @@ namespace SCM2020___Utility
                 NameSector = "Administrador",
                 NumberSector = 100
             };
-            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector"), sector, null);
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
             Console.WriteLine(result);
             var signUp = new SignUpUserInfo()
             {

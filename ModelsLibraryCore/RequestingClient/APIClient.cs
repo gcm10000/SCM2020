@@ -21,13 +21,14 @@ namespace ModelsLibraryCore.RequestingClient
         public Sector Sector { get; private set; }
         public SignIn(HttpRequestHeaders Headers, Token Token, string url)
         {
-            Uri uriHost = new Uri(url);
+            Uri uri = new Uri(url);
             
             this.Headers = Headers;
             this.Token = Token;
-            string idSector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
-            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(uriHost.Host), $"sector/{idSector}" ).ToString(), Headers.Authorization);
+            string idSector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+            string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + "/api/";
+            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(requested), $"sector/{idSector}" ).ToString(), Headers.Authorization);
         }
     }
     public static class APIClient

@@ -117,13 +117,13 @@ namespace SCM2020___Client.Frames.Query
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     DocumentMovement.Product product = new DocumentMovement.Product()
                     {
-                        code = infoProduct.Code,
-                        description = infoProduct.Description,
-                        movement = "SAÍDA",
-                        quantity = item.Quantity,
-                        unity = infoProduct.Unity,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "SAÍDA",
+                        Quantity = item.Quantity,
+                        Unity = infoProduct.Unity,
                         MoveDate = item.Date,
-                        patrimony = ""
+                        Patrimony = ""
                     };
                     ProductsToShow.Add(product);
                 }
@@ -135,13 +135,13 @@ namespace SCM2020___Client.Frames.Query
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     DocumentMovement.Product product = new DocumentMovement.Product()
                     {
-                        code = infoProduct.Code,
-                        description = infoProduct.Description,
-                        movement = "ENTRADA",
-                        quantity = item.Quantity,
-                        unity = infoProduct.Unity,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "ENTRADA",
+                        Quantity = item.Quantity,
+                        Unity = infoProduct.Unity,
                         MoveDate = item.Date,
-                        patrimony = ""
+                        Patrimony = ""
                     };
                     ProductsToShow.Add(product);
                 }
@@ -155,13 +155,13 @@ namespace SCM2020___Client.Frames.Query
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                     DocumentMovement.Product product = new DocumentMovement.Product()
                     {
-                        code = infoProduct.Code,
-                        description = infoProduct.Description,
-                        movement = "SAÍDA",
-                        quantity = 1,
-                        unity = infoProduct.Unity,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "SAÍDA",
+                        Quantity = 1,
+                        Unity = infoProduct.Unity,
                         MoveDate = item.Date,
-                        patrimony = infoPermanentProduct.Patrimony
+                        Patrimony = infoPermanentProduct.Patrimony
                     };
                     ProductsToShow.Add(product);
                 }
@@ -174,25 +174,32 @@ namespace SCM2020___Client.Frames.Query
                     ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                     DocumentMovement.Product product = new DocumentMovement.Product()
                     {
-                        code = infoProduct.Code,
-                        description = infoProduct.Description,
-                        movement = "ENTRADA",
-                        quantity = 1,
-                        unity = infoProduct.Unity,
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "ENTRADA",
+                        Quantity = 1,
+                        Unity = infoProduct.Unity,
                         MoveDate = item.Date,
-                        patrimony = infoPermanentProduct.Patrimony
+                        Patrimony = infoPermanentProduct.Patrimony
                     };
                     ProductsToShow.Add(product);
                 }
             ProductsToShow = ProductsToShow.OrderByDescending(x => x.MoveDate).ToList();
+            foreach (var product in ProductsToShow)
+            {
+                ProductMovementDataGrid.Items.Add(product);
+            }
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
         }
+        //True to print, False to export.
+        bool PrintORExport = false;
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
+            PrintORExport = true;
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
             var result = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
@@ -202,8 +209,15 @@ namespace SCM2020___Client.Frames.Query
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            webBrowser.PrintDocument();
-            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            if (PrintORExport == true)
+            {
+                webBrowser.PrintDocument();
+                webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            }
+            else
+            {
+                webBrowser.ExportDocument(Helper.GetPrinter("PDF"));
+            }
         }
 
 
@@ -339,6 +353,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
+            PrintORExport = false;
             DocumentMovement template = new DocumentMovement(ProductsToShow, info);
             var result = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
