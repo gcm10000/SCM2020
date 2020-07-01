@@ -2,6 +2,7 @@
 using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
@@ -216,7 +217,10 @@ namespace SCM2020___Client.Frames.Query
             }
             else
             {
-                webBrowser.ExportDocument(Helper.GetPrinter("PDF"));
+                //webBrowser.ExportDocument(Helper.GetPrinter("PDF"));
+                var p = new Process();
+                p.StartInfo.FileName = "notepad.exe";
+                p.Start();
             }
         }
 
