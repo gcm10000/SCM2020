@@ -20,9 +20,11 @@ namespace SCM2020___Client.Frames.Register
     /// </summary>
     public partial class Employee : UserControl
     {
+        List<Sector> Sectors;
         public Employee()
         {
             InitializeComponent();
+            Sectors = APIClient.GetData<List<Sector>>(new Uri(Helper.Server, "sector").ToString(), Helper.Authentication);
         }
 
         private void BtnSaveEmployee_Click(object sender, RoutedEventArgs e)
@@ -36,7 +38,7 @@ namespace SCM2020___Client.Frames.Register
                     CPFRegistration = CPFTextBox.Text,
                     Occupation = OccupationTextBox.Text,
                     IsPJERJRegistration = (RegisterTextBox.Text.Trim() == string.Empty),
-                    Role = SectorTextBox.Text,
+                    IdSector = (SectorComboBox.SelectedIndex + 1),
                     Password = PasswordBoxTextBox.Password
                 };
                 var result = APIClient.PostData(new Uri(Helper.Server, new Uri("User/NewUser/")).ToString(), employee, Helper.Authentication);

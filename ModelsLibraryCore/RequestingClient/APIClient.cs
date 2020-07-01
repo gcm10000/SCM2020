@@ -21,13 +21,13 @@ namespace ModelsLibraryCore.RequestingClient
         public Sector Sector { get; private set; }
         public SignIn(HttpRequestHeaders Headers, Token Token, string url)
         {
-            Uri uri = new Uri(url);
+            Uri uriHost = new Uri(url);
             
             this.Headers = Headers;
             this.Token = Token;
             string idSector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
-            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(uri.Host), $"sector/{idSector}" ).ToString(), Headers.Authorization);
+            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(uriHost.Host), $"sector/{idSector}" ).ToString(), Headers.Authorization);
         }
     }
     public static class APIClient
@@ -76,7 +76,7 @@ namespace ModelsLibraryCore.RequestingClient
                 {
                     throw new AuthenticationException(content);
                 }
-                return new SignIn(client.DefaultRequestHeaders, token);
+                return new SignIn(client.DefaultRequestHeaders, token, url);
             }
         }
         private static HttpRequestHeaders MakeSignIn2(string url, string Registration, bool IsPJERJRegistration, string Password)

@@ -19,7 +19,9 @@
                 <TextBlock Text="Cargo" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="OccupationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="SectorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <ComboBox x:Name="SectorComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16">
+                    
+                </ComboBox>
                 <TextBlock Text="Senha" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <PasswordBox x:Name="PasswordBoxTextBox" Style="{x:Null}" Height="30" FontSize="16"></PasswordBox>
                 <Button VerticalAlignment="Bottom" Content="Salvar Funcionário" Padding="5" Width="200" x:Name="BtnSaveEmployee" Click="BtnSaveEmployee_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
