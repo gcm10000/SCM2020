@@ -212,6 +212,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
+            Helper.SetOptionsToPrint();
             if (PrintORExport == true)
             {
                 webBrowser.PrintDocument();
@@ -222,6 +223,7 @@ namespace SCM2020___Client.Frames.Query
                 string tempFile = string.Empty;
                 try
                 {
+
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
