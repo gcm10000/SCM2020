@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Management;
 using NDesk.Options;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Document_Exporter
 {
@@ -14,6 +15,7 @@ namespace Document_Exporter
         static void Main(string[] args)
         {
             var show_help = false;
+            var delete = false;
             var macros = new Dictionary<string, string>();
             string file = null;
             string TempPrinter = null;
@@ -22,9 +24,12 @@ namespace Document_Exporter
             { "f=", "The input file",   v => file = v },
             { "p=", "The temporary default printer",   v => TempPrinter = v },
 
-            // other...
+            // help...
             { "h|help",  "show this message and exit",
               v => show_help = v != null },
+            
+            { "d|delete",  "delete file when finished",
+              v => delete = v != null },
         };
             try
             {
@@ -77,8 +82,15 @@ namespace Document_Exporter
             {
                 Console.WriteLine("Set default printer failed: " + ex.Message);
             }
-            Console.WriteLine("Press Enter to exit.");
-            Console.ReadLine();
+            try
+            {
+                if (File.Exists(file))
+                    File.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("File delete error: " + ex.Message);
+            }
 
             /*
                 string strKey = "Software\\Microsoft\\Internet Explorer\\PageSetup";
