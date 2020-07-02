@@ -39,7 +39,6 @@ namespace SCM2020___Client
             var user = UserTextBox.Text;
             var password = PasswordTextBox.Password;
             var t = Task.Run(() => SignIn(user, password));
-            //t.Wait();
 
         }
         private void SignIn(string user, string password)
