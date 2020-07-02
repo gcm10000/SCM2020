@@ -84,7 +84,7 @@ namespace Document_Exporter
             }
             try
             {
-                if (File.Exists(file))
+                if (File.Exists(file) && delete)
                     File.Delete(file);
             }
             catch (Exception ex)
