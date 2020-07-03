@@ -524,6 +524,8 @@ namespace SCM2020___Client.Frames
                     };
                     this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
                 }
+                this.BtnPrint.IsEnabled = true;
+                this.BtnExport.IsEnabled = true;
             }
             catch (System.Net.Http.HttpRequestException) //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
             { }
@@ -543,22 +545,20 @@ namespace SCM2020___Client.Frames
             if (!DataToPrintORExportWasRescued)
             {
                 DataToPrintORExportWasRescued = true;
-                DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
-                {
-                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
-                    WorkOrder = PrincipalMonitoring.Work_Order,
-                    RegisterApplication = int.Parse(InfoUser.Register),
-                    SolicitationEmployee = InfoUser.Name
-                };
+                string workOrder = System.Uri.EscapeDataString(PrincipalMonitoring.Work_Order);
 
-                List<DocumentMovement.Product> products = DocumentMovement.ProductsAtWorkOrder(PrincipalMonitoring.Work_Order);
-                DocumentToPrintORExport = new DocumentMovement(products, info);
+                DocumentMovement.ResultSearch resultSearch = null;
+                var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
+                t.Wait();
+                var InformationQuery = resultSearch.InformationQuery;
+
+                DocumentToPrintORExport = new DocumentMovement(resultSearch.ProductsToShow, resultSearch.InformationQuery);
             }
 
             PrintORExport = true;
-            var result = DocumentToPrintORExport.RenderizeHtml();
+            Document = DocumentToPrintORExport.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(result);
+            this.webBrowser.NavigateToString(Document);
 
         }
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
@@ -605,24 +605,20 @@ namespace SCM2020___Client.Frames
             if (!DataToPrintORExportWasRescued)
             {
                 DataToPrintORExportWasRescued = true;
-                DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
-                {
-                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
-                    WorkOrder = PrincipalMonitoring.Work_Order,
-                    RegisterApplication = int.Parse(InfoUser.Register),
-                    SolicitationEmployee = InfoUser.Name
-                };
+                string workOrder = PrincipalMonitoring.Work_Order;
 
-                List<DocumentMovement.Product> products = DocumentMovement.ProductsAtWorkOrder(PrincipalMonitoring.Work_Order);
-                DocumentToPrintORExport = new DocumentMovement(products, info);
+                DocumentMovement.ResultSearch resultSearch = null;
+                var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
+                t.Wait();
+                var InformationQuery = resultSearch.InformationQuery;
 
-                PrintORExport = false;
-                Document = DocumentToPrintORExport.RenderizeHtml();
-                this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-                this.webBrowser.NavigateToString(Document);
+                DocumentToPrintORExport = new DocumentMovement(resultSearch.ProductsToShow, resultSearch.InformationQuery);
             }
 
-
+            PrintORExport = false;
+            Document = DocumentToPrintORExport.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
         }
     }
 }

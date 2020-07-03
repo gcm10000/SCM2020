@@ -73,7 +73,7 @@
                 </Button>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Button Content="Exportar" IsEnabled="False" Padding="5" x:Name="BtnExport" Click="BtnExport_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 220 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button Content="Exportar" IsEnabled="True" Padding="5" x:Name="BtnExport" Click="BtnExport_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 220 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -87,7 +87,7 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Content="Imprimir" IsEnabled="False" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button Content="Imprimir" IsEnabled="True" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
