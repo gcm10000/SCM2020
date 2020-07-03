@@ -476,7 +476,7 @@ namespace SCM2020___Client.Frames
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
                 InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
-                
+
                 PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
                 {
@@ -524,10 +524,11 @@ namespace SCM2020___Client.Frames
                     };
                     this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
                 }
-                this.BtnPrint.IsEnabled = true;
-                this.BtnExport.IsEnabled = true;
+
+                this.BtnPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnPrint.IsEnabled = true; }));
+                this.BtnExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnExport.IsEnabled = true; }));
             }
-            catch (System.Net.Http.HttpRequestException) //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
+            catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             { }
             catch (Exception ex)
             {
@@ -547,14 +548,21 @@ namespace SCM2020___Client.Frames
                 DataToPrintORExportWasRescued = true;
                 string workOrder = System.Uri.EscapeDataString(PrincipalMonitoring.Work_Order);
 
-                DocumentMovement.ResultSearch resultSearch = null;
-                var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
+                List<DocumentMovement.Product> resultSearch = null;
+                var t = Task.Run(() => resultSearch = DocumentMovement.ProductsAtWorkOrder(workOrder));
+                DocumentMovement.QueryMovement queryMovement = new DocumentMovement.QueryMovement()
+                {
+                    Sector = InfoUser.Sector.NameSector,
+                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
+                    WorkOrder = PrincipalMonitoring.Work_Order,
+                    WorkOrderDate = PrincipalMonitoring.MovingDate,
+                    SolicitationEmployee = InfoUser.Name,
+                    RegisterApplication = int.Parse(InfoUser.Register)
+                };
                 t.Wait();
-                var InformationQuery = resultSearch.InformationQuery;
 
-                DocumentToPrintORExport = new DocumentMovement(resultSearch.ProductsToShow, resultSearch.InformationQuery);
+                DocumentToPrintORExport = new DocumentMovement(resultSearch, queryMovement);
             }
-
             PrintORExport = true;
             Document = DocumentToPrintORExport.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;

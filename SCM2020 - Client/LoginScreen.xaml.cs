@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Security.Authentication;
 
 namespace SCM2020___Client
 {
@@ -63,6 +64,10 @@ namespace SCM2020___Client
                 {
                     MessageBox.Show("Não foi possível conectar ao servidor.", "Erro de conectividade", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                MessageBox.Show(ex.Message, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
             }
             //Messagebox será exibido como uma resposta do servidor.
             catch (HttpRequestException ex)
