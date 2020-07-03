@@ -439,21 +439,20 @@ namespace SCM2020___Client.Frames
             var workOrder = OSTextBox.Text;
             if (previousOS == workOrder)
                 return;
-            else
-                previousOS = workOrder;
             new Task(() => RescueData(workOrder)).Start();
+            previousOS = workOrder;
+
         }
         string previousOS = string.Empty;
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             var workOrder = OSTextBox.Text;
-            if (previousOS == workOrder)
-                return;
-            else
-                previousOS = workOrder;
             if (e.Key == Key.Enter)
             {
+                if (previousOS == workOrder)
+                    return;
                 new Task(() => RescueData(workOrder)).Start();
+                previousOS = workOrder;
             }
         }
         private void RescueData(string workOrder)

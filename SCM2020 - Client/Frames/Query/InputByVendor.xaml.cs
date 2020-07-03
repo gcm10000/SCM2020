@@ -20,6 +20,7 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class InputByVendor : UserControl
     {
+        //NOTA FISCAL v, DATA DA MOVIMENTAÇÃO v, FORNECEDOR, FUNCIONÁRIO v
         public InputByVendor()
         {
             InitializeComponent();
@@ -42,5 +43,19 @@ namespace SCM2020___Client.Frames.Query
                 Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
         }
 
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+
+        }
     }
 }
