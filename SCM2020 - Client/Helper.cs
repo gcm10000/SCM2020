@@ -47,7 +47,7 @@ namespace SCM2020___Client
             oKey.SetValue("font", "");
             oKey.SetValue("header", "");
             oKey.SetValue("footer", "");
-            oKey.SetValue("margin_bottom", "0.75000");
+            oKey.SetValue("margin_bottom", "0.75000"); //Margem é dada em polegadas
             oKey.SetValue("margin_left", "0.75000");
             oKey.SetValue("margin_right", "0.75000");
             oKey.SetValue("margin_bottom", "0.75000");
