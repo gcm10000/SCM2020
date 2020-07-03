@@ -28,6 +28,7 @@ namespace SCM2020___Client.Frames.Query
     {
         List<DocumentMovement.Product> ProductsToShow = null;
         DocumentMovement.QueryMovement info = null;
+        WebBrowser webBrowser = Helper.MyWebBrowser;
         public Movement()
         {
             InitializeComponent();
