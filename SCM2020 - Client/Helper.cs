@@ -25,6 +25,7 @@ namespace SCM2020___Client
         public static string NameIdentifier { get; set; }
         public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }
+        public static WebBrowser MyWebBrowser { get; set; }
         public static bool IsTextAllowed(string text)
         {
             return !NumberRegex.IsMatch(text);

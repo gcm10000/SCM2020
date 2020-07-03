@@ -69,6 +69,7 @@ namespace SCM2020___Client
             //    this.MovementItem.Visibility = Visibility.Collapsed;
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
+            Helper.MyWebBrowser = WebBrowser;
         }
 
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

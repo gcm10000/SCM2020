@@ -233,52 +233,20 @@ namespace SCM2020___Client.Frames.Query
 
                     //"f=" The input file
                     //"p=" The temporary default printer
+                    //"d|delete" Delete file when finished
                     var p = new Process();
                     p.StartInfo.FileName = Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
-                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo: O arquivo é apagado antes do Exporter poder lê-lo.
-                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" ";
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
                     p.Start();
                 }
-                finally
+                catch (Exception ex)
                 {
-                    //if (File.Exists(tempFile))
-                    //{
-                    //    File.Delete(tempFile);
-                    //}
+                    MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
-
-
-        //private void Print()
-        //{
-        //    //if (m_streams == null || m_streams.Count == 0)
-        //    //    throw new Exception(“Error: no stream to print.”);
-        //    PrintDocument printDoc = new PrintDocument();
-        //    if (!printDoc.PrinterSettings.IsValid)
-        //    {
-        //        throw new Exception("Error: cannot find the default printer.");
-        //    }
-        //    else
-        //    {
-        //        printDoc.PrintPage += new PrintPageEventHandler((sender, e) => 
-        //        {
-
-        //        });
-        //        int m_currentPageIndex = 0;
-        //        string filename = "";
-        //        if (printDoc.PrinterSettings.PrinterName == "Microsoft XPS Document Writer")
-        //        {
-        //            printDoc.PrinterSettings.PrintToFile = true;
-        //            if (filename == "")
-        //                printDoc.PrinterSettings.PrintFileName = DateTime.Now.Ticks.ToString() + ".xps";
-        //            else
-        //                printDoc.PrinterSettings.PrintFileName = filename;
-        //        }
-        //        printDoc.Print();
-        //    }
-        //}
 
         private string _previewWindowXaml =
     @"<Window
