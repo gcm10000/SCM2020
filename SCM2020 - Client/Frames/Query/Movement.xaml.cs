@@ -52,8 +52,9 @@ namespace SCM2020___Client.Frames.Query
         }
         private void Search(string workOrder)
         {
-            //SenhaSecreta#2020
             //Zerar todos os dados anteriores...
+            this.Export_Button.IsEnabled = false;
+            this.Print_Button.IsEnabled = false;
             ProductMovementDataGrid.Items.Clear();
             ProductsToShow = null;
             this.info = null;
@@ -79,6 +80,8 @@ namespace SCM2020___Client.Frames.Query
             {
                 ProductMovementDataGrid.Items.Add(product);
             }
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
         }
         //private void Search(string workOrder)
         //{

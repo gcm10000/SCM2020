@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -465,6 +466,8 @@ namespace SCM2020___Client.Frames
              */
             if (workOrder == string.Empty)
                 return;
+
+            DataToPrintORExportWasRescued = false;
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
@@ -530,18 +533,96 @@ namespace SCM2020___Client.Frames
             }
 
         }
+        bool DataToPrintORExportWasRescued = false;
+        bool PrintORExport = false;
+        DocumentMovement DocumentToPrintORExport = null;
+        string Document = string.Empty;
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
-            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            if (!DataToPrintORExportWasRescued)
             {
-                Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = PrincipalMonitoring.Work_Order,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-            List<DocumentMovement.Product> products = new List<DocumentMovement.Product>();
-            DocumentMovement document = new DocumentMovement(products, info);
+                DataToPrintORExportWasRescued = true;
+                DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+                {
+                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
+                    WorkOrder = PrincipalMonitoring.Work_Order,
+                    RegisterApplication = int.Parse(InfoUser.Register),
+                    SolicitationEmployee = InfoUser.Name
+                };
+
+                List<DocumentMovement.Product> products = DocumentMovement.ProductsAtWorkOrder(PrincipalMonitoring.Work_Order);
+                DocumentToPrintORExport = new DocumentMovement(products, info);
+            }
+
+            PrintORExport = true;
+            var result = DocumentToPrintORExport.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(result);
+
+        }
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            Helper.SetOptionsToPrint();
+            if (PrintORExport)
+            {
+                webBrowser.PrintDocument();
+            }
+            else
+            {
+                string printer = Helper.GetPrinter("PDF");
+                string tempFile = string.Empty;
+                try
+                {
+
+                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    {
+                        file.Write(Document);
+                        file.Flush();
+                    }
+
+                    //"f=" The input file
+                    //"p=" The temporary default printer
+                    //"d|delete" Delete file when finished
+                    var p = new Process();
+                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
+                    p.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+            }
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+        }
+
+
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataToPrintORExportWasRescued)
+            {
+                DataToPrintORExportWasRescued = true;
+                DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+                {
+                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
+                    WorkOrder = PrincipalMonitoring.Work_Order,
+                    RegisterApplication = int.Parse(InfoUser.Register),
+                    SolicitationEmployee = InfoUser.Name
+                };
+
+                List<DocumentMovement.Product> products = DocumentMovement.ProductsAtWorkOrder(PrincipalMonitoring.Work_Order);
+                DocumentToPrintORExport = new DocumentMovement(products, info);
+
+                PrintORExport = false;
+                Document = DocumentToPrintORExport.RenderizeHtml();
+                this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+                this.webBrowser.NavigateToString(Document);
+            }
+
+
         }
     }
 }

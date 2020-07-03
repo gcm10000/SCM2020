@@ -358,6 +358,28 @@ namespace SCM2020___Client
                 MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
+
+
+            //Show data in screen
+            QueryMovement InformationMovement = new DocumentMovement.QueryMovement()
+            {
+                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = Monitoring.Work_Order,
+                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
+                WorkOrderDate = Monitoring.MovingDate,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+
+            var ProductsToShow = ProductsAtWorkOrder(workOrder);
+
+            return new ResultSearch(ProductsToShow, Monitoring, InfoUser, InformationMovement);
+        }
+        public static List<DocumentMovement.Product> ProductsAtWorkOrder(string workOrder)
+        {
+
+            List<DocumentMovement.Product> ProductsToShow = new List<DocumentMovement.Product>();
+
             ModelsLibraryCore.MaterialOutput output = null;
             try
             {
@@ -373,20 +395,6 @@ namespace SCM2020___Client
             }
             catch //Doesn't exist input with that workorder
             { }
-
-            //Show data in screen
-            QueryMovement InformationMovement = new DocumentMovement.QueryMovement()
-            {
-                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = Monitoring.Work_Order,
-                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
-                WorkOrderDate = Monitoring.MovingDate,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-
-            List<DocumentMovement.Product> ProductsToShow = new List<DocumentMovement.Product>();
-
             //CONSUMPTERS
             if (output != null)
                 foreach (var item in output.ConsumptionProducts.ToList())
@@ -465,8 +473,7 @@ namespace SCM2020___Client
             //Tasks will be waiting here
             ProductsToShow = ProductsToShow.OrderByDescending(x => x.MoveDate).ToList();
 
-
-            return new ResultSearch(ProductsToShow, Monitoring, InfoUser, InformationMovement);
+            return ProductsToShow;
         }
 
     }
