@@ -1,7 +1,11 @@
-﻿using SCM2020___Client.Frames.Query;
+﻿using ModelsLibraryCore;
+using ModelsLibraryCore.RequestingClient;
+using SCM2020___Client.Frames.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace SCM2020___Client
 {
@@ -29,6 +33,21 @@ namespace SCM2020___Client
             public string Movement { get; set; }
             public DateTime MoveDate { get; set; }
         }
+        public class ResultSearch
+        {
+            public List<DocumentMovement.Product> ProductsToShow { get; }
+            public Monitoring Monitoring { get; }
+            public InfoUser InfoUser { get; }
+            public QueryMovement InformationQuery { get; }
+            public ResultSearch(List<DocumentMovement.Product> ProductsToShow, Monitoring Monitoring, InfoUser InfoUser, QueryMovement InformationQuery)
+            {
+                this.ProductsToShow = ProductsToShow;
+                this.Monitoring = Monitoring;
+                this.InfoUser = InfoUser;
+                this.InformationQuery = InformationQuery;
+            }
+        }
+
         /// <summary>
         /// Conjunto de produtos.
         /// </summary>
@@ -309,5 +328,146 @@ namespace SCM2020___Client
             Html.Replace("@MarginBottom", MarginBottom);
             return Html.ToString();
         }
+
+        public static ResultSearch Search(string workOrder)
+        {
+            string userId = string.Empty;
+            Monitoring Monitoring;
+            InfoUser InfoUser;
+
+
+            try
+            {
+                workOrder = System.Uri.EscapeDataString(workOrder);
+                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                userId = Monitoring.EmployeeId;
+            }
+            catch
+            {
+                //If doesn't exist work order, then shows error inside MessageBox 
+                MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            try
+            {
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+            }
+            catch
+            {
+                //HttpRequestException -> BadRequest
+                MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            ModelsLibraryCore.MaterialOutput output = null;
+            try
+            {
+                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
+            }
+            catch //Doesn't exist output with that workorder
+            { }
+
+            ModelsLibraryCore.MaterialInput input = null;
+            try
+            {
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+            }
+            catch //Doesn't exist input with that workorder
+            { }
+
+            //Show data in screen
+            QueryMovement InformationMovement = new DocumentMovement.QueryMovement()
+            {
+                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
+                WorkOrder = Monitoring.Work_Order,
+                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
+                WorkOrderDate = Monitoring.MovingDate,
+                RegisterApplication = int.Parse(InfoUser.Register),
+                SolicitationEmployee = InfoUser.Name
+            };
+
+            List<DocumentMovement.Product> ProductsToShow = new List<DocumentMovement.Product>();
+
+            //CONSUMPTERS
+            if (output != null)
+                foreach (var item in output.ConsumptionProducts.ToList())
+                {
+                    //Task.Run for each
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    DocumentMovement.Product product = new DocumentMovement.Product()
+                    {
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "SAÍDA",
+                        Quantity = item.Quantity,
+                        Unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        Patrimony = ""
+                    };
+                    ProductsToShow.Add(product);
+                }
+
+            if (input != null)
+                foreach (var item in input.ConsumptionProducts.ToList())
+                {
+                    //Task.Run for each
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    DocumentMovement.Product product = new DocumentMovement.Product()
+                    {
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "ENTRADA",
+                        Quantity = item.Quantity,
+                        Unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        Patrimony = ""
+                    };
+                    ProductsToShow.Add(product);
+                }
+
+            //PERMANENTS
+            if (output != null)
+                foreach (var item in output.PermanentProducts.ToList())
+                {
+                    //Task.Run for each
+                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    DocumentMovement.Product product = new DocumentMovement.Product()
+                    {
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "SAÍDA",
+                        Quantity = 1,
+                        Unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        Patrimony = infoPermanentProduct.Patrimony
+                    };
+                    ProductsToShow.Add(product);
+                }
+
+            if (input != null)
+                foreach (var item in input.PermanentProducts.ToList())
+                {
+                    //Task.Run for each
+                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    DocumentMovement.Product product = new DocumentMovement.Product()
+                    {
+                        Code = infoProduct.Code,
+                        Description = infoProduct.Description,
+                        Movement = "ENTRADA",
+                        Quantity = 1,
+                        Unity = infoProduct.Unity,
+                        MoveDate = item.Date,
+                        Patrimony = infoPermanentProduct.Patrimony
+                    };
+                    ProductsToShow.Add(product);
+                }
+            //Tasks will be waiting here
+            ProductsToShow = ProductsToShow.OrderByDescending(x => x.MoveDate).ToList();
+
+
+            return new ResultSearch(ProductsToShow, Monitoring, InfoUser, InformationMovement);
+        }
+
     }
 }

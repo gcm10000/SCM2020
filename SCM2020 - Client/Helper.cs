@@ -47,11 +47,11 @@ namespace SCM2020___Client
             oKey.SetValue("font", "");
             oKey.SetValue("header", "");
             oKey.SetValue("footer", "");
-            oKey.SetValue("margin_bottom", 0.75);
-            oKey.SetValue("margin_left", 0.75);
-            oKey.SetValue("margin_right", 0.75);
-            oKey.SetValue("margin_bottom", 0.75);
-            oKey.SetValue("margin_top", 0.75);
+            oKey.SetValue("margin_bottom", "0.75000");
+            oKey.SetValue("margin_left", "0.75000");
+            oKey.SetValue("margin_right", "0.75000");
+            oKey.SetValue("margin_bottom", "0.75000");
+            oKey.SetValue("margin_top", "0.75");
             oKey.SetValue("Print_Background", "yes");
             oKey.SetValue("Shrink_To_Fit", "yes");
         }
