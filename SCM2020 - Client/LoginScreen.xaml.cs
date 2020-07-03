@@ -58,15 +58,18 @@ namespace SCM2020___Client
             }
             catch (AggregateException ex)
             {
+                //Messagebox será exibido quando não houver conectividade com o servidor.
                 if (ex.InnerExceptions.Any(x => x.GetType().ToString() == "System.Net.Http.HttpRequestException"))
                 {
                     MessageBox.Show("Não foi possível conectar ao servidor.", "Erro de conectividade", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
+            //Messagebox será exibido como uma resposta do servidor.
             catch (HttpRequestException ex)
             {
                 MessageBox.Show(ex.Message, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
             }
+            //É preciso de outro catch para credenciais erradas.
         }
     }
 }
