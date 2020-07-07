@@ -26,16 +26,10 @@ namespace SCM2020___Client.Frames.Query
         List<DocumentInputByVendor.Product> ProductsToShow = null;
         DocumentInputByVendor.QueryInputByVendor info = null;
 
-
-        //NOTA FISCAL v, DATA DA MOVIMENTAÇÃO v, FORNECEDOR, FUNCIONÁRIO v
+        //NOTA FISCAL, DATA DA MOVIMENTAÇÃO, FORNECEDOR, FUNCIONÁRIO
         public InputByVendor()
         {
             InitializeComponent();
-        }
-
-        private void PrintButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)

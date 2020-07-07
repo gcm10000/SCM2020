@@ -64,9 +64,11 @@
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                     <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MinStock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding CurrentStock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Máximo" Binding="{Binding MaxStock}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Localization}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

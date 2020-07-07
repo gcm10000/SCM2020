@@ -67,7 +67,7 @@ namespace SCM2020___Client.Frames.Query
         }
         private void SearchStock(string query)
         {
-            var result = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+            List<ModelsLibraryCore.ConsumptionProduct> result = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
             foreach (var item in result)
             {
                 this.QueryDataGrid.Items.Add(item);
