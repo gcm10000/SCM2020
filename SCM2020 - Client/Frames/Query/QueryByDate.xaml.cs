@@ -45,11 +45,6 @@ namespace SCM2020___Client.Frames.Query
             APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"/generalproduct/{id}").ToString(), Helper.Authentication);
         }
 
-        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
 
@@ -57,7 +52,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void ListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
