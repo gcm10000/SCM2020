@@ -12,13 +12,13 @@
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="Nota Fiscal" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <TextBox IsEnabled="False" x:Name="OSText" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBox IsEnabled="False" x:Name="InvoiceText" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Nome do Fornecedor" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="VendorTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Matrícula do Funcionário" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" Width="188" x:Name="RegistrationSCMTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Nome do Funcionário" FontSize="18"></TextBlock>
                     <TextBox IsEnabled="False" Width="188" x:Name="SCMEmployeeTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
-                    <TextBlock Margin="0 20 0 5" Text="Situação" FontSize="18"></TextBlock>
-                    <TextBox IsEnabled="False" Width="188" x:Name="SituationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Data da Movimentação" FontSize="18"></TextBlock>
                     <DatePicker IsEnabled="False" x:Name="WorkOrderDateDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
                 </StackPanel>
@@ -77,13 +77,11 @@
                                   VirtualizingStackPanel.IsVirtualizing="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        <DataGridTextColumn Header=" Data" Binding="{Binding MoveDate}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Movimentação" Binding="{Binding Movement}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding MoveDate}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

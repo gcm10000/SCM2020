@@ -1,6 +1,5 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
-using SCM2020___Client.Frames.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;

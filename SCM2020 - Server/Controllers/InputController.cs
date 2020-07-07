@@ -37,6 +37,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Invoice/{invoice}")]
         public IActionResult ShowByInvoice(string invoice)
         {
+            invoice = System.Uri.UnescapeDataString(invoice);
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }

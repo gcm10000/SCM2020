@@ -10,8 +10,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using RazorEngine;
-using RazorEngine.Templating;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -20,6 +18,8 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class InputByVendor : UserControl
     {
+        WebBrowser webBrowser = Helper.MyWebBrowser;
+
         //NOTA FISCAL v, DATA DA MOVIMENTAÇÃO v, FORNECEDOR, FUNCIONÁRIO v
         public InputByVendor()
         {
@@ -33,14 +33,28 @@ namespace SCM2020___Client.Frames.Query
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            string workOrder = TxtSearch.Text;
+            if (e.Key == Key.Enter)
+                Search(workOrder);
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string template = "Hello @Model.Name, welcome to RazorEngine!";
-            var result =
-                Engine.Razor.RunCompile(template, "templateKey", null, new { Name = "World" });
+            string workOrder = TxtSearch.Text;
+            Search(workOrder);
+        }
+
+        private void Search(string workOrder)
+        {
+            //Zerar todos os dados anteriores...
+            this.Export_Button.IsEnabled = false;
+            this.Print_Button.IsEnabled = false;
+
+
+
+
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
@@ -55,7 +69,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
     }
 }

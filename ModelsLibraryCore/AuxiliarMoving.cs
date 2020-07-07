@@ -31,7 +31,7 @@ namespace ModelsLibraryCore
         public int Id { get; set; }
         /// <summary>
         /// Produto retirado na movimentação.  
-        /// Referencia objeto da classe de produto permanente.
+        /// Referencia objeto da classe de produto permanente ou consumível.
         /// </summary>
         [Required]
         public int ProductId { get; set; }
