@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using ModelsLibraryCore;
 using System.Windows;
-using System.Data.Odbc;
-using System.ServiceModel.Channels;
 
 namespace SCM2020___Client
 {
