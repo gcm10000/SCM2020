@@ -40,7 +40,27 @@ namespace SCM2020___Client.Frames.Query
             int id = 0;
             var initialDate = InitialDate.SelectedDate.Value;
             var finalDate = FinalDate.SelectedDate.Value;
-            var materialInputByVendorInDate = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
+            var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialInputByVendor>>(new Uri(Helper.Server, $"input/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
+            var materialOutputInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialOutput>>(new Uri(Helper.Server, $"output/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
+            var materialDevolutionInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialInput>>(new Uri(Helper.Server, $"devolution/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
+
+            foreach (var item in materialInputByVendorInDate)
+            {
+                //ADD INFO
+            }
+
+            foreach (var item in materialOutputInDate)
+            {
+                //ADD INFO
+
+            }
+
+            foreach (var item in materialDevolutionInDate)
+            {
+                //ADD INFO
+
+            }
+
             APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"/generalproduct/{id}").ToString(), Helper.Authentication);
         }
 
