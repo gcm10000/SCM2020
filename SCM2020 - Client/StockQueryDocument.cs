@@ -8,6 +8,10 @@ namespace SCM2020___Client
     {
         private List<ModelsLibraryCore.ConsumptionProduct> Products;
         private StringBuilder Html;
+        public string MarginTop { get; set; } = "25mm";
+        public string MarginLeft { get; set; } = "25mm";
+        public string MarginRight { get; set; } = "25mm";
+        public string MarginBottom { get; set; } = "5mm";
         public StockQueryDocument(List<ModelsLibraryCore.ConsumptionProduct> Products)
         {
             this.Products = Products;
@@ -64,44 +68,6 @@ namespace SCM2020___Client
                                         "<b><u><span style=\"font-family:'Arial',sans-serif\">LISTAGEM DE MATERIAL</span></u></b>" +
                                     "</p>" +
                                     "<p class=MsoNormal><span style=\"font-size:10.0pt;line-height:107%;font-family: 'Arial',sans-serif\">&nbsp;</span></p>" +
-                                    "<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width=633 style=\"width:100%;border-collapse:collapse;border: none\">" +
-                                        "<tr>" +
-                                            "<td width=133 valign=top style=\"width:99.55pt;background:#C9C9C9;padding: 0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\">" +
-                                                "<b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\"> Nota fiscal </span></b>" +
-                                                "</p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.7pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data da Movimentação</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=132 valign=top style=\"width:99.2pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Matrícula do Fun.</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.95pt;background:#C9C9C9;padding: 0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Nome do Fun.</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=91 valign=top style=\"width:68.0pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Fornecedor</span></b></p>" +
-                                            "</td>" +
-                                        "</tr>" +
-                                        "<tr style=\"height:3.5pt\">" +
-                                            "<td width=133 valign=top style=\"width:99.55pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InformationMovement.Invoice}</span></p>" +
-                                            "</td>" +
-                                            "<td width=132 valign=top style=\"width:99.2pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InformationMovement.InvoiceDate.ToString("dd/MM/yyyy")}</span></p>" +
-                                            "</td>" +
-                                            "<td width=91 valign=top style=\"width:68.0pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InformationMovement.SCMRegistration}</span></p>" +
-                                            "</td>" +
-                                            "<td width=70 valign=top style=\"width:52.5pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InformationMovement.SCMEmployee}</span></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.7pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InformationMovement.Vendor}</span></p>" +
-                                            "</td>" +
-                                        "</tr>" +
-                                    "</table>" +
                                     "<p class=MsoNormal><span style=\"font-family:'Arial',sans-serif\">&nbsp;</span></p>" +
                                     "<table class=MsoTableGrid border=0 cellspacing=0 width=633 style=\"width:100%;border-collapse:separate;border: none\">" +
                                         "<tr style=\"height:9.55pt;background-color: #FF9900;\">" +
@@ -232,19 +198,28 @@ namespace SCM2020___Client
             {
                 itemsContent += "<tr style=\"height:19.1pt\">" +
                                             "<td width=81 valign=top style=\"width:60.65pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MoveDate.ToString("dd/MM/yyyy")}</span></p>" +
-                                            "</td>" +
-                                            "<td width=44 valign=top style=\"width:32.9pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Code}</span></p>" +
                                             "</td>" +
-                                            "<td width=109 valign=top style=\"width:81.45pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                            "<td width=44 valign=top style=\"width:32.9pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Description}</span></p>" +
                                             "</td>" +
+                                            "<td width=109 valign=top style=\"width:81.45pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MininumStock}</span></p>" +
+                                            "</td>" +
                                             "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Quantity}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Stock}</span></p>" +
+                                            "</td>" +
+                                            "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MaximumStock}</span></p>" +
                                             "</td>" +
                                             "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Unity}</span></p>" +
+                                            "</td>" +
+                                            "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Localization}</span></p>" +
+                                            "</td>" +
+                                            "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Group}</span></p>" +
                                             "</td>" +
                                         "</tr>";
             }
