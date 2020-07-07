@@ -19,14 +19,10 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class QueryByDate : UserControl
     {
+        WebBrowser WebBrowser = Helper.MyWebBrowser;
         public QueryByDate()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -42,30 +38,24 @@ namespace SCM2020___Client.Frames.Query
              ESTOQUE MÁXIMO -> GENERALPRODUCT
              */
             int id = 0;
+            var initialDate = InitialDate.SelectedDate.Value;
+            var finalDate = FinalDate.SelectedDate.Value;
+            var materialInputByVendorInDate = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"/generalproduct/{id}").ToString(), Helper.Authentication);
-        }
-
-        private void BtnPrint_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
+            e.Cancel = true;
 
         }
 
-        private void InitialDate_KeyDown(object sender, KeyEventArgs e)
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void FinalDate_KeyDown(object sender, KeyEventArgs e)
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
 
         }

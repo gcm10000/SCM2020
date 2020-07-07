@@ -47,12 +47,12 @@ namespace SCM2020___Server.Controllers
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
-            foreach (var input in context.MaterialInputByVendor.ToList())
+            foreach (var input in context.MaterialInputByVendor)
             {
                 inputs.AddRange(input.AuxiliarConsumptions.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
             }
 
-            return Ok(inputs.ToList());
+            return Ok(inputs);
         }
         [AllowAnonymous]
         [HttpPost("Migrate")]
