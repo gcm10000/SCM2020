@@ -37,11 +37,12 @@ namespace SCM2020___Client
                 this.InformationMovement = InformationMovement;
             }
         }
-        public List<DocumentMovement.Product> Products { get; }
-
-        public DocumentInputByVendor()
+        public List<DocumentInputByVendor.Product> Products { get; }
+        public QueryInputByVendor InformationMovement { get; }
+        public DocumentInputByVendor(List<Product> Products, QueryInputByVendor InformationMovement)
         {
-            
+            this.InformationMovement = InformationMovement;
+            this.Products = Products;
         }
         public static ResultSearch Search(string invoice)
         {
