@@ -19,7 +19,7 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class QueryByDate : UserControl
     {
-        WebBrowser WebBrowser = Helper.MyWebBrowser;
+        WebBrowser webBrowser = Helper.MyWebBrowser;
         public QueryByDate()
         {
             InitializeComponent();
@@ -47,6 +47,7 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in materialInputByVendorInDate)
             {
                 //ADD INFO
+
             }
 
             foreach (var item in materialOutputInDate)
@@ -67,15 +68,31 @@ namespace SCM2020___Client.Frames.Query
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
-
         }
+
+        //True to print, False to export.
+        bool PrintORExport = false;
+        string Document = string.Empty;
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            PrintORExport = false;
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
 
         }
