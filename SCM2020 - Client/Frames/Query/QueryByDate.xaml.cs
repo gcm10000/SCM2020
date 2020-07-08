@@ -20,6 +20,8 @@ namespace SCM2020___Client.Frames.Query
     public partial class QueryByDate : UserControl
     {
         WebBrowser webBrowser = Helper.MyWebBrowser;
+        List<QueryByDateDocument.Product> products = null;
+
         public QueryByDate()
         {
             InitializeComponent();
@@ -36,6 +38,8 @@ namespace SCM2020___Client.Frames.Query
              SAÍDA -> AUXILIARPRODUCT OUTPUT
              ESTOQUE MÍNIMO -> GENERALPRODUCT
              ESTOQUE MÁXIMO -> GENERALPRODUCT
+             UNIDADE -> GENERALPRODUCT
+
              */
             int id = 0;
             var initialDate = InitialDate.SelectedDate.Value;
@@ -43,7 +47,10 @@ namespace SCM2020___Client.Frames.Query
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialInputByVendor>>(new Uri(Helper.Server, $"input/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             var materialOutputInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialOutput>>(new Uri(Helper.Server, $"output/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             var materialDevolutionInDate = APIClient.GetData<List<ModelsLibraryCore.MaterialInput>>(new Uri(Helper.Server, $"devolution/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
+            InitialDateTime = initialDate.Date;
+            FinalDateTime = FinalDate.DisplayDate;
 
+            products = new List<QueryByDateDocument.Product>();
             foreach (var item in materialInputByVendorInDate)
             {
                 //ADD INFO
@@ -73,11 +80,14 @@ namespace SCM2020___Client.Frames.Query
         //True to print, False to export.
         bool PrintORExport = false;
         string Document = string.Empty;
+        DateTime InitialDateTime;
+        DateTime FinalDateTime;
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            StockQueryDocument template = new StockQueryDocument(products);
+
+            QueryByDateDocument template = new QueryByDateDocument(InitialDateTime, FinalDateTime, products);
             Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
@@ -86,7 +96,7 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            StockQueryDocument template = new StockQueryDocument(products);
+            QueryByDateDocument template = new QueryByDateDocument(products);
             Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
