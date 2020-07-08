@@ -22,7 +22,6 @@ namespace SCM2020___Client
                     "<head>" +
                         "<title>&nbsp;</title>" +
                         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />" +
-                        //"<meta http-equiv=Content-Type content=\"text/html; charset=windows-1252\">" +
                         "<style>" +
                             "p.MsoNormal, li.MsoNormal, div.MsoNormal {" +
                                 "margin-top: 0cm;" +
