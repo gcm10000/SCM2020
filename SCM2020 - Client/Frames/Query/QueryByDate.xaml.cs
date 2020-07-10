@@ -52,8 +52,8 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in materialInputByVendorInDate)
             {
                 //ADD INFO
-                if (!products.Any(x => x.ProductId == item.ProductId))
-                {
+                //if (!products.Any(x => x.ProductId == item.ProductId))
+                //{
                     var product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     products.Add(new QueryByDateDocument.Product()
                     {
@@ -67,12 +67,12 @@ namespace SCM2020___Client.Frames.Query
                         Unity = product.Unity,
                         //Output =
                     });
-                }
-                else
-                {
-                    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                    product.StockEntry = item.Quantity;
-                }
+                //}
+                //else
+                //{
+                //    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
+                //    product.StockEntry = item.Quantity;
+                //}
             }
 
             foreach (var item in materialOutputInDate)
