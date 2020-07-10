@@ -8,6 +8,7 @@ namespace SCM2020___Client
     {
         public class Product
         {
+            public int ProductId { get; set; }
             public int Code { get; set; }
             public string Description { get; set; }
             public double StockEntry { get; set; }
