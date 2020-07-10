@@ -97,7 +97,7 @@ namespace SCM2020___Client.Frames.Query
                 else
                 {
                     QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                    product.Output = item.Quantity;
+                    product.Output += item.Quantity;
                 }
             }
 
@@ -124,7 +124,7 @@ namespace SCM2020___Client.Frames.Query
                 else
                 {
                     QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                    product.StockEntry = item.Quantity;
+                    product.StockEntry += item.Quantity;
                 }
             }
 
