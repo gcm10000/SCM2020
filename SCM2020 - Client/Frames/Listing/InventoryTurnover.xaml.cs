@@ -18,6 +18,12 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class InventoryTurnover : UserControl
     {
+        // INVENTÁRIO ROTATIVO EXIBE:
+        // CÓDIGO
+        // DESCRIÇÃO
+        // QUANTIDADE
+        // DE PRODUTOS SELECIONADOS
+        // FILTRAR PRODUTO POR CÓDIGO OU DESCRIÇÃO
         public InventoryTurnover()
         {
             InitializeComponent();

@@ -39,7 +39,7 @@ namespace SCM2020___Client.Frames.Query
              UNIDADE -> GENERALPRODUCT
 
              */
-            int id = 0;
+            //int id = 0;
             var initialDate = InitialDate.SelectedDate.Value;
             var finalDate = FinalDate.SelectedDate.Value;
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"input/Date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);

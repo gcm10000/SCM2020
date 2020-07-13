@@ -18,6 +18,11 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class InventoryOfficer : UserControl
     {
+        // INVENTÁRIO OFICIAL EXIBE:
+        // CÓDIGO
+        // DESCRIÇÃO
+        // QUANTIDADE
+        // DE TODOS OS PRODUTOS
         public InventoryOfficer()
         {
             InitializeComponent();
