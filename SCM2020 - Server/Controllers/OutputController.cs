@@ -47,14 +47,14 @@ namespace SCM2020___Server.Controllers
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
             List<AuxiliarConsumption> outputs = new List<AuxiliarConsumption>();
-            foreach (var output in context.MaterialOutput.ToList())
+            foreach (var output in context.MaterialOutput)
             {
                 var newoutputs = output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
                 if (newoutputs != null)
                     outputs.AddRange(newoutputs);
             }
 
-            return Ok(outputs.ToList());
+            return Ok(outputs);
         }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]

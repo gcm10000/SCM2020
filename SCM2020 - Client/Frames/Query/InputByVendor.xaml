@@ -8,26 +8,84 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <DockPanel Background="White">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid Margin="10 20 10 20">
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+            <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
+                <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
+                    <TextBlock Text="Nota Fiscal" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" x:Name="InvoiceText" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Nome do Fornecedor" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" Width="188" x:Name="VendorTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Matrícula do Funcionário" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" Width="188" x:Name="RegistrationSCMTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Nome do Funcionário" FontSize="18"></TextBlock>
+                    <TextBox IsEnabled="False" Width="188" x:Name="SCMEmployeeTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Margin="0 20 0 5" Text="Data da Movimentação" FontSize="18"></TextBlock>
+                    <DatePicker IsEnabled="False" x:Name="WorkOrderDateDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
+            <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Insira a nota fiscal..." KeyDown="TxtSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
-                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" x:Name="SearchButton" Click="SearchButton_Click">
+                <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Insira nota fiscal..." KeyDown="TxtSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
+                <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="SearchButton_Click">
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
-            <WebBrowser x:Name="webBrowser" Grid.Row="1"/>
-            <Button HorizontalAlignment="Right" Grid.Row="2" Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="0 0 20 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Content="Imprimir Entrada" x:Name="PrintButton" Click="PrintButton_Click">
-            </Button>
-        </Grid>
+            <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Button Content="Exportar" Padding="5" x:Name="Export_Button" IsEnabled="False" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="Imprimir" Padding="5" x:Name="Print_Button" IsEnabled="False" Click="Print_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Grid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
+                </Grid.Resources>
+                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductMovementDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductMovementDataGrid" IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="False">
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        <DataGridTextColumn Header=" Data" Binding="{Binding MoveDate}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
 
+        </DockPanel>
     </DockPanel>
 </UserControl>

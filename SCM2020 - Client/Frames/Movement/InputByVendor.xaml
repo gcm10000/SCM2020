@@ -128,6 +128,7 @@
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Unity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" >

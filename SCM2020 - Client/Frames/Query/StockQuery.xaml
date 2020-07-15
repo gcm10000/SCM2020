@@ -34,7 +34,21 @@
             </Button>
         </Grid>
         <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Button Content="Imprimir" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+            <Button Content="Exportar" Padding="5" x:Name="Export_Button" IsEnabled="False" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Imprimir" Padding="5" x:Name="Print_Button" IsEnabled="False" Click="Print_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -64,9 +78,12 @@
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                     <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MininumStock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Máximo" Binding="{Binding MaximumStock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Localization}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

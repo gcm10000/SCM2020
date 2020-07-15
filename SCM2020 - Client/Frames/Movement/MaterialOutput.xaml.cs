@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -438,21 +439,20 @@ namespace SCM2020___Client.Frames
             var workOrder = OSTextBox.Text;
             if (previousOS == workOrder)
                 return;
-            else
-                previousOS = workOrder;
             new Task(() => RescueData(workOrder)).Start();
+            previousOS = workOrder;
+
         }
         string previousOS = string.Empty;
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             var workOrder = OSTextBox.Text;
-            if (previousOS == workOrder)
-                return;
-            else
-                previousOS = workOrder;
             if (e.Key == Key.Enter)
             {
+                if (previousOS == workOrder)
+                    return;
                 new Task(() => RescueData(workOrder)).Start();
+                previousOS = workOrder;
             }
         }
         private void RescueData(string workOrder)
@@ -465,6 +465,8 @@ namespace SCM2020___Client.Frames
              */
             if (workOrder == string.Empty)
                 return;
+
+            DataToPrintORExportWasRescued = false;
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
@@ -473,7 +475,7 @@ namespace SCM2020___Client.Frames
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
                 InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
-                
+
                 PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //WORKORDER IS CLOSED.
                 {
@@ -521,8 +523,11 @@ namespace SCM2020___Client.Frames
                     };
                     this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
                 }
+
+                this.BtnPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnPrint.IsEnabled = true; }));
+                this.BtnExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnExport.IsEnabled = true; }));
             }
-            catch (System.Net.Http.HttpRequestException) //DOESN'T EXISTS MATERIALOUTPUT REFERENCE ON WORKORDER
+            catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             { }
             catch (Exception ex)
             {
@@ -530,18 +535,97 @@ namespace SCM2020___Client.Frames
             }
 
         }
+        bool DataToPrintORExportWasRescued = false;
+        bool PrintORExport = false;
+        DocumentMovement DocumentToPrintORExport = null;
+        string Document = string.Empty;
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
-            DocumentMovement.QueryMovement info = new DocumentMovement.QueryMovement()
+            if (!DataToPrintORExportWasRescued)
             {
-                Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = PrincipalMonitoring.Work_Order,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-            List<DocumentMovement.Product> products = new List<DocumentMovement.Product>();
-            DocumentMovement document = new DocumentMovement(products, info);
+                DataToPrintORExportWasRescued = true;
+                string workOrder = System.Uri.EscapeDataString(PrincipalMonitoring.Work_Order);
+
+                List<DocumentMovement.Product> resultSearch = null;
+                var t = Task.Run(() => resultSearch = DocumentMovement.ProductsAtWorkOrder(workOrder));
+                DocumentMovement.QueryMovement queryMovement = new DocumentMovement.QueryMovement()
+                {
+                    Sector = InfoUser.Sector.NameSector,
+                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
+                    WorkOrder = PrincipalMonitoring.Work_Order,
+                    WorkOrderDate = PrincipalMonitoring.MovingDate,
+                    SolicitationEmployee = InfoUser.Name,
+                    RegisterApplication = int.Parse(InfoUser.Register)
+                };
+                t.Wait();
+
+                DocumentToPrintORExport = new DocumentMovement(resultSearch, queryMovement);
+            }
+            PrintORExport = true;
+            Document = DocumentToPrintORExport.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+
+        }
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            Helper.SetOptionsToPrint();
+            if (PrintORExport)
+            {
+                webBrowser.PrintDocument();
+            }
+            else
+            {
+                string printer = Helper.GetPrinter("PDF");
+                string tempFile = string.Empty;
+                try
+                {
+
+                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    {
+                        file.Write(Document);
+                        file.Flush();
+                    }
+
+                    //"f=" The input file
+                    //"p=" The temporary default printer
+                    //"d|delete" Delete file when finished
+                    var p = new Process();
+                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
+                    p.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+            }
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+        }
+
+
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataToPrintORExportWasRescued)
+            {
+                DataToPrintORExportWasRescued = true;
+                string workOrder = PrincipalMonitoring.Work_Order;
+
+                DocumentMovement.ResultSearch resultSearch = null;
+                var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
+                t.Wait();
+                var InformationQuery = resultSearch.InformationQuery;
+
+                DocumentToPrintORExport = new DocumentMovement(resultSearch.ProductsToShow, resultSearch.InformationQuery);
+            }
+
+            PrintORExport = false;
+            Document = DocumentToPrintORExport.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
         }
     }
 }

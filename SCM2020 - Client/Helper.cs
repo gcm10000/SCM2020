@@ -11,6 +11,7 @@ using System.Windows.Xps.Serialization;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Management;
+using Microsoft.Win32;
 
 namespace SCM2020___Client
 {
@@ -24,6 +25,7 @@ namespace SCM2020___Client
         public static string NameIdentifier { get; set; }
         public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }
+        public static WebBrowser MyWebBrowser { get; set; }
         public static bool IsTextAllowed(string text)
         {
             return !NumberRegex.IsMatch(text);
@@ -32,7 +34,26 @@ namespace SCM2020___Client
         {
             var path = Path.GetTempPath();
             var fileName = Guid.NewGuid().ToString() + extension;
-            return Path.Combine(path, fileName);
+            var directory = Path.Combine(path, "SCM");
+            if (!Directory.Exists(directory)) 
+                Directory.CreateDirectory(directory);
+            return Path.Combine(directory, fileName);
+        }
+        public static void SetOptionsToPrint()
+        {
+            string strKey = "Software\\Microsoft\\Internet Explorer\\PageSetup";
+            bool bolWritable = true;
+            RegistryKey oKey = Registry.CurrentUser.OpenSubKey(strKey, bolWritable);
+            oKey.SetValue("font", "");
+            oKey.SetValue("header", "");
+            oKey.SetValue("footer", "");
+            oKey.SetValue("margin_bottom", "0.75000"); //Margem é dada em polegadas
+            oKey.SetValue("margin_left", "0.75000");
+            oKey.SetValue("margin_right", "0.75000");
+            oKey.SetValue("margin_bottom", "0.75000");
+            oKey.SetValue("margin_top", "0.75");
+            oKey.SetValue("Print_Background", "yes");
+            oKey.SetValue("Shrink_To_Fit", "yes");
         }
 
         /// <summary>
@@ -150,7 +171,7 @@ namespace SCM2020___Client
 
             return maxVer;
         } // End Function GetBrowserVersion 
-        public static string GetPrinter(string[] content)
+        public static string GetPrinter(params string[] content)
         {
             foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {

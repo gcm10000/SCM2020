@@ -52,7 +52,7 @@
                     <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="ApplicantTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Tipo de Saída" FontSize="18"></TextBlock>
-                    <ComboBox Width="188" SelectedIndex="0" x:Name="OutputTypeComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16" SelectionChanged="VendorComboBox_SelectionChanged">
+                    <ComboBox Width="188" SelectedIndex="0" x:Name="OutputTypeComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16">
                         <ComboBoxItem>Uso Interno</ComboBoxItem>
                         <ComboBoxItem>Cautela</ComboBoxItem>
                     </ComboBox>
@@ -73,7 +73,21 @@
                 </Button>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <Button Content="Imprimir" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button Content="Exportar" IsEnabled="True" Padding="5" x:Name="BtnExport" Click="BtnExport_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 220 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="Imprimir" IsEnabled="True" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -146,6 +160,34 @@
                 </Button>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Button Content="Exportar" IsEnabled="True" Padding="5" x:Name="BtnExport2" Click="BtnExport_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 220 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="Imprimir" IsEnabled="True" Padding="5" x:Name="BtnPrint2" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 <Button Content="Finalizar Movimentação" Padding="5" x:Name="BtnFinish2" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
@@ -201,6 +243,34 @@
                 </StackPanel>
             </Grid>
             <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Button Content="Exportar" IsEnabled="True" Padding="5" x:Name="BtnExport3" Click="BtnExport_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 220 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Content="Imprimir" IsEnabled="True" Padding="5" x:Name="BtnPrint3" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 150 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 <Button Content="Finalizar Movimentação" Padding="5" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3" Height="28" VerticalAlignment="Top">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">

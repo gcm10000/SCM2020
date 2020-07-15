@@ -37,6 +37,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Invoice/{invoice}")]
         public IActionResult ShowByInvoice(string invoice)
         {
+            invoice = System.Uri.UnescapeDataString(invoice);
             var record = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
@@ -46,14 +47,14 @@ namespace SCM2020___Server.Controllers
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
-            foreach (var input in context.MaterialInputByVendor.ToList())
+            foreach (var input in context.MaterialInputByVendor)
             {
                 var newinputs = input.AuxiliarConsumptions.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
                 if (newinputs != null)
                     inputs.AddRange(newinputs);
             }
 
-            return Ok(inputs.ToList());
+            return Ok(inputs);
         }
         [AllowAnonymous]
         [HttpPost("Migrate")]

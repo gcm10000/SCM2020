@@ -8,6 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Exporter - Cópia\**" />
+    <Compile Remove="NovaPasta1\**" />
+    <Compile Remove="NovaPasta\**" />
+    <EmbeddedResource Remove="Exporter - Cópia\**" />
+    <EmbeddedResource Remove="NovaPasta1\**" />
+    <EmbeddedResource Remove="NovaPasta\**" />
+    <None Remove="Exporter - Cópia\**" />
+    <None Remove="NovaPasta1\**" />
+    <None Remove="NovaPasta\**" />
+    <Page Remove="Exporter - Cópia\**" />
+    <Page Remove="NovaPasta1\**" />
+    <Page Remove="NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Document-Exporter.exe" />
+    <None Remove="NDesk.Options.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="MSHTML.dll">
       <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
       <VersionMajor>4</VersionMajor>
@@ -28,6 +48,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModelsLibraryCore\ModelsLibraryCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Exporter\Document-Exporter.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Exporter\NDesk.Options.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

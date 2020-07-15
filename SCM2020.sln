@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsLibrary", "ModelsLibr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCM2020 - Client", "SCM2020 - Client\SCM2020 - Client.csproj", "{46E76F46-1360-4E2E-AABA-D82F42830A1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Document-Exporter", "Document-Exporter\Document-Exporter.csproj", "{10A08A85-B0C7-4893-BCAB-132EAFCAB578}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,14 @@ Global
 		{46E76F46-1360-4E2E-AABA-D82F42830A1B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46E76F46-1360-4E2E-AABA-D82F42830A1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{46E76F46-1360-4E2E-AABA-D82F42830A1B}.Release|x86.Build.0 = Release|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Debug|x86.Build.0 = Debug|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Release|x86.ActiveCfg = Release|Any CPU
+		{10A08A85-B0C7-4893-BCAB-132EAFCAB578}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

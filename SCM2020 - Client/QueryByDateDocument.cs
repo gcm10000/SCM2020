@@ -1,68 +1,35 @@
-﻿using ModelsLibraryCore;
-using ModelsLibraryCore.RequestingClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Windows;
 
 namespace SCM2020___Client
 {
-    /// <summary>
-    /// Template reproduzido em HTML para visualização das movimentações com ordem de serviço.
-    /// </summary>
-    public class DocumentMovement
+    public class QueryByDateDocument
     {
-        public class QueryMovement
-        {
-            public int RegisterApplication { get; set; }
-            public string SolicitationEmployee { get; set; }
-            public string WorkOrder { get; set; }
-            public string Situation { get; set; }
-            public string Sector { get; set; }
-            public DateTime WorkOrderDate { get; set; }
-        }
         public class Product
         {
+            public int ProductId { get; set; }
             public int Code { get; set; }
             public string Description { get; set; }
-            public double Quantity { get; set; }
+            public double StockEntry { get; set; }
+            public double Stock { get; set; }
+            public double Output { get; set; }
+            public double MinimumStock { get; set; }
+            public double MaximumStock { get; set; }
             public string Unity { get; set; }
-            public string Patrimony { get; set; }
-            public string Movement { get; set; }
-            public DateTime MoveDate { get; set; }
         }
-        public class ResultSearch
-        {
-            public List<DocumentMovement.Product> ProductsToShow { get; }
-            public Monitoring Monitoring { get; }
-            public InfoUser InfoUser { get; }
-            public QueryMovement InformationQuery { get; }
-            public ResultSearch(List<DocumentMovement.Product> ProductsToShow, Monitoring Monitoring, InfoUser InfoUser, QueryMovement InformationQuery)
-            {
-                this.ProductsToShow = ProductsToShow;
-                this.Monitoring = Monitoring;
-                this.InfoUser = InfoUser;
-                this.InformationQuery = InformationQuery;
-            }
-        }
-
-        /// <summary>
-        /// Conjunto de produtos.
-        /// </summary>
-        public List<DocumentMovement.Product> Products { get; }
-        /// <summary>
-        /// Informações da Ordem de Serviço.
-        /// </summary>
-        public QueryMovement Information { get; }
+        private List<Product> Products = null;
         public string MarginTop { get; set; } = "25mm";
         public string MarginLeft { get; set; } = "25mm";
         public string MarginRight { get; set; } = "25mm";
         public string MarginBottom { get; set; } = "5mm";
-        private StringBuilder Html { get; set; }
-        public DocumentMovement(List<DocumentMovement.Product> Products, QueryMovement Information)
+        private DateTime InitialDateTime;
+        private DateTime FinalDateTime;
+        private StringBuilder Html;
+        public QueryByDateDocument(DateTime InitialDateTime, DateTime FinalDateTime, List<Product> Products)
         {
-            this.Information = Information;
+            this.InitialDateTime = InitialDateTime;
+            this.FinalDateTime = FinalDateTime;
             this.Products = Products;
 
             Html = new StringBuilder(
@@ -125,39 +92,18 @@ namespace SCM2020___Client
                                                 "</p>" +
                                             "</td>" +
                                             "<td width=104 valign=top style=\"width:77.7pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data da O.S</span></b></p>" +
+                                                 "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data de inicio</span></b></p>" +
                                             "</td>" +
                                             "<td width=70 valign=top style=\"width:52.5pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Situação</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=132 valign=top style=\"width:99.2pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Matrícula do Fun.</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.95pt;background:#C9C9C9;padding: 0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Nome do Fun.</span></b></p>" +
-                                            "</td>" +
-                                            "<td width=91 valign=top style=\"width:68.0pt;background:#C9C9C9;padding:0cm 5.4pt 0cm 5.4pt\">" +
-                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Setor</span></b></p>" +
+                                                "<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><b><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif; color:black\">Data final</span></b></p>" +
                                             "</td>" +
                                         "</tr>" +
                                         "<tr style=\"height:3.5pt\">" +
                                             "<td width=133 valign=top style=\"width:99.55pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrder}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{InitialDateTime.ToString("dd/MM/yyyy")}</span></p>" +
                                             "</td>" +
                                             "<td width=132 valign=top style=\"width:99.2pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.WorkOrderDate.ToString("dd/MM/yyyy")}</span></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.95pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Situation}</span></p>" +
-                                            "</td>" +
-                                            "<td width=91 valign=top style=\"width:68.0pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.RegisterApplication.ToString()}</span></p>" +
-                                            "</td>" +
-                                            "<td width=70 valign=top style=\"width:52.5pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.SolicitationEmployee}</span></p>" +
-                                            "</td>" +
-                                            "<td width=104 valign=top style=\"width:77.7pt;padding:0cm 5.4pt 0cm 5.4pt; height:3.5pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{Information.Sector}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{FinalDateTime.ToString("dd/MM/yyyy")}</span></p>" +
                                             "</td>" +
                                         "</tr>" +
                                     "</table>" +
@@ -289,34 +235,36 @@ namespace SCM2020___Client
                              "</div>" +
                 "</body>" +
                 "</html>");
-            //Html.Append("");
         }
         public string RenderizeHtml()
         {
             string itemsContent = string.Empty;
             foreach (var product in Products)
             {
-                itemsContent +=         "<tr style=\"height:19.1pt\">" +
+                itemsContent += "<tr style=\"height:19.1pt\">" +
                                             "<td width=81 valign=top style=\"width:60.65pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MoveDate.ToString("dd/MM/yyyy")}</span></p>" +
-                                            "</td>" +
-                                            "<td width=44 valign=top style=\"width:32.9pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Code}</span></p>" +
                                             "</td>" +
-                                            "<td width=109 valign=top style=\"width:81.45pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                            "<td width=44 valign=top style=\"width:32.9pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Description}</span></p>" +
                                             "</td>" +
+                                            "<td width=109 valign=top style=\"width:81.45pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MinimumStock}</span></p>" +
+                                            "</td>" +
                                             "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Quantity}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Stock}</span></p>" +
+                                            "</td>" +
+                                            "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MaximumStock}</span></p>" +
+                                            "</td>" +
+                                            "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.StockEntry}</span></p>" +
+                                            "</td>" +
+                                            "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Output}</span></p>" +
                                             "</td>" +
                                             "<td width=67 valign=top style=\"width:50.05pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Unity}</span></p>" +
-                                            "</td>" +
-                                            "<td width=162 valign=top style=\"width:121.3pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Movement}</span></p>" +
-                                            "</td>" +
-                                            "<td width=84 valign=top style=\"width:62.85pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Patrimony}</span></p>" +
                                             "</td>" +
                                         "</tr>";
             }
@@ -326,153 +274,6 @@ namespace SCM2020___Client
             Html.Replace("@MarginRight", MarginRight);
             Html.Replace("@MarginBottom", MarginBottom);
             return Html.ToString();
-        }
-
-        public static ResultSearch Search(string workOrder)
-        {
-            string userId = string.Empty;
-            Monitoring Monitoring;
-            InfoUser InfoUser;
-
-
-            try
-            {
-                workOrder = System.Uri.EscapeDataString(workOrder);
-                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
-                userId = Monitoring.EmployeeId;
-            }
-            catch
-            {
-                //If doesn't exist work order, then shows error inside MessageBox 
-                MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-            try
-            {
-                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
-            }
-            catch
-            {
-                //HttpRequestException -> BadRequest
-                MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
-                return null;
-            }
-
-
-            //Show data in screen
-            QueryMovement InformationMovement = new DocumentMovement.QueryMovement()
-            {
-                Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
-                WorkOrder = Monitoring.Work_Order,
-                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
-                WorkOrderDate = Monitoring.MovingDate,
-                RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
-            };
-
-            var ProductsToShow = ProductsAtWorkOrder(workOrder);
-
-            return new ResultSearch(ProductsToShow, Monitoring, InfoUser, InformationMovement);
-        }
-        public static List<DocumentMovement.Product> ProductsAtWorkOrder(string workOrder)
-        {
-
-            List<DocumentMovement.Product> ProductsToShow = new List<DocumentMovement.Product>();
-
-            ModelsLibraryCore.MaterialOutput output = null;
-            try
-            {
-                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
-            }
-            catch //Doesn't exist output with that workorder
-            { }
-
-            ModelsLibraryCore.MaterialInput input = null;
-            try
-            {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-            }
-            catch //Doesn't exist input with that workorder
-            { }
-            //CONSUMPTERS
-            if (output != null)
-                foreach (var item in output.ConsumptionProducts.ToList())
-                {
-                    //Task.Run for each
-                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    DocumentMovement.Product product = new DocumentMovement.Product()
-                    {
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Movement = "SAÍDA",
-                        Quantity = item.Quantity,
-                        Unity = infoProduct.Unity,
-                        MoveDate = item.Date,
-                        Patrimony = ""
-                    };
-                    ProductsToShow.Add(product);
-                }
-
-            if (input != null)
-                foreach (var item in input.ConsumptionProducts.ToList())
-                {
-                    //Task.Run for each
-                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    DocumentMovement.Product product = new DocumentMovement.Product()
-                    {
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Movement = "ENTRADA",
-                        Quantity = item.Quantity,
-                        Unity = infoProduct.Unity,
-                        MoveDate = item.Date,
-                        Patrimony = ""
-                    };
-                    ProductsToShow.Add(product);
-                }
-
-            //PERMANENTS
-            if (output != null)
-                foreach (var item in output.PermanentProducts.ToList())
-                {
-                    //Task.Run for each
-                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    DocumentMovement.Product product = new DocumentMovement.Product()
-                    {
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Movement = "SAÍDA",
-                        Quantity = 1,
-                        Unity = infoProduct.Unity,
-                        MoveDate = item.Date,
-                        Patrimony = infoPermanentProduct.Patrimony
-                    };
-                    ProductsToShow.Add(product);
-                }
-
-            if (input != null)
-                foreach (var item in input.PermanentProducts.ToList())
-                {
-                    //Task.Run for each
-                    ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    DocumentMovement.Product product = new DocumentMovement.Product()
-                    {
-                        Code = infoProduct.Code,
-                        Description = infoProduct.Description,
-                        Movement = "ENTRADA",
-                        Quantity = 1,
-                        Unity = infoProduct.Unity,
-                        MoveDate = item.Date,
-                        Patrimony = infoPermanentProduct.Patrimony
-                    };
-                    ProductsToShow.Add(product);
-                }
-            //Tasks will be waiting here
-            ProductsToShow = ProductsToShow.OrderByDescending(x => x.MoveDate).ToList();
-
-            return ProductsToShow;
         }
 
     }
