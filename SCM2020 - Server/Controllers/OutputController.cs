@@ -51,19 +51,8 @@ namespace SCM2020___Server.Controllers
             var listMaterialOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts);
             foreach (var output in listMaterialOutput)
             {
-                if (output.ConsumptionProducts == null)
-                {
-
-                }
-                else
-                {
-
-                    var newoutputs = output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
-
-                    if (newoutputs != null)
-                        outputs.AddRange(newoutputs);
-                }
-
+                var newoutputs = output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
+                outputs.AddRange(newoutputs);
             }
 
             return Ok(outputs);
