@@ -49,7 +49,9 @@ namespace SCM2020___Server.Controllers
             List<AuxiliarConsumption> outputs = new List<AuxiliarConsumption>();
             foreach (var output in context.MaterialOutput.ToList())
             {
-                outputs.AddRange(output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
+                var newoutputs = output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
+                if (newoutputs != null)
+                    outputs.AddRange(newoutputs);
             }
 
             return Ok(outputs.ToList());
