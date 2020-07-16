@@ -61,8 +61,9 @@ namespace SCM2020___Client.Frames.Query
                     MinimumStock = product.MininumStock,
                     MaximumStock = product.MaximumStock,
                     ProductId = product.Id,
-                    StockEntry = item.Quantity,
-                    Unity = product.Unity, 
+                    StockEntry = item.Quantity, //ENTRADA POR FORNECEDOR
+                    Unity = product.Unity,
+                    
                     //StockDevolution =
                     //Output =
                 });
@@ -107,10 +108,10 @@ namespace SCM2020___Client.Frames.Query
                         MinimumStock = product.MininumStock,
                         MaximumStock = product.MaximumStock,
                         ProductId = product.Id,
-                        StockEntry = item.Quantity,
                         Unity = product.Unity,
-                        //Output = item.Quantity
-                        //StockDevolution =
+                        StockDevolution = item.Quantity
+                        //Output =
+                        //StockEntry =
                     });
                 }
                 else
