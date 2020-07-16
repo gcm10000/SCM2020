@@ -23,9 +23,27 @@ namespace SCM2020___Client.Frames.Query
         // DESCRIÇÃO
         // QUANTIDADE
         // DE TODOS OS PRODUTOS
+
+        // UTILIZAR WEBBROWSER POR TER UMA MELHOR PERFORMANCE 
+        // NO TRATAMENTO DE VISUALIZAÇÃO DE DADOS
+        // DO QUE DATAGRID
+
+        // INVENTÁRIO OFICIAL NÃO HÁ NECESSIDADE DE ALTERAÇÃO DINÂMICA DOS DADOS
+        // BASTA EXIBIR TODOS OS DADOS NUMA TABELA E TER A POSSIBILIDADE DE IMPRESSÃO
+
         public InventoryOfficer()
         {
             InitializeComponent();
+        }
+
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
