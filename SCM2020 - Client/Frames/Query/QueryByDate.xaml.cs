@@ -53,20 +53,27 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in materialInputByVendorInDate)
             {
                 //ADD INFO
-                var product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                products.Add(new QueryByDateDocument.Product()
+                if (!products.Any(x => x.ProductId == item.ProductId))
                 {
-                    Code = product.Code,
-                    Description = product.Description,
-                    MinimumStock = product.MininumStock,
-                    MaximumStock = product.MaximumStock,
-                    ProductId = product.Id,
-                    StockEntry = item.Quantity, //ENTRADA POR FORNECEDOR
-                    Unity = product.Unity,
-                    
-                    //StockDevolution =
-                    //Output =
-                });
+                    var product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    products.Add(new QueryByDateDocument.Product()
+                    {
+                        Code = product.Code,
+                        Description = product.Description,
+                        MinimumStock = product.MininumStock,
+                        MaximumStock = product.MaximumStock,
+                        ProductId = product.Id,
+                        StockEntry = item.Quantity, //ENTRADA POR FORNECEDOR
+                        Unity = product.Unity,
+                        //StockDevolution =
+                        //Output =
+                    });
+                }
+                else
+                {
+                    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
+                    product.StockEntry += item.Quantity;
+                }
             }
 
             foreach (var item in materialOutputInDate)
@@ -117,7 +124,7 @@ namespace SCM2020___Client.Frames.Query
                 else
                 {
                     QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                    product.StockEntry += item.Quantity;
+                    product.StockDevolution += item.Quantity;
                 }
             }
 
