@@ -37,6 +37,11 @@ namespace SCM2020___Client.Frames.Query
         // POSSIVELMENTE PODERÁ SER USADO BOOTSTRAP TAMBÉM
         // https://www.youtube.com/watch?v=pNfSOBzHd8Y
         // https://stackoverflow.com/questions/31251720/ie-11-signalr-not-working -> IE DOESN'T WORKING WITH SIGNALR
+
+        // https://github.com/videojs/video.js/issues/5910
+        //  A RESPEITO DA LEITURA DE MKV
+        // you can sometimes get some MKVs to play in browsers that support webm, because webm is a subset of MKV
+
         public InventoryTurnover()
         {
             InitializeComponent();
