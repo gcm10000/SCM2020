@@ -32,14 +32,15 @@ namespace SCM2020___Client.Frames.Query
              CODIGO -> GENERALPRODUCT
              DESC -> GENERALPRODUCT
              ENTRADA NO ESTOQUE -> AUXILIARPRODUCT INPUT BY VENDOR
-             ESTOQUE ATUAL -> GENERALPRODUCT
+             ENTRADA DE DEVOLUÇÃO -> AUXILIARPRODUCT INPUT
+             TOTAL DE ESTOQUE -> ENTRADA NO ESTOQUE + ENTRADA DE DEVOLUÇÃO
              SAÍDA -> AUXILIARPRODUCT OUTPUT
+             SALDO ATUAL -> TOTAL DE ESTOQUE - SAÍDA
              ESTOQUE MÍNIMO -> GENERALPRODUCT
              ESTOQUE MÁXIMO -> GENERALPRODUCT
              UNIDADE -> GENERALPRODUCT
 
              */
-            int id = 0;
             var initialDate = InitialDate.SelectedDate.Value;
             var finalDate = FinalDate.SelectedDate.Value;
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"input/Date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
@@ -52,8 +53,8 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in materialInputByVendorInDate)
             {
                 //ADD INFO
-                //if (!products.Any(x => x.ProductId == item.ProductId))
-                //{
+                if (!products.Any(x => x.ProductId == item.ProductId))
+                {
                     var product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     products.Add(new QueryByDateDocument.Product()
                     {
@@ -61,18 +62,18 @@ namespace SCM2020___Client.Frames.Query
                         Description = product.Description,
                         MinimumStock = product.MininumStock,
                         MaximumStock = product.MaximumStock,
-                        Stock = product.Stock,
                         ProductId = product.Id,
-                        StockEntry = item.Quantity,
+                        StockEntry = item.Quantity, //ENTRADA POR FORNECEDOR
                         Unity = product.Unity,
+                        //StockDevolution =
                         //Output =
                     });
-                //}
-                //else
-                //{
-                //    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                //    product.StockEntry = item.Quantity;
-                //}
+                }
+                else
+                {
+                    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
+                    product.StockEntry += item.Quantity;
+                }
             }
 
             foreach (var item in materialOutputInDate)
@@ -87,8 +88,8 @@ namespace SCM2020___Client.Frames.Query
                         Description = product.Description,
                         MinimumStock = product.MininumStock,
                         MaximumStock = product.MaximumStock,
-                        Stock = product.Stock,
                         ProductId = product.Id,
+                        //StockDevolution =
                         //StockEntry = item.Quantity,
                         Unity = product.Unity,
                         Output = item.Quantity
@@ -113,22 +114,24 @@ namespace SCM2020___Client.Frames.Query
                         Description = product.Description,
                         MinimumStock = product.MininumStock,
                         MaximumStock = product.MaximumStock,
-                        Stock = product.Stock,
                         ProductId = product.Id,
-                        StockEntry = item.Quantity,
-                        Unity = product.Unity
-                        //Output = item.Quantity
-
+                        Unity = product.Unity,
+                        StockDevolution = item.Quantity
+                        //Output =
+                        //StockEntry =
                     });
                 }
                 else
                 {
                     QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
-                    product.StockEntry += item.Quantity;
+                    product.StockDevolution += item.Quantity;
                 }
             }
 
-            //APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"/generalproduct/{id}").ToString(), Helper.Authentication);
+            foreach (var product in products)
+            {
+                this.ShowByDateDataGrid.Items.Add(product);
+            }
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)

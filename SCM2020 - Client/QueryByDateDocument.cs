@@ -11,11 +11,13 @@ namespace SCM2020___Client
             public int ProductId { get; set; }
             public int Code { get; set; }
             public string Description { get; set; }
-            public double StockEntry { get; set; } = 0.00d;
-            public double Stock { get; set; } = 0.00d;
-            public double Output { get; set; } = 0.00d;
-            public double MinimumStock { get; set; } = 0.00d;
-            public double MaximumStock { get; set; } = 0.00d;
+            public double StockEntry { get; set; }
+            public double StockDevolution { get; set; }
+            public double TotalStock { get => StockEntry + StockDevolution; }
+            public double Output { get; set; }
+            public double CurrentBalance { get => TotalStock - Output; }
+            public double MinimumStock { get; set; }
+            public double MaximumStock { get; set; }
             public string Unity { get; set; }
         }
         private List<Product> Products = null;
@@ -252,7 +254,7 @@ namespace SCM2020___Client
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MinimumStock}</span></p>" +
                                             "</td>" +
                                             "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
-                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.Stock}</span></p>" +
+                                                $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.CurrentBalance}</span></p>" +
                                             "</td>" +
                                             "<td width=87 valign=top style=\"width:65.6pt;padding:0cm 5.4pt 0cm 5.4pt; height:19.1pt\">" +
                                                 $"<p class=MsoNormal style=\"margin-bottom:0cm;margin-bottom:.0001pt;line-height: normal\"><span style=\"font-size:10.0pt;font-family:'Arial',sans-serif\">{product.MaximumStock}</span></p>" +

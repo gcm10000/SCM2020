@@ -48,9 +48,12 @@ namespace SCM2020___Server.Controllers
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
-            foreach (var input in context.MaterialInput.ToList())
+            var listMaterialInput = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts);
+
+            foreach (var input in listMaterialInput)
             {
-                inputs.AddRange(input.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd)));
+                var newinputs = input.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
+                inputs.AddRange(newinputs);
             }
 
             return Ok(inputs.ToList());
