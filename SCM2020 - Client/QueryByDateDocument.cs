@@ -11,11 +11,11 @@ namespace SCM2020___Client
             public int ProductId { get; set; }
             public int Code { get; set; }
             public string Description { get; set; }
-            public double StockEntry { get; set; }
-            public double Stock { get; set; }
-            public double Output { get; set; }
-            public double MinimumStock { get; set; }
-            public double MaximumStock { get; set; }
+            public double StockEntry { get; set; } = 0.00d;
+            public double Stock { get; set; } = 0.00d;
+            public double Output { get; set; } = 0.00d;
+            public double MinimumStock { get; set; } = 0.00d;
+            public double MaximumStock { get; set; } = 0.00d;
             public string Unity { get; set; }
         }
         private List<Product> Products = null;
