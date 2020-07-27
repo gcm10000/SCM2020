@@ -35,7 +35,6 @@ namespace SCM2020___Client.Frames.Query
         {
             InitializeComponent();
 
-            this.webBrowser.NavigateToString("");
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
@@ -46,6 +45,17 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            InventoryOfficerPreview.Product product = new InventoryOfficerPreview.Product(1, 9999, "PRODUTO TESTE", 999d);
+            List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
+            products.Add(product);
+            InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
+
+            var html = preview.RenderizeHTML();
+            this.webBrowser.NavigateToString(html);
         }
     }
 }
