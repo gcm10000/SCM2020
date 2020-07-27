@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -49,9 +50,14 @@ namespace SCM2020___Client.Frames.Query
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            InventoryOfficerPreview.Product product = new InventoryOfficerPreview.Product(1, 9999, "PRODUTO TESTE", 999d);
             List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
-            products.Add(product);
+            var productsServer = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, "generalproduct/").ToString(), Helper.Authentication);
+
+            foreach (var product in productsServer)
+            {
+                InventoryOfficerPreview.Product productInventory = new InventoryOfficerPreview.Product(product.Id, product.Code, product.Description, product.Stock);
+                products.Add(productInventory);
+            }
             InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
 
             var html = preview.RenderizeHTML();

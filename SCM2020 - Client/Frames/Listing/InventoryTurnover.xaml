@@ -9,7 +9,7 @@
              Loaded="UserControl_Loaded"
              Background="White">
     <DockPanel>
-        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid DockPanel.Dock="Bottom"  Margin="0 0 15 15" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Button Content="Exportar" Padding="5" x:Name="Export_Button" IsEnabled="False" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">

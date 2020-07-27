@@ -35,7 +35,7 @@ namespace SCM2020___Client
             StringBuilder StringBuilder = new StringBuilder();
             foreach (var product in Products)
             {
-                string line = 
+                string line =
                     "<tr>" +
                     $"<th>{product.SKU}</th>" +
                     $"<td>{product.Description}</td>" +
