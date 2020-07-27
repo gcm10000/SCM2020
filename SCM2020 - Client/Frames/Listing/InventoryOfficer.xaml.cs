@@ -34,6 +34,8 @@ namespace SCM2020___Client.Frames.Query
         public InventoryOfficer()
         {
             InitializeComponent();
+
+            this.webBrowser.NavigateToString("");
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
