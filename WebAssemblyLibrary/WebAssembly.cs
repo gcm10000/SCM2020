@@ -7,7 +7,7 @@ namespace WebAssemblyLibrary
     {
         public static IWebHostBuilder CreateWebHostBuilder()
         {
-            return WebHost.CreateDefaultBuilder().UseStartup<Startup>();
+            return WebHost.CreateDefaultBuilder().UseStartup<Startup>(); 
         }
     }
 }
