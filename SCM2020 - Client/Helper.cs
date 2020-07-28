@@ -12,6 +12,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Management;
 using Microsoft.Win32;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SCM2020___Client
 {
@@ -26,6 +27,8 @@ namespace SCM2020___Client
         public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }
         public static WebBrowser MyWebBrowser { get; set; }
+        public static IWebHost WebHost { get; internal set; }
+
         public static bool IsTextAllowed(string text)
         {
             return !NumberRegex.IsMatch(text);
