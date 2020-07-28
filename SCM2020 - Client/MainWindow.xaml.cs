@@ -43,7 +43,9 @@ namespace SCM2020___Client
             {
                 Helper.WebHost = WebAssemblyLibrary.WebAssembly.CreateWebHostBuilder().Build();
                 Helper.WebHost.Run();
+                //Default url is http://localhost:5000/
             });
+            Helper.MyWebBrowser = WebBrowser;
 
             ////Only users with role SCM and role Administrator have total access
             //if (!(Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM))
@@ -52,7 +54,6 @@ namespace SCM2020___Client
             //    this.MovementItem.Visibility = Visibility.Collapsed;
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
-            Helper.MyWebBrowser = WebBrowser;
         }
 
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
