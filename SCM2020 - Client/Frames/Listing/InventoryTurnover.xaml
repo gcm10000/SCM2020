@@ -7,8 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="UserControl_Loaded"
-             Background="White">
+             Background="White"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <DockPanel>
+        <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Insira ordem de serviço..." KeyDown="TxtSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
+            <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="SearchButton_Click">
+                <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+            </Button>
+        </Grid>
         <Grid DockPanel.Dock="Bottom"  Margin="0 0 15 15" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Button Content="Exportar" Padding="5" x:Name="Export_Button" IsEnabled="False" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                 <Button.Template>
