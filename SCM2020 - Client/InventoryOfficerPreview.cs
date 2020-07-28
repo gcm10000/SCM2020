@@ -21,6 +21,7 @@ namespace SCM2020___Client
                 this.Quantity = Quantity;
             }
         }
+
         private string html = string.Empty;
         private ICollection<Product> Products;
         public InventoryOfficerPreview(ICollection<Product> Products)
@@ -37,14 +38,13 @@ namespace SCM2020___Client
             {
                 string line =
                     "<tr>" +
-                    $"<th>{product.SKU}</th>" +
-                    $"<td>{product.Description}</td>" +
-                    $"<td>{product.Quantity}</td>" +
+                    $"  <th>{product.SKU}</th>" +
+                    $"  <td>{product.Description}</td>" +
+                    $"  <td>{product.Quantity}</td>" +
                     "</tr>";
                 StringBuilder.AppendLine(line);
             }
             html = html.Replace("@PRODUCTS", StringBuilder.ToString());
-            //html.Replace("@PRODUCTS", "");
             return html;
         }
     }
