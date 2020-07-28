@@ -48,6 +48,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ModelsLibraryCore\ModelsLibraryCore.csproj" />
+    <ProjectReference Include="..\WebAssemblyLibrary\WebAssemblyLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
