@@ -44,6 +44,7 @@ namespace SCM2020___Client
                     $"  <th>{product.SKU}</th>" +
                     $"  <td>{product.Description}</td>" +
                     $"  <td>{product.Quantity}</td>" +
+                    $"  <td>{product.Unity}</td>" +
                     "</tr>";
                 StringBuilder.AppendLine(line);
             }
