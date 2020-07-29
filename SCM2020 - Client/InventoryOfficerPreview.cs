@@ -13,12 +13,15 @@ namespace SCM2020___Client
             public int SKU { get; }
             public string Description { get; }
             public double Quantity { get; }
-            public Product(int ID, int SKU, string Description, double Quantity)
+            public string Unity { get; }
+
+            public Product(int ID, int SKU, string Description, double Quantity, string Unity)
             {
                 this.ID = ID;
                 this.SKU = SKU;
                 this.Description = Description;
                 this.Quantity = Quantity;
+                this.Unity = Unity;
             }
         }
 

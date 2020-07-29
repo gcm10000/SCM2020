@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -42,9 +45,12 @@ namespace SCM2020___Client.Frames.Query
         //  A RESPEITO DA LEITURA DE MKV
         // you can sometimes get some MKVs to play in browsers that support webm, because webm is a subset of MKV
 
+        WebAssemblyLibrary.Client.Client client;
         public InventoryTurnover()
         {
             InitializeComponent();
+            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
+
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
@@ -59,7 +65,68 @@ namespace SCM2020___Client.Frames.Query
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            this.ButtonSearchProducts.IsEnabled = false;
+            this.ButtonInventoryTurnover.IsEnabled = true;
+            var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
+            this.webBrowser.Navigate(path);
 
+        }
+
+        private void ButtonSearchProducts_Click(object sender, RoutedEventArgs e)
+        {
+            this.ButtonSearchProducts.IsEnabled = false;
+            this.ButtonInventoryTurnover.IsEnabled = true;
+            this.webBrowser.Visibility = Visibility.Collapsed;
+            this.ProductToAddDataGrid.Visibility = Visibility.Visible;
+            this.SearchGrid.Visibility = Visibility.Visible;
+        }
+
+        private void ButtonInventoryTurnover_Click(object sender, RoutedEventArgs e)
+        {
+            this.ButtonSearchProducts.IsEnabled = true;
+            this.ButtonInventoryTurnover.IsEnabled = false;
+            this.webBrowser.Visibility = Visibility.Visible;
+            this.ProductToAddDataGrid.Visibility = Visibility.Collapsed;
+            this.SearchGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            string workOrder = TxtSearchConsumpterProduct.Text;
+            if (e.Key == Key.Enter)
+                Search(workOrder);
+
+        }
+
+        private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
+        {
+            Search(TxtSearchConsumpterProduct.Text);
+        }
+
+        private void Search(string product)
+        {
+            this.ProductToAddDataGrid.Items.Clear();
+
+            var listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
+            foreach (var item in listProducts)
+            {
+                this.ProductToAddDataGrid.Items.Add(item);
+            }
+        }
+
+        private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            //ENVIAR MENSAGEM PARA O CLIENTE...
+            var product = ((FrameworkElement)sender).DataContext as ModelsLibraryCore.ConsumptionProduct;
+            var productjson = product.ToJson();
+            client.Send("SendMessage", "ContentInventoryTurnover", productjson);
+
+            this.ProductToAddDataGrid.UnselectAll();
         }
     }
 }

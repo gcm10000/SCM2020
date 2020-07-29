@@ -55,7 +55,7 @@ namespace SCM2020___Client.Frames.Query
 
             foreach (var product in productsServer)
             {
-                InventoryOfficerPreview.Product productInventory = new InventoryOfficerPreview.Product(product.Id, product.Code, product.Description, product.Stock);
+                InventoryOfficerPreview.Product productInventory = new InventoryOfficerPreview.Product(product.Id, product.Code, product.Description, product.Stock, product.Unity);
                 products.Add(productInventory);
             }
             InventoryOfficerPreview preview = new InventoryOfficerPreview(products);

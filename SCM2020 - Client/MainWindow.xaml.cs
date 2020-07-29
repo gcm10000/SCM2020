@@ -41,7 +41,7 @@ namespace SCM2020___Client
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Task.Run(() => 
             {
-                Helper.WebHost = WebAssemblyLibrary.WebAssembly.CreateWebHostBuilder().Build();
+                Helper.WebHost = WebAssemblyLibrary.Server.WebAssembly.CreateWebHostBuilder().Build();
                 Helper.WebHost.Run();
                 //Default url is http://localhost:5000/
             });

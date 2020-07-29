@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 
 namespace WebAssemblyLibrary
@@ -54,5 +55,10 @@ namespace WebAssemblyLibrary
 
             return maxVer;
         } // End Function GetBrowserVersion 
+        public static string ToJson<T>(this T obj)
+        {
+            string output = JsonConvert.SerializeObject(obj);
+            return output;
+        }
     }
 }

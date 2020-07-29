@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WebAssemblyLibrary
+namespace WebAssemblyLibrary.Server
 {
     public class Startup
     {

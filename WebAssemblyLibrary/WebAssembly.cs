@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace WebAssemblyLibrary
+namespace WebAssemblyLibrary.Server
 {
     public class WebAssembly
     {

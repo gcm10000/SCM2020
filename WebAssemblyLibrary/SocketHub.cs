@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace WebAssemblyLibrary
+namespace WebAssemblyLibrary.Server
 {
     class SocketHub : Hub
     {

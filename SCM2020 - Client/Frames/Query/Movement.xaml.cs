@@ -40,14 +40,12 @@ namespace SCM2020___Client.Frames.Query
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
-            string workOrder = TxtSearch.Text;
             if (e.Key == Key.Enter)
-                Search(workOrder);
+                Search(TxtSearch.Text); //TxtSearch == workOrder
         }
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string workOrder = TxtSearch.Text;
-            Search(workOrder);
+            Search(TxtSearch.Text); //TxtSearch == workOrder
 
         }
         private void Search(string workOrder)
