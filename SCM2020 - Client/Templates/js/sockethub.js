@@ -31,7 +31,7 @@ connection.on("ReceiveMessage", function (window, message)
     }
 });
 connection.start().then(function () {
-    alert("ready");
+    console.log("ready");
 });
 
 function SendMessage(window, message)
