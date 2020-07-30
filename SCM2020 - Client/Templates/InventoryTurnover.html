@@ -28,9 +28,14 @@
             user-select: none;
         }
         .threedots:after {
-
             content: '\2807';
             /*font-size: 72px;*/
+        }
+
+        @media print {
+            th:last-child, td:last-child {
+                visibility: hidden;
+            }
         }
     </style>
 </head>
