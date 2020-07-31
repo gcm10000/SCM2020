@@ -26,7 +26,7 @@ namespace SCM2020___Client.Frames.Listing
 
         // Com os seguintes filtros:
         // PRODUTO: SKU ou DESCRIÇÃO
-        // DATA
+        // DATA INICIAL E FINAL
         public Finance()
         {
             InitializeComponent();
