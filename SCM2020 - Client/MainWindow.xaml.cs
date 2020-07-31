@@ -215,26 +215,12 @@ namespace SCM2020___Client
                 switch (index)
                 {
                     case 0:
-                        //FrameContent.Source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
-                        break;
-                    case 1:
-                        //FrameContent.Source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
-                        break;
-                    case 2:
-                        //FrameContent.Source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
-                        break;
-                    case 3:
-                        //FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
-                        break;
-                    case 4:
-                        //FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
-                        break;
-                    case 5:
                         source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
                         break;
-                    case 6:
+                    case 1:
                         source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
                         break;
+
                 }
                 PopupReport.IsOpen = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
