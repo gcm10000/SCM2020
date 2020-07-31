@@ -21,6 +21,21 @@ namespace SCM2020___Client.Frames.Listing
     /// </summary>
     public partial class ListPermanentProduct : UserControl
     {
+        class PermanentProduct
+        {
+            public int SKU { get; }
+            public string Description { get; }
+            public string Patrimony { get; }
+            public string Group { get; }
+            public PermanentProduct(int SKU, string Description, string Patrimony, string Group)
+            {
+                this.SKU = SKU;
+                this.Description = Description;
+                this.Patrimony = Patrimony;
+                this.Group = Group;
+            }
+        }
+
         public ListPermanentProduct()
         {
             InitializeComponent();
@@ -41,19 +56,11 @@ namespace SCM2020___Client.Frames.Listing
         }
         private void SearchPermanentProduct()
         {
-
             try
             {
-                var query = TxtSearch.Text;
-                Task.Run(() => 
-                {
-                    //
-                    var permanentProduct = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"permanentproduct/search/{query}").ToString(), Helper.Authentication);
-                    //FILL DATA
-                });
-                
+
             }
-            catch
+            catch (Exception ex)
             {
 
             }
@@ -68,12 +75,24 @@ namespace SCM2020___Client.Frames.Listing
 
         private void ListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
 
         private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, "permanentproduct").ToString(), Helper.Authentication);
+
+            foreach (var permanentProduct in permanentProducts)
+            {
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/search/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
+                PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName);
+            }
         }
     }
 }

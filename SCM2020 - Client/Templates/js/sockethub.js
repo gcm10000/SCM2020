@@ -7,11 +7,11 @@ connection.on("ReceiveMessage", function (window, message)
     var encodedMsg = window + " says " + msg;
     var obj = JSON.parse(message);
     alert(encodedMsg);
-    if (window === "ContentInventoryTurnover")
-    {
+    if (window === "ContentInventoryTurnover") {
         var content = document.getElementById("content");
         //Adicionar objeto
         var producthtml = document.getElementById(obj.Id);
+        //Caso for inexistente...
         if (producthtml == null) {
 
             var button = "<div class=\"dropdown\">" +
@@ -24,10 +24,18 @@ connection.on("ReceiveMessage", function (window, message)
                 "</div>";
             content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.Code + "</th><td>" + obj.Description + "</td><td>" + obj.Stock + "</td><td> " + obj.Unity + " </td><td>" + button + "</td></tr>";
         }
-            //Remover objeto
+        //Caso já existir, remove o objeto
         else {
             content.removeChild(producthtml);
         }
+    }
+    else if (window === "ContentListPermanentProduct") {
+        var content = document.getElementById("content");
+        //Adicionar objeto
+        var producthtml = document.getElementById(obj.Id);
+        content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.Code + "</th><td>" + obj.Description + "</td><td>" + obj.Patrimony + "</td><td> " + obj.Group + " </td></tr>";
+
+
     }
 });
 connection.start().then(function () {
