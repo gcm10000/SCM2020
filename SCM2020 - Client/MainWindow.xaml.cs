@@ -220,6 +220,12 @@ namespace SCM2020___Client
                     case 1:
                         source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
                         break;
+                    case 2:
+                        source = new Uri("Frames/Listing/ListingPermanentProduct.xaml", UriKind.Relative);
+                        break;
+                    case 3:
+                        source = new Uri("Frames/Listing/Finance.xaml", UriKind.Relative);
+                        break;
 
                 }
                 PopupReport.IsOpen = false;

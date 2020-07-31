@@ -13,9 +13,9 @@ using System.Windows.Shapes;
 namespace SCM2020___Client.Frames.Listing
 {
     /// <summary>
-    /// Lógica interna para Finance.xaml
+    /// Lógica interna para Financial.xaml
     /// </summary>
-    public partial class Finance : Window
+    public partial class Financial : Window
     {
         // Relatório financeiro apresenta os seguintes itens:
         // SKU
@@ -27,7 +27,7 @@ namespace SCM2020___Client.Frames.Listing
         // Com os seguintes filtros:
         // PRODUTO: SKU ou DESCRIÇÃO
         // DATA INICIAL E FINAL
-        public Finance()
+        public Financial()
         {
             InitializeComponent();
         }

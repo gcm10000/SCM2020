@@ -50,7 +50,7 @@ namespace SCM2020___Client.Frames.Listing
                     //
                     var permanentProduct = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"permanentproduct/search/{query}").ToString(), Helper.Authentication);
                     //FILL DATA
-                }).Start();
+                });
                 
             }
             catch
@@ -73,7 +73,7 @@ namespace SCM2020___Client.Frames.Listing
 
         private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
     }
 }

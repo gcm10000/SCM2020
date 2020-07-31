@@ -5,3 +5,7 @@
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo;
 - Modificar a movimentação
+- Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
+- Sistematizar os funcionários;
+- Adicionar relatório financeiro;
+
