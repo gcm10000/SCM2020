@@ -1,6 +1,6 @@
 - Adicionar opção de exportação e impressão a todas as telas necessárias;
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
+- Listagem de todos os produtos com patrimônio
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo;
-- 
