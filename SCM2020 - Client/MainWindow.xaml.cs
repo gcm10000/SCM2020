@@ -48,7 +48,7 @@ namespace SCM2020___Client
             Helper.MyWebBrowser = WebBrowser;
 
             ////Only users with role SCM and role Administrator have total access
-            //if (!(Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM))
+            //if (!((Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM)))
             //{
             //    //Users with access restrited only does can access the Query and Listing menu
             //    this.MovementItem.Visibility = Visibility.Collapsed;
@@ -71,23 +71,26 @@ namespace SCM2020___Client
                 lvItem.IsSelected = false;
             }
             item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
-            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));            
-            
-            if (index == 1)
+            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
+
+            switch (index)
             {
+                case 1:
                 PopupMovement.IsOpen = true;
-            }
-            else if (index == 2)
-            {
-                PopupRegister.IsOpen = true;
-            }
-            else if (index == 3)
-            {
-                PopupQueries.IsOpen = true;
-            }
-            else if (index == 4)
-            {
-                PopupReport.IsOpen = true;
+                    break;
+                case 2:
+                    PopupRegister.IsOpen = true;
+
+                    break;
+                case 3:
+                    PopupQueries.IsOpen = true;
+
+                    break;
+                case 4:
+                    PopupReport.IsOpen = true;
+                    break;
+                default:
+                    break;
             }
         }
         private void ListViewMoving_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -95,25 +98,37 @@ namespace SCM2020___Client
             var listView = sender as ListBox;
             var item = listView.SelectedItem as ListBoxItem;
             var index = listView.SelectedIndex;
+
             if (item != null)
             {
+                Uri source = null;
                 switch (index)
                 {
                     case 0:
-                        FrameContent.Source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
                         break;
                     case 1:
-                        FrameContent.Source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        FrameContent.Source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
                         break;
                     case 3:
-                        FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
                         break;
                 }
                 PopupMovement.IsOpen = false;
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    FrameWindow frame = new FrameWindow(source);
+                    frame.Show();
+                }
+                else
+                {
+                    FrameContent.Source = source;
+                }
             }
+
         }
         private void ListBoxRegister_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -122,28 +137,38 @@ namespace SCM2020___Client
             var index = listView.SelectedIndex;
             if (item != null)
             {
+                Uri source = null;
                 switch (index)
                 {
                     case 0:
-                        FrameContent.Source = new Uri("Frames/Register/Employee.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/Employee.xaml", UriKind.Relative);
                         break;
                     case 1:
-                        FrameContent.Source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        FrameContent.Source = new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative);
                         break;
                     case 3:
-                        FrameContent.Source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
                         break;
                     case 4:
-                        FrameContent.Source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
                         break;
                     case 5:
-                        FrameContent.Source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
                         break;
                 }
                 PopupRegister.IsOpen = false;
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    FrameWindow frame = new FrameWindow(source);
+                    frame.Show();
+                }
+                else
+                {
+                    FrameContent.Source = source;
+                }
             }
         }
         private void ListBoxQueries_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -153,22 +178,32 @@ namespace SCM2020___Client
             var index = listView.SelectedIndex;
             if (item != null)
             {
+                Uri source = null;
                 switch (index)
                 {
                     case 0:
-                        FrameContent.Source = new Uri("Frames/Query/Movement.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Query/Movement.xaml", UriKind.Relative);
                         break;
                     case 1:
-                        FrameContent.Source = new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative);
                         break;
                     case 2:
-                        FrameContent.Source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
                         break;
                     case 3:
-                        FrameContent.Source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);
                         break;
                 }
                 PopupQueries.IsOpen = false;
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    FrameWindow frame = new FrameWindow(source);
+                    frame.Show();
+                }
+                else
+                {
+                    FrameContent.Source = source;
+                }
             }
         }
         private void ListBoxReport_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -178,6 +213,7 @@ namespace SCM2020___Client
             var index = listView.SelectedIndex;
             if (item != null)
             {
+                Uri source = null;
                 switch (index)
                 {
                     case 0:
@@ -196,13 +232,22 @@ namespace SCM2020___Client
                         //FrameContent.Source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
                         break;
                     case 5:
-                        FrameContent.Source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
                         break;
                     case 6:
-                        FrameContent.Source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
+                        source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
                         break;
                 }
                 PopupReport.IsOpen = false;
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    FrameWindow frame = new FrameWindow(source);
+                    frame.Show();
+                }
+                else
+                {
+                    FrameContent.Source = source;
+                }
             }
         }
     }
