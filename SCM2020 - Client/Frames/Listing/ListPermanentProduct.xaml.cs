@@ -41,41 +41,9 @@ namespace SCM2020___Client.Frames.Listing
             InitializeComponent();
         }
 
-        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                SearchPermanentProduct();
-            }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SearchPermanentProduct();
-
-        }
-        private void SearchPermanentProduct()
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-
-        }
-
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void ListingDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
         }
 
         private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -92,6 +60,8 @@ namespace SCM2020___Client.Frames.Listing
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/search/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                 var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
                 PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName);
+                ListPermanentProductDataGrid.Items.Add(product);
+                ListPermanentProductDataGrid.UnselectAll();
             }
         }
     }
