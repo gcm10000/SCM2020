@@ -4,3 +4,4 @@
 - Listagem de todos os produtos com patrimônio
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo;
+- Modificar a movimentação
