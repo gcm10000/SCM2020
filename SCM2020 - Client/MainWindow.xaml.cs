@@ -80,11 +80,9 @@ namespace SCM2020___Client
                     break;
                 case 2:
                     PopupRegister.IsOpen = true;
-
                     break;
                 case 3:
                     PopupQueries.IsOpen = true;
-
                     break;
                 case 4:
                     PopupReport.IsOpen = true;
