@@ -131,28 +131,16 @@
                             -->
                             <Popup x:Name="PopupReport" StaysOpen="False" Placement="Right" Margin="0">
                                 <ListBox Background="White" x:Name="ListBoxReport" PreviewMouseLeftButtonUp="ListBoxReport_PreviewMouseLeftButtonUp"  Padding="15, 15, 15, 15">
-                                        <ListBoxItem>
-                                            <TextBlock Text="Listagem de Balanço"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Listagem de Conferência"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Listagem de Produtos"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Listagem de Produtos por Grupo"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Inventário oficial"></TextBlock>
-                                        </ListBoxItem>
-                                        <ListBoxItem>
-                                            <TextBlock Text="Inventário rotativo"></TextBlock>
-                                        </ListBoxItem>
-                                    </ListBox>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário oficial"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário rotativo"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
+                                    </ListBoxItem>
+                                </ListBox>
                                 </Popup>
                                 <materialDesign:PackIcon Kind="BooksVariant"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                                 <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
