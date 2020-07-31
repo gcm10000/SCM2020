@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WebAssemblyLibrary;
+using WebAssemblyLibrary.Client;
 
 namespace SCM2020___Client.Frames.Listing
 {
@@ -36,9 +38,12 @@ namespace SCM2020___Client.Frames.Listing
             }
         }
 
+        WebAssemblyLibrary.Client.Client client;
+
         public ListPermanentProduct()
         {
             InitializeComponent();
+            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
         }
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
@@ -53,16 +58,33 @@ namespace SCM2020___Client.Frames.Listing
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "listpermanentproduct.html");
+            this.webBrowser.Navigate(path);
+            
             var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, "permanentproduct").ToString(), Helper.Authentication);
-
-            foreach (var permanentProduct in permanentProducts)
+            webBrowser.LoadCompleted += (sender, args) =>
             {
-                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/search/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
-                PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName);
-                ListPermanentProductDataGrid.Items.Add(product);
-                ListPermanentProductDataGrid.UnselectAll();
-            }
+                foreach (var permanentProduct in permanentProducts)
+                {
+                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
+                    PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName);
+
+                    var productjson = product.ToJson();
+                    client.Send("SendMessage", "ContentListPermanentProduct", productjson);
+
+                }
+            };
+        }
+
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

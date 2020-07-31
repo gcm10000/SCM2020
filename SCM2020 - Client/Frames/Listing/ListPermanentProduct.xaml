@@ -22,9 +22,23 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10" Background="White">
-        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Button Content="Imprimir" Padding="5" x:Name="BtnPrint" Click="BtnPrint_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom" Margin="0 0 15 15" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Button Content="Exportar" Padding="5" x:Name="Export_Button" IsEnabled="False" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Imprimir" Padding="5" x:Name="Print_Button" IsEnabled="False" Click="Print_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
                         <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -43,22 +57,7 @@
             <Grid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
             </Grid.Resources>
-            <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ListPermanentProductDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ListPermanentProductDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
-                IsReadOnly="True"
-                ScrollViewer.CanContentScroll="True" 
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                VirtualizingPanel.ScrollUnit="Pixel"
-                VirtualizingPanel.IsVirtualizing="False">
-                <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"/>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"/>
-                    <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"/>
-                    <DataGridTextColumn Header=" Usado" Binding="{Binding IsUsed}"/>
-                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Patrimony}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <WebBrowser x:Name="webBrowser"></WebBrowser>
         </Grid>
     </DockPanel>
 </UserControl>
