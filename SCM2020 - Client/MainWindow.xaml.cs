@@ -76,7 +76,7 @@ namespace SCM2020___Client
             switch (index)
             {
                 case 1:
-                PopupMovement.IsOpen = true;
+                    PopupMovement.IsOpen = true;
                     break;
                 case 2:
                     PopupRegister.IsOpen = true;
