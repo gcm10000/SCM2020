@@ -40,7 +40,7 @@ connection.on("ReceiveMessage", function (window, message)
         //Adicionar objeto
         var producthtml = document.getElementById(obj.Id);
         console.log(obj);
-        content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.SKU + "</th><td>" + obj.Description + "</td><td>" + obj.Patrimony + "</td><td>" + obj.Group + "</td><td>" + obj.IsUsed +"</td></tr>";
+        content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.SKU + "</th><td>" + obj.Description + "</td><td>" + obj.Patrimony + "</td><td>" + obj.Group + "</td><td>" + obj.WorkOrder +"</td></tr>";
 
 
     }

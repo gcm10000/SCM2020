@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -52,8 +53,11 @@ namespace SCM2020___Client.Frames.Query
             this.Print_Button.IsEnabled = false;
 
             DocumentInputByVendor.ResultSearch resultSearch = null;
-            var t = Task.Run(() => resultSearch = DocumentInputByVendor.Search(invoice));
-            t.Wait();
+            resultSearch = DocumentInputByVendor.Search(invoice);
+            if (resultSearch == null)
+                return;
+
+
             var InformationQuery = resultSearch.InformationMovement;
             info = InformationQuery;
             InvoiceText.Text = InformationQuery.Invoice;
@@ -69,7 +73,6 @@ namespace SCM2020___Client.Frames.Query
             {
                 ProductMovementDataGrid.Items.Add(product);
             }
-
             this.Export_Button.IsEnabled = true;
             this.Print_Button.IsEnabled = true;
         }
