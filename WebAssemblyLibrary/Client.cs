@@ -20,7 +20,7 @@ namespace WebAssemblyLibrary.Client
         {
             connection.InvokeCoreAsync(methodName, new[] { window, message });
         }
-        public void Receive(string methodName, Action Receive)
+        public void Receive(string methodName, Action<string, string> Receive)
         {
             connection.On(methodName, Receive);
         }

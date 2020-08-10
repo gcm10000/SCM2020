@@ -5,6 +5,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,22 +87,40 @@ namespace SCM2020___Client.Frames.Query
                 string tempFile = string.Empty;
                 try
                 {
+                    //Declara sinal para sincronismo em diferentes threads
+                    ManualResetEvent receiveDone = new ManualResetEvent(false);
 
-                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    //Obter o DOM atual
+                    string DOM = string.Empty;
+                    client.Receive("ReceiveMessage", (window, message) =>
                     {
-                        file.Write(Document);
-                        file.Flush();
-                    }
+                        Console.WriteLine("{0}, {1}", window, message);
+                        if (window == "SetDOM")
+                        {
+                            DOM = message;
 
-                    //"f=" The input file
-                    //"p=" The temporary default printer
-                    //"d|delete" Delete file when finished
-                    var p = new Process();
-                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
-                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
-                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
-                    p.Start();
+                            Document = DOM;
+                            tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                            using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, false))
+                            {
+                                file.Write(Document);
+                                file.Flush();
+                            }
+
+                            //"f=" The input file
+                            //"p=" The temporary default printer
+                            //"d|delete" Delete file when finished
+                            var p = new Process();
+                            p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                            //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\"";
+                            Console.WriteLine("Path: {0}", tempFile);
+                            p.Start();
+                        }
+                    });
+
+                    client.Send("SendMessage", "GetDOM", "");
+
                 }
                 catch (Exception ex)
                 {

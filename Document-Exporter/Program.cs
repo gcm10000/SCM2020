@@ -16,7 +16,6 @@ namespace Document_Exporter
         {
             var show_help = false;
             var delete = false;
-            var macros = new Dictionary<string, string>();
             string file = null;
             string TempPrinter = null;
 
@@ -127,6 +126,10 @@ namespace Document_Exporter
             return null;
         }
 
+        static void PrintDocument(string url)
+        {
+            //WebBrowser web
+        }
 
         // navigate WebBrowser to the list of urls in a loop
         static async Task<object> DoWorkAsync(object[] url)
@@ -164,7 +167,7 @@ namespace Document_Exporter
                 }
                 finally
                 {
-                    wb.DocumentCompleted -= documentCompletedHandler;
+                    //wb.DocumentCompleted -= documentCompletedHandler;
                 }
 
                 // the DOM is ready, 

@@ -43,6 +43,11 @@ namespace SCM2020___Server.Controllers
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
             return Ok(monitoring);
         }
+        [HttpGet("Patrimony/{patrimony}")]
+        public IActionResult ShowByPatrimony(string patrimony)
+        {
+            return Ok();
+        }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]
         [HttpPost("Migrate")]
