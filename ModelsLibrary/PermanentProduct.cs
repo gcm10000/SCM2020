@@ -41,9 +41,9 @@ namespace ModelsLibrary
         /// </summary>
         public string Patrimony { get; set; }
         /// <summary>
-        /// Booleana que indica se o produto está sendo utilizado.
+        /// Indica em qual ordem de serviço o produto se encontra.
         /// </summary>
-        public bool IsUsed { get; set; }
+        public string WorkOrder { get; set; }
     }
     public enum Status
     {

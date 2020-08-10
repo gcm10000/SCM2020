@@ -29,15 +29,15 @@ namespace SCM2020___Client.Frames.Listing
             public string Description { get; }
             public string Patrimony { get; }
             public string Group { get; }
-            public string IsUsed { get; }
+            public string WorkOrder { get; }
 
-            public PermanentProduct(int SKU, string Description, string Patrimony, string Group, bool IsUsed)
+            public PermanentProduct(int SKU, string Description, string Patrimony, string Group, string WorkOrder)
             {
                 this.SKU = SKU;
                 this.Description = Description;
                 this.Patrimony = Patrimony;
                 this.Group = Group;
-                this.IsUsed = (IsUsed) ? "Sim" : "Não";
+                this.WorkOrder = WorkOrder;
             }
         }
 
@@ -72,7 +72,7 @@ namespace SCM2020___Client.Frames.Listing
                     var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                     var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
                     
-                    PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.IsUsed);
+                    PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.WorkOrder);
 
                     var productjson = product.ToJson();
                     client.Send("SendMessage", "ContentListPermanentProduct", productjson);

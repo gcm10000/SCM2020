@@ -9,3 +9,5 @@
 - Sistematizar os funcionários;
 - Adicionar relatório financeiro;
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
+- BUGS na correlação de entrada e saída;
+- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados

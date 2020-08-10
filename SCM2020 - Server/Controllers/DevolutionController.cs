@@ -144,7 +144,7 @@ namespace SCM2020___Server.Controllers
                     context.ConsumptionProduct.Update(c);
 
                     var p2 = context.PermanentProduct.Find(p.Id);
-                    p2.IsUsed = false;
+                    p2.WorkOrder = string.Empty;
                 }
 
             await context.SaveChangesAsync();

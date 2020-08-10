@@ -126,7 +126,7 @@ namespace SCM2020___Server.Controllers
             foreach (var p in arrayPermanent)
             {
                 var p2 = context.PermanentProduct.Find(p.ProductId);
-                p2.IsUsed = true;
+                p2.WorkOrder = output.WorkOrder;
 
                 var c = context.ConsumptionProduct.Find(p2.InformationProduct);
                 c.Stock -= 1;
