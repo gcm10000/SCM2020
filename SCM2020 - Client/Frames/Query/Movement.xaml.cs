@@ -59,11 +59,11 @@ namespace SCM2020___Client.Frames.Query
             //Monitoring = null;
             //InfoUser = null;
 
-            DocumentMovement.ResultSearch resultSearch = null;
-            var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
-            t.Wait();
-            //resultSearch = DocumentMovement.Search(workOrder);
+            DocumentMovement.ResultSearch resultSearch = DocumentMovement.Search(workOrder);
+            if (resultSearch == null)
+                return;
             var InformationQuery = resultSearch.InformationQuery;
+
             info = InformationQuery;
             OSText.Text = info.WorkOrder;
             RegisterApplicationTextBox.Text = info.RegisterApplication.ToString();
