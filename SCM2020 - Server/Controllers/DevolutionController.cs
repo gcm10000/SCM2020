@@ -188,6 +188,8 @@ namespace SCM2020___Server.Controllers
             {
                 if (!PermanentsProductIds.Contains(p.ProductId))
                     PermanentsProductIds.Add(p.ProductId);
+
+                var p2 = context.PermanentProduct.Find(p.Id);
             }
 
             foreach (var currentId in ConsumpterProductIds)

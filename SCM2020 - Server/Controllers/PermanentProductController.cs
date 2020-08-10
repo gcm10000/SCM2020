@@ -42,6 +42,9 @@ namespace SCM2020___Server.Controllers
             if (!context.ConsumptionProduct.Any(x => x.Id == newProduct.InformationProduct))
                 return BadRequest("Não existe informação de produto com este id.");
 
+            var infoProduct = context.ConsumptionProduct.Find(newProduct.InformationProduct);
+            infoProduct.Stock += 1;
+
             context.PermanentProduct.Add(newProduct);
             await context.SaveChangesAsync();
             return Ok("Produto adicionado com sucesso.");
@@ -97,8 +100,12 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            ConsumptionProduct product = context.ConsumptionProduct.Find(id);
-            context.ConsumptionProduct.Remove(product);
+            PermanentProduct product = context.PermanentProduct.Find(id);
+            context.PermanentProduct.Remove(product);
+
+            var infoProduct = context.ConsumptionProduct.Find(product.InformationProduct);
+            infoProduct.Stock -= 1;
+
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
         }

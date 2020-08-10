@@ -129,7 +129,7 @@ namespace SCM2020___Server.Controllers
                 c.Stock -= 1;
                 context.ConsumptionProduct.Update(c);
 
-                var p2 = context.PermanentProduct.Find(p.Id);
+                var p2 = context.PermanentProduct.Find(p.ProductId);
                 p2.IsUsed = true;
             }
 
