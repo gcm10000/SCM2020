@@ -114,7 +114,6 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Há produtos permanentes não cadastrados sendo solicitado na movimentação de saída. Verifique e tente novamente.");
 
             context.MaterialOutput.Add(output);
-
             //arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
             //arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
 
@@ -129,7 +128,11 @@ namespace SCM2020___Server.Controllers
                 var c = context.ConsumptionProduct.Find(p.ProductId);
                 c.Stock -= 1;
                 context.ConsumptionProduct.Update(c);
+
+                var p2 = context.PermanentProduct.Find(p.Id);
+                p2.IsUsed = true;
             }
+
             await context.SaveChangesAsync();
             return Ok("Saída feita com sucesso.");
         }
