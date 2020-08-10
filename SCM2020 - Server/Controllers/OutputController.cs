@@ -125,12 +125,13 @@ namespace SCM2020___Server.Controllers
             }
             foreach (var p in arrayPermanent)
             {
-                var c = context.ConsumptionProduct.Find(p.ProductId);
+                var p2 = context.PermanentProduct.Find(p.ProductId);
+                p2.IsUsed = true;
+
+                var c = context.ConsumptionProduct.Find(p2.InformationProduct);
                 c.Stock -= 1;
                 context.ConsumptionProduct.Update(c);
 
-                var p2 = context.PermanentProduct.Find(p.ProductId);
-                p2.IsUsed = true;
             }
 
             await context.SaveChangesAsync();
