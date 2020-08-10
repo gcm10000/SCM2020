@@ -4,7 +4,7 @@
   • Relatório -> Materiais com Patrimônio
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
-- Listagem de todos os produtos com patrimônio
+- Listagem de todos os produtos com patrimônio (feito);
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo;
 - Modificar a movimentação
@@ -13,4 +13,4 @@
 - Adicionar relatório financeiro;
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
 - BUGS na correlação de entrada e saída;
-- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados
+- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (feito);
