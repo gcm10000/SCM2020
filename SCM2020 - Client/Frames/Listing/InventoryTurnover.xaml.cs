@@ -1,6 +1,7 @@
 ﻿using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -43,10 +44,6 @@ namespace SCM2020___Client.Frames.Query
         // https://www.youtube.com/watch?v=pNfSOBzHd8Y
         // https://stackoverflow.com/questions/31251720/ie-11-signalr-not-working -> IE DOESN'T WORKING WITH SIGNALR
 
-        // https://github.com/videojs/video.js/issues/5910
-        //  A RESPEITO DA LEITURA DE MKV
-        // you can sometimes get some MKVs to play in browsers that support webm, because webm is a subset of MKV
-
         WebAssemblyLibrary.Client.Client client;
         public InventoryTurnover()
         {
@@ -61,16 +58,22 @@ namespace SCM2020___Client.Frames.Query
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            ExportPrint();
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            ExportPrint();
         }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
+        }
+
+        private void ExportPrint()
         {
             Helper.SetOptionsToPrint();
             if (PrintORExport)
@@ -107,14 +110,13 @@ namespace SCM2020___Client.Frames.Query
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
-
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             this.ButtonSearchProducts.IsEnabled = false;
             this.ButtonInventoryTurnover.IsEnabled = true;
             var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
+            webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.Navigate(path);
-
         }
 
         private void ButtonSearchProducts_Click(object sender, RoutedEventArgs e)
