@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SCM2020___Client
@@ -34,7 +35,8 @@ namespace SCM2020___Client
             this.FinalDateTime = FinalDateTime;
             this.Products = Products;
 
-            Html = "";
+            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "QueryByDate.html");
+            Html = System.IO.File.ReadAllText(pathFileHtml);
         }
         public string RenderizeHtml()
         {
@@ -54,7 +56,7 @@ namespace SCM2020___Client
                                     $"<td>{product.Unity}</td>" +
                                 "</tr>";
             }
-            Html.Replace("@LISTOFITEMS", itemsContent);
+            Html = Html.Replace("@LISTOFITEMS", itemsContent);
             return Html.ToString();
         }
 
