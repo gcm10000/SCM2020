@@ -201,6 +201,7 @@ namespace SCM2020___Server.Controllers
                     if (!output.PermanentProducts.Any(x => x.ProductId == permanentProductInList.ProductId))
                     {
                         var permanentProduct = context.PermanentProduct.Find(permanentProductInList.ProductId);
+                        permanentProduct.WorkOrder = null;
                         context.PermanentProduct.Update(permanentProduct);
                         var consumpterProduct = context.ConsumptionProduct.Find(permanentProduct.InformationProduct);
                         consumpterProduct.Stock += 1;
