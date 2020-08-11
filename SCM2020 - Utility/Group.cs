@@ -69,7 +69,7 @@ namespace SCM2020___Utility
                         id = g.FirstOrDefault(x => x.GroupName == group).Id;
                     else
                     {
-                        AddOnServer("http://192.168.1.30:52991/api/Group/Add", new Group() { GroupName = group });
+                        AddOnServer("http://192.168.0.4:52991/api/Group/Add", new Group() { GroupName = group });
                         return GetGroup(url, group);
                     }
 
@@ -77,7 +77,7 @@ namespace SCM2020___Utility
                 }
                 catch (NullReferenceException)
                 {
-                    AddOnServer("http://192.168.1.30:52991/api/Group/Add", new Group() { GroupName = group});
+                    AddOnServer("http://192.168.0.4:52991/api/Group/Add", new Group() { GroupName = group});
                     return GetGroup(url, group);
                 }
             }
