@@ -149,6 +149,7 @@ namespace SCM2020___Server.Controllers
             
             var lConsumpter = new List<AuxiliarConsumption>();
             lConsumpter.AddRange(output.ConsumptionProducts);
+            //Cria uma nova lista com antigos itens para não perder dados
             var lPermanent = new List<AuxiliarPermanent>();
             lPermanent.AddRange(output.PermanentProducts);
             output.ConsumptionProducts = materialOutputFromJson.ConsumptionProducts;
@@ -191,12 +192,10 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(productModify);
             }
 
-            var _output = context.MaterialOutput.Find(output.Id);
-            
             //Loop dentro da antiga lista de materiais
             if (output.PermanentProducts != null)
             {
-                foreach (var permanentProductInList in _output.PermanentProducts)
+                foreach (var permanentProductInList in lPermanent)
                 {
                     //Se algum item foi apagado da nova lista em comparação a antiga lista...
                     if (!output.PermanentProducts.Any(x => x.ProductId == permanentProductInList.ProductId))
