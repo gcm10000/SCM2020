@@ -139,8 +139,11 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
         {
+
             var raw = await Helper.RawFromBody(this);
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
+            var _output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
+
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
             //output.EmployeeId = materialOutputFromJson.EmployeeId;
@@ -191,7 +194,6 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(productModify);
             }
 
-            var _output = context.MaterialOutput.Find(output.Id);
             
             //Loop dentro da antiga lista de materiais
             if (output.PermanentProducts != null)
