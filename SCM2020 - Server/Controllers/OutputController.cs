@@ -191,7 +191,6 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(productModify);
             }
 
-
             var _output = context.MaterialOutput.Find(output.Id);
             
             //Loop dentro da antiga lista de materiais
@@ -199,10 +198,13 @@ namespace SCM2020___Server.Controllers
             {
                 foreach (var permanentProductInList in _output.PermanentProducts)
                 {
+                    //Se algum item foi apagado da nova lista em comparação a antiga lista...
                     if (!output.PermanentProducts.Any(x => x.ProductId == permanentProductInList.ProductId))
                     {
                         var permanentProduct = context.PermanentProduct.Find(permanentProductInList.ProductId);
                         context.PermanentProduct.Update(permanentProduct);
+                        var consumpterProduct = context.ConsumptionProduct.Find(permanentProduct.InformationProduct);
+                        consumpterProduct.Stock += 1;
                     }
                 }
             }
