@@ -14,3 +14,5 @@
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
 - BUGS na correlação de entrada e saída;
 - TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (feito);
+- Checar aparente vazamento de memória no DataGridView
+- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro.

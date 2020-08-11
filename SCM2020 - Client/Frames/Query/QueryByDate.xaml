@@ -78,7 +78,7 @@
                 VirtualizingPanel.IsVirtualizing="False">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" Código" Binding="{Binding Code}"/>
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"/>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header=" Entrada no Estoque" Binding="{Binding NumberInputVendor}"/>
                     <DataGridTextColumn Header=" Entrada de Devolução" Binding="{Binding NumberInput}"/>
