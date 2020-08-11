@@ -22,11 +22,12 @@
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
 Ordem do tratamento dos bugs:
- 1. Movimentações
- 2. Evitar repetição de dados em listagem de patrimônio e inventário
- 3. Usuários
+ 1. Movimentações;
+ 2. Evitar repetição de dados em listagem de patrimônio e inventário;
+ 3. Adicionar gráfico no painel de controle;
+ 4. Usuários;
  
 
  Somente depois tratar as demais pendências.
-
+ EXISTEM ORDEM DE SERVIÇO QUE SOMENTE REALIZAM DEVOLUÇÕES!
  SenhaSecreta#2020
