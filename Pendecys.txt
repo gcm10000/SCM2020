@@ -24,3 +24,5 @@ Ordem do tratamento dos bugs:
  1. Movimentações
  2. Usuários
  Somente depois tratar as demais pendências.
+
+ SenhaSecreta#2020
