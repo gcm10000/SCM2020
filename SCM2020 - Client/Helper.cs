@@ -21,12 +21,13 @@ namespace SCM2020___Client
         public static Uri Server = new Uri("http://192.168.0.4:52991/api/");
         public static AuthenticationHeaderValue Authentication { get; set; } = null;
         private static readonly Regex NumberRegex = new Regex("[^0-9,]+"); //regex that matches disallowed text
-        public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\"; //File.ReadAllText(System.IO.Path.Combine(Environment.CurrentDirectory, "movement.cshtml"));
+        public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\";
         //public static string SCMRegistration { get; set; }
         public static string NameIdentifier { get; set; }
         public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }
         public static WebBrowser MyWebBrowser { get; set; }
+        public static WebAssemblyLibrary.Client.Client Client { get; set; }
         public static IWebHost WebHost { get; internal set; }
 
         public static bool IsTextAllowed(string text)

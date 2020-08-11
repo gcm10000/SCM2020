@@ -62,6 +62,10 @@ namespace SCM2020___Client.Frames.Query
             {
                 this.QueryDataGrid.Items.Add(item);
             }
+            products = result;
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
+
         }
 
         //True to print, False to export.

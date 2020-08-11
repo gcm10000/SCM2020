@@ -81,7 +81,7 @@ namespace SCM2020___Server.Controllers
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
-            //var output = new MaterialOutput(raw, id);
+
             var output = new MaterialOutput(raw);
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == output.WorkOrder);
             if (monitoring == null)
@@ -114,8 +114,6 @@ namespace SCM2020___Server.Controllers
                 return BadRequest("Há produtos permanentes não cadastrados sendo solicitado na movimentação de saída. Verifique e tente novamente.");
 
             context.MaterialOutput.Add(output);
-            //arrayConsumption.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
-            //arrayPermanent.ForEach(x => context.ConsumptionProduct.Find(x.ProductId).Stock -= 1);
 
             foreach (var p in arrayConsumption)
             {
@@ -167,7 +165,7 @@ namespace SCM2020___Server.Controllers
             foreach (var p in output.PermanentProducts)
             {
                 if (!PermanentsProductIds.Contains(p.ProductId))
-                    PermanentsProductIds.Add(p.ProductId);
+                    PermanentsProductIds.Add(p.ProductId); //ProductId em AuxiliarPermanents refere-se ao ID da classe PermanentProduct
             }
 
             //bool allEquals = output.ConsumptionProducts.All(x => lConsumpter
@@ -196,13 +194,14 @@ namespace SCM2020___Server.Controllers
             foreach (var currentId in PermanentsProductIds)
             {
                 //oldder - newest
-                var productModify = await context.ConsumptionProduct.FindAsync(currentId);
+                var productpermanentModify = await context.PermanentProduct.FindAsync(currentId);
+                var productconsumpterModify = await context.ConsumptionProduct.FindAsync(productpermanentModify.InformationProduct);
                 double oldder = lPermanent.Count(x => x.ProductId == currentId);
                 double newest = output.PermanentProducts.Count(x => x.ProductId == currentId);
                 if (oldder != newest)
                 {
-                    productModify.Stock += oldder - newest;
-                    context.ConsumptionProduct.Update(productModify);
+                    productconsumpterModify.Stock += oldder - newest;
+                    context.ConsumptionProduct.Update(productconsumpterModify);
                 }
             }
             context.MaterialOutput.Update(output);

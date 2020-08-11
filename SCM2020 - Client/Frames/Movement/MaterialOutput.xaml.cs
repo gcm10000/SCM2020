@@ -75,29 +75,8 @@ namespace SCM2020___Client.Frames
         public MaterialOutput()
         {
             InitializeComponent();
-            Uri vendorUri = new Uri(Helper.Server, "vendor/");
-            //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
-            //var nameVendors = vendors.Select(x => x.Name).ToList();
-            //this.VendorComboBox.ItemsSource = nameVendors;
-
-            //ProductToOutput ProductToOutput = new ProductToOutput()
-            //{
-            //    Id = 1,
-            //    Code = 1,
-            //    Description = "TESTE",
-            //    Quantity = 10
-            //};
-            //ProductToAddDataGrid.Items.Add(ProductToOutput);
-            //PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
-            //{
-            //    Id = 1,
-            //    Code = 2,
-            //    Description = "TESTE2",
-            //    Quantity = 12,
-            //    Patrimony = "5621034",
-            //};
-            //PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
         }
+
         private bool previousOutputExists = false;
         private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
         private void ConsumpterProductSearch()
@@ -166,10 +145,6 @@ namespace SCM2020___Client.Frames
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
-        }
-        private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
         }
         private void BtnInformation_Click(object sender, RoutedEventArgs e)
         {
@@ -339,10 +314,8 @@ namespace SCM2020___Client.Frames
             {
                 materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
             }
-            if ((FinalPermanentProductsAddedDataGrid.Items.Count > 0) && (materialOutput.PermanentProducts == null))
-            {
-                materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
-            }
+            
+            materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
             var listProduct = materialOutput.ConsumptionProducts.ToList();
             foreach (ProductToOutput item in FinalConsumpterProductsAdded)
             {

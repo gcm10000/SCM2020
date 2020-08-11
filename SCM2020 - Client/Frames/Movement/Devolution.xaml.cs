@@ -388,7 +388,7 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
         List<ConsumpterProductDataGrid> ConsumpterProductInput = new List<ConsumpterProductDataGrid>();
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
@@ -431,7 +431,7 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            //e.Cancel = true;
+            e.Cancel = true;
         }
         private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
         {
