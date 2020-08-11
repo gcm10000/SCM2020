@@ -2,6 +2,8 @@
 using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,14 +47,9 @@ namespace SCM2020___Client.Frames.Listing
         public ListPermanentProduct()
         {
             ManualResetEvent clientDone = new ManualResetEvent(false);
-            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); });
+            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); clientDone.Set(); });
             clientDone.WaitOne();
             InitializeComponent();
-        }
-
-        private void BtnPrint_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -79,17 +76,65 @@ namespace SCM2020___Client.Frames.Listing
                     Helper.Client.Send("SendMessage", "ContentListPermanentProduct", productjson);
 
                 }
+                this.Export_Button.IsEnabled = true;
+                this.Print_Button.IsEnabled = true;
             };
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
+            Export();
+        }
 
+        private void Export()
+        {
+            Helper.SetOptionsToPrint();
+            string printer = Helper.GetPrinter("PDF");
+            string tempFile = string.Empty;
+            try
+            {
+                //Declara sinal para sincronismo em diferentes threads
+                ManualResetEvent receiveDone = new ManualResetEvent(false);
+
+                //Obter o DOM atual
+                string DOM = string.Empty;
+                Helper.Client.Receive("ReceiveMessage", (window, message) =>
+                {
+                    Console.WriteLine("{0}, {1}", window, message);
+                    if (window == "SetDOM")
+                    {
+                        DOM = message;
+
+                        tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, false))
+                        {
+                            file.Write(DOM);
+                            file.Flush();
+                        }
+
+                            //"f=" The input file
+                            //"p=" The temporary default printer
+                            //"d|delete" Delete file when finished
+                            var p = new Process();
+                        p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                            //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
+                        p.Start();
+                    }
+                });
+
+                Helper.Client.Send("SendMessage", "GetDOM", "");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+            }
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            this.webBrowser.PrintDocument();
         }
     }
 }

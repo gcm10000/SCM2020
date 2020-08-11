@@ -47,8 +47,10 @@ namespace SCM2020___Client.Frames.Query
 
         public InventoryTurnover()
         {
+            ManualResetEvent clientDone = new ManualResetEvent(false);
+            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); clientDone.Set(); });
+            
             InitializeComponent();
-            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); });
 
         }
 
@@ -112,8 +114,7 @@ namespace SCM2020___Client.Frames.Query
                             var p = new Process();
                             p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
                             //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
-                            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\"";
-                            Console.WriteLine("Path: {0}", tempFile);
+                            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
                             p.Start();
                         }
                     });
@@ -126,7 +127,6 @@ namespace SCM2020___Client.Frames.Query
                     MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
-            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

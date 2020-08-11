@@ -1,18 +1,18 @@
-- Adicionar opção de exportação e impressão a telas pendentes:
+- Adicionar opção de exportação e impressão a telas pendentes: (OK)
   • Consulta -> Estoque
   • Consulta -> Estoque por Data
   • Relatório -> Materiais com Patrimônio
+- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (OK);
+- Listagem de todos os produtos com patrimônio (OK);
+- Adicionar relatório financeiro;
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
-- Listagem de todos os produtos com patrimônio (feito);
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo;
 - Modificar a movimentação
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
-- Adicionar relatório financeiro;
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
 - BUGS na correlação de entrada e saída;
-- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (feito);
 - Checar aparente vazamento de memória no DataGridView
 - Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro.
