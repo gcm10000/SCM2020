@@ -45,11 +45,10 @@ namespace SCM2020___Client.Frames.Query
         // https://www.youtube.com/watch?v=pNfSOBzHd8Y
         // https://stackoverflow.com/questions/31251720/ie-11-signalr-not-working -> IE DOESN'T WORKING WITH SIGNALR
 
-        WebAssemblyLibrary.Client.Client client;
         public InventoryTurnover()
         {
             InitializeComponent();
-            Task.Run(() => { if (client == null) client = new WebAssemblyLibrary.Client.Client(); });
+            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); });
 
         }
 
@@ -92,7 +91,7 @@ namespace SCM2020___Client.Frames.Query
 
                     //Obter o DOM atual
                     string DOM = string.Empty;
-                    client.Receive("ReceiveMessage", (window, message) =>
+                    Helper.Client.Receive("ReceiveMessage", (window, message) =>
                     {
                         Console.WriteLine("{0}, {1}", window, message);
                         if (window == "SetDOM")
@@ -119,7 +118,7 @@ namespace SCM2020___Client.Frames.Query
                         }
                     });
 
-                    client.Send("SendMessage", "GetDOM", "");
+                    Helper.Client.Send("SendMessage", "GetDOM", "");
 
                 }
                 catch (Exception ex)
@@ -190,7 +189,7 @@ namespace SCM2020___Client.Frames.Query
             //ENVIAR MENSAGEM PARA O CLIENTE...
             var product = ((FrameworkElement)sender).DataContext as ModelsLibraryCore.ConsumptionProduct;
             var productjson = product.ToJson();
-            client.Send("SendMessage", "ContentInventoryTurnover", productjson);
+            Helper.Client.Send("SendMessage", "ContentInventoryTurnover", productjson);
 
             this.ProductToAddDataGrid.UnselectAll();
         }

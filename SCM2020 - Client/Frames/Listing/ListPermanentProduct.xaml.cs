@@ -42,12 +42,10 @@ namespace SCM2020___Client.Frames.Listing
             }
         }
 
-        WebAssemblyLibrary.Client.Client client;
-
         public ListPermanentProduct()
         {
             ManualResetEvent clientDone = new ManualResetEvent(false);
-            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); clientDone.Set(); });
+            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); });
             clientDone.WaitOne();
             InitializeComponent();
         }
@@ -78,7 +76,7 @@ namespace SCM2020___Client.Frames.Listing
                     PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.WorkOrder);
 
                     var productjson = product.ToJson();
-                    client.Send("SendMessage", "ContentListPermanentProduct", productjson);
+                    Helper.Client.Send("SendMessage", "ContentListPermanentProduct", productjson);
 
                 }
             };
