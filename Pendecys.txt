@@ -8,7 +8,7 @@
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
-- Sistema de notificação do estoque mínimo e estoque máximo;
+- Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail;
 - Modificar a movimentação;
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
@@ -20,3 +20,7 @@
 - Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro.
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
+Ordem do tratamento dos bugs:
+ 1. Movimentações
+ 2. Usuários
+ Somente depois tratar as demais pendências.
