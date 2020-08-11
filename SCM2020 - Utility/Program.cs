@@ -14,13 +14,13 @@ namespace SCM2020___Utility
 {
     class Program
     {
-        static Uri uriServer = new Uri("http://192.168.0.104:52991/api/");
-        const string urlLogin = "http://192.168.0.104:52991/api/User/Login";
-        const string urlAddUser = "http://192.168.0.104:52991/api/User/NewUser";
-        const string urlGroups = "http://192.168.0.104:52991/api/Group/";
-        const string urlAddGroup = "http://192.168.0.104:52991/api/Group/Add";
-        const string urlAddProduct = "http://192.168.0.104:52991/api/GeneralProduct/Add";
-        const string urlVendor = "http://192.168.0.104:52991/api/Vendor/Add";
+        static Uri uriServer = new Uri("http://192.168.0.4:52991/api/");
+        const string urlLogin = "http://192.168.0.4:52991/api/User/Login";
+        const string urlAddUser = "http://192.168.0.4:52991/api/User/NewUser";
+        const string urlGroups = "http://192.168.0.4:52991/api/Group/";
+        const string urlAddGroup = "http://192.168.0.4:52991/api/Group/Add";
+        const string urlAddProduct = "http://192.168.0.4:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://192.168.0.4:52991/api/Vendor/Add";
 
 
         static void Main(string[] args)
@@ -31,7 +31,7 @@ namespace SCM2020___Utility
             //UPDATE -> GENERIC POST V
             //DELETE -> INT DELETE
 
-            SignUpAdministrator();
+            //SignUpAdministrator();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
@@ -95,11 +95,11 @@ namespace SCM2020___Utility
             //    null);
 
 
-            RegisterVendors(start);
-            AddGroup(start);
+            //RegisterVendors(start);
+            //AddGroup(start);
             //AddSector(start);
-            SignUpSCMEmployees();
-            SignUpAll();
+            //SignUpSCMEmployees();
+            //SignUpAll();
             AddProduct(start);
             //AddMonitoring(start);
             //AddInputByVendor(start);
