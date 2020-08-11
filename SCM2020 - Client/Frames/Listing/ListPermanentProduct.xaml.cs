@@ -40,7 +40,7 @@ namespace SCM2020___Client.Frames.Listing
                 this.Description = Description;
                 this.Patrimony = Patrimony;
                 this.Group = Group;
-                this.WorkOrder = WorkOrder;
+                this.WorkOrder =  (WorkOrder == null) ? string.Empty : WorkOrder;
             }
         }
 
