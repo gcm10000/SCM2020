@@ -16,8 +16,8 @@
 - BUGS na correlação de entrada e saída:
   • Impossibilidade de fazer devolução APENAS de produtos permanentes
   • Impossibilidade de apagar permanente da movimentação de saída
-- Checar aparente vazamento de memória no DataGridView
-- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro.
+- Checar aparente vazamento de memória no DataGridView https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
+- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
 Ordem do tratamento dos bugs:
