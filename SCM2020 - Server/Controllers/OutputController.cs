@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using SCM2020___Server.Extensions;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SCM2020___Server.Controllers
 {
@@ -190,7 +191,23 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(productModify);
             }
 
-            //permanent
+
+            var _output = context.MaterialOutput.Find(output.Id);
+            
+            //Loop dentro da antiga lista de materiais
+            if (output.PermanentProducts != null)
+            {
+                foreach (var permanentProductInList in _output.PermanentProducts)
+                {
+                    if (!output.PermanentProducts.Any(x => x.ProductId == permanentProductInList.ProductId))
+                    {
+                        var permanentProduct = context.PermanentProduct.Find(permanentProductInList.ProductId);
+                        context.PermanentProduct.Update(permanentProduct);
+                    }
+                }
+            }
+
+            //Lista nova de objetos/materiais permanentes
             foreach (var currentId in PermanentsProductIds)
             {
                 //oldder - newest
