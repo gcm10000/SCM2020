@@ -22,10 +22,6 @@ namespace SCM2020___Client
             public string Unity { get; set; }
         }
         private List<Product> Products = null;
-        public string MarginTop { get; set; } = "25mm";
-        public string MarginLeft { get; set; } = "25mm";
-        public string MarginRight { get; set; } = "25mm";
-        public string MarginBottom { get; set; } = "5mm";
         private DateTime InitialDateTime;
         private DateTime FinalDateTime;
         private string Html;
@@ -56,7 +52,9 @@ namespace SCM2020___Client
                                     $"<td>{product.Unity}</td>" +
                                 "</tr>";
             }
-            Html = Html.Replace("@LISTOFITEMS", itemsContent);
+            Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
+            Html = Html.Replace("@InitialDate", InitialDateTime.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@FinalDate", InitialDateTime.ToString("dd/MM/yyyy"));
             return Html.ToString();
         }
 

@@ -49,7 +49,7 @@ namespace SCM2020___Client.Frames.Query
         public InventoryTurnover()
         {
             InitializeComponent();
-            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
+            Task.Run(() => { if (client == null) client = new WebAssemblyLibrary.Client.Client(); });
 
         }
 

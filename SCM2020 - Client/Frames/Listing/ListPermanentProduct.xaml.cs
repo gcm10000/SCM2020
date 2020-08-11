@@ -3,6 +3,7 @@ using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,8 +46,10 @@ namespace SCM2020___Client.Frames.Listing
 
         public ListPermanentProduct()
         {
+            ManualResetEvent clientDone = new ManualResetEvent(false);
+            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); clientDone.Set(); });
+            clientDone.WaitOne();
             InitializeComponent();
-            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
         }
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
