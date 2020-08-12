@@ -370,7 +370,8 @@ namespace SCM2020___Client
                 Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
                 WorkOrderDate = Monitoring.MovingDate,
                 RegisterApplication = int.Parse(InfoUser.Register),
-                SolicitationEmployee = InfoUser.Name
+                SolicitationEmployee = InfoUser.Name,
+                ServiceLocalizationTextBox = Monitoring.ServiceLocation
             };
 
             var ProductsToShow = ProductsAtWorkOrder(workOrder);

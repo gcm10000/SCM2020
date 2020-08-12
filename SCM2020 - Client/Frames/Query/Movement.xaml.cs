@@ -75,7 +75,7 @@ namespace SCM2020___Client.Frames.Query
             ApplicationTextBox.Text = info.SolicitationEmployee;
             SectorTextBox.Text = info.Sector;
             SituationTextBox.Text = info.Situation;
-            ServiceLocalizationTextBox.Text = info.Situation;
+            ServiceLocalizationTextBox.Text = info.ServiceLocalizationTextBox;
             WorkOrderDateDatePicker.SelectedDate = info.WorkOrderDate;
 
             ProductsToShow = resultSearch.ProductsToShow;
