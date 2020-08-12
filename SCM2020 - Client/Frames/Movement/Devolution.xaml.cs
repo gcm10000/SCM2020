@@ -50,19 +50,7 @@ namespace SCM2020___Client.Frames.Movement
         {
             InitializeComponent();
         }
-        //private void SearchOSButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    new Task(() => CheckOS()).Start();
-        //    //new Task(() => CheckOS()).Start();
-        //    //this.ButtonInformation.IsHitTestVisible = false;
-        //    //this.ButtonPermanentProducts.IsHitTestVisible = true;
-        //    //this.ButtonFinish.IsHitTestVisible = true;
 
-        //    //this.InfoScrollViewer.Visibility = Visibility.Visible;
-        //    //this.InfoDockPanel.Visibility = Visibility.Visible;
-        //    //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-        //    //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        //}
         private void RescueData(string workOrder)
         {
             workOrder = System.Uri.EscapeDataString(workOrder);
@@ -79,9 +67,10 @@ namespace SCM2020___Client.Frames.Movement
                 //this.RegisterApplicantTextBox.Text = infoUser.Register;
                 //this.ApplicantTextBox.Text = infoUser.Name;
             }
-            catch (System.Net.Http.HttpRequestException ex)
+            catch (System.Net.Http.HttpRequestException)
             {
-                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                //Não existe monitoramento com este ordem de serviço
+                //Sempre será capturado o código 204 NO CONTENT
                 return;
             }
             catch (Exception ex)

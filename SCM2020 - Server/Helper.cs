@@ -22,15 +22,15 @@ namespace SCM2020___Server
             }
             return postData;
         }
-        public static bool GetToken(out JwtSecurityToken Token, ControllerBase controllerBase)
+        public static JwtSecurityToken GetToken(ControllerBase controllerBase)
         {
             bool b = controllerBase.Request.Headers.ContainsKey("Authorization");
             var header = controllerBase.Request.Headers["Authorization"].ToString();
             var bearer = "Bearer ";
             var accessToken = header.Substring(bearer.Length);
             var handler = new JwtSecurityTokenHandler();
-            Token = handler.ReadToken(accessToken) as JwtSecurityToken;
-            return b;
+            var o = handler.ReadToken(accessToken) as JwtSecurityToken;
+            return o;
         }
         public static Int32 Levenshtein(String a, String b)
         {

@@ -76,9 +76,7 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> NewOutput()
         {
-            var b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
-            if (!b)
-                return BadRequest("Por favor, faça login.");
+            var token = Helper.GetToken(this);
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
@@ -130,7 +128,6 @@ namespace SCM2020___Server.Controllers
                 var c = context.ConsumptionProduct.Find(p2.InformationProduct);
                 c.Stock -= 1;
                 context.ConsumptionProduct.Update(c);
-
             }
 
             await context.SaveChangesAsync();
@@ -143,20 +140,26 @@ namespace SCM2020___Server.Controllers
             var materialOutputFromJson = JsonConvert.DeserializeObject<MaterialOutput>(raw);
             var output = context.MaterialOutput.Include(x => x.PermanentProducts).Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             output.MovingDate = materialOutputFromJson.MovingDate;
-            //output.EmployeeId = materialOutputFromJson.EmployeeId;
             output.ServiceLocation = materialOutputFromJson.ServiceLocation;
             output.WorkOrder = materialOutputFromJson.WorkOrder;
-            
+
+
+            //Cria uma nova lista com antigos itens no intuito de não perder os dados
             var lConsumpter = new List<AuxiliarConsumption>();
             lConsumpter.AddRange(output.ConsumptionProducts);
-            //Cria uma nova lista com antigos itens para não perder dados
+            
             var lPermanent = new List<AuxiliarPermanent>();
             lPermanent.AddRange(output.PermanentProducts);
+
+            //Atribui o array recebidos pelo formulário do cliente
             output.ConsumptionProducts = materialOutputFromJson.ConsumptionProducts;
             output.PermanentProducts = materialOutputFromJson.PermanentProducts;
 
+            //Checa ordem de serviço
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutputFromJson.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
+
+            //Cria lista de ID de produtos
             List<int> ConsumpterProductIds = new List<int>();
             List<int> PermanentsProductIds = new List<int>();
             foreach (var p in output.ConsumptionProducts)
@@ -232,23 +235,40 @@ namespace SCM2020___Server.Controllers
         {
             var materialOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
 
+            //Confere se a ordem de serviço encontra-se fechada
             if (context.Monitoring.Any(x => (x.Work_Order == materialOutput.WorkOrder) && (x.Situation == true)))
                 return BadRequest("Ordem de serviço fechada.");
-            //Products reallocation
+            //Realocação de produtos
             foreach (var c in materialOutput.ConsumptionProducts)
             {
                 var p = context.ConsumptionProduct.Find(c.ProductId);
                 p.Stock += c.Quantity;
                 context.ConsumptionProduct.Update(p);
             }
-            foreach (var c in materialOutput.PermanentProducts)
+            foreach (var pp in materialOutput.PermanentProducts)
             {
-                var p = context.ConsumptionProduct.Find(c.ProductId);
-                p.Stock += 1;
-                context.ConsumptionProduct.Update(p);
+                //Encontra o produto permanente na lista de produtos dentro do banco de dados
+                var p = context.PermanentProduct.Find(pp.ProductId);
+                //Resgata o id do produto permanente e insere na busca do produto consumível
+                var c = context.ConsumptionProduct.Find(p.InformationProduct);
+                //Realoca o produto permanente
+                p.WorkOrder = null;
+                //Realoca o produto consumível
+                c.Stock += 1;
+                //Atualiza a estrutura de dados
+                context.PermanentProduct.Update(p);
+                context.ConsumptionProduct.Update(c);
+            }
+            //Remove movimentação de saída
+            context.MaterialOutput.Remove(materialOutput);
+
+            //Checar se existe uma entrada na ordem de serviço. Se não houver, o monitoramento será apagado
+            if (!context.MaterialInput.Any(x => x.WorkOrder == materialOutput.WorkOrder))
+            {
+                var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == materialOutput.WorkOrder);
+                context.Monitoring.Remove(monitoring);
             }
 
-            context.MaterialOutput.Remove(materialOutput);
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída removida com sucesso.");
         }

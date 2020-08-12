@@ -64,11 +64,8 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            //var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
-            //MaterialInput materialInput = new MaterialInput(raw, SCMId);
+
             MaterialInput materialInput = new MaterialInput(raw);
-            //materialInput.Monitoring = context.Monitoring.First(x => x.Work_Order == materialInput.WorkOrder);
-            //materialInput.EmployeeId = userManager.FindByPJERJRegistrationAsync(deserialized.EmployeeId).Id;
             context.MaterialInput.Add(materialInput);
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");
@@ -76,14 +73,16 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
-            if (!b)
-                return BadRequest("Por favor, faça login.");
+            var token = Helper.GetToken(this);
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
             //MaterialInput materialInput = new MaterialInput(raw, id);
             MaterialInput materialInput = new MaterialInput(raw);
+            
+            if (materialInput.ConsumptionProducts == null)
+                materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
+
             var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
                 .FirstOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
             if (output == null)
@@ -137,14 +136,15 @@ namespace SCM2020___Server.Controllers
                 }
 
             if (materialInput.PermanentProducts != null)
-                foreach (var p in materialInput.PermanentProducts)
+                foreach (var pp in materialInput.PermanentProducts)
                 {
-                    var c = context.ConsumptionProduct.Find(p.ProductId);
+                    var p = context.PermanentProduct.Find(pp.ProductId);
+                    var c = context.ConsumptionProduct.Find(p.InformationProduct);
+                    p.WorkOrder = null;
                     c.Stock += 1;
+                    context.PermanentProduct.Update(p);
                     context.ConsumptionProduct.Update(c);
 
-                    var p2 = context.PermanentProduct.Find(p.Id);
-                    p2.WorkOrder = string.Empty;
                 }
 
             await context.SaveChangesAsync();
@@ -254,6 +254,8 @@ namespace SCM2020___Server.Controllers
                 context.ConsumptionProduct.Update(p);
             }
             context.MaterialInput.Remove(materialInput);
+
+
             await context.SaveChangesAsync();
             return Ok("Devolução removida com sucesso.");
         }

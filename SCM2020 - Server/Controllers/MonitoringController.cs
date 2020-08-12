@@ -37,11 +37,11 @@ namespace SCM2020___Server.Controllers
             return Ok(monitoring);
         }
         [HttpGet("WorkOrder/{workorder}")]
-        public IActionResult ShowByWorkOrder(string workorder)
+        public ActionResult<Monitoring> ShowByWorkOrder(string workorder)
         {
             workorder = System.Uri.UnescapeDataString(workorder);
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
-            return Ok(monitoring);
+            return monitoring;
         }
         [HttpGet("Patrimony/{patrimony}")]
         public IActionResult ShowByPatrimony(string patrimony)
@@ -68,9 +68,7 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Create()
         {
-            bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
-            if (!b)
-                return BadRequest("Por favor, faça login.");
+            var token = Helper.GetToken(this);
             var unique = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
@@ -120,9 +118,9 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            //Check output with these order work
+            //Checa monivomentações referente a ordem de serviço
             var monitoring = context.Monitoring.Find(id);
-            if (context.MaterialOutput.Any(x => x.WorkOrder == monitoring.Work_Order))
+            if ((context.MaterialOutput.Any(x => x.WorkOrder == monitoring.Work_Order)) || context.MaterialInput.Any(x => x.WorkOrder == monitoring.Work_Order))
                 return BadRequest("Já contém movimentações nesta ordem de serviço. Para remover o monitoramento, remova as movimentações.");
             context.Monitoring.Remove(monitoring);
             await context.SaveChangesAsync();
