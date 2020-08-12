@@ -85,7 +85,7 @@
                     </DataGrid.Resources>
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
