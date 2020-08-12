@@ -71,6 +71,7 @@ namespace ModelsLibraryCore
         /// <summary>
         /// Local onde será utilizado o produto.
         /// </summary>
+        [Required]
         public string ServiceLocation { get; set; }
     }
 }
