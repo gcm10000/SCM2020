@@ -55,7 +55,6 @@ namespace SCM2020___Client.Frames.Movement
         {
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
-            string teste = uriRequest.ToString();
             Monitoring resultMonitoring;
             try
             {
@@ -96,7 +95,7 @@ namespace SCM2020___Client.Frames.Movement
             else
             {
                 DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
-                MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-YYYY")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
