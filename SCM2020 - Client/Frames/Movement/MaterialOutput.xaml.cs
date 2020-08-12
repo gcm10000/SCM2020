@@ -412,7 +412,7 @@ namespace SCM2020___Client.Frames
             var workOrder = OSTextBox.Text;
             if (previousOS == workOrder)
                 return;
-            new Task(() => RescueData(workOrder)).Start();
+            Task.Run(() => RescueData(workOrder));
             previousOS = workOrder;
 
         }
@@ -443,14 +443,14 @@ namespace SCM2020___Client.Frames
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
-                //Check monitoring
+                //Checar objeto monitoramento
                 Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
                 InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
 
                 PrincipalMonitoring = monitoring;
-                if (monitoring.Situation) //WORKORDER IS CLOSED.
+                if (monitoring.Situation) //Ordem de serviço encontra-se fechada.
                 {
                     MessageBox.Show("Ordem de serviço fechada.", "Informação.", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return; //DISABLE FILLING DATA.
@@ -501,7 +501,11 @@ namespace SCM2020___Client.Frames
                 this.BtnExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnExport.IsEnabled = true; }));
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
-            { }
+            {
+                ApplicantTextBox.IsEnabled = true;
+                OutputTypeComboBox.IsEnabled = true;
+                ServiceLocalizationTextBox.IsEnabled = true;
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
