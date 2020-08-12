@@ -167,6 +167,7 @@ namespace SCM2020___Utility
                     if (oldOutput.Any(x => (x.Key.ToLower() == "ordem de seriço") && (x.Value == monitoring.Work_Order)))
                     {
                         monitoring.RequestingSector = int.Parse(oldOutput.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                        monitoring.ServiceLocation = oldOutput.First(x => x.Key.ToLower() == "local do seriço").Value;
                     }
                 }
                 lMonitoring.Add(monitoring);
@@ -304,8 +305,6 @@ namespace SCM2020___Utility
                 {
                     resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
 
-
-
                     var resultProductId = resultProduct.Id;
 
                     var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
@@ -320,7 +319,7 @@ namespace SCM2020___Utility
                             MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value),
                             //SCMEmployeeId = resultSCMId,
                             //EmployeeId = resultEmployeeId,
-                            ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
+                            //ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
                             WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
                             ConsumptionProducts = new List<AuxiliarConsumption>()
                         {
