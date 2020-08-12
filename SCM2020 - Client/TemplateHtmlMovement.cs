@@ -22,6 +22,7 @@ namespace SCM2020___Client
             public string WorkOrder { get; set; }
             public string Situation { get; set; }
             public string Sector { get; set; }
+            public string ServiceLocalizationTextBox { get; set; }
             public DateTime WorkOrderDate { get; set; }
         }
         public class Product

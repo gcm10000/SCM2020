@@ -16,8 +16,7 @@ namespace ModelsLibraryCore
             var productFromRaw = JObject.Parse(raw);
             this.MovingDate = productFromRaw.Value<DateTime>("MovingDate");
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
-            this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
-            this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
+            //this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
 
             this.ConsumptionProducts = output.ConsumptionProducts;
             this.PermanentProducts = output.PermanentProducts;
@@ -55,10 +54,6 @@ namespace ModelsLibraryCore
         /// Ordem de serviço.
         /// </summary>
         public string WorkOrder { get; set; }
-        /// <summary>
-        /// Local onde será utilizado o produto.
-        /// </summary>
-        public string ServiceLocation { get; set; }
         /// <summary>
         /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>

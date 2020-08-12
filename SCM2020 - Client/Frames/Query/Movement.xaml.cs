@@ -61,7 +61,12 @@ namespace SCM2020___Client.Frames.Query
 
             DocumentMovement.ResultSearch resultSearch = DocumentMovement.Search(workOrder);
             if (resultSearch == null)
+            {
+                this.Export_Button.IsEnabled = true;
+                this.Print_Button.IsEnabled = true;
+
                 return;
+            }
             var InformationQuery = resultSearch.InformationQuery;
 
             info = InformationQuery;
@@ -70,6 +75,7 @@ namespace SCM2020___Client.Frames.Query
             ApplicationTextBox.Text = info.SolicitationEmployee;
             SectorTextBox.Text = info.Sector;
             SituationTextBox.Text = info.Situation;
+            ServiceLocalizationTextBox.Text = info.Situation;
             WorkOrderDateDatePicker.SelectedDate = info.WorkOrderDate;
 
             ProductsToShow = resultSearch.ProductsToShow;

@@ -247,7 +247,8 @@ namespace SCM2020___Client.Frames
                 EmployeeId = userId,
                 RequestingSector = Helper.CurrentSector.Id,
                 MovingDate = dateTime,
-                Work_Order = OSTextBox.Text
+                Work_Order = OSTextBox.Text,
+                ServiceLocation = ServiceLocalizationTextBox.Text
             };
 
             //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
@@ -256,8 +257,6 @@ namespace SCM2020___Client.Frames
             {
                 WorkOrder = OSTextBox.Text,
                 MovingDate = dateTime,
-                ServiceLocation = ServiceLocalizationTextBox.Text,
-
             };
 
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
@@ -460,7 +459,7 @@ namespace SCM2020___Client.Frames
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
-                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = monitoring.ServiceLocation; }));
 
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Register; }));
 
@@ -502,9 +501,9 @@ namespace SCM2020___Client.Frames
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             {
-                ApplicantTextBox.IsEnabled = true;
-                OutputTypeComboBox.IsEnabled = true;
-                ServiceLocalizationTextBox.IsEnabled = true;
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = true; }));
+                this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.IsEnabled = true; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = true; }));
             }
             catch (Exception ex)
             {
