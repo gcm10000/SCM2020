@@ -23,8 +23,6 @@ namespace SCM2020___Client.Frames.Query
     /// Interação lógica para Movement.xam
     /// </summary>
 
-    //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
-    //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
     public partial class Movement : UserControl
     {
         List<DocumentMovement.Product> ProductsToShow = null;
@@ -35,17 +33,14 @@ namespace SCM2020___Client.Frames.Query
             InitializeComponent();
         }
 
-        //ModelsLibraryCore.Monitoring Monitoring;
-        //ModelsLibraryCore.InfoUser InfoUser;
-
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                Search(TxtSearch.Text); //TxtSearch == workOrder
+                Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
         }
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Search(TxtSearch.Text); //TxtSearch == workOrder
+            Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
 
         }
         private void Search(string workOrder)
