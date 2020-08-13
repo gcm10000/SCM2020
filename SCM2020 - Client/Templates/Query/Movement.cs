@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SCM2020___Client.Templates.Query
@@ -21,13 +22,13 @@ namespace SCM2020___Client.Templates.Query
         private DateTime InitialDateTime;
         private DateTime FinalDateTime;
         private string Html;
-        public QueryByDateDocument(DateTime InitialDateTime, DateTime FinalDateTime, List<Product> Products)
+        public Movement(DateTime InitialDateTime, DateTime FinalDateTime, List<Product> Products)
         {
             this.InitialDateTime = InitialDateTime;
             this.FinalDateTime = FinalDateTime;
             this.Products = Products;
 
-            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "QueryByDate.html");
+            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "QueryByDate.html");
             Html = System.IO.File.ReadAllText(pathFileHtml);
         }
         public string RenderizeHtml()
@@ -45,9 +46,16 @@ namespace SCM2020___Client.Templates.Query
                                     $"<td>{product.MoveDate}</td>" +
                                 "</tr>";
             }
-            Html = Html.Replace("@LISTOFPRODUCTS", itemsContent); //CONTINUAR EDIÇÃO...
+            Html = Html.Replace("@WorkOrder", itemsContent); 
+            Html = Html.Replace("@RegisterApplication", itemsContent);
+            Html = Html.Replace("@Application", itemsContent);
+            Html = Html.Replace("@Sector", itemsContent);
+            Html = Html.Replace("@Situation", itemsContent);
+            Html = Html.Replace("@ServiceLocalization", itemsContent);
+            Html = Html.Replace("@WorkOrderDate", itemsContent);
             Html = Html.Replace("@WorkOrder", InitialDateTime.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@FinalDate", InitialDateTime.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
             return Html.ToString();
         }
     }
