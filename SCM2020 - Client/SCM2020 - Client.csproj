@@ -79,6 +79,9 @@
     <None Update="Templates\QueryByDate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Query\Movement.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\StockQuery.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

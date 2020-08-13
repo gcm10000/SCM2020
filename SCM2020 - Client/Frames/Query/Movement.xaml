@@ -25,6 +25,8 @@
                     <TextBox IsEnabled="False" Width="188" x:Name="ServiceLocalizationTextBox"  Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Margin="0 20 0 5" Text="Data da OS" FontSize="18"></TextBlock>
                     <DatePicker IsEnabled="False" x:Name="WorkOrderDateDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
+                    <TextBlock Margin="0 20 0 5" Text="Fechamento da OS" FontSize="18"></TextBlock>
+                    <DatePicker IsEnabled="False" x:Name="ClosureOSDatePicker" Style="{x:Null}" Height="30" FontSize="16"></DatePicker>
                 </StackPanel>
             </Border>
         </ScrollViewer>

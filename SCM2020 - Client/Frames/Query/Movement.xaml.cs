@@ -1,5 +1,6 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using SCM2020___Client.Templates.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,6 +27,7 @@ namespace SCM2020___Client.Frames.Query
         List<Templates.Query.Movement.Product> ProductsToShow = null;
         WebBrowser webBrowser = Helper.MyWebBrowser;
         DocumentMovement.QueryMovement InformationQuery = null;
+        SCM2020___Client.Templates.Query.Movement ResultMovement = null;
         public Movement()
         {
             InitializeComponent();
@@ -51,25 +53,26 @@ namespace SCM2020___Client.Frames.Query
             //Monitoring = null;
             //InfoUser = null;
 
-            DocumentMovement.ResultSearch resultSearch = DocumentMovement.Search(workOrder);
-            if (resultSearch == null)
+            ResultMovement = new SCM2020___Client.Templates.Query.Movement(workOrder);
+            
+            if (ResultMovement == null)
             {
                 this.Export_Button.IsEnabled = true;
                 this.Print_Button.IsEnabled = true;
 
                 return;
             }
-            DocumentMovement.QueryMovement InformationQuery = resultSearch.InformationQuery;
 
-            OSText.Text = InformationQuery.WorkOrder;
-            RegisterApplicationTextBox.Text = InformationQuery.RegisterApplication.ToString();
-            ApplicationTextBox.Text = InformationQuery.SolicitationEmployee;
-            SectorTextBox.Text = InformationQuery.Sector;
-            SituationTextBox.Text = InformationQuery.Situation;
-            ServiceLocalizationTextBox.Text = InformationQuery.ServiceLocalizationTextBox;
-            WorkOrderDateDatePicker.SelectedDate = InformationQuery.WorkOrderDate;
+            OSText.Text = ResultMovement.WorkOrder;
+            RegisterApplicationTextBox.Text = ResultMovement.RegisterApplication.ToString();
+            ApplicationTextBox.Text = ResultMovement.Application;
+            SectorTextBox.Text = ResultMovement.Sector;
+            SituationTextBox.Text = ResultMovement.Situation;
+            ServiceLocalizationTextBox.Text = ResultMovement.ServiceLocalization;
+            WorkOrderDateDatePicker.SelectedDate = ResultMovement.WorkOrderDate;
+            ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder;
 
-            ProductsToShow = resultSearch.QueryMovement;
+            ProductsToShow = ResultMovement.Products;
             foreach (var product in ProductsToShow)
             {
                 ProductMovementDataGrid.Items.Add(product);
@@ -88,16 +91,8 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            SCM2020___Client.Templates.Query.Movement template = new SCM2020___Client.Templates.Query.Movement(WorkOrder: InformationQuery.WorkOrder,
-                RegisterApplication: InformationQuery.RegisterApplication,
-                Application: InformationQuery.SolicitationEmployee,
-                Sector: InformationQuery.Sector,
-                Situation: InformationQuery.Situation,
-                ServiceLocalization: InformationQuery.ServiceLocalizationTextBox,
-                WorkOrderDate: InformationQuery.WorkOrderDate,
-                ClosureWorkOrder: InformationQuery.ClosingDate,
-                Products: ProductsToShow);
-            var result = template.RenderizeHtml();
+
+            var result = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
 
@@ -143,16 +138,8 @@ namespace SCM2020___Client.Frames.Query
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            SCM2020___Client.Templates.Query.Movement template = new SCM2020___Client.Templates.Query.Movement(WorkOrder: InformationQuery.WorkOrder,
-                RegisterApplication: InformationQuery.RegisterApplication,
-                Application: InformationQuery.SolicitationEmployee,
-                Sector: InformationQuery.Sector,
-                Situation: InformationQuery.Situation,
-                ServiceLocalization: InformationQuery.ServiceLocalizationTextBox,
-                WorkOrderDate: InformationQuery.WorkOrderDate,
-                ClosureWorkOrder: InformationQuery.ClosingDate,
-                Products: ProductsToShow);
-            var result = template.RenderizeHtml();
+
+            var result = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
         }
