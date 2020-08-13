@@ -12,7 +12,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 
@@ -26,7 +25,6 @@ namespace SCM2020___Client.Frames.Query
     {
         List<Templates.Query.Movement.Product> ProductsToShow = null;
         WebBrowser webBrowser = Helper.MyWebBrowser;
-        DocumentMovement.QueryMovement InformationQuery = null;
         SCM2020___Client.Templates.Query.Movement ResultMovement = null;
         public Movement()
         {

@@ -93,7 +93,7 @@
                         <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Movimentação" Binding="{Binding Movement}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding MoveDate}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}" ></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
