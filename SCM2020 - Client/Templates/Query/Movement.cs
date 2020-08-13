@@ -72,7 +72,7 @@ namespace SCM2020___Client.Templates.Query
                                     $"<td>{product.Unity}</td>" +
                                     $"<td>{product.Patrimony}</td>" +
                                     $"<td>{product.Movement}</td>" +
-                                    $"<td>{product.MoveDate}</td>" +
+                                    $"<td>{product.MoveDate.ToString("dd/MM/yyyy")}</td>" +
                                 "</tr>";
             }
 

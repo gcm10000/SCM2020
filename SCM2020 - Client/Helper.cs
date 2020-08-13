@@ -18,11 +18,21 @@ namespace SCM2020___Client
 {
     static class Helper
     {
+        /// <summary>
+        /// Endereço do servidor.
+        /// </summary>
         public static Uri Server = new Uri("http://localhost:52991/api/");
+        /// <summary>
+        /// Autenticação das credenciais.
+        /// </summary>
         public static AuthenticationHeaderValue Authentication { get; set; } = null;
+        /// <summary>
+        /// Regex com disposição única a números.
+        /// </summary>
         private static readonly Regex NumberRegex = new Regex("[^0-9,]+"); //regex that matches disallowed text
-        public static string TemplatePath = @"C:\Users\Gabriel\source\repos\gcm10000\SCM2020\SCM2020 - Client\Templates\";
-        //public static string SCMRegistration { get; set; }
+        /// <summary>
+        /// Id do usuário logado.
+        /// </summary>
         public static string NameIdentifier { get; set; }
         public static string Role { get; set; }
         public static ModelsLibraryCore.Sector CurrentSector { get; set; }

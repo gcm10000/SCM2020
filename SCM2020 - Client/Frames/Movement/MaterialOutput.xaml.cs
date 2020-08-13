@@ -41,6 +41,7 @@ namespace SCM2020___Client.Frames
             public bool NewProduct { get; set; }
             public bool ProductChanged { get; set; }
             public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
+
         }
         class PermanentProductDataGrid : ProductToOutput
         {
@@ -57,6 +58,7 @@ namespace SCM2020___Client.Frames
                 this.Id = searchPermanentProduct.Id;
                 this.Patrimony = searchPermanentProduct.Patrimony;
                 this.Quantity = searchPermanentProduct.ConsumptionProduct.Stock;
+
             }
         }
         class SearchPermanentProduct : ModelsLibraryCore.PermanentProduct
@@ -94,13 +96,13 @@ namespace SCM2020___Client.Frames
             if (int.TryParse(textBoxValue, out _))
             {
                 Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-                new Task(() =>
+                Task.Run(() =>
                 {
                     var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
                     products.Add(singleProduct);
                     index = products.FindIndex(x => x.Id == singleProduct.Id);
 
-                }).Start();
+                });
             }
 
             var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
@@ -179,18 +181,18 @@ namespace SCM2020___Client.Frames
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
         List<ProductToOutput> FinalConsumpterProductsAdded = new List<ProductToOutput>();
+        List<ProductToOutput> FinalPermanentProductsAdded = new List<ProductToOutput>();
 
+        //Método conveniente somente para produtos consumíveis
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
-            //BtnAdded
             var product = ((FrameworkElement)sender).DataContext as ProductToOutput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
-                //int index = ProductToAddDataGrid.SelectedIndex;
                 ProductToAddDataGrid.Items.Refresh();
                 FinalConsumpterProductsAddedDataGrid.Items.Refresh();
                 if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
@@ -314,8 +316,11 @@ namespace SCM2020___Client.Frames
                 materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
             }
             
-            materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
-            var listProduct = materialOutput.ConsumptionProducts.ToList();
+            //materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
+
+            var listConsumptionProduct = materialOutput.ConsumptionProducts.ToList();
+            var listPermanentProduct = materialOutput.PermanentProducts.ToList();
+            //Loop baseado na lista de produtos consumíveis escolhidos
             foreach (ProductToOutput item in FinalConsumpterProductsAdded)
             {
                 if (item.NewProduct)
@@ -325,29 +330,42 @@ namespace SCM2020___Client.Frames
                         Date = DateTime.Now,
                         ProductId = item.Id,
                         Quantity = item.QuantityAdded,
-                        SCMEmployeeId = Helper.NameIdentifier,
+                        SCMEmployeeId = Helper.NameIdentifier
                     };
                     item.NewProduct = false;
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
-                    listProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
+                    listConsumptionProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
                         item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
-            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+
+
+            foreach (var item in FinalPermanentProductsAdded)
             {
                 //MEXER
+                //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
+                if (!FinalPermanentProductsAddedDataGrid.Items.Contains(item))
+                {
+                    var permanentProduct = materialOutput.PermanentProducts.Single(x => x.Id == item.Id);
+                    materialOutput.PermanentProducts.Remove(permanentProduct);
+                }
+
+                //Se na lista final não conter o produto permanente, então trate de adicionar.
                 if (!materialOutput.PermanentProducts.Any(x => x.ProductId == item.Id))
                 {
-                    AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                    if (item.NewProduct)
                     {
-                        Date = DateTime.Now,
-                        ProductId = item.Id,
-                        SCMEmployeeId = Helper.NameIdentifier
-                    };
-                    materialOutput.PermanentProducts.Add(auxiliarPermanent);
+                        AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                        {
+                            Date = DateTime.Now,
+                            ProductId = item.Id,
+                            SCMEmployeeId = Helper.NameIdentifier
+                        };
+                        materialOutput.PermanentProducts.Add(auxiliarPermanent);
+                    }
                 }
             }
             var result = APIClient.PostData(new Uri(Helper.Server, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
@@ -363,19 +381,23 @@ namespace SCM2020___Client.Frames
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
         }
+        //Método conveninente somente a produtos permanentes
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
         {
             var product = ((FrameworkElement)sender).DataContext as PermanentProductDataGrid;
             if (product.BtnContent == "Adicionar")
             {
-                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
                 product.QuantityAdded += 1;
+                product.NewProduct = true;
+                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
+                this.FinalPermanentProductsAdded.Add(product);
                 //product.BtnContent = "Remover";
             }
             else
             {
                 //product.BtnContent = "Adicionar";
                 product.QuantityAdded -= 1;
+                product.NewProduct = false;
                 this.FinalPermanentProductsAddedDataGrid.Items.Remove(product);
             }
             this.PermanentProductToAddDataGrid.Items.Refresh();
