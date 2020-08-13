@@ -24,6 +24,7 @@ namespace SCM2020___Client
             public string Sector { get; set; }
             public string ServiceLocalizationTextBox { get; set; }
             public DateTime WorkOrderDate { get; set; }
+            public DateTime? ClosingDate { get; set; }
         }
         public class Product
         {
@@ -38,12 +39,20 @@ namespace SCM2020___Client
         public class ResultSearch
         {
             public List<DocumentMovement.Product> ProductsToShow { get; }
+            public List<Templates.Query.Movement.Product> QueryMovement { get; }
             public Monitoring Monitoring { get; }
             public InfoUser InfoUser { get; }
             public QueryMovement InformationQuery { get; }
             public ResultSearch(List<DocumentMovement.Product> ProductsToShow, Monitoring Monitoring, InfoUser InfoUser, QueryMovement InformationQuery)
             {
                 this.ProductsToShow = ProductsToShow;
+                this.Monitoring = Monitoring;
+                this.InfoUser = InfoUser;
+                this.InformationQuery = InformationQuery;
+            }
+            public ResultSearch(List<Templates.Query.Movement.Product> QueryMovement, Monitoring Monitoring, InfoUser InfoUser, QueryMovement InformationQuery)
+            {
+                this.QueryMovement = QueryMovement;
                 this.Monitoring = Monitoring;
                 this.InfoUser = InfoUser;
                 this.InformationQuery = InformationQuery;
@@ -371,9 +380,11 @@ namespace SCM2020___Client
                 WorkOrderDate = Monitoring.MovingDate,
                 RegisterApplication = int.Parse(InfoUser.Register),
                 SolicitationEmployee = InfoUser.Name,
-                ServiceLocalizationTextBox = Monitoring.ServiceLocation
-            };
+                ServiceLocalizationTextBox = Monitoring.ServiceLocation,
+                ClosingDate = Monitoring.ClosingDate
 
+            };
+            
             var ProductsToShow = ProductsAtWorkOrder(workOrder);
 
             return new ResultSearch(ProductsToShow, Monitoring, InfoUser, InformationMovement);

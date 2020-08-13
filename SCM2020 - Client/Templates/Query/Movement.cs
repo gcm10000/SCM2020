@@ -18,14 +18,28 @@ namespace SCM2020___Client.Templates.Query
             public string Movement { get; set; }
             public DateTime MoveDate { get; set; }
         }
+
+        private readonly string workOrder;
+        private readonly int registerApplication;
+        private readonly string application;
+        private readonly string sector;
+        private readonly string situation;
+        private readonly string serviceLocalization;
+        private readonly DateTime workOrderDate;
+        private readonly DateTime? closureWorkOrder;
+
         private List<Product> Products = null;
-        private DateTime InitialDateTime;
-        private DateTime FinalDateTime;
         private string Html;
-        public Movement(DateTime InitialDateTime, DateTime FinalDateTime, List<Product> Products)
+        public Movement(string WorkOrder, int RegisterApplication, string Application, string Sector, string Situation, string ServiceLocalization, DateTime WorkOrderDate, DateTime? ClosureWorkOrder, List<Product> Products)
         {
-            this.InitialDateTime = InitialDateTime;
-            this.FinalDateTime = FinalDateTime;
+            workOrder = WorkOrder;
+            registerApplication = RegisterApplication;
+            application = Application;
+            sector = Sector;
+            situation = Situation;
+            serviceLocalization = ServiceLocalization;
+            workOrderDate = WorkOrderDate;
+            closureWorkOrder = ClosureWorkOrder;
             this.Products = Products;
 
             var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "QueryByDate.html");
@@ -46,15 +60,14 @@ namespace SCM2020___Client.Templates.Query
                                     $"<td>{product.MoveDate}</td>" +
                                 "</tr>";
             }
-            Html = Html.Replace("@WorkOrder", itemsContent); 
-            Html = Html.Replace("@RegisterApplication", itemsContent);
-            Html = Html.Replace("@Application", itemsContent);
-            Html = Html.Replace("@Sector", itemsContent);
-            Html = Html.Replace("@Situation", itemsContent);
-            Html = Html.Replace("@ServiceLocalization", itemsContent);
-            Html = Html.Replace("@WorkOrderDate", itemsContent);
-            Html = Html.Replace("@WorkOrder", InitialDateTime.ToString("dd/MM/yyyy"));
-            Html = Html.Replace("@FinalDate", InitialDateTime.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@WorkOrder", workOrder); 
+            Html = Html.Replace("@RegisterApplication", registerApplication.ToString());
+            Html = Html.Replace("@Application", application);
+            Html = Html.Replace("@Sector", sector);
+            Html = Html.Replace("@Situation", situation);
+            Html = Html.Replace("@ServiceLocalization", serviceLocalization);
+            Html = Html.Replace("@WorkOrderDate", workOrderDate.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@FinalDate", (closureWorkOrder == null) ? "" : closureWorkOrder.Value.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
             return Html.ToString();
         }
