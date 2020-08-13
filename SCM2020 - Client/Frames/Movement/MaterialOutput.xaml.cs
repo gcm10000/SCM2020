@@ -349,7 +349,7 @@ namespace SCM2020___Client.Frames
                 //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
                 if (!FinalPermanentProductsAddedDataGrid.Items.Contains(item))
                 {
-                    var permanentProduct = materialOutput.PermanentProducts.Single(x => x.Id == item.Id);
+                    var permanentProduct = materialOutput.PermanentProducts.Single(x => x.ProductId == item.Id);
                     materialOutput.PermanentProducts.Remove(permanentProduct);
                 }
 
@@ -516,6 +516,7 @@ namespace SCM2020___Client.Frames
                         Patrimony = permanentProduct.Patrimony,
                     };
                     this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
+                    FinalPermanentProductsAdded.Add(productDataGrid);
                 }
 
                 this.BtnPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnPrint.IsEnabled = true; }));
