@@ -86,6 +86,9 @@ namespace SCM2020___Client.Frames
             string textBoxValue = string.Empty;
             this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
 
+            if (textBoxValue == string.Empty)
+                return;
+
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
 
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
@@ -132,7 +135,10 @@ namespace SCM2020___Client.Frames
         {
             string textBoxValue = string.Empty;
             this.TxtPermanentProductSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtPermanentProductSearch.Text; }));
-            
+
+            if (textBoxValue == string.Empty)
+                return;
+
             Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
@@ -342,10 +348,8 @@ namespace SCM2020___Client.Frames
                 }
             }
 
-
             foreach (var item in FinalPermanentProductsAdded)
             {
-                //MEXER
                 //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
                 if (!FinalPermanentProductsAddedDataGrid.Items.Contains(item))
                 {
@@ -375,11 +379,17 @@ namespace SCM2020___Client.Frames
         {
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
         }
         private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
         }
         //Método conveninente somente a produtos permanentes
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
@@ -407,24 +417,24 @@ namespace SCM2020___Client.Frames
         }
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            new Task(() => ConsumpterProductSearch()).Start();
+            Task.Run(ConsumpterProductSearch);
         }
         private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                new Task(() => ConsumpterProductSearch()).Start();
+                Task.Run(ConsumpterProductSearch);
             }
         }
         private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            new Task(() => PermanentProductSearch()).Start();
+            Task.Run(PermanentProductSearch);
         }
         private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                new Task(() => PermanentProductSearch()).Start();
+                Task.Run(PermanentProductSearch);
             }
         }
 
@@ -445,7 +455,7 @@ namespace SCM2020___Client.Frames
             {
                 if (previousOS == workOrder)
                     return;
-                new Task(() => RescueData(workOrder)).Start();
+                Task.Run(() => RescueData(workOrder));
                 previousOS = workOrder;
             }
         }

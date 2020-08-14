@@ -36,7 +36,7 @@
         <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
-                <Button Uid="0" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnInformation_Click" Cursor="Hand"></Button>
+                <Button Uid="0" IsHitTestVisible="False" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnInformation_Click" Cursor="Hand"></Button>
                 <Button Uid="1" x:Name="ButtonPermanentProducts" Width="220" Content="PRODUTOS PERMANENTES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonPermanentProducts_Click"  Cursor="Hand"/>
                 <Button Uid="2" x:Name="ButtonFinish" Width="150" Content="FINALIZAÇÃO" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinish_Click"  Cursor="Hand"/>
             </StackPanel>
@@ -238,7 +238,7 @@
         <DockPanel x:Name="FinalProductsDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="60">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
-                    <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click"  Cursor="Hand"/>
+                    <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" IsHitTestVisible="False" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click"  Cursor="Hand"/>
                     <Button Uid="4" Width="220" x:Name="ButtonFinalPermanentProduct" Content="PRODUTOS PERMANENTES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalPermanentProduct_Click"  Cursor="Hand"/>
                 </StackPanel>
             </Grid>
@@ -290,7 +290,7 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
                 </Grid.Resources>
-                <DataGrid Visibility="Collapsed" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalConsumpterProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalConsumpterProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -315,7 +315,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalPermanentProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                <DataGrid Visibility="Collapsed" SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductToAddDataGrid_BeginningEdit" VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="FinalPermanentProductsAddedDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"

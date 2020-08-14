@@ -98,9 +98,7 @@ namespace SCM2020___Client.Templates.Query
             }
             catch
             {
-                //If doesn't exist work order, then shows error inside MessageBox 
-                MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                throw new Exception("Ordem de serviço inexistente.", new NullReferenceException());
             }
             try
             {
@@ -109,8 +107,7 @@ namespace SCM2020___Client.Templates.Query
             catch
             {
                 //HttpRequestException -> BadRequest
-                MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                throw new Exception("Funcionário não encontrado.", new NullReferenceException());
             }
 
 

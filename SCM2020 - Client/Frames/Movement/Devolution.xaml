@@ -37,7 +37,7 @@
         <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
-                <Button Uid="0" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonInformation_Click"  Cursor="Hand"></Button>
+                <Button Uid="0" IsHitTestVisible="False" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonInformation_Click"  Cursor="Hand"></Button>
                 <Button Uid="1" x:Name="ButtonPermanentProducts" Width="220" Content="PRODUTOS PERMANENTES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonPermanentProducts_Click"  Cursor="Hand"/>
                 <Button Uid="2" x:Name="ButtonFinish" Width="150" Content="FINALIZAÇÃO" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinish_Click"  Cursor="Hand"/>
             </StackPanel>

@@ -1,5 +1,6 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using RazorEngine.Compilation.ImpromptuInterface;
 using SCM2020___Client.Templates.Query;
 using System;
 using System.Collections.Generic;
@@ -48,10 +49,25 @@ namespace SCM2020___Client.Frames.Query
             this.Print_Button.IsEnabled = false;
             ProductMovementDataGrid.Items.Clear();
             ProductsToShow = null;
-            //Monitoring = null;
-            //InfoUser = null;
 
-            ResultMovement = new SCM2020___Client.Templates.Query.Movement(workOrder);
+            OSText.Text = string.Empty;
+            RegisterApplicationTextBox.Text = string.Empty;
+            ApplicationTextBox.Text = string.Empty;
+            SectorTextBox.Text = string.Empty;
+            SituationTextBox.Text = string.Empty;
+            ServiceLocalizationTextBox.Text = string.Empty;
+            WorkOrderDateDatePicker.SelectedDate = null;
+            ClosureOSDatePicker.SelectedDate = null;
+
+            try
+            {
+                ResultMovement = new SCM2020___Client.Templates.Query.Movement(workOrder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             
             if (ResultMovement == null)
             {
@@ -77,6 +93,8 @@ namespace SCM2020___Client.Frames.Query
             }
             this.Export_Button.IsEnabled = true;
             this.Print_Button.IsEnabled = true;
+
+            ProductMovementDataGrid.UnselectAll();
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
