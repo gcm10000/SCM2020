@@ -81,9 +81,10 @@ namespace SCM2020___Client.Frames.Movement
 
             //Se o monitoramento vinculado a ordem de serviço é existente
             if (resultMonitoring != null)
+            {
+                previousDevolutionExists = true;
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
-                    
 
                     //GetProducts(workOrder);
                     this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
@@ -101,6 +102,7 @@ namespace SCM2020___Client.Frames.Movement
                     DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
                     MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
         }
 
         private void EnableMonitoringObjects()

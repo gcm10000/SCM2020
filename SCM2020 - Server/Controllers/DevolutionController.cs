@@ -77,75 +77,88 @@ namespace SCM2020___Server.Controllers
             var id = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);
-            //MaterialInput materialInput = new MaterialInput(raw, id);
             MaterialInput materialInput = new MaterialInput(raw);
-            
+
             if (materialInput.ConsumptionProducts == null)
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
+            if (materialInput.PermanentProducts == null)
+                materialInput.PermanentProducts = new List<AuxiliarPermanent>();
 
-            var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
-                .FirstOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
-            if (output == null)
-                return BadRequest("Não há qualquer saída existente nessa ordem de serviço.");
-            bool allMatches = materialInput.ConsumptionProducts
-                .All(x => output.ConsumptionProducts
-                .Any(y => y.ProductId == x.ProductId));
-            if (!allMatches)
-                return BadRequest("Existem itens que estão na entrada e que não pertencem a saída.");
+            //14-08-2020
+            //var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
+            //    .FirstOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
+            //if (output == null)
+            //    return BadRequest("Não há qualquer saída existente nessa ordem de serviço.");
+            //bool allMatches = materialInput.ConsumptionProducts
+            //    .All(x => output.ConsumptionProducts
+            //    .Any(y => y.ProductId == x.ProductId));
+            //if (!allMatches)
+            //    return BadRequest("Existem itens que estão na entrada e que não pertencem a saída.");
+            //FIM - 14-08-2020
+
             //var allMatches2 = materialInput.ConsumptionProducts
             //    .Where(x => output.ConsumptionProducts
             //    .Any(y => x.Quantity.CompareTo(y.Quantity) > 0));
 
-            var allMatches2 = new List<AuxiliarConsumption>();
+            //14-08-2020
+            //var allMatches2 = new List<AuxiliarConsumption>();
+            //foreach (var item in materialInput.ConsumptionProducts)
+            //{
+            //    //Utilizando o método linq first irá mostrar somente o PRIMEIRO registro do produto.
+            //    //Se por acaso houver mais de um registro do MESMO produto, não será contabilizado.
+
+            //    var consumptionProducts = output.ConsumptionProducts.Where(x => x.ProductId == item.ProductId);
+            //    double totalQuantity = 0.00d;
+            //    //Se incrementar todas quantidades dentro da variável totalQuantity, o problema será erradicado
+            //    //baseando-se em todos os registros do MESMO produto.
+            //    foreach (var product in consumptionProducts)
+            //    {
+            //        totalQuantity += product.Quantity;
+            //    }
+            //    if (item.Quantity.CompareTo(totalQuantity) > 0)
+            //    {
+            //        allMatches2.Add(item);
+            //    }
+            //}
+            //if (allMatches2.Count() > 0)
+            //{
+            //    string names = string.Empty;
+            //    foreach (var match in allMatches2)
+            //    {
+            //        names += context.ConsumptionProduct.Find(match.ProductId).Description + "\n";
+            //    }
+            //    return BadRequest($"O seguintes materiais estão com valor acima da quantidade que foi solicitada na saída:\n{names}");
+
+            //}
+            //FIM - 14-08-2020
+
+            if (context.MaterialInput.Any(x => x.WorkOrder == materialInput.WorkOrder))
+                return BadRequest("Já existe objeto de entrada vinculada a esta ordem de serviço.");
+
+            if (!context.Monitoring.Any(x => x.Work_Order == materialInput.WorkOrder))
+                return BadRequest("Não existe monitoramento com esta ordem de serviço.");
+
+            if (context.Monitoring.Any(x => ((x.Work_Order == materialInput.WorkOrder) && (x.Situation))))
+                return BadRequest("Ordem de serviço fechada.");
+            
+            context.MaterialInput.Add(materialInput);
+            
             foreach (var item in materialInput.ConsumptionProducts)
             {
-                //Utilizando o método linq first irá mostrar somente o PRIMEIRO registro do produto.
-                //Se por acaso houver mais de um registro do MESMO produto, não será contabilizado.
-                
-                var consumptionProducts = output.ConsumptionProducts.Where(x => x.ProductId == item.ProductId);
-                double totalQuantity = 0.00d;
-                //Se incrementar todas quantidades dentro da variável totalQuantity, o problema será erradicado
-                //baseando-se em todos os registros do MESMO produto.
-                foreach (var product in consumptionProducts)
-                {
-                    totalQuantity += product.Quantity;
-                }
-                if (item.Quantity.CompareTo(totalQuantity) > 0)
-                {
-                    allMatches2.Add(item);
-                }
+                var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
+                product.Stock += item.Quantity;
+                context.ConsumptionProduct.Update(product);
             }
-            if (allMatches2.Count() > 0)
+
+            foreach (var pp in materialInput.PermanentProducts)
             {
-                string names = string.Empty;
-                foreach (var match in allMatches2)
-                {
-                    names += context.ConsumptionProduct.Find(match.ProductId).Description + "\n";
-                }
-                return BadRequest($"O seguintes materiais estão com valor acima da quantidade que foi solicitada na saída:\n{names}");
-
+                var p = context.PermanentProduct.Find(pp.ProductId);
+                var c = context.ConsumptionProduct.Find(p.InformationProduct);
+                p.WorkOrder = null;
+                c.Stock += 1;
+                context.PermanentProduct.Update(p);
+                context.ConsumptionProduct.Update(c);
             }
-
-            context.MaterialInput.Add(materialInput);
-            if (materialInput.ConsumptionProducts != null)
-                foreach (var item in materialInput.ConsumptionProducts)
-                {
-                    var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
-                    product.Stock += item.Quantity;
-                    context.ConsumptionProduct.Update(product);
-                }
-
-            if (materialInput.PermanentProducts != null)
-                foreach (var pp in materialInput.PermanentProducts)
-                {
-                    var p = context.PermanentProduct.Find(pp.ProductId);
-                    var c = context.ConsumptionProduct.Find(p.InformationProduct);
-                    p.WorkOrder = null;
-                    c.Stock += 1;
-                    context.PermanentProduct.Update(p);
-                    context.ConsumptionProduct.Update(c);
-
-                }
 
             await context.SaveChangesAsync();
             return Ok("Nova devolução registrada com sucesso.");

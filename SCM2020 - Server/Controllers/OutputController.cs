@@ -261,12 +261,12 @@ namespace SCM2020___Server.Controllers
             //Remove movimentação de saída
             context.MaterialOutput.Remove(materialOutput);
 
-            //Checar se existe uma entrada na ordem de serviço. Se não houver, o monitoramento será apagado
-            if (!context.MaterialInput.Any(x => x.WorkOrder == materialOutput.WorkOrder))
-            {
-                var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == materialOutput.WorkOrder);
-                context.Monitoring.Remove(monitoring);
-            }
+            ////Checar se existe uma entrada na ordem de serviço. Se não houver, o monitoramento será apagado
+            //if (!context.MaterialInput.Any(x => x.WorkOrder == materialOutput.WorkOrder))
+            //{
+            //    var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == materialOutput.WorkOrder);
+            //    context.Monitoring.Remove(monitoring);
+            //}
 
             await context.SaveChangesAsync();
             return Ok("Movimentação de saída removida com sucesso.");
