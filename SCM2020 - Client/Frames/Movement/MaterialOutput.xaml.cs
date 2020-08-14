@@ -483,7 +483,7 @@ namespace SCM2020___Client.Frames
                 PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //Ordem de serviço encontra-se fechada.
                 {
-                    MessageBox.Show("Ordem de serviço fechada.", "Informação.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show($"Ordem de serviço foi fechada na data {monitoring.ClosingDate.Value.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                     return; //DISABLE FILLING DATA.
                 }
                 //ID -> MATRÍCULA

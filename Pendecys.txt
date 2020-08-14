@@ -31,3 +31,12 @@ Ordem do tratamento dos bugs:
  Somente depois tratar as demais pendências.
  EXISTEM ORDEM DE SERVIÇO QUE SOMENTE REALIZAM DEVOLUÇÕES!
  SenhaSecreta#2020
+
+
+Bugs tratados no cliente:
+  1. Movimentações:
+	1. Saída
+	2. 
+	
+ 2. Consulta:
+	1. Movimentação

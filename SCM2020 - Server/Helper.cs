@@ -84,5 +84,17 @@ namespace SCM2020___Server
 
             return d[d.GetUpperBound(0), d.GetUpperBound(1)];
         }
+        public static bool MultiplesContains(this string bigstr, params string[] content)
+        {
+                foreach (var item in content)
+                {
+                    if (!content.Any(x => bigstr.Contains(item)))
+                    {
+                        continue;
+                    }
+                    return true;
+                }
+                return false;
+        }
     }
 }
