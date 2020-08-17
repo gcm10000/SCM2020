@@ -43,9 +43,10 @@ namespace SCM2020___Client.Frames.Query
         // https://www.youtube.com/watch?v=pNfSOBzHd8Y
         // https://stackoverflow.com/questions/31251720/ie-11-signalr-not-working -> IE DOESN'T WORKING WITH SIGNALR
 
-        // https://github.com/videojs/video.js/issues/5910
-        //  A RESPEITO DA LEITURA DE MKV
-        // you can sometimes get some MKVs to play in browsers that support webm, because webm is a subset of MKV
+        // https://stackoverflow.com/questions/6209161/extract-the-current-dom-and-print-it-as-a-string-with-styles-intact
+        // SÓ HÁ UMA MANEIRA DE EXPORTAR ESSA PÁGINA SEM PERDER OS DADOS DO WEBSOCKET
+        // EXTRAI O HTML COM AS MODIFICAÇÕES DO DOM, SALVA EM UM ARQUIVO TEMPORÁRIO E FAZ A REQUISIÇÃO DA EXPORTAÇÃO
+
 
         WebAssemblyLibrary.Client.Client client;
         public InventoryTurnover()
@@ -61,6 +62,8 @@ namespace SCM2020___Client.Frames.Query
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
+            // faz requisição da string html por websocket
+            // coloca na string Document
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
         }
 
