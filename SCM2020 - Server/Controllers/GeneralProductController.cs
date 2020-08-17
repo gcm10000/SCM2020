@@ -96,10 +96,11 @@ namespace SCM2020___Server.Controllers
             }
         }
         [AllowAnonymous]
-        [HttpGet("Search/{description}")]
-        public IActionResult Search(string description)
+        [HttpGet("Search/{query}")]
+        public IActionResult Search(string query)
         {
-            var lproduct = context.ConsumptionProduct.Where(x => x.Description.Contains(description));
+            string[] querySplited = query.Split(' ');
+            var lproduct = context.ConsumptionProduct.ToList().Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
             return Ok(lproduct);
         }
         //Show information today about products

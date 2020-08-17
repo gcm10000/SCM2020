@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,15 +24,15 @@ namespace SCM2020___Server
             }
             return postData;
         }
-        public static bool GetToken(out JwtSecurityToken Token, ControllerBase controllerBase)
+        public static JwtSecurityToken GetToken(ControllerBase controllerBase)
         {
             bool b = controllerBase.Request.Headers.ContainsKey("Authorization");
             var header = controllerBase.Request.Headers["Authorization"].ToString();
             var bearer = "Bearer ";
             var accessToken = header.Substring(bearer.Length);
             var handler = new JwtSecurityTokenHandler();
-            Token = handler.ReadToken(accessToken) as JwtSecurityToken;
-            return b;
+            var o = handler.ReadToken(accessToken) as JwtSecurityToken;
+            return o;
         }
         public static Int32 Levenshtein(String a, String b)
         {
@@ -83,6 +85,34 @@ namespace SCM2020___Server
             }
 
             return d[d.GetUpperBound(0), d.GetUpperBound(1)];
+        }
+        public static bool MultiplesContains(this string bigstr, params string[] content)
+        {
+                foreach (var item in content)
+                {
+                    if (!content.Any(x => bigstr.Contains(item.RemoveDiacritics())))
+                    {
+                        continue;
+                    }
+                    return true;
+                }
+                return false;
+        }
+       public static string RemoveDiacritics(this string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

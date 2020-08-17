@@ -41,6 +41,7 @@ namespace SCM2020___Client.Frames
             public bool NewProduct { get; set; }
             public bool ProductChanged { get; set; }
             public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
+
         }
         class PermanentProductDataGrid : ProductToOutput
         {
@@ -57,6 +58,7 @@ namespace SCM2020___Client.Frames
                 this.Id = searchPermanentProduct.Id;
                 this.Patrimony = searchPermanentProduct.Patrimony;
                 this.Quantity = searchPermanentProduct.ConsumptionProduct.Stock;
+
             }
         }
         class SearchPermanentProduct : ModelsLibraryCore.PermanentProduct
@@ -75,35 +77,17 @@ namespace SCM2020___Client.Frames
         public MaterialOutput()
         {
             InitializeComponent();
-            Uri vendorUri = new Uri(Helper.Server, "vendor/");
-            //var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
-            //var nameVendors = vendors.Select(x => x.Name).ToList();
-            //this.VendorComboBox.ItemsSource = nameVendors;
-
-            //ProductToOutput ProductToOutput = new ProductToOutput()
-            //{
-            //    Id = 1,
-            //    Code = 1,
-            //    Description = "TESTE",
-            //    Quantity = 10
-            //};
-            //ProductToAddDataGrid.Items.Add(ProductToOutput);
-            //PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
-            //{
-            //    Id = 1,
-            //    Code = 2,
-            //    Description = "TESTE2",
-            //    Quantity = 12,
-            //    Patrimony = "5621034",
-            //};
-            //PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid);
         }
+
         private bool previousOutputExists = false;
         private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
         private void ConsumpterProductSearch()
         {
             string textBoxValue = string.Empty;
             this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
+
+            if (textBoxValue == string.Empty)
+                return;
 
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
 
@@ -115,13 +99,13 @@ namespace SCM2020___Client.Frames
             if (int.TryParse(textBoxValue, out _))
             {
                 Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-                new Task(() =>
+                Task.Run(() =>
                 {
                     var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
                     products.Add(singleProduct);
                     index = products.FindIndex(x => x.Id == singleProduct.Id);
 
-                }).Start();
+                });
             }
 
             var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
@@ -151,7 +135,10 @@ namespace SCM2020___Client.Frames
         {
             string textBoxValue = string.Empty;
             this.TxtPermanentProductSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtPermanentProductSearch.Text; }));
-            
+
+            if (textBoxValue == string.Empty)
+                return;
+
             Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
@@ -166,10 +153,6 @@ namespace SCM2020___Client.Frames
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
-        }
-        private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
         }
         private void BtnInformation_Click(object sender, RoutedEventArgs e)
         {
@@ -204,18 +187,18 @@ namespace SCM2020___Client.Frames
             this.PermanentDockPanel.Visibility = Visibility.Collapsed;
         }
         List<ProductToOutput> FinalConsumpterProductsAdded = new List<ProductToOutput>();
+        List<ProductToOutput> FinalPermanentProductsAdded = new List<ProductToOutput>();
 
+        //Método conveniente somente para produtos consumíveis
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
-            //BtnAdded
             var product = ((FrameworkElement)sender).DataContext as ProductToOutput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
 
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
-                //int index = ProductToAddDataGrid.SelectedIndex;
                 ProductToAddDataGrid.Items.Refresh();
                 FinalConsumpterProductsAddedDataGrid.Items.Refresh();
                 if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
@@ -272,7 +255,8 @@ namespace SCM2020___Client.Frames
                 EmployeeId = userId,
                 RequestingSector = Helper.CurrentSector.Id,
                 MovingDate = dateTime,
-                Work_Order = OSTextBox.Text
+                Work_Order = OSTextBox.Text,
+                ServiceLocation = ServiceLocalizationTextBox.Text
             };
 
             //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
@@ -281,8 +265,6 @@ namespace SCM2020___Client.Frames
             {
                 WorkOrder = OSTextBox.Text,
                 MovingDate = dateTime,
-                ServiceLocation = ServiceLocalizationTextBox.Text,
-
             };
 
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
@@ -339,11 +321,12 @@ namespace SCM2020___Client.Frames
             {
                 materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
             }
-            if ((FinalPermanentProductsAddedDataGrid.Items.Count > 0) && (materialOutput.PermanentProducts == null))
-            {
-                materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
-            }
-            var listProduct = materialOutput.ConsumptionProducts.ToList();
+            
+            //materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
+
+            var listConsumptionProduct = materialOutput.ConsumptionProducts.ToList();
+            var listPermanentProduct = materialOutput.PermanentProducts.ToList();
+            //Loop baseado na lista de produtos consumíveis escolhidos
             foreach (ProductToOutput item in FinalConsumpterProductsAdded)
             {
                 if (item.NewProduct)
@@ -353,29 +336,40 @@ namespace SCM2020___Client.Frames
                         Date = DateTime.Now,
                         ProductId = item.Id,
                         Quantity = item.QuantityAdded,
-                        SCMEmployeeId = Helper.NameIdentifier,
+                        SCMEmployeeId = Helper.NameIdentifier
                     };
                     item.NewProduct = false;
                     materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
-                    listProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
+                    listConsumptionProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
                         item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
-            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+
+            foreach (var item in FinalPermanentProductsAdded)
             {
-                //MEXER
+                //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
+                if (!FinalPermanentProductsAddedDataGrid.Items.Contains(item))
+                {
+                    var permanentProduct = materialOutput.PermanentProducts.Single(x => x.ProductId == item.Id);
+                    materialOutput.PermanentProducts.Remove(permanentProduct);
+                }
+
+                //Se na lista final não conter o produto permanente, então trate de adicionar.
                 if (!materialOutput.PermanentProducts.Any(x => x.ProductId == item.Id))
                 {
-                    AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                    if (item.NewProduct)
                     {
-                        Date = DateTime.Now,
-                        ProductId = item.Id,
-                        SCMEmployeeId = Helper.NameIdentifier
-                    };
-                    materialOutput.PermanentProducts.Add(auxiliarPermanent);
+                        AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
+                        {
+                            Date = DateTime.Now,
+                            ProductId = item.Id,
+                            SCMEmployeeId = Helper.NameIdentifier
+                        };
+                        materialOutput.PermanentProducts.Add(auxiliarPermanent);
+                    }
                 }
             }
             var result = APIClient.PostData(new Uri(Helper.Server, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
@@ -385,25 +379,35 @@ namespace SCM2020___Client.Frames
         {
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
         }
         private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
             this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
             this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+
+            this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
+            this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
         }
+        //Método conveninente somente a produtos permanentes
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
         {
             var product = ((FrameworkElement)sender).DataContext as PermanentProductDataGrid;
             if (product.BtnContent == "Adicionar")
             {
-                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
                 product.QuantityAdded += 1;
+                product.NewProduct = true;
+                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
+                this.FinalPermanentProductsAdded.Add(product);
                 //product.BtnContent = "Remover";
             }
             else
             {
                 //product.BtnContent = "Adicionar";
                 product.QuantityAdded -= 1;
+                product.NewProduct = false;
                 this.FinalPermanentProductsAddedDataGrid.Items.Remove(product);
             }
             this.PermanentProductToAddDataGrid.Items.Refresh();
@@ -413,24 +417,24 @@ namespace SCM2020___Client.Frames
         }
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            new Task(() => ConsumpterProductSearch()).Start();
+            Task.Run(ConsumpterProductSearch);
         }
         private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                new Task(() => ConsumpterProductSearch()).Start();
+                Task.Run(ConsumpterProductSearch);
             }
         }
         private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            new Task(() => PermanentProductSearch()).Start();
+            Task.Run(PermanentProductSearch);
         }
         private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                new Task(() => PermanentProductSearch()).Start();
+                Task.Run(PermanentProductSearch);
             }
         }
 
@@ -439,7 +443,7 @@ namespace SCM2020___Client.Frames
             var workOrder = OSTextBox.Text;
             if (previousOS == workOrder)
                 return;
-            new Task(() => RescueData(workOrder)).Start();
+            Task.Run(() => RescueData(workOrder));
             previousOS = workOrder;
 
         }
@@ -451,7 +455,7 @@ namespace SCM2020___Client.Frames
             {
                 if (previousOS == workOrder)
                     return;
-                new Task(() => RescueData(workOrder)).Start();
+                Task.Run(() => RescueData(workOrder));
                 previousOS = workOrder;
             }
         }
@@ -470,16 +474,16 @@ namespace SCM2020___Client.Frames
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
-                //Check monitoring
+                //Checar objeto monitoramento
                 Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
                 InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
 
                 PrincipalMonitoring = monitoring;
-                if (monitoring.Situation) //WORKORDER IS CLOSED.
+                if (monitoring.Situation) //Ordem de serviço encontra-se fechada.
                 {
-                    MessageBox.Show("Ordem de serviço fechada.", "Informação.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show($"Ordem de serviço foi fechada na data {monitoring.ClosingDate.Value.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                     return; //DISABLE FILLING DATA.
                 }
                 //ID -> MATRÍCULA
@@ -487,7 +491,7 @@ namespace SCM2020___Client.Frames
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
-                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = materialOutput.ServiceLocation; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = monitoring.ServiceLocation; }));
 
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Register; }));
 
@@ -522,13 +526,18 @@ namespace SCM2020___Client.Frames
                         Patrimony = permanentProduct.Patrimony,
                     };
                     this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
+                    FinalPermanentProductsAdded.Add(productDataGrid);
                 }
 
                 this.BtnPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnPrint.IsEnabled = true; }));
                 this.BtnExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnExport.IsEnabled = true; }));
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
-            { }
+            {
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = true; }));
+                this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.IsEnabled = true; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = true; }));
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);

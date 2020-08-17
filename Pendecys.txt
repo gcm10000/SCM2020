@@ -1,11 +1,42 @@
-- Adicionar opção de exportação e impressão a todas as telas necessárias;
+- Adicionar opção de exportação e impressão a telas pendentes: (OK)
+  • Consulta -> Estoque
+  • Consulta -> Estoque por Data
+  • Relatório -> Materiais com Patrimônio
+- TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (OK);
+- Listagem de todos os produtos com patrimônio (OK);
+- Adicionar relatório financeiro;
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
-- Listagem de todos os produtos com patrimônio
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
-- Sistema de notificação do estoque mínimo e estoque máximo;
-- Modificar a movimentação
+- Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail;
+- Modificar a movimentação;
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
-- Adicionar relatório financeiro;
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
+- BUGS na correlação de entrada e saída:
+  • Impossibilidade de fazer devolução APENAS de produtos permanentes
+  • Impossibilidade de apagar permanente da movimentação de saída
+- Checar aparente vazamento de memória no DataGridView https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
+- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7
+- Evitar repetição de dados em listagem de patrimônio e inventário
+
+Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
+Ordem do tratamento dos bugs:
+ 1. Movimentações;
+ 2. Evitar repetição de dados em listagem de patrimônio e inventário;
+ 3. Adicionar gráfico no painel de controle;
+ 4. Usuários;
+ 
+
+ Somente depois tratar as demais pendências.
+ EXISTEM ORDEM DE SERVIÇO QUE SOMENTE REALIZAM DEVOLUÇÕES!
+ SenhaSecreta#2020
+
+
+Bugs tratados no cliente:
+  1. Movimentações:
+	1. Saída
+	2. 
+	
+ 2. Consulta:
+	1. Movimentação

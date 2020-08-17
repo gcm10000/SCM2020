@@ -13,8 +13,6 @@ namespace ModelsLibrary
             this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
             //this.EmployeeId = productFromRaw.Value<string>("EmployeeId");
             //this.SCMEmployeeId = UserId;
-            this.ServiceLocation = productFromRaw.Value<string>("ServiceLocation");
-            this.WorkOrder = productFromRaw.Value<string>("WorkOrder");
 
             this.ConsumptionProducts = ((JArray)productFromRaw["ConsumptionProducts"]).ToObject<List<AuxiliarConsumption>>();
             this.PermanentProducts = ((JArray)productFromRaw["PermanentProducts"]).ToObject<List<AuxiliarPermanent>>();
@@ -47,10 +45,6 @@ namespace ModelsLibrary
         /// Ordem de serviço.
         /// </summary>
         public string WorkOrder { get; set; }
-        /// <summary>
-        /// Local onde será utilizado o produto.
-        /// </summary>
-        public string ServiceLocation { get; set; }
         /// <summary>
         /// Somente produtos de consumo retirados na movimentação de saída.
         /// </summary>

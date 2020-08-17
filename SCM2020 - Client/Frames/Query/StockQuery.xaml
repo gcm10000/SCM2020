@@ -76,7 +76,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="False">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MininumStock}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}"></DataGridTextColumn>

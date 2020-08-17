@@ -5,8 +5,14 @@ connection.on("ReceiveMessage", function (window, message)
 {
     var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var encodedMsg = window + " says " + msg;
-    var obj = JSON.parse(message);
     alert(encodedMsg);
+    var obj = null;
+    if (IsJsonString(message)) {
+        obj = JSON.parse(message);
+    }
+    else {
+        obj = null;
+    }
     if (window === "ContentInventoryTurnover") {
         var content = document.getElementById("content");
         //Adicionar objeto
@@ -33,9 +39,14 @@ connection.on("ReceiveMessage", function (window, message)
         var content = document.getElementById("content");
         //Adicionar objeto
         var producthtml = document.getElementById(obj.Id);
-        content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.Code + "</th><td>" + obj.Description + "</td><td>" + obj.Patrimony + "</td><td> " + obj.Group + " </td></tr>";
+        console.log(obj);
+        content.innerHTML += "<tr id=\"" + obj.Id + "\"><th>" + obj.SKU + "</th><td>" + obj.Description + "</td><td>" + obj.Patrimony + "</td><td>" + obj.Group + "</td><td>" + obj.WorkOrder +"</td></tr>";
 
 
+    }
+    else if (window === "GetDOM") {
+        var myDOM = document.getElementsByTagName("HTML")[0].outerHTML;
+        SendMessage("SetDOM", myDOM);
     }
 });
 connection.start().then(function () {
@@ -55,4 +66,13 @@ function Remove(Id) {
     var producthtml = document.getElementById(Id);
     content.removeChild(producthtml);
 
+}
+
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

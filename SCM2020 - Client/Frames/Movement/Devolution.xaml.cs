@@ -50,25 +50,13 @@ namespace SCM2020___Client.Frames.Movement
         {
             InitializeComponent();
         }
-        //private void SearchOSButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    new Task(() => CheckOS()).Start();
-        //    //new Task(() => CheckOS()).Start();
-        //    //this.ButtonInformation.IsHitTestVisible = false;
-        //    //this.ButtonPermanentProducts.IsHitTestVisible = true;
-        //    //this.ButtonFinish.IsHitTestVisible = true;
 
-        //    //this.InfoScrollViewer.Visibility = Visibility.Visible;
-        //    //this.InfoDockPanel.Visibility = Visibility.Visible;
-        //    //this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-        //    //this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        //}
         private void RescueData(string workOrder)
         {
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
-            string teste = uriRequest.ToString();
-            Monitoring resultMonitoring;
+            Monitoring resultMonitoring = null;
+
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
@@ -79,164 +67,180 @@ namespace SCM2020___Client.Frames.Movement
                 //this.RegisterApplicantTextBox.Text = infoUser.Register;
                 //this.ApplicantTextBox.Text = infoUser.Name;
             }
-            catch (System.Net.Http.HttpRequestException ex)
-            {
-                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (resultMonitoring.Situation == false)
-            {
-                //ABERTA...
-
-                GetProducts(workOrder);
-                this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
-                this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
-                this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
-                
-                this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
-                this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
-                this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
-                this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
-
-            }
-            else
-            {
-                DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
-                MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-YYYY")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
-        List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
-        private void GetProducts(string workorder)
-        {
-            var outputProducts = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workorder}").ToString(), Helper.Authentication);
-            ListConsumpterProductDataGrid.Clear();
-            ListPermanentProductDataGrid.Clear();
-            
-            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
-            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
-
-            foreach (var item in outputProducts.ConsumptionProducts)
-            {
-                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                AuxiliarConsumption productInput;
-                double productInputQuantity = 0.00d;
-                try
-                {
-                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workorder}").ToString(), Helper.Authentication);
-                    productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
-                    productInputQuantity = productInput.Quantity;
-                }
-                catch (System.Net.Http.HttpRequestException)
-                {
-                    //Devolução de item na ordem de serviço é inexistente
-                }
-                ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
-                {
-                    Code = infoProduct.Code,
-                    Description = infoProduct.Description,
-                    Id = item.ProductId,
-                    Quantity = infoProduct.Stock,
-                    QuantityOutput = item.Quantity,
-                    QuantityAdded = productInputQuantity,
-                    NewProduct = false,
-                    ConsumptionProduct = item
-                };
-
-                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
-                this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
-            }
-            foreach (var item in outputProducts.PermanentProducts)
-            {
-                var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-
-                PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
-                {
-                    Code = infoProduct.Code,
-                    Description = infoProduct.Description,
-                    //Id do produto permanente
-                    Id = item.ProductId,
-                    Quantity = infoProduct.Stock,
-                    Patrimony = infoPermanentProduct.Patrimony,
-                    QuantityOutput = 1,
-                    NewProduct = false
-                    //QuantityAdded = 1
-                };
-                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
-                this.ListPermanentProductDataGrid.Add(permanentProductDataGrid);
-            }
-            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Refresh(); }));
-            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.UnselectAll(); }));
-            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Refresh(); }));
-            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.UnselectAll(); }));
-
-            try
-            {
-                MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
-                this.previousDevolutionExists = true;
-                this.previousMaterialInput = materialInput;
-                this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
-
-                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-                {
-                    this.FinalConsumpterProductsAddedDataGrid.Items.Clear();
-                    foreach (var item in materialInput.ConsumptionProducts)
-                    {
-                        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
-                        {
-                            Id = item.ProductId,
-                            Code = infoProduct.Code,
-                            Description = infoProduct.Description,
-                            Quantity = infoProduct.Stock,
-                            QuantityAdded = item.Quantity,
-                            NewProduct = false,
-                            ConsumptionProduct = item
-                            //QuantityOutput
-                        };
-                        if (item.Quantity != 0)
-                            this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
-                        ConsumpterProductInput.Add(consumpterProductDataGrid);
-                    }
-                }));
-                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-                {
-                    this.FinalPermanentProductsAddedDataGrid.Items.Clear();
-                    foreach (var item in materialInput.PermanentProducts)
-                    {
-                        var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                        PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
-                        {
-                            Id = item.ProductId,
-                            Code = infoProduct.Code,
-                            Description = infoProduct.Description,
-                            Quantity = infoProduct.Stock,
-                            Patrimony = infoPermanentProduct.Patrimony,
-                            //QuantityOutput = 1,
-                            QuantityAdded = 1,
-                        };
-                        this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
-                    }
-                }));
-            }
             catch (System.Net.Http.HttpRequestException)
             {
-                //DOESNOT EXIST INPUT (DEVOLUTION) REFERENCE FOR WORKORDER
-                previousDevolutionExists = false;
+                //Não existe monitoramento com este ordem de serviço
+                //Sempre será capturado o código 204 NO CONTENT
+                EnableMonitoringObjects();
             }
             catch (Exception ex)
             {
-                previousDevolutionExists = false;
-                MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Ocorreu um erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            //Se o monitoramento vinculado a ordem de serviço é existente
+            if (resultMonitoring != null)
+            {
+                previousDevolutionExists = true;
+                if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
+                {
+
+                    //GetProducts(workOrder);
+                    this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
+                    this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
+                    this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
+
+                    this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
+                    this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
+                    this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
+                    this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
+
+                }
+                else
+                {
+                    DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
+                    MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
+
+        private void EnableMonitoringObjects()
+        {
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.IsEnabled = true; }));
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.IsEnabled = true; }));
+        }
+
+        List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
+        List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
+
+        //private void GetProducts(string workorder)
+        //{
+        //    var outputProducts = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workorder}").ToString(), Helper.Authentication);
+        //    ListConsumpterProductDataGrid.Clear();
+        //    ListPermanentProductDataGrid.Clear();
+            
+        //    this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
+        //    this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
+
+        //    foreach (var item in outputProducts.ConsumptionProducts)
+        //    {
+        //        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+        //        AuxiliarConsumption productInput;
+        //        double productInputQuantity = 0.00d;
+        //        try
+        //        {
+        //            var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workorder}").ToString(), Helper.Authentication);
+        //            productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == item.ProductId);
+        //            productInputQuantity = productInput.Quantity;
+        //        }
+        //        catch (System.Net.Http.HttpRequestException)
+        //        {
+        //            //Devolução de item na ordem de serviço é inexistente
+        //        }
+        //        ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+        //        {
+        //            Code = infoProduct.Code,
+        //            Description = infoProduct.Description,
+        //            Id = item.ProductId,
+        //            Quantity = infoProduct.Stock,
+        //            QuantityOutput = item.Quantity,
+        //            QuantityAdded = productInputQuantity,
+        //            NewProduct = false,
+        //            ConsumptionProduct = item
+        //        };
+
+        //        this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
+        //        this.ListConsumpterProductDataGrid.Add(consumpterProductDataGrid);
+        //    }
+        //    foreach (var item in outputProducts.PermanentProducts)
+        //    {
+        //        var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+        //        var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+
+        //        PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
+        //        {
+        //            Code = infoProduct.Code,
+        //            Description = infoProduct.Description,
+        //            //Id do produto permanente
+        //            Id = item.ProductId,
+        //            Quantity = infoProduct.Stock,
+        //            Patrimony = infoPermanentProduct.Patrimony,
+        //            QuantityOutput = 1,
+        //            NewProduct = false
+        //            //QuantityAdded = 1
+        //        };
+        //        this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
+        //        this.ListPermanentProductDataGrid.Add(permanentProductDataGrid);
+        //    }
+        //    this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Refresh(); }));
+        //    this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.UnselectAll(); }));
+        //    this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Refresh(); }));
+        //    this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.UnselectAll(); }));
+
+        //    try
+        //    {
+        //        MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workorder}").ToString(), Helper.Authentication);
+        //        this.previousDevolutionExists = true;
+        //        this.previousMaterialInput = materialInput;
+        //        this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = (int)(materialInput.Regarding + 1); }));
+
+        //        this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+        //        {
+        //            this.FinalConsumpterProductsAddedDataGrid.Items.Clear();
+        //            foreach (var item in materialInput.ConsumptionProducts)
+        //            {
+        //                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+        //                ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+        //                {
+        //                    Id = item.ProductId,
+        //                    Code = infoProduct.Code,
+        //                    Description = infoProduct.Description,
+        //                    Quantity = infoProduct.Stock,
+        //                    QuantityAdded = item.Quantity,
+        //                    NewProduct = false,
+        //                    ConsumptionProduct = item
+        //                    //QuantityOutput
+        //                };
+        //                if (item.Quantity != 0)
+        //                    this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+        //                ConsumpterProductInput.Add(consumpterProductDataGrid);
+        //            }
+        //        }));
+        //        this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+        //        {
+        //            this.FinalPermanentProductsAddedDataGrid.Items.Clear();
+        //            foreach (var item in materialInput.PermanentProducts)
+        //            {
+        //                var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+        //                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+        //                PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
+        //                {
+        //                    Id = item.ProductId,
+        //                    Code = infoProduct.Code,
+        //                    Description = infoProduct.Description,
+        //                    Quantity = infoProduct.Stock,
+        //                    Patrimony = infoPermanentProduct.Patrimony,
+        //                    //QuantityOutput = 1,
+        //                    QuantityAdded = 1,
+        //                };
+        //                this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid);
+        //            }
+        //        }));
+        //    }
+        //    catch (System.Net.Http.HttpRequestException)
+        //    {
+        //        //DOESNOT EXIST INPUT (DEVOLUTION) REFERENCE FOR WORKORDER
+        //        previousDevolutionExists = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        previousDevolutionExists = false;
+        //        MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
         private void ButtonInformation_Click(object sender, RoutedEventArgs e)
         {
             this.ButtonInformation.IsHitTestVisible = false;
@@ -388,7 +392,7 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-
+            e.Cancel = true;
         }
         List<ConsumpterProductDataGrid> ConsumpterProductInput = new List<ConsumpterProductDataGrid>();
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
@@ -431,13 +435,14 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            //e.Cancel = true;
+            e.Cancel = true;
         }
         private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                ConsumpterProductSearchButton_Click(sender, e);
+                string workOrder = TxtProductConsumpterSearch.Text;
+                Task.Run(() => ConsumpterProductSearch(workOrder));
             }
         }
         private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
@@ -455,6 +460,50 @@ namespace SCM2020___Client.Frames.Movement
             }
             this.ConsumpterProductToAddDataGrid.Items.Refresh();
             this.ConsumpterProductToAddDataGrid.UnselectAll();
+        }
+
+        private void ConsumpterProductSearch(string workOrder)
+        {
+            if (workOrder == string.Empty)
+                return;
+
+            //Limpa datagrid de consumo
+            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Clear(); ConsumpterProductToAddDataGrid.UnselectAll(); }));
+
+
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{workOrder}");
+
+            //Requisição de dados baseado na busca
+            var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
+
+            foreach (var infoProduct in products.ToList())
+            {
+                double productInputQuantity = 0.00d;
+                try
+                {
+                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+                    var productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == infoProduct.Id);
+                    productInputQuantity = productInput.Quantity;
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    //Devolução de item na ordem de serviço é inexistente
+                }
+
+                ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+                {
+                    Code = infoProduct.Code,
+                    Description = infoProduct.Description,
+                    Id = infoProduct.Id,
+                    Quantity = infoProduct.Stock,
+                    QuantityOutput = infoProduct.Stock,
+                    QuantityAdded = productInputQuantity,
+                    NewProduct = false,
+                };
+
+                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
+
+            }
         }
         private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
         {

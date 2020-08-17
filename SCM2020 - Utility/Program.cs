@@ -14,13 +14,13 @@ namespace SCM2020___Utility
 {
     class Program
     {
-        static Uri uriServer = new Uri("http://192.168.1.30:52991/api/");
-        const string urlLogin = "http://192.168.1.30:52991/api/User/Login";
-        const string urlAddUser = "http://192.168.1.30:52991/api/User/NewUser";
-        const string urlGroups = "http://192.168.1.30:52991/api/Group/";
-        const string urlAddGroup = "http://192.168.1.30:52991/api/Group/Add";
-        const string urlAddProduct = "http://192.168.1.30:52991/api/GeneralProduct/Add";
-        const string urlVendor = "http://192.168.1.30:52991/api/Vendor/Add";
+        static Uri uriServer = new Uri("http://localhost:52991/api/");
+        const string urlLogin = "http://localhost:52991/api/User/Login";
+        const string urlAddUser = "http://localhost:52991/api/User/NewUser";
+        const string urlGroups = "http://localhost:52991/api/Group/";
+        const string urlAddGroup = "http://localhost:52991/api/Group/Add";
+        const string urlAddProduct = "http://localhost:52991/api/GeneralProduct/Add";
+        const string urlVendor = "http://localhost:52991/api/Vendor/Add";
 
 
         static void Main(string[] args)
@@ -167,6 +167,7 @@ namespace SCM2020___Utility
                     if (oldOutput.Any(x => (x.Key.ToLower() == "ordem de seriço") && (x.Value == monitoring.Work_Order)))
                     {
                         monitoring.RequestingSector = int.Parse(oldOutput.First(x => x.Key.ToLower() == "tipo de saida").Value);
+                        monitoring.ServiceLocation = oldOutput.First(x => x.Key.ToLower() == "local do seriço").Value;
                     }
                 }
                 lMonitoring.Add(monitoring);
@@ -304,8 +305,6 @@ namespace SCM2020___Utility
                 {
                     resultProduct = APIClient.GETData<ConsumptionProduct>(new Uri(uriServer, $"GeneralProduct/Code/{code}"), Authentication);
 
-
-
                     var resultProductId = resultProduct.Id;
 
                     var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
@@ -320,7 +319,7 @@ namespace SCM2020___Utility
                             MovingDate = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value),
                             //SCMEmployeeId = resultSCMId,
                             //EmployeeId = resultEmployeeId,
-                            ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
+                            //ServiceLocation = oldMaterialOutput.First(x => x.Key.ToLower() == "local do seriço").Value,
                             WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
                             ConsumptionProducts = new List<AuxiliarConsumption>()
                         {

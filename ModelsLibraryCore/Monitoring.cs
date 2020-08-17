@@ -20,6 +20,7 @@ namespace ModelsLibraryCore
             this.Situation = false;
             this.Work_Order = monitoringRaw.Work_Order;
             this.RequestingSector = monitoringRaw.RequestingSector;
+            this.ServiceLocation = monitoringRaw.ServiceLocation;
 
         }
         /// <summary>
@@ -37,6 +38,7 @@ namespace ModelsLibraryCore
                 this.ClosingDate = monitoringRaw.ClosingDate;
             this.Work_Order = monitoringRaw.Work_Order;
             this.RequestingSector = monitoringRaw.RequestingSector;
+            this.ServiceLocation = monitoringRaw.ServiceLocation;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -66,5 +68,10 @@ namespace ModelsLibraryCore
         /// Será tratado como ID da tabela Sectors.
         /// </summary>
         public int RequestingSector { get; set; }
+        /// <summary>
+        /// Local onde será utilizado o produto.
+        /// </summary>
+        [Required]
+        public string ServiceLocation { get; set; }
     }
 }

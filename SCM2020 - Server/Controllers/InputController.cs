@@ -73,9 +73,7 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
-            bool b = Helper.GetToken(out System.IdentityModel.Tokens.Jwt.JwtSecurityToken token, this);
-            if (!b)
-                return BadRequest("Por favor, faça login.");
+            var token = Helper.GetToken(this);
             var userId = token.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             var raw = await Helper.RawFromBody(this);

@@ -1,5 +1,7 @@
 ﻿using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using RazorEngine.Compilation.ImpromptuInterface;
+using SCM2020___Client.Templates.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,10 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Xps.Packaging;
-using System.Windows.Xps.Serialization;
 
 
 namespace SCM2020___Client.Frames.Query
@@ -23,29 +22,24 @@ namespace SCM2020___Client.Frames.Query
     /// Interação lógica para Movement.xam
     /// </summary>
 
-    //N° MATRICULA - SOLICITANTE - OS - SITUAÇÃO
-    //COD - DESC - QTD - UN - PATRIMÔNIO - MOVIMENTAÇÃO - DATA DA MOVIMENTAÇÃO
     public partial class Movement : UserControl
     {
-        List<DocumentMovement.Product> ProductsToShow = null;
-        DocumentMovement.QueryMovement info = null;
+        List<Templates.Query.Movement.Product> ProductsToShow = null;
         WebBrowser webBrowser = Helper.MyWebBrowser;
+        SCM2020___Client.Templates.Query.Movement ResultMovement = null;
         public Movement()
         {
             InitializeComponent();
         }
 
-        //ModelsLibraryCore.Monitoring Monitoring;
-        //ModelsLibraryCore.InfoUser InfoUser;
-
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                Search(TxtSearch.Text); //TxtSearch == workOrder
+                Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
         }
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Search(TxtSearch.Text); //TxtSearch == workOrder
+            Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
 
         }
         private void Search(string workOrder)
@@ -55,31 +49,52 @@ namespace SCM2020___Client.Frames.Query
             this.Print_Button.IsEnabled = false;
             ProductMovementDataGrid.Items.Clear();
             ProductsToShow = null;
-            this.info = null;
-            //Monitoring = null;
-            //InfoUser = null;
 
-            DocumentMovement.ResultSearch resultSearch = null;
-            var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
-            t.Wait();
-            //resultSearch = DocumentMovement.Search(workOrder);
-            var InformationQuery = resultSearch.InformationQuery;
-            info = InformationQuery;
-            OSText.Text = info.WorkOrder;
-            RegisterApplicationTextBox.Text = info.RegisterApplication.ToString();
-            ApplicationTextBox.Text = info.SolicitationEmployee;
-            SectorTextBox.Text = info.Sector;
-            SituationTextBox.Text = info.Situation;
-            WorkOrderDateDatePicker.SelectedDate = info.WorkOrderDate;
+            OSText.Text = string.Empty;
+            RegisterApplicationTextBox.Text = string.Empty;
+            ApplicationTextBox.Text = string.Empty;
+            SectorTextBox.Text = string.Empty;
+            SituationTextBox.Text = string.Empty;
+            ServiceLocalizationTextBox.Text = string.Empty;
+            WorkOrderDateDatePicker.SelectedDate = null;
+            ClosureOSDatePicker.SelectedDate = null;
 
-            ProductsToShow = resultSearch.ProductsToShow;
-            info = resultSearch.InformationQuery;
+            try
+            {
+                ResultMovement = new SCM2020___Client.Templates.Query.Movement(workOrder);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            
+            if (ResultMovement == null)
+            {
+                this.Export_Button.IsEnabled = true;
+                this.Print_Button.IsEnabled = true;
+
+                return;
+            }
+
+            OSText.Text = ResultMovement.WorkOrder;
+            RegisterApplicationTextBox.Text = ResultMovement.RegisterApplication.ToString();
+            ApplicationTextBox.Text = ResultMovement.Application;
+            SectorTextBox.Text = ResultMovement.Sector;
+            SituationTextBox.Text = ResultMovement.Situation;
+            ServiceLocalizationTextBox.Text = ResultMovement.ServiceLocalization;
+            WorkOrderDateDatePicker.SelectedDate = ResultMovement.WorkOrderDate;
+            ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder;
+
+            ProductsToShow = ResultMovement.Products;
             foreach (var product in ProductsToShow)
             {
                 ProductMovementDataGrid.Items.Add(product);
             }
             this.Export_Button.IsEnabled = true;
             this.Print_Button.IsEnabled = true;
+
+            ProductMovementDataGrid.UnselectAll();
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -92,8 +107,8 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            DocumentMovement template = new DocumentMovement(ProductsToShow, info);
-            var result = template.RenderizeHtml();
+
+            var result = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
 
@@ -139,10 +154,10 @@ namespace SCM2020___Client.Frames.Query
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            DocumentMovement template = new DocumentMovement(ProductsToShow, info);
-            Document = template.RenderizeHtml();
+
+            var result = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
+            this.webBrowser.NavigateToString(result);
         }
     }
 

@@ -125,6 +125,7 @@ namespace SCM2020___Client
                 {
                     FrameContent.Source = source;
                 }
+                GC.Collect();
             }
 
         }
@@ -167,6 +168,7 @@ namespace SCM2020___Client
                 {
                     FrameContent.Source = source;
                 }
+                GC.Collect();
             }
         }
         private void ListBoxQueries_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -202,6 +204,7 @@ namespace SCM2020___Client
                 {
                     FrameContent.Source = source;
                 }
+                GC.Collect();
             }
         }
         private void ListBoxReport_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -238,6 +241,7 @@ namespace SCM2020___Client
                 {
                     FrameContent.Source = source;
                 }
+                GC.Collect();
             }
         }
     }

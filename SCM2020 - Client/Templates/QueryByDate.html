@@ -1,40 +1,50 @@
-﻿<!-- saved from url=(0016)http://localhost -->
-<html lang="pt-br">
+﻿<!DOCTYPE HTML>
+<html>
 <head>
-    <title>Teste</title>
     <meta charset="utf-8" />
-    <script>
-                //$.ajaxSetup({ cache: false });
-    </script>
+    <title>Consulta por Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style type="text/css">
-        body {
-            overflow-x: hidden;
-        }
-    </style>
+
 </head>
 <body>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">SKU</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Patrimônio</th>
-                <th scope="col">Grupo</th>
-                <th scope="col">Ordem de Serviço</th>
+                <th scope="col">Data Inicial</th>
+                <th scope="col">Data Final</th>
             </tr>
         </thead>
-        <tbody id="content">
+        <tbody>
+            <tr>
+                <td>@InitialDate</td>
+                <td>@FinalDate</td>
+            </tr>
         </tbody>
     </table>
-
-    <script src="js/signalr/signalr.js"></script>
-    <script src="js/sockethub.js"></script>
+    <br />
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">SKU</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Entrada no Estoque</th>
+                <th scope="col">Entrada de Devolução</th>
+                <th scope="col">Total de Estoque</th>
+                <th scope="col">Saída</th>
+                <th scope="col">Saldo Atual</th>
+                <th scope="col">Estoque mínimo</th>
+                <th scope="col">Estoque Máximo</th>
+                <th scope="col">Unidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            @LISTOFPRODUCTS
+        </tbody>
+    </table>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        //$("tbody").html("<tr><th>1212</th><td>PRODUTO TESTE</td><td>85</td></tr>");
-    </script>
 </body>
 </html>

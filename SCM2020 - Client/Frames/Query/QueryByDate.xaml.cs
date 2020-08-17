@@ -29,18 +29,18 @@ namespace SCM2020___Client.Frames.Query
         {
             //ModelsLibraryCore.RequestingClient.APIClient.GetData<>()
             /*
-             CODIGO -> GENERALPRODUCT
-             DESC -> GENERALPRODUCT
-             ENTRADA NO ESTOQUE -> AUXILIARPRODUCT INPUT BY VENDOR
-             ENTRADA DE DEVOLUÇÃO -> AUXILIARPRODUCT INPUT
-             TOTAL DE ESTOQUE -> ENTRADA NO ESTOQUE + ENTRADA DE DEVOLUÇÃO
-             SAÍDA -> AUXILIARPRODUCT OUTPUT
-             SALDO ATUAL -> TOTAL DE ESTOQUE - SAÍDA
-             ESTOQUE MÍNIMO -> GENERALPRODUCT
-             ESTOQUE MÁXIMO -> GENERALPRODUCT
-             UNIDADE -> GENERALPRODUCT
-
+                CODIGO -> GENERALPRODUCT
+                DESC -> GENERALPRODUCT
+                ENTRADA NO ESTOQUE -> AUXILIARPRODUCT INPUT BY VENDOR
+                ENTRADA DE DEVOLUÇÃO -> AUXILIARPRODUCT INPUT
+                TOTAL DE ESTOQUE -> ENTRADA NO ESTOQUE + ENTRADA DE DEVOLUÇÃO
+                SAÍDA -> AUXILIARPRODUCT OUTPUT
+                SALDO ATUAL -> TOTAL DE ESTOQUE - SAÍDA
+                ESTOQUE MÍNIMO -> GENERALPRODUCT
+                ESTOQUE MÁXIMO -> GENERALPRODUCT
+                UNIDADE -> GENERALPRODUCT
              */
+
             var initialDate = InitialDate.SelectedDate.Value;
             var finalDate = FinalDate.SelectedDate.Value;
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"input/Date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
@@ -132,6 +132,9 @@ namespace SCM2020___Client.Frames.Query
             {
                 this.ShowByDateDataGrid.Items.Add(product);
             }
+
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)

@@ -15,6 +15,7 @@ namespace ModelsLibrary
             this.ClosingDate = monitoringRaw.ClosingDate;
             this.Situation = false;
             this.Work_Order = monitoringRaw.Work_Order;
+            this.ServiceLocation = monitoringRaw.ServiceLocation;
         }
         public int Id { get; set; }
         /// <summary>
@@ -40,5 +41,9 @@ namespace ModelsLibrary
         /// Será tratado como ID da tabela Sectors.
         /// </summary>
         public int RequestingSector { get; set; }
+        /// <summary>
+        /// Local onde será utilizado o produto.
+        /// </summary>
+        public string ServiceLocation { get; set; }
     }
 }

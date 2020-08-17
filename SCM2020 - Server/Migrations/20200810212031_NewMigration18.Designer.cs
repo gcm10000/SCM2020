@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200810212031_NewMigration18")]
+    partial class NewMigration18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,6 +211,9 @@ namespace SCM2020___Server.Migrations
                     b.Property<DateTime>("MovingDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ServiceLocation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("WorkOrder")
                         .HasColumnType("nvarchar(max)");
 
@@ -238,10 +243,6 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SCMEmployeeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServiceLocation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

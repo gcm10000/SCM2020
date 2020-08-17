@@ -31,39 +31,22 @@ namespace SCM2020___Client.Frames
             var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             var nameVendors = vendors.Select(x => x.Name).ToList();
             this.VendorComboBox.ItemsSource = nameVendors;
-
-            //ProductDataGrid productsToInput = new ProductDataGrid()
-            //{
-            //    Id = 1,
-            //    Code = 1,
-            //    Description = "TESTE",
-            //    Quantity = 10
-            //};
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
-            //ProductToAddDataGrid.Items.Add(productsToInput);
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            new Task(() => Search()).Start();
+            Task.Run(Search);
         }
         private void Search()
         {
             string textBoxValue = string.Empty;
             this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
+
+            //Se o campo está vazio, não irá realizar a busca
+            if (textBoxValue == string.Empty)
+            {
+                return;
+            }
 
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
 
@@ -75,7 +58,7 @@ namespace SCM2020___Client.Frames
             if (int.TryParse(textBoxValue, out _))
             {
                 Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-                new Task(() => 
+                Task.Run(() => 
                     {
                         try
                         {
@@ -84,7 +67,7 @@ namespace SCM2020___Client.Frames
                             index = products.FindIndex(x => x.Id == singleProduct.Id);
                         }
                         catch (System.Net.Http.HttpRequestException) { }
-                    }).Start();
+                    });
 
             }
 
@@ -120,7 +103,7 @@ namespace SCM2020___Client.Frames
         {
             if (e.Key == Key.Enter)
             {
-                new Task(() => Search()).Start();
+                Task.Run(Search);
             }
         }
 
@@ -198,11 +181,11 @@ namespace SCM2020___Client.Frames
                 p.Add(auxiliarConsumption);
             }
             materialInputByVendor.AuxiliarConsumptions = p;
-            new Task(() => 
+            Task.Run(() => 
             {
                 var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-            }).Start();
+            });
         }
     }
 }
