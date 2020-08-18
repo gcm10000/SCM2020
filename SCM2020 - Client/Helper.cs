@@ -157,8 +157,6 @@ namespace SCM2020___Client
             return false;
         }
 
-
-
         public static int GetInternetExplorerVersion()
         {
             // string strKeyPath = @"HKLM\SOFTWARE\Microsoft\Internet Explorer";
