@@ -114,6 +114,17 @@ namespace SCM2020___Server.Controllers
             context.Monitoring.Update(monitoring);
             await context.SaveChangesAsync();
             return Ok("Monitoramento atualizada com sucesso.");
+        }        
+        [HttpPost("Reopen/{workOrder}")]
+        public async Task<IActionResult> Reopen(string workOrder)
+        {
+
+            var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
+            monitoring.Situation = false;
+            monitoring.ClosingDate = null;
+            context.Monitoring.Update(monitoring);
+            await context.SaveChangesAsync();
+            return Ok("Ordem de serviço aberta com sucesso.");
         }
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
