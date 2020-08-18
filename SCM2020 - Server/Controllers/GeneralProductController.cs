@@ -100,7 +100,15 @@ namespace SCM2020___Server.Controllers
         public IActionResult Search(string query)
         {
             string[] querySplited = query.Split(' ');
-            var lproduct = context.ConsumptionProduct.ToList().Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
+
+            var lproduct = context.ConsumptionProduct.ToList()
+                .Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
+            if (int.TryParse(query, out int result))
+            {
+                lproduct = lproduct.AsEnumerable()
+                        .OrderBy(x => !x.Code.ToString().Contains(query))
+                        .ToList();
+            }
             return Ok(lproduct);
         }
         //Show information today about products
