@@ -4,6 +4,7 @@
   • Relatório -> Materiais com Patrimônio
 - TROCAR VARIÁVEL "ESTÁ USADO" POR "ORDEM DE SERVIÇO": Isso permite maior visualização da estrutura de dados (OK);
 - Listagem de todos os produtos com patrimônio (OK);
+- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. (Mais informações: https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7 ) (OK?)
 - Adicionar relatório financeiro;
 - Consulta do patrimônio;
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
@@ -17,7 +18,6 @@
   • Impossibilidade de fazer devolução APENAS de produtos permanentes
   • Impossibilidade de apagar permanente da movimentação de saída
 - Checar aparente vazamento de memória no DataGridView https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
-- Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7
 - Evitar repetição de dados em listagem de patrimônio e inventário
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
