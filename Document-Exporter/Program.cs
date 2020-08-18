@@ -14,6 +14,8 @@ namespace Document_Exporter
         // Entry Point of the console app
         static void Main(string[] args)
         {
+            Helper.SetLastVersionIE();
+
             var show_help = false;
             var delete = false;
             string file = null;
