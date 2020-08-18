@@ -118,7 +118,6 @@ namespace SCM2020___Server.Controllers
         [HttpPost("Reopen/{workOrder}")]
         public async Task<IActionResult> Reopen(string workOrder)
         {
-
             var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
             monitoring.Situation = false;
             monitoring.ClosingDate = null;
