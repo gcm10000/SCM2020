@@ -103,7 +103,7 @@ namespace SCM2020___Server.Controllers
 
             var lproduct = context.ConsumptionProduct.ToList()
                 .Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
-            if (int.TryParse(query, out int result))
+            if (query.IsDigitsOnly())
             {
                 lproduct = lproduct.AsEnumerable()
                         .OrderBy(x => !x.Code.ToString().Contains(query))
