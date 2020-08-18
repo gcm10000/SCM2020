@@ -81,17 +81,42 @@ namespace SCM2020___Client.Frames
 
         private bool previousOutputExists = false;
         private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
+        private void ConsumpterProductSearch(string workOrder)
+        {
+            if (workOrder == string.Empty)
+                return;
+            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{workOrder}");
+
+            //Requisição de dados baseado na busca
+            var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+
+            foreach (var item in products.ToList())
+            {
+                ProductToOutput productsToOutput = new ProductToOutput()
+                {
+                    Id = item.Id,
+                    Code = item.Code,
+                    Description = item.Description,
+                    Quantity = item.Stock,
+                };
+                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
+            }
+        }
         private void ConsumpterProductSearch()
         {
             string textBoxValue = string.Empty;
-            this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
 
             if (textBoxValue == string.Empty)
                 return;
 
+            this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
+            
+            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
 
-            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
             List<ConsumptionProduct> products = new List<ConsumptionProduct>();
 
