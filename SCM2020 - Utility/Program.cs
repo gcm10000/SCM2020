@@ -4,6 +4,7 @@ using SCM2020___Utility.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -761,6 +762,29 @@ namespace SCM2020___Utility
             SignUp signUp = new SignUp();
             signUp.MakeSignUp(urlAddUser, userInfo);
         }
+        static void ReadXLS()
+        {
+            //Coloque o programa em x86 e instale Drive Access 32-bits
+            string file = @"""C:\Users\Gabriel\Documents\SCM\PATRIMÔNIO SUB UNIDADE 10574.xls""";
+            //string con1 = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={file};Extended Properties='Excel 8.0;HDR=Yes'";
+            //string con2 = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={file};Extended Properties='Excel 8.0;HDR=Yes'";
+            string excelConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + file + @";Extended Properties=""Excel 8.0;HDR=Yes;IMEX=1""";
+
+            using (OleDbConnection connection = new OleDbConnection(excelConnectionString))
+            {
+                connection.Open();
+                OleDbCommand command = new OleDbCommand("select * from [Planilha1$]", connection);
+                using (OleDbDataReader dr = command.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        var row1Col0 = dr[0];
+                        Console.WriteLine(row1Col0);
+                    }
+                }
+            }
+        }
+
         static void Pause()
         {
             Console.WriteLine("Pressione uma tecla para continuar. . .");
