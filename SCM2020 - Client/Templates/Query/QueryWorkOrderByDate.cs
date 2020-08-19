@@ -34,7 +34,7 @@ namespace SCM2020___Client.Templates.Query
             Html = Html.Replace("@InitialDate", InitialDate.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@FinalDate", FinalDate.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@LISTOFWORKORDERS", itemsContent);
-            return Html.ToString();
+            return Html;
         }
     }
 }
