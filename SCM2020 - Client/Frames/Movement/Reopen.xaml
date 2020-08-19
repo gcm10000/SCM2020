@@ -15,7 +15,7 @@
             <StackPanel>
                 <TextBlock Text="Ordem de Serviço" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="OSTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <Button VerticalAlignment="Bottom" Content="Abrir Ordem de Serviço" Padding="5" Width="200" x:Name="BtnFinish" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
+                <Button VerticalAlignment="Bottom" Content="Abrir Ordem de Serviço" Padding="5" Width="200" x:Name="BtnReopen" Click="BtnReopen_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
