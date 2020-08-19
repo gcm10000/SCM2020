@@ -62,7 +62,7 @@ namespace WebAssemblyLibrary
         }
         public static T DeserializeJson<T>(this string json)
         {
-            var obj = JsonConvert.DeserializeObject<T>(json);
+            T obj = JsonConvert.DeserializeObject<T>(json);
             return obj;
         }
     }
