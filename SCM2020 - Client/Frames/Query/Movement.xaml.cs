@@ -5,7 +5,6 @@ using SCM2020___Client.Templates.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Printing;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
