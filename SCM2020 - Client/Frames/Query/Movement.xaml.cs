@@ -32,6 +32,7 @@ namespace SCM2020___Client.Frames.Query
 
             if (Helper.WorkOrderByPass != string.Empty)
             {
+                TxtSearch.Text = Helper.WorkOrderByPass;
                 Search(Helper.WorkOrderByPass);
                 Helper.WorkOrderByPass = string.Empty;
             }
