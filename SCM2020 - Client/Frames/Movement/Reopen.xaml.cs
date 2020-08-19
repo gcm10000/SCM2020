@@ -33,6 +33,8 @@ namespace SCM2020___Client.Frames.Movement
         {
             //Captura a ordem de serviço escrita pelo usuário
             string workOrder = OSTextBox.Text;
+            workOrder = System.Uri.EscapeDataString(workOrder);
+
             MessageBoxResult resultBox = MessageBox.Show("Deseja realmente abrir a ordem de serviço?", "Você tem certeza disso", MessageBoxButton.YesNo, MessageBoxImage.Question);
             //Se o usuário selecionou o botão sim...
             if (resultBox == MessageBoxResult.Yes)
