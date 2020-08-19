@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="SCM2020___Client.Frames.Movement.Reopen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SCM2020___Client.Frames.Movement"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel Background="White">
+        <!--
+            https://www.youtube.com/watch?v=Jma5VYwEQcY
+            C# WPF Material Design UI: Tab Menu
+        -->
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+            <StackPanel>
+                <TextBlock Text="Ordem de Serviço" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBox x:Name="OSTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <Button VerticalAlignment="Bottom" Content="Abrir Ordem de Serviço" Padding="5" Width="200" x:Name="BtnFinish" Click="BtnFinish_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
+                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Button.IsFocused" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>
