@@ -6,7 +6,7 @@
 - Listagem de todos os produtos com patrimônio (OK);
 - Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. (Mais informações: https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7 ) (OK?);
 - Reabrir ordem de serviço (OK?);
-- Consulta do patrimônio;
+- Consulta do patrimônio (OK?);
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido;
 - Adicionar relatório financeiro;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
