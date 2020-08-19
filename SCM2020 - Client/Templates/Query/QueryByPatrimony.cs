@@ -13,7 +13,7 @@ namespace SCM2020___Client.Templates.Query
         public QueryByPatrimony(List<SCM2020___Client.Frames.Query.QueryByPatrimony.ProductDataGrid> Products)
         {
             this.Products = Products;
-            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "Movement.html");
+            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "QueryByPatrimony.html");
             Html = System.IO.File.ReadAllText(pathFileHtml);
         }
         public string RenderizeHtml()
