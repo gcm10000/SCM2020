@@ -39,7 +39,7 @@ namespace SCM2020___Client
         public static WebBrowser MyWebBrowser { get; set; }
         public static WebAssemblyLibrary.Client.Client Client { get; set; }
         public static IWebHost WebHost { get; internal set; }
-
+        public static string WorkOrderByPass { get; set; }
         public static bool IsTextAllowed(string text)
         {
             return !NumberRegex.IsMatch(text);

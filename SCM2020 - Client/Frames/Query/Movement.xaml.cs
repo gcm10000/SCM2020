@@ -30,8 +30,14 @@ namespace SCM2020___Client.Frames.Query
         public Movement()
         {
             InitializeComponent();
-        }
 
+            if (Helper.WorkOrderByPass != string.Empty)
+            {
+                Search(Helper.WorkOrderByPass);
+                Helper.WorkOrderByPass = string.Empty;
+            }
+
+        }
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

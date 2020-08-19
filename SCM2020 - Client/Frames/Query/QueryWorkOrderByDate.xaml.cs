@@ -36,8 +36,12 @@ namespace SCM2020___Client.Frames.Query
             // Garantir que a linha selecionada foi clicada e não um espaço em branco
             var row = ItemsControl.ContainerFromElement((DataGrid)sender,
                                                 e.OriginalSource as DependencyObject) as DataGridRow;
-            //row.Item
             if (row == null) return;
+
+            QueryWorkOrderByDateDataGrid workOrder = row.Item as QueryWorkOrderByDateDataGrid;
+            Helper.WorkOrderByPass = workOrder.WorkOrder;
+            FrameWindow frame = new FrameWindow(new Uri("Frames/Query/Movement.xaml", UriKind.Relative));
+            frame.Show();
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -65,6 +69,21 @@ namespace SCM2020___Client.Frames.Query
                     this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Add(workorder); }));
                 }
             });
+        }
+
+        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }
