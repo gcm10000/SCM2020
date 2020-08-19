@@ -85,7 +85,6 @@ namespace SCM2020___Server.Controllers
         public IActionResult SearchByPatrimony(string patrimony)
         {
             var productPermanent = context.PermanentProduct.Where(x => x.Patrimony.Contains(patrimony));
-            //var productConsumpter = context.ConsumptionProduct.Where(x => productConsumpter)
             if (productPermanent != null)
             {
                 return Ok(productPermanent);

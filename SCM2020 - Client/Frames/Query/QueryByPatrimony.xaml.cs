@@ -23,7 +23,7 @@ namespace SCM2020___Client.Frames.Query
     /// </summary>
     public partial class QueryByPatrimony : UserControl
     {
-        class ProductDataGrid
+        public class ProductDataGrid
         {
             public int Code { get; set; }
             public string Description { get; set; }
