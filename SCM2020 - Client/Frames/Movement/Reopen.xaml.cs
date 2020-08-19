@@ -48,7 +48,9 @@ namespace SCM2020___Client.Frames.Movement
                         MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-
+                    //Abrir ordem de serviço
+                    var result = APIClient.GetData<string>(new Uri(Helper.Server, $"monitoring/reopen/{workOrder}").ToString(), Helper.Authentication);
+                    MessageBox.Show(result);
                 });
             }
         }

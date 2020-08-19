@@ -115,7 +115,7 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Monitoramento atualizada com sucesso.");
         }        
-        [HttpPost("Reopen/{workOrder}")]
+        [HttpGet("Reopen/{workOrder}")]
         public async Task<IActionResult> Reopen(string workOrder)
         {
             var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);

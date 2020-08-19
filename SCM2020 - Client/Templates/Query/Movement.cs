@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Templates.Query
 {
