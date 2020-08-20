@@ -24,6 +24,7 @@
 - Checar aparente vazamento de memória no DataGridView:
     https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
     Possível solução: https://stackoverflow.com/questions/49223932/wpf-datagrid-grouping-leads-to-horrible-memory-consumption
+    https://stackoverflow.com/questions/27838500/datagrid-with-groups-and-virtualizingpanel-isvirtualizingwhengrouping-true
         <DataGrid x:Name="dataGrid" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
 
 - Evitar repetição de dados em listagem de patrimônio e inventário
