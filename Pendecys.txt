@@ -21,7 +21,11 @@
 - BUGS na correlação de entrada e saída:
   • Impossibilidade de fazer devolução APENAS de produtos permanentes
   • Impossibilidade de apagar permanente da movimentação de saída
-- Checar aparente vazamento de memória no DataGridView https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
+- Checar aparente vazamento de memória no DataGridView:
+    https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
+    Possível solução: https://stackoverflow.com/questions/49223932/wpf-datagrid-grouping-leads-to-horrible-memory-consumption
+        <DataGrid x:Name="dataGrid" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+
 - Evitar repetição de dados em listagem de patrimônio e inventário
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.

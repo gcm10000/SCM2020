@@ -77,6 +77,20 @@ namespace SCM2020___Client.Frames
         public MaterialOutput()
         {
             InitializeComponent();
+            //ProductToOutput productToOutput = new ProductToOutput()
+            //{
+            //    Id = 1,
+            //    Description = "TESTE 123",
+            //    Code = 999,
+            //    NewProduct = false,
+            //    QuantityAdded = 0,
+            //    Quantity = 10,
+            //    ProductChanged = false,
+            //    //ConsumptionProduct 
+            //};
+
+            //ProductToAddDataGrid.Items.Add(productToOutput);
+            //ProductToAddDataGrid.Items.Add(productToOutput);
         }
 
         private bool previousOutputExists = false;
