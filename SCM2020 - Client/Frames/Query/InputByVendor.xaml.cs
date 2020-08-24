@@ -56,7 +56,15 @@ namespace SCM2020___Client.Frames.Query
             DocumentInputByVendor.ResultSearch resultSearch = null;
             resultSearch = DocumentInputByVendor.Search(invoice);
             if (resultSearch == null)
+            {
+                InvoiceText.Text = string.Empty;
+                VendorTextBox.Text = string.Empty;
+                RegistrationSCMTextBox.Text = string.Empty;
+                SCMEmployeeTextBox.Text = string.Empty;
+                WorkOrderDateDatePicker.SelectedDate = null;
+                ProductMovementDataGrid.Items.Clear();
                 return;
+            }
 
 
             var InformationQuery = resultSearch.InformationMovement;

@@ -302,7 +302,7 @@ namespace SCM2020___Client
             }
             catch
             {
-                MessageBox.Show("Não há movimentação com esta nota fiscal.", "Movimentação inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Movimentação com nota fiscal inexistente.", "Movimentação inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
             try

@@ -95,13 +95,13 @@ namespace SCM2020___Client.Frames
 
         private bool previousOutputExists = false;
         private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
-        private void ConsumpterProductSearch(string workOrder)
+        private void ConsumpterProductSearch(string query)
         {
-            if (workOrder == string.Empty)
+            if (query == string.Empty)
                 return;
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{workOrder}");
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
             var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);

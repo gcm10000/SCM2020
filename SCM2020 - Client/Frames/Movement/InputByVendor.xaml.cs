@@ -38,53 +38,21 @@ namespace SCM2020___Client.Frames
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(Search);
+            string query = TxtSearch.Text;
+            Task.Run(() => ConsumpterProductSearch(query));
         }
-        private void Search()
+        private void ConsumpterProductSearch(string query)
         {
-            string textBoxValue = string.Empty;
-            this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
-
-            //Se o campo está vazio, não irá realizar a busca
-            if (textBoxValue == string.Empty)
-            {
+            if (query == string.Empty)
                 return;
-            }
-
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
-
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
-            List<ConsumptionProduct> products = new List<ConsumptionProduct>();
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
 
-            int index = -1;
-            if (int.TryParse(textBoxValue, out _))
-            {
-                Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-                Task.Run(() => 
-                    {
-                        try
-                        {
-                            var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
-                            products.Add(singleProduct);
-                            index = products.FindIndex(x => x.Id == singleProduct.Id);
-                        }
-                        catch (System.Net.Http.HttpRequestException) { }
-                    });
+            //Requisição de dados baseado na busca
+            var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
 
-            }
-
-            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
-            products.AddRange(data);
-
-            if (index > -1)
-            {
-                var myProduct = products[index];
-                products[index] = products[0];
-                products[0] = myProduct;
-            }
-
-            foreach (var item in products.ToList())
+            foreach (var item in products)
             {
                 ConsumpterProductDataGrid productsToInput = new ConsumpterProductDataGrid()
                 {
@@ -97,6 +65,63 @@ namespace SCM2020___Client.Frames
             }
         }
 
+        //private void Search()
+        //{
+        //    string textBoxValue = string.Empty;
+        //    this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
+
+        //    //Se o campo está vazio, não irá realizar a busca
+        //    if (textBoxValue == string.Empty)
+        //    {
+        //        return;
+        //    }
+
+        //    Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
+
+        //    this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+
+        //    List<ConsumptionProduct> products = new List<ConsumptionProduct>();
+
+        //    int index = -1;
+        //    if (int.TryParse(textBoxValue, out _))
+        //    {
+        //        Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
+        //        Task.Run(() => 
+        //            {
+        //                try
+        //                {
+        //                    var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
+        //                    products.Add(singleProduct);
+        //                    index = products.FindIndex(x => x.Id == singleProduct.Id);
+        //                }
+        //                catch (System.Net.Http.HttpRequestException) { }
+        //            });
+
+        //    }
+
+        //    var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+        //    products.AddRange(data);
+
+        //    if (index > -1)
+        //    {
+        //        var myProduct = products[index];
+        //        products[index] = products[0];
+        //        products[0] = myProduct;
+        //    }
+
+        //    foreach (var item in products.ToList())
+        //    {
+        //        ConsumpterProductDataGrid productsToInput = new ConsumpterProductDataGrid()
+        //        {
+        //            Id = item.Id,
+        //            Code = item.Code,
+        //            Description = item.Description,
+        //            Quantity = item.Stock
+        //        };
+        //        this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToInput); }));
+        //    }
+        //}
+
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
@@ -106,7 +131,8 @@ namespace SCM2020___Client.Frames
         {
             if (e.Key == Key.Enter)
             {
-                Task.Run(Search);
+                string query = TxtSearch.Text;
+                Task.Run(() => ConsumpterProductSearch(query));
             }
         }
 
@@ -170,6 +196,10 @@ namespace SCM2020___Client.Frames
                 MessageBox.Show("Data invalida.", "Data inválida", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+        }
+        private void AddInput()
+        {
             DateTime dateTime = (MovingDateDatePicker.DisplayDate == DateTime.Today) ? DateTime.Now : MovingDateDatePicker.SelectedDate.Value;
             MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
             materialInputByVendor.Invoice = InvoiceTextBox.Text;
@@ -182,7 +212,7 @@ namespace SCM2020___Client.Frames
             {
                 ConsumpterProductDataGrid product = item as ConsumpterProductDataGrid;
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
-                { 
+                {
                     Date = materialInputByVendor.MovingDate,
                     ProductId = product.Id,
                     Quantity = product.QuantityAdded
@@ -190,11 +220,15 @@ namespace SCM2020___Client.Frames
                 p.Add(auxiliarConsumption);
             }
             materialInputByVendor.AuxiliarConsumptions = p;
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
+        }
+        private void UpdateInput()
+        {
+
         }
     }
 }
