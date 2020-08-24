@@ -437,13 +437,14 @@ namespace SCM2020___Client.Frames.Movement
             //TASK...
             Task.Run(() => 
             {
+                var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
 
-                var checkMonitoring = APIClient.GetData(new Uri(Helper.Server, $"").ToString(), Helper.Authentication);
-                if ()
+                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
+                if (!checkMonitoring)
                 {
                     //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
                     var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
-                    MessageBox.Show(result1.DeserializeJson<string>());
+                    MessageBox.Show(result1.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 var result2 = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);

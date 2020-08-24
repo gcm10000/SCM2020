@@ -48,6 +48,13 @@ namespace SCM2020___Server.Controllers
         {
             return Ok();
         }
+        [HttpGet("CheckWorkOrder/{workorder}")]
+        public bool CheckWorkOrder(string workorder)
+        {
+            workorder = System.Uri.UnescapeDataString(workorder);
+            var result = context.Monitoring.Any(x => x.Work_Order == workorder);
+            return result;
+        }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]
         [HttpPost("Migrate")]
