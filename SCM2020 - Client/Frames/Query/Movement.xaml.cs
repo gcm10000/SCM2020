@@ -30,7 +30,7 @@ namespace SCM2020___Client.Frames.Query
         {
             InitializeComponent();
 
-            if (Helper.WorkOrderByPass != string.Empty)
+            if (!((Helper.WorkOrderByPass == string.Empty) || (Helper.WorkOrderByPass == null)))
             {
                 TxtSearch.Text = Helper.WorkOrderByPass;
                 Search(Helper.WorkOrderByPass);
@@ -114,9 +114,9 @@ namespace SCM2020___Client.Frames.Query
         {
             PrintORExport = true;
 
-            var result = ResultMovement.RenderizeHtml();
+            Document = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(result);
+            this.webBrowser.NavigateToString(Document);
 
         }
 
@@ -161,9 +161,9 @@ namespace SCM2020___Client.Frames.Query
         {
             PrintORExport = false;
 
-            var result = ResultMovement.RenderizeHtml();
+            Document = ResultMovement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(result);
+            this.webBrowser.NavigateToString(Document);
         }
     }
 

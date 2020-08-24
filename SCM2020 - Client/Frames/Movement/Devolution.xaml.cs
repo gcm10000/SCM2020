@@ -64,6 +64,8 @@ namespace SCM2020___Client.Frames.Movement
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
                 this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
+                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = resultMonitoring.MovingDate; this.OSDatePicker.DisplayDate = resultMonitoring.MovingDate; }));
+                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = resultMonitoring.ServiceLocation; }));
                 //this.RegisterApplicantTextBox.Text = infoUser.Register;
                 //this.ApplicantTextBox.Text = infoUser.Name;
             }
@@ -71,7 +73,9 @@ namespace SCM2020___Client.Frames.Movement
             {
                 //Não existe monitoramento com este ordem de serviço
                 //Sempre será capturado o código 204 NO CONTENT
-                EnableMonitoringObjects();
+                ClearData();
+                InputData(true);
+                //EnableMonitoringObjects();
             }
             catch (Exception ex)
             {
@@ -85,8 +89,7 @@ namespace SCM2020___Client.Frames.Movement
                 previousDevolutionExists = true;
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
-
-                    //GetProducts(workOrder);
+                    InputData(false);
                     this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
                     this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
                     this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
@@ -95,33 +98,96 @@ namespace SCM2020___Client.Frames.Movement
                     this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
                     this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
                     this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
+                    
+                    MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                    RescueProducts(materialInput);
 
                 }
                 else
                 {
                     DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
-                    MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd/MM/yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
-        private void EnableMonitoringObjects()
+        //private void EnableMonitoringObjects()
+        //{
+        //    this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
+        //    this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.IsEnabled = true; }));
+        //    this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
+        //    this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.IsEnabled = true; }));
+        //}
+
+        private void ClearData()
         {
-            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.IsEnabled = true; }));
-            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.IsEnabled = true; }));
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.Text = string.Empty; }));
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.SelectedIndex = 0; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.Text = string.Empty; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
+        }
+
+        private void InputData(bool IsEnable)
+        {
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
+            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = IsEnable; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = IsEnable; }));
         }
 
         List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
         List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
+        private void RescueProducts(ModelsLibraryCore.MaterialInput materialInput)
+        {
+            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); } ));
+            //this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { } ));
+            foreach (var item in materialInput.ConsumptionProducts)
+            {
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
+                {
+                    Id = item.ProductId,
+                    Code = infoProduct.Code,
+                    Description = infoProduct.Description,
+                    Quantity = infoProduct.Stock,
+                    QuantityAdded = item.Quantity,
+                    NewProduct = false,
+                    ConsumptionProduct = item
+                    //QuantityOutput
+                };
+                if (item.Quantity != 0)
+                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid); }));
 
+                ConsumpterProductInput.Add(consumpterProductDataGrid);
+            }
+
+            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+
+            foreach (var item in materialInput.PermanentProducts)
+            {
+                var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
+                {
+                    Id = item.ProductId,
+                    Code = infoProduct.Code,
+                    Description = infoProduct.Description,
+                    Quantity = infoProduct.Stock,
+                    Patrimony = infoPermanentProduct.Patrimony,
+                    //QuantityOutput = 1,
+                    QuantityAdded = 1,
+                };
+                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid); }));
+            }
+        }
         //private void GetProducts(string workorder)
         //{
         //    var outputProducts = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workorder}").ToString(), Helper.Authentication);
         //    ListConsumpterProductDataGrid.Clear();
         //    ListPermanentProductDataGrid.Clear();
-            
+
         //    this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ConsumpterProductToAddDataGrid.Items.Clear(); }));
         //    this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentProductToAddDataGrid.Items.Clear(); }));
 

@@ -47,8 +47,10 @@
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="Ordem de Serviço" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="OSTextBox" LostFocus="OSTextBox_LostFocus" KeyDown="OSTextBox_KeyDown" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                    <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                    <DatePicker x:Name="OSDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Style="{x:Null}" IsEnabled="False" Height="30" FontSize="16"></DatePicker>
                     <TextBlock Text="Entrada Referente a" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                    <ComboBox Width="188" SelectedIndex="0" x:Name="ReferenceComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16">
+                    <ComboBox Width="188" IsEnabled="False" SelectedIndex="0" x:Name="ReferenceComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16">
                         <ComboBoxItem>Não utilizado</ComboBoxItem>
                         <ComboBoxItem>Transferência Interna</ComboBoxItem>
                         <ComboBoxItem>Outra Comarca</ComboBoxItem>
@@ -198,7 +200,7 @@
         <DockPanel x:Name="FinalProductsDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="60">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
-                    <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click"  Cursor="Hand"/>
+                    <Button Uid="3" Width="220" x:Name="ButtonFinalConsumpterProduct" Content="PRODUTOS CONSUMÍVEIS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalConsumpterProduct_Click" IsHitTestVisible="False"  Cursor="Hand"/>
                     <Button Uid="4" Width="220" x:Name="ButtonFinalPermanentProduct" Content="PRODUTOS PERMANENTES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="ButtonFinalPermanentProduct_Click"  Cursor="Hand"/>
                 </StackPanel>
             </Grid>

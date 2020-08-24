@@ -282,7 +282,7 @@ namespace SCM2020___Client.Frames
             //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
             DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
 
-            var register = ApplicantTextBox.Text;
+            var register = RegisterApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
@@ -512,11 +512,23 @@ namespace SCM2020___Client.Frames
                 return;
 
             DataToPrintORExportWasRescued = false;
+            workOrder = System.Uri.EscapeDataString(workOrder);
+            Monitoring monitoring = null;
             try
             {
-                workOrder = System.Uri.EscapeDataString(workOrder);
                 //Checar objeto monitoramento
-                Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+
+            }
+            catch (System.Net.Http.HttpRequestException) //Ordem de serviço inexistente
+            {
+                ClearData();
+                InputData(true);
+                return;
+            }
+
+            try
+            {
                 var userId = monitoring.EmployeeId;
                 var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
                 InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
@@ -524,17 +536,19 @@ namespace SCM2020___Client.Frames
                 PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //Ordem de serviço encontra-se fechada.
                 {
-                    MessageBox.Show($"Ordem de serviço foi fechada na data {monitoring.ClosingDate.Value.ToString("dd-MM-yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Ordem de serviço foi fechada na data {monitoring.ClosingDate.Value.ToString("dd/MM/yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                     return; //DISABLE FILLING DATA.
                 }
                 //ID -> MATRÍCULA
                 var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
-                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
+                InputData(false);
+                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = monitoring.MovingDate; this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
                 this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = monitoring.ServiceLocation; }));
 
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Register; }));
+                this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = InfoUser.Register; }));
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Name; }));
 
                 this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
                 this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
@@ -575,9 +589,7 @@ namespace SCM2020___Client.Frames
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             {
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = true; }));
-                this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.IsEnabled = true; }));
-                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = true; }));
+                InputData(true);
             }
             catch (Exception ex)
             {
@@ -585,6 +597,25 @@ namespace SCM2020___Client.Frames
             }
 
         }
+
+        private void ClearData()
+        {
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.Text = string.Empty; }));
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+            this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.SelectedIndex = 0; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.Text = string.Empty; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
+        }
+
+        private void InputData(bool IsEnable)
+        {
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
+            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
+            this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.IsEnabled = IsEnable; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = IsEnable; }));
+        }
+
         bool DataToPrintORExportWasRescued = false;
         bool PrintORExport = false;
         DocumentMovement DocumentToPrintORExport = null;
