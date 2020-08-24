@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Frames.Movement
 {
@@ -433,8 +435,20 @@ namespace SCM2020___Client.Frames.Movement
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
             //TASK...
-            var result = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            Task.Run(() => 
+            {
+
+                var checkMonitoring = APIClient.GetData(new Uri(Helper.Server, $"").ToString(), Helper.Authentication);
+                if ()
+                {
+                    //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+                    var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
+                    MessageBox.Show(result1.DeserializeJson<string>());
+                }
+
+                var result2 = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
+                MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            });
         }
         private void UpdateInput()
         {

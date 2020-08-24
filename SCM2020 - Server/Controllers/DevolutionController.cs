@@ -236,7 +236,9 @@ namespace SCM2020___Server.Controllers
                 {
                     productModify.Stock += newest - oldder;
                     context.ConsumptionProduct.Update(productModify);
+
                 }
+
             }
 
             //check quantity equals zero
