@@ -36,6 +36,7 @@ namespace SCM2020___Client.Frames
             this.VendorComboBox.ItemsSource = nameVendors;
             this.VendorComboBox.SelectedIndex = 0;
         }
+        private bool existsInput = false;
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
@@ -197,6 +198,10 @@ namespace SCM2020___Client.Frames
                 MessageBox.Show("Data invalida.", "Data inválida", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            if (existsInput)
+                AddInput();
+            else
+                UpdateInput();
 
         }
         private void AddInput()
@@ -259,33 +264,48 @@ namespace SCM2020___Client.Frames
                 return;
             invoice = System.Uri.EscapeDataString(invoice);
 
+            this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Clear(); }));
+
             ModelsLibraryCore.MaterialInputByVendor input = null;
             try
             {
                 input = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
-
             }
             catch (HttpRequestException) //Entrada por fornecedor inexistente
             {
-                MessageBox.Show("Inexistente!");
-                //Limpar campos
+                //Limpar campos e permitir uso
                 ClearData();
+                InputData(true);
 
             }
-                //Bloquear combobox e data
-                //Colocar informações
-                //Preencher datagrid
+            //Bloquear combobox e data
+            InputData(false);
+            //Colocar informações
+            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = input.VendorId + 1; }));
+            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = input.MovingDate; }));
+            //Preencher datagrid
+            foreach (var item in input.AuxiliarConsumptions)
+            {
+                ModelsLibraryCore.ConsumptionProduct information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                ConsumpterProductDataGrid product = new ConsumpterProductDataGrid()
+                {
+                    Id = item.ProductId,
+                    Code = information.Code,
+                    Description = information.Description,
+                    QuantityAdded = item.Quantity,
+                    Quantity = information.Stock
+                };
+                this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Add(product); }));
+            }
         }
 
         private void ClearData()
         {
-            this.InvoiceTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { InvoiceTextBox.Text = string.Empty; }));
             this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = 0; }));
             this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = DateTime.Now; }));
         }
         private void InputData(bool IsEnable)
         {
-            this.InvoiceTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { InvoiceTextBox.IsEnabled = IsEnable; }));
             this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.IsEnabled = IsEnable; }));
             this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.IsEnabled = IsEnable; }));
         }
