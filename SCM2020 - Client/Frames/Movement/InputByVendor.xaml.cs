@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
@@ -213,7 +214,7 @@ namespace SCM2020___Client.Frames
                 ConsumpterProductDataGrid product = item as ConsumpterProductDataGrid;
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
-                    Date = materialInputByVendor.MovingDate,
+                    Date = DateTime.Now,
                     ProductId = product.Id,
                     Quantity = product.QuantityAdded
                 };
@@ -229,6 +230,64 @@ namespace SCM2020___Client.Frames
         private void UpdateInput()
         {
 
+        }
+        string previousInvoice = string.Empty;
+        private void InvoiceTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var invoice = InvoiceTextBox.Text;
+            if (previousInvoice == invoice)
+                return;
+            Task.Run(() => RescueData(invoice));
+            previousInvoice = invoice;
+        }
+
+        private void InvoiceTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            var invoice = InvoiceTextBox.Text;
+            if (e.Key == Key.Enter)
+            {
+                if (previousInvoice == invoice)
+                    return;
+                Task.Run(() => RescueData(invoice));
+                previousInvoice = invoice;
+            }
+        }
+
+        private void RescueData(string invoice)
+        {
+            if (invoice == string.Empty)
+                return;
+            invoice = System.Uri.EscapeDataString(invoice);
+
+            ModelsLibraryCore.MaterialInputByVendor input = null;
+            try
+            {
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
+
+            }
+            catch (HttpRequestException) //Entrada por fornecedor inexistente
+            {
+                MessageBox.Show("Inexistente!");
+                //Limpar campos
+                ClearData();
+
+            }
+                //Bloquear combobox e data
+                //Colocar informações
+                //Preencher datagrid
+        }
+
+        private void ClearData()
+        {
+            this.InvoiceTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { InvoiceTextBox.Text = string.Empty; }));
+            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = 0; }));
+            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = DateTime.Now; }));
+        }
+        private void InputData(bool IsEnable)
+        {
+            this.InvoiceTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { InvoiceTextBox.IsEnabled = IsEnable; }));
+            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.IsEnabled = IsEnable; }));
+            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.IsEnabled = IsEnable; }));
         }
     }
 }

@@ -479,6 +479,7 @@ namespace SCM2020___Client.Frames
             }
         }
 
+        string previousOS = string.Empty;
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var workOrder = OSTextBox.Text;
@@ -488,7 +489,6 @@ namespace SCM2020___Client.Frames
             previousOS = workOrder;
 
         }
-        string previousOS = string.Empty;
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             var workOrder = OSTextBox.Text;
