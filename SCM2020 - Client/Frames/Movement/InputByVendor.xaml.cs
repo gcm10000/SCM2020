@@ -199,9 +199,9 @@ namespace SCM2020___Client.Frames
                 return;
             }
             if (existsInput)
-                AddInput();
-            else
                 UpdateInput();
+            else
+                AddInput();
 
         }
         private void AddInput()
@@ -270,18 +270,21 @@ namespace SCM2020___Client.Frames
             try
             {
                 input = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
+                existsInput = true;
             }
             catch (HttpRequestException) //Entrada por fornecedor inexistente
             {
                 //Limpar campos e permitir uso
                 ClearData();
                 InputData(true);
+                existsInput = false;
+                return;
 
             }
             //Bloquear combobox e data
             InputData(false);
             //Colocar informações
-            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = input.VendorId + 1; }));
+            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = input.VendorId - 1; }));
             this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = input.MovingDate; }));
             //Preencher datagrid
             foreach (var item in input.AuxiliarConsumptions)

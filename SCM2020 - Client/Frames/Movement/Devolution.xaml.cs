@@ -56,7 +56,7 @@ namespace SCM2020___Client.Frames.Movement
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
             Monitoring resultMonitoring = null;
-
+            previousDevolutionExists = false;
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
@@ -101,6 +101,8 @@ namespace SCM2020___Client.Frames.Movement
                     try
                     {
                         MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)materialInput.Regarding) - 1; }));
+
                         RescueProducts(materialInput);
                         InputData(false, false);
                     }
@@ -115,6 +117,10 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     DateTime closingDate = resultMonitoring.ClosingDate ?? DateTime.Now;
                     MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd/MM/yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    InputData(false, false);
+                    ClearData();
+                    this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
+                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
                 }
             }
         }
@@ -372,15 +378,33 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void AddInput()
         {
+            DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
+
+            var register = RegisterApplicantTextBox.Text;
+            var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            Monitoring monitoring = new Monitoring()
+            {
+                SCMEmployeeId = Helper.NameIdentifier,
+                Situation = false,
+                ClosingDate = null,
+                EmployeeId = userId,
+                RequestingSector = Helper.CurrentSector.Id,
+                MovingDate = dateTime,
+                Work_Order = OSTextBox.Text,
+                ServiceLocation = ServiceLocalizationTextBox.Text
+            };
+
             MaterialInput materialInput = new MaterialInput()
             {
-                Regarding = (Regarding)ReferenceComboBox.SelectedIndex,
+                Regarding = ((Regarding)(ReferenceComboBox.SelectedIndex + 1)),
                 WorkOrder = OSTextBox.Text,
                 //DocDate não deveria existir. Tratamentos diretos sobre ordem de serviço constitui-se na classe Monitoring.
                 DocDate = DateTime.Now,
                 //Data da criação de objeto
                 //ou seja, da primeira movimentação
-                MovingDate = DateTime.Now,
+                MovingDate = OSDatePicker.SelectedDate.Value,
             };
 
             if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)

@@ -284,8 +284,8 @@ namespace SCM2020___Client.Frames
 
             var register = RegisterApplicantTextBox.Text;
             var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
-            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
 
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
             Monitoring monitoring = new Monitoring()
             {
                 SCMEmployeeId = Helper.NameIdentifier,
