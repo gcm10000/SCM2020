@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using ModelsLibraryCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -64,8 +65,8 @@ namespace SCM2020___Client.Frames.Query
             VendorTextBox.Text = InformationQuery.Vendor;
             RegistrationSCMTextBox.Text = InformationQuery.SCMRegistration;
             SCMEmployeeTextBox.Text = InformationQuery.SCMEmployee;
-            WorkOrderDateDatePicker.DisplayDate = InformationQuery.InvoiceDate;
-
+            WorkOrderDateDatePicker.SelectedDate = WorkOrderDateDatePicker.DisplayDate = InformationQuery.InvoiceDate;
+            
 
             ProductsToShow = resultSearch.Products;
             info = resultSearch.InformationMovement;

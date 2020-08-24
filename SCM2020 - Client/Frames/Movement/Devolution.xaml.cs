@@ -107,7 +107,7 @@ namespace SCM2020___Client.Frames.Movement
 
                     catch (System.Net.Http.HttpRequestException) //Não existe entrada nesta ordem de serviço
                     {
-                        InputData(true, false, false);
+                        InputData(true, false, false, false);
                     }
 
                 }
@@ -136,11 +136,10 @@ namespace SCM2020___Client.Frames.Movement
             this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
             this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
         }
-        private void InputData(bool IsEnable, bool OSDatePickerIsEnable, bool ServiceLocalizationIsEnable)
+        private void InputData(bool ReferenceComboBoxIsEnable, bool OSDatePickerIsEnable, bool RegisterApplicantTextBoxIsEnable, bool ServiceLocalizationIsEnable)
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
-            //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
-            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = IsEnable; }));
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = RegisterApplicantTextBoxIsEnable; }));
+            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = ReferenceComboBoxIsEnable; }));
             this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = ServiceLocalizationIsEnable; }));
             this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
         }
