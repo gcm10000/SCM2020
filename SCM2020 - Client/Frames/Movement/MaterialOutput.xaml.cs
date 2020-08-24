@@ -456,13 +456,15 @@ namespace SCM2020___Client.Frames
         }
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(ConsumpterProductSearch);
+            string query = TxtSearchConsumpterProduct.Text;
+            Task.Run(() => ConsumpterProductSearch(query));
         }
         private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                Task.Run(ConsumpterProductSearch);
+                string query = TxtSearchConsumpterProduct.Text;
+                Task.Run(() => ConsumpterProductSearch(query));
             }
         }
         private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
