@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
@@ -31,6 +33,7 @@ namespace SCM2020___Client.Frames
             var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             var nameVendors = vendors.Select(x => x.Name).ToList();
             this.VendorComboBox.ItemsSource = nameVendors;
+            this.VendorComboBox.SelectedIndex = 0;
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -162,10 +165,16 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateTime = (MovingDateDatePicker.DisplayDate == DateTime.Today) ? DateTime.Now : MovingDateDatePicker.DisplayDate;
+            if (!MovingDateDatePicker.SelectedDate.HasValue)
+            {
+                MessageBox.Show("Data invalida.", "Data inválida", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            DateTime dateTime = (MovingDateDatePicker.DisplayDate == DateTime.Today) ? DateTime.Now : MovingDateDatePicker.SelectedDate.Value;
             MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
             materialInputByVendor.Invoice = InvoiceTextBox.Text;
             materialInputByVendor.MovingDate = dateTime;
+            materialInputByVendor.VendorId = VendorComboBox.SelectedIndex + 1;
 
             List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
 

@@ -133,7 +133,6 @@ namespace SCM2020___Client.Frames.Query
                 string tempFile = string.Empty;
                 try
                 {
-
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {

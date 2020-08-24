@@ -49,6 +49,8 @@
                     <TextBox x:Name="OSTextBox" LostFocus="OSTextBox_LostFocus" KeyDown="OSTextBox_KeyDown" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Data da O.S" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <DatePicker x:Name="OSDatePicker" SelectedDate="{x:Static sys:DateTime.Now}" Style="{x:Null}" IsEnabled="False" Height="30" FontSize="16"></DatePicker>
+                    <TextBlock Margin="0 20 0 5" Text="Local do Serviço" FontSize="18"></TextBlock>
+                    <TextBox x:Name="ServiceLocalizationTextBox" Style="{x:Null}" IsEnabled="False" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Entrada Referente a" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <ComboBox Width="188" IsEnabled="False" SelectedIndex="0" x:Name="ReferenceComboBox" Style="{x:Null}" Background="{x:Null}" Height="30" FontSize="16">
                         <ComboBoxItem>Não utilizado</ComboBoxItem>
@@ -59,8 +61,6 @@
                     <TextBox x:Name="RegisterApplicantTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                     <TextBlock Text="Solicitante" Margin="0 20 0 5" FontSize="18"></TextBlock>
                     <TextBox x:Name="ApplicantTextBox" IsEnabled="False" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                    <TextBlock Margin="0 20 0 5" Text="Local do Serviço" FontSize="18"></TextBlock>
-                    <TextBox x:Name="ServiceLocalizationTextBox" Style="{x:Null}" IsEnabled="False" Height="30" FontSize="16"></TextBox>
                 </StackPanel>
             </Border>
         </ScrollViewer>

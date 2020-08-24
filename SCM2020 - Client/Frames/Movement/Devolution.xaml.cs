@@ -74,8 +74,7 @@ namespace SCM2020___Client.Frames.Movement
                 //Não existe monitoramento com este ordem de serviço
                 //Sempre será capturado o código 204 NO CONTENT
                 ClearData();
-                InputData(true);
-                //EnableMonitoringObjects();
+                InputData(true, true);
             }
             catch (Exception ex)
             {
@@ -89,7 +88,7 @@ namespace SCM2020___Client.Frames.Movement
                 previousDevolutionExists = true;
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
-                    InputData(false);
+                    
                     this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
                     this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
                     this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
@@ -98,9 +97,18 @@ namespace SCM2020___Client.Frames.Movement
                     this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
                     this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
                     this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
-                    
-                    MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-                    RescueProducts(materialInput);
+
+                    try
+                    {
+                        MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        RescueProducts(materialInput);
+                        InputData(false, false);
+                    }
+
+                    catch (System.Net.Http.HttpRequestException) //Não existe entrada nesta ordem de serviço
+                    {
+                        InputData(true, false, false);
+                    }
 
                 }
                 else
@@ -111,14 +119,6 @@ namespace SCM2020___Client.Frames.Movement
             }
         }
 
-        //private void EnableMonitoringObjects()
-        //{
-        //    this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
-        //    this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.IsEnabled = true; }));
-        //    this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.IsEnabled = true; }));
-        //    this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.IsEnabled = true; }));
-        //}
-
         private void ClearData()
         {
             this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.Text = string.Empty; }));
@@ -128,13 +128,21 @@ namespace SCM2020___Client.Frames.Movement
             this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
         }
 
-        private void InputData(bool IsEnable)
+        private void InputData(bool IsEnable, bool OSDatePickerIsEnable)
         {
             this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
-            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
+            //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
             this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = IsEnable; }));
             this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = IsEnable; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
+        }
+        private void InputData(bool IsEnable, bool OSDatePickerIsEnable, bool ServiceLocalizationIsEnable)
+        {
+            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
+            //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
+            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = IsEnable; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = ServiceLocalizationIsEnable; }));
+            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
         }
 
         List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();

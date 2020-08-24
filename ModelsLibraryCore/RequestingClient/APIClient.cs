@@ -22,13 +22,13 @@ namespace ModelsLibraryCore.RequestingClient
         public SignIn(HttpRequestHeaders Headers, Token Token, string url)
         {
             Uri uri = new Uri(url);
-            
+
             this.Headers = Headers;
             this.Token = Token;
             this.JwtSecurityToken = new JwtSecurityToken(this.Token.token);
             string idSector = JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
             string requested = uri.Scheme + Uri.SchemeDelimiter + uri.Host + ":" + uri.Port + "/api/";
-            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(requested), $"sector/{idSector}" ).ToString(), Headers.Authorization);
+            this.Sector = APIClient.GetData<Sector>(new Uri(new Uri(requested), $"sector/{idSector}").ToString(), Headers.Authorization);
         }
     }
     public static class APIClient
@@ -154,34 +154,27 @@ namespace ModelsLibraryCore.RequestingClient
         /// </summary>
         /// <typeparam name="T">Modelo de dados em questão.</typeparam>
         /// <returns></returns>
-        public static T GetData<T>(string RequestUrl, AuthenticationHeaderValue authentication = null) 
+        public static T GetData<T>(string RequestUrl, AuthenticationHeaderValue authentication = null)
         {
-            try
+            using (var client = new HttpClient())
             {
-                using (var client = new HttpClient())
+                client.DefaultRequestHeaders.Accept.Clear();
+
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = authentication;
+
+                HttpResponseMessage respToken = client.GetAsync(RequestUrl).Result;
+
+                string content = respToken.Content.ReadAsStringAsync().Result;
+
+                if (respToken.StatusCode == HttpStatusCode.OK)
                 {
-                    client.DefaultRequestHeaders.Accept.Clear();
-
-                    client.DefaultRequestHeaders.Accept.Add(
-                        new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Authorization = authentication;
-
-                    HttpResponseMessage respToken = client.GetAsync(RequestUrl).Result;
-
-                    string content = respToken.Content.ReadAsStringAsync().Result;
-
-                    if (respToken.StatusCode == HttpStatusCode.OK)
-                    {
-                        var result = JsonConvert.DeserializeObject<T>(content);
-                        return result;
-                    }
-                    else
-                        throw new HttpRequestException($"{respToken.StatusCode}: {respToken.Content}.\n{content}");
+                    var result = JsonConvert.DeserializeObject<T>(content);
+                    return result;
                 }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                else
+                    throw new HttpRequestException($"{respToken.StatusCode}: {respToken.Content}.\n{content}");
             }
         }
     }

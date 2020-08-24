@@ -81,8 +81,12 @@ namespace SCM2020___Server.Controllers
             if (context.MaterialInputByVendor.Any(x => x.Invoice == input.Invoice))
                 return BadRequest("Já existe uma entrada com esta nota fiscal. Caso queria adicionar um novo produto nesta nota fiscal, atualize a entrada.");
 
+            if (!context.Vendors.Any(x => x.Id == input.VendorId))
+                return BadRequest("Fornecedor com ID inexistente.");
+
             if (!input.AuxiliarConsumptions.All(x => context.ConsumptionProduct.Any(y => y.Id == x.ProductId)))
                 return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
+
             context.MaterialInputByVendor.Add(input);
             //Incrementar um produto
             foreach (var item in input.AuxiliarConsumptions)
