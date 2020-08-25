@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -284,7 +285,17 @@ namespace SCM2020___Client.Frames
             DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
 
             var register = RegisterApplicantTextBox.Text;
-            var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+            string userId = string.Empty;
+            try
+            {
+                userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
             Monitoring monitoring = new Monitoring()
@@ -719,6 +730,39 @@ namespace SCM2020___Client.Frames
             Document = DocumentToPrintORExport.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
+        }
+        private void GetName(string register)
+        {
+            if (string.IsNullOrWhiteSpace(register))
+                return;
+            try
+            {
+                //Zera informação
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+                //Recebe informações
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
+                //Atribui o nome do funcionário no campo correspondente
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void RegisterApplicantTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string register = this.RegisterApplicantTextBox.Text;
+                Task.Run(() => GetName(register));
+            }
+        }
+
+        private void RegisterApplicantTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string register = this.RegisterApplicantTextBox.Text;
+            Task.Run(() => GetName(register));
         }
     }
 }

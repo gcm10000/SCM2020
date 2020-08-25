@@ -190,9 +190,17 @@ namespace SCM2020___Server.Controllers
         }
         [HttpGet("UserId/{register}")]
         [AllowAnonymous]
-        public string GetUserIdByPJERJRegister(string register)
+        public ActionResult<string> GetUserIdByPJERJRegister(string register)
         {
-            return UserManager.FindByPJERJRegistrationAsync(register).Id;
+            var user = UserManager.FindByPJERJRegistrationAsync(register);
+            if (user != null)
+            {
+                return user.Id;
+            }
+            else
+            {
+                return BadRequest("Matrícula não encontrada.");
+            }
         }
         [HttpGet("RegisterId/{userId}")]
         [AllowAnonymous]
@@ -209,13 +217,18 @@ namespace SCM2020___Server.Controllers
             var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
             return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
         }
-        [HttpGet("InfoUser/Register/{register}")]
+        [HttpGet("InfoUserRegister/{register}")]
         [AllowAnonymous]
-        public async Task<InfoUser> GetInfoUserByRegister(string register)
+        public ActionResult<InfoUser> GetInfoUserByRegister(string register)
         {
-            var user = await UserManager.FindByNameAsync(register);
-            var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+            if (UserManager.Users.Any(x => x.UserName == register))
+            {
+                var user = UserManager.Users.First(x => x.UserName == register);
+                var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
+                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+            }
+            return BadRequest("Não existe um funcionário com esta matrícula.");
+
         }
         [HttpGet("ListUser/{query}")]
         [AllowAnonymous]

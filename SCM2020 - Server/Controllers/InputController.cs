@@ -156,7 +156,7 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Remove(int id)
         {
             var input = context.MaterialInputByVendor.Include(x => x.AuxiliarConsumptions).SingleOrDefault(x => x.Id == id);
-            foreach (var item in input.AuxiliarConsumptions)
+             foreach (var item in input.AuxiliarConsumptions)
             {
                 var product = context.ConsumptionProduct.SingleOrDefault(x => x.Id == item.ProductId);
                 product.Stock -= item.Quantity;
@@ -164,7 +164,7 @@ namespace SCM2020___Server.Controllers
             }
             context.MaterialInputByVendor.Remove(input);
             await context.SaveChangesAsync();
-            return Ok($"Entrada foi removida com sucesso.\n{input.AuxiliarConsumptions.Count} produtos foram descontados no sistema.");
+            return Ok($"Entrada removida com sucesso.{Environment.NewLine}{input.AuxiliarConsumptions.Count} produto(s) foram descontados no sistema.");
         }
 
 

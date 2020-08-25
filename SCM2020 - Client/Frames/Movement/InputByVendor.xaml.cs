@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Frames
 {
@@ -238,15 +239,23 @@ namespace SCM2020___Client.Frames
             Task.Run(() =>
             {
                 var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
-                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
         private void UpdateInput()
         {
             ModelsLibraryCore.MaterialInputByVendor input = this.previousInput;
-            if (input.AuxiliarConsumptions.Count == 0)
+            if (this.ProductsAddedDataGrid.Items.Count == 0)
             {
-                //apagar
+                //Pergunta se deseja apagar
+                //Não há sentido de manter uma entrada por fornecedor com informações e sem materiais envolvidos
+                MessageBoxResult resultDialog = MessageBox.Show("Você deseja apagar a entrada por fornecedor?", "Confirmação", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (resultDialog == MessageBoxResult.Yes)
+                {
+                    var result = APIClient.DeleteData(new Uri(Helper.Server, $"Input/Remove/{previousInput.Id}").ToString(), Helper.Authentication);
+                    MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
             }
 
             foreach (ConsumpterProductDataGrid item in this.ProductsAddedDataGrid.Items)

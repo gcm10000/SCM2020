@@ -383,7 +383,16 @@ namespace SCM2020___Client.Frames.Movement
             DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
 
             var register = RegisterApplicantTextBox.Text;
-            var userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+            string userId = string.Empty;
+            try
+            {
+                userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
             Monitoring monitoring = new Monitoring()
@@ -725,10 +734,12 @@ namespace SCM2020___Client.Frames.Movement
                 return;
             try
             {
-                //Recebe as informações
-                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"InfoUser/Register/{register}").ToString(), Helper.Authentication);
-                ApplicantTextBox.Text = infoUser.Name;
-
+                //Zera informação
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+                //Recebe informações
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
+                //Atribui o nome do funcionário no campo correspondente
+                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
             }
             catch (HttpRequestException)
             {
