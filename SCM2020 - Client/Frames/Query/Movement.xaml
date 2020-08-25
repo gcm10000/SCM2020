@@ -7,6 +7,27 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <UserControl.Resources>
+        <Style x:Key="Body_Content_DataGrid_Centering"
+        TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Disable" TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="#FF2196F3"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <DockPanel Background="White">
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
@@ -75,16 +96,12 @@
                 <Grid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
                 </Grid.Resources>
-                <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="ProductMovementDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductMovementDataGrid" IsReadOnly="True"
+                <DataGrid SelectionMode="Single" SelectionUnit="FullRow"  BeginningEdit="ProductMovementDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="ProductMovementDataGrid" IsReadOnly="True"  RowHeight="37" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   ScrollViewer.CanContentScroll="True" 
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="False">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}"/>
-                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>

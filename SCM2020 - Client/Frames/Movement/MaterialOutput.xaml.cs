@@ -370,8 +370,9 @@ namespace SCM2020___Client.Frames
             
             //materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
 
-            var listConsumptionProduct = materialOutput.ConsumptionProducts.ToList();
-            var listPermanentProduct = materialOutput.PermanentProducts.ToList();
+            //var listConsumptionProduct = materialOutput.ConsumptionProducts.ToList();
+            //var listPermanentProduct = materialOutput.PermanentProducts.ToList();
+
             //Loop baseado na lista de produtos consumíveis escolhidos
             foreach (ProductToOutput item in FinalConsumpterProductsAdded)
             {
@@ -389,8 +390,8 @@ namespace SCM2020___Client.Frames
                 }
                 if (item.ProductChanged)
                 {
-                    listConsumptionProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
-                        item.ConsumptionProduct.Quantity = item.QuantityAdded;
+                    //listConsumptionProduct[FinalConsumpterProductsAdded.IndexOf(item)].Quantity =
+                    item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
 
@@ -418,8 +419,12 @@ namespace SCM2020___Client.Frames
                     }
                 }
             }
-            var result = APIClient.PostData(new Uri(Helper.Server, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Task.Run(() =>
+            {
+                var result = APIClient.PostData(new Uri(Helper.Server, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            });
         }
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {

@@ -9,12 +9,15 @@ namespace SCM2020___Client
         //public string Image { get; set; }
         public int Id { get; set; }
         public int Code { get; set; }
-        public double QuantityFuture { get => Quantity + QuantityAdded; }
+        //public double QuantityFuture { get => Quantity + QuantityAdded; }
         public double QuantityAdded { get; set; }
         public double Quantity { get; set; }
         public string Description { get; set; }
+        public bool NewProduct { get; set; }
+        public bool ProductChanged { get; set; }
+        public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
     }
-    //É aconselhável que seja dado as classes internamentes por cada classe GUI pois é fundamental que siga as especificações de entrada e saída.
+    //É aconselhável que seja dado as classes internamente por cada classe GUI pois é fundamental que siga as especificações de entrada e saída.
     //A variável QuantityFuture por exemplo, na saída deveria apresentar uma subtração das duas variáveis, ao contrário das entradas.
     //class PermanentProductDataGrid : ConsumpterProductDataGrid
     //{

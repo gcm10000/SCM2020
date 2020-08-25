@@ -3,7 +3,9 @@ using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.Frames.Query;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -102,10 +104,10 @@ namespace SCM2020___Client.Frames.Movement
 
                     try
                     {
-                        MaterialInput materialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-                        this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)materialInput.Regarding) - 1; }));
+                        previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)previousMaterialInput.Regarding) - 1; }));
 
-                        RescueProducts(materialInput);
+                        RescueProducts(previousMaterialInput);
                         InputData(false, false);
                     }
 
@@ -152,8 +154,6 @@ namespace SCM2020___Client.Frames.Movement
             this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
         }
 
-        List<ConsumpterProductDataGrid> ListConsumpterProductDataGrid = new List<ConsumpterProductDataGrid>();
-        List<PermanentProductDataGrid> ListPermanentProductDataGrid = new List<PermanentProductDataGrid>();
         private void RescueProducts(ModelsLibraryCore.MaterialInput materialInput)
         {
             this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); } ));
@@ -392,6 +392,7 @@ namespace SCM2020___Client.Frames.Movement
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
+                //O setor é referente ao funcionário que solicitou material na ordem de serviço
                 RequestingSector = Helper.CurrentSector.Id,
                 MovingDate = dateTime,
                 Work_Order = OSTextBox.Text,
@@ -559,19 +560,8 @@ namespace SCM2020___Client.Frames.Movement
         }
         private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            //TxtProductConsumpterSearch_KeyDown
-            //fazer com que filtre dentro do datagrid
-            //this.ConsumpterProductToAddDataGrid
-            List<ConsumpterProductDataGrid> list = ListConsumpterProductDataGrid;
-            var newList = list.Where(x => (x.Description.Contains(TxtProductConsumpterSearch.Text)) || (x.Code.ToString().Contains(TxtProductConsumpterSearch.Text)));
-            this.ConsumpterProductToAddDataGrid.Items.Clear();
-            this.ConsumpterProductToAddDataGrid.Items.Refresh();
-            foreach (var item in newList)
-            {
-                this.ConsumpterProductToAddDataGrid.Items.Add(item);
-            }
-            this.ConsumpterProductToAddDataGrid.Items.Refresh();
-            this.ConsumpterProductToAddDataGrid.UnselectAll();
+                string workOrder = TxtProductConsumpterSearch.Text;
+                Task.Run(() => ConsumpterProductSearch(workOrder));
         }
 
         private void ConsumpterProductSearch(string workOrder)
@@ -621,21 +611,50 @@ namespace SCM2020___Client.Frames.Movement
         {
             if (e.Key == Key.Enter)
             {
-                PermanentProductButton_Click(sender, e);
+                string query = this.TxtPermanentProductSearch.Text;
+                Task.Run(() =>
+                {
+                    SearchPermamentProduct(query);
+
+                });
             }
         }
         private void PermanentProductButton_Click(object sender, RoutedEventArgs e)
         {
-            List<PermanentProductDataGrid> list = new List<PermanentProductDataGrid>(ListPermanentProductDataGrid);
-            var newList = list.Where(x => (x.Description.Contains(TxtPermanentProductSearch.Text) ) || (x.Code.ToString().Contains(TxtPermanentProductSearch.Text) || (x.Patrimony.Contains(TxtPermanentProductSearch.Text))));
-            this.PermanentProductToAddDataGrid.Items.Clear();
-            this.PermanentProductToAddDataGrid.Items.Refresh();
-            foreach (var item in newList)
+            string query = this.TxtPermanentProductSearch.Text;
+            Task.Run(() =>
             {
-                this.PermanentProductToAddDataGrid.Items.Add(item);
+                SearchPermamentProduct(query);
+
+            });
+        }
+
+        private void SearchPermamentProduct(string query)
+        {
+            if (query == string.Empty)
+                return;
+
+            Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{query}");
+
+            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
+
+            List<PermanentProduct> products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+            foreach (var product in products)
+            {
+                var information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{product.InformationProduct}").ToString(), Helper.Authentication);
+
+                PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
+                {
+                    Id = product.Id,
+                    Code = information.Code,
+                    Description = information.Description,
+                    Patrimony = product.Patrimony,
+                    Quantity = information.Stock,
+                    NewProduct = true,
+                };
+                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
             }
-            this.PermanentProductToAddDataGrid.Items.Refresh();
-            this.PermanentProductToAddDataGrid.UnselectAll();
+
         }
         string oldOS = string.Empty;
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -684,6 +703,37 @@ namespace SCM2020___Client.Frames.Movement
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RegisterApplicantTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string register = this.RegisterApplicantTextBox.Text;
+            Task.Run(() => GetName(register));
+        }
+
+        private void RegisterApplicantTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string register = this.RegisterApplicantTextBox.Text;
+                Task.Run(() => GetName(register));
+            }
+        }
+        private void GetName(string register)
+        {
+            if (string.IsNullOrWhiteSpace(register))
+                return;
+            try
+            {
+                //Recebe as informações
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"InfoUser/Register/{register}").ToString(), Helper.Authentication);
+                ApplicantTextBox.Text = infoUser.Name;
+
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

@@ -178,7 +178,7 @@
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
+                        <!--<DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>-->
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

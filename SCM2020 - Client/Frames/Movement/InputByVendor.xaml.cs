@@ -37,6 +37,7 @@ namespace SCM2020___Client.Frames
             this.VendorComboBox.SelectedIndex = 0;
         }
         private bool existsInput = false;
+        private ModelsLibraryCore.MaterialInputByVendor previousInput;
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
@@ -173,13 +174,20 @@ namespace SCM2020___Client.Frames
                 ProductToAddDataGrid.Items.Refresh();
                 ProductsAddedDataGrid.Items.Refresh();
                 if (!ProductsAddedDataGrid.Items.Contains(product))
+                {
+                    product.NewProduct = true;
                     ProductsAddedDataGrid.Items.Add(product);
+                }
                 else
                 {
                     if (dialog.QuantityAdded == 0)
                         ProductsAddedDataGrid.Items.Remove(product);
                     else
+                    {
                         product.QuantityAdded = dialog.QuantityAdded;
+                        product.ProductChanged = true;
+
+                    }
                 }
                 ProductToAddDataGrid.UnselectAll();
                 ProductsAddedDataGrid.UnselectAll();
@@ -221,7 +229,8 @@ namespace SCM2020___Client.Frames
                 {
                     Date = DateTime.Now,
                     ProductId = product.Id,
-                    Quantity = product.QuantityAdded
+                    Quantity = product.QuantityAdded,
+                    SCMEmployeeId = Helper.NameIdentifier
                 };
                 p.Add(auxiliarConsumption);
             }
@@ -234,7 +243,37 @@ namespace SCM2020___Client.Frames
         }
         private void UpdateInput()
         {
+            ModelsLibraryCore.MaterialInputByVendor input = this.previousInput;
+            if (input.AuxiliarConsumptions.Count == 0)
+            {
+                //apagar
+            }
 
+            foreach (ConsumpterProductDataGrid item in this.ProductsAddedDataGrid.Items)
+            {
+                if (item.NewProduct)
+                {
+                    AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
+                    {
+                        Date = DateTime.Now,
+                        ProductId = item.Id,
+                        Quantity = item.QuantityAdded,
+                        SCMEmployeeId = Helper.NameIdentifier
+                    };
+                    item.NewProduct = false;
+                    input.AuxiliarConsumptions.Add(auxiliarConsumption);
+                }
+                if (item.ProductChanged)
+                {
+                    item.ConsumptionProduct.Quantity = item.QuantityAdded;
+                }
+            }
+
+            Task.Run(() => 
+            {
+                var result = APIClient.PostData(new Uri(Helper.Server, $"input/update/{input.Id}").ToString(), input, Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            });
         }
         string previousInvoice = string.Empty;
         private void InvoiceTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -266,10 +305,10 @@ namespace SCM2020___Client.Frames
 
             this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Clear(); }));
 
-            ModelsLibraryCore.MaterialInputByVendor input = null;
+            previousInput = null;
             try
             {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
+                previousInput = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
                 existsInput = true;
             }
             catch (HttpRequestException) //Entrada por fornecedor inexistente
@@ -284,10 +323,10 @@ namespace SCM2020___Client.Frames
             //Bloquear combobox e data
             InputData(false);
             //Colocar informações
-            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = input.VendorId - 1; }));
-            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = input.MovingDate; }));
+            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = previousInput.VendorId - 1; }));
+            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = previousInput.MovingDate; }));
             //Preencher datagrid
-            foreach (var item in input.AuxiliarConsumptions)
+            foreach (var item in previousInput.AuxiliarConsumptions)
             {
                 ModelsLibraryCore.ConsumptionProduct information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                 ConsumpterProductDataGrid product = new ConsumpterProductDataGrid()
@@ -296,7 +335,8 @@ namespace SCM2020___Client.Frames
                     Code = information.Code,
                     Description = information.Description,
                     QuantityAdded = item.Quantity,
-                    Quantity = information.Stock
+                    Quantity = information.Stock,
+                    ConsumptionProduct = item
                 };
                 this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Add(product); }));
             }

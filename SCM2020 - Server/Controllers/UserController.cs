@@ -202,10 +202,18 @@ namespace SCM2020___Server.Controllers
         }
         [HttpGet("InfoUser/{userId}")]
         [AllowAnonymous]
-        public InfoUser GetInfoUserByRegister(string userId)
+        public InfoUser GetInfoUserById(string userId)
         {
             var user = UserManager.FindUserByIdAsync(userId);
             //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
+            var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
+            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+        }
+        [HttpGet("InfoUser/Register/{register}")]
+        [AllowAnonymous]
+        public async Task<InfoUser> GetInfoUserByRegister(string register)
+        {
+            var user = await UserManager.FindByNameAsync(register);
             var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
             return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
         }
