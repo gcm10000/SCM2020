@@ -16,7 +16,7 @@ namespace ModelsLibraryCore
             this.VendorId = input.VendorId;
             this.MovingDate = input.MovingDate;
             this.SCMEmployeeId = UserId;
-            this.AuxiliarConsumptions = input.AuxiliarConsumptions;
+            this.ConsumptionProducts = input.ConsumptionProducts;
         }
         public MaterialInputByVendor(string raw)
         {
@@ -25,7 +25,7 @@ namespace ModelsLibraryCore
             this.VendorId = input.VendorId;
             this.MovingDate = input.MovingDate;
             this.SCMEmployeeId = input.SCMEmployeeId;
-            this.AuxiliarConsumptions = input.AuxiliarConsumptions;
+            this.ConsumptionProducts = input.ConsumptionProducts;
         }
         /// <summary>
         /// Chave primária da entrada.
@@ -48,7 +48,11 @@ namespace ModelsLibraryCore
         /// Entrada por Id do produto.
         /// </summary>
         [Required]
-        public ICollection<AuxiliarConsumption> AuxiliarConsumptions { get; set; }
+        public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
+        /// <summary>
+        /// Materiais permanentes presente na entrada.
+        /// </summary>
+        public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
         [Required]
         public int VendorId { get; set; }
         /// <summary>

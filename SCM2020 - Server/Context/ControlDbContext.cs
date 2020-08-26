@@ -37,7 +37,7 @@ namespace SCM2020___Server.Context
 
             modelBuilder.Entity<AuxiliarConsumption>()
                 .HasOne(b => b.MaterialInputByVendor)
-                .WithMany(a => a.AuxiliarConsumptions)
+                .WithMany(a => a.ConsumptionProducts)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AuxiliarConsumption>()

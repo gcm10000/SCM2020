@@ -235,7 +235,7 @@ namespace SCM2020___Client.Frames
                 };
                 p.Add(auxiliarConsumption);
             }
-            materialInputByVendor.AuxiliarConsumptions = p;
+            materialInputByVendor.ConsumptionProducts = p;
             Task.Run(() =>
             {
                 var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
@@ -270,7 +270,7 @@ namespace SCM2020___Client.Frames
                         SCMEmployeeId = Helper.NameIdentifier
                     };
                     item.NewProduct = false;
-                    input.AuxiliarConsumptions.Add(auxiliarConsumption);
+                    input.ConsumptionProducts.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
@@ -335,7 +335,7 @@ namespace SCM2020___Client.Frames
             this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = previousInput.VendorId - 1; }));
             this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = previousInput.MovingDate; }));
             //Preencher datagrid
-            foreach (var item in previousInput.AuxiliarConsumptions)
+            foreach (var item in previousInput.ConsumptionProducts)
             {
                 ModelsLibraryCore.ConsumptionProduct information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                 ConsumpterProductDataGrid product = new ConsumpterProductDataGrid()
