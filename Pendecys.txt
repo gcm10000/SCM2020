@@ -16,6 +16,7 @@
 - Modificar as impressões das movimentações (!!!);
 - Revisar migração de setores no software Utility
 - Importação de produtos permanentes (PENDENTE);
+- Tratar objetos nulos no servidor
 - Adicionar relatório financeiro;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
 - Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail;

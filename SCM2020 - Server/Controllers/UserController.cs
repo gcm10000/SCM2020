@@ -52,9 +52,9 @@ namespace SCM2020___Server.Controllers
             var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
             var user = new ApplicationUser { UserName = username, Name = postData.Name, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration, IdSector = postData.IdSector, Occupation = postData.Occupation };
             
-            var r1 = UserManager.FindByPJERJRegistrationAsync(postData.PJERJRegistration);
+            var r1 = UserManager.FindByPJERJRegistration(postData.PJERJRegistration);
             //MUDAR
-            var r2 = UserManager.FindByPJERJRegistrationAsync(postData.CPFRegistration);
+            var r2 = UserManager.FindByPJERJRegistration(postData.CPFRegistration);
             if ((r1 != null) || (r2 != null))
                 return BadRequest("Já existe um usuário com algum dos dois registros.");
 
@@ -95,7 +95,7 @@ namespace SCM2020___Server.Controllers
             var fromPOST = await SignInUserInfo();
             string strRegistration = fromPOST.Registration;
 
-            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistrationAsync(strRegistration) : UserManager.FindByCPFAsync(strRegistration);
+            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistration(strRegistration) : UserManager.FindByCPF(strRegistration);
 
             if (user == null)
                 return BadRequest("Usuário ou senha inválidos.");
@@ -157,7 +157,7 @@ namespace SCM2020___Server.Controllers
 
             string newPassword = fromPOST.NewPassword;
 
-            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistrationAsync(strRegistration) : UserManager.FindByCPFAsync(strRegistration);
+            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistration(strRegistration) : UserManager.FindByCPF(strRegistration);
 
             string resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             IdentityResult passwordChangeResult = await UserManager.ResetPasswordAsync(user, resetToken, newPassword);
@@ -192,30 +192,36 @@ namespace SCM2020___Server.Controllers
         [AllowAnonymous]
         public ActionResult<string> GetUserIdByPJERJRegister(string register)
         {
-            var user = UserManager.FindByPJERJRegistrationAsync(register);
+            var user = UserManager.FindByPJERJRegistration(register);
             if (user != null)
             {
                 return user.Id;
             }
-            else
-            {
-                return BadRequest("Matrícula não encontrada.");
-            }
+            return BadRequest("Matrícula não encontrada.");
         }
         [HttpGet("RegisterId/{userId}")]
         [AllowAnonymous]
-        public string GetPJERJRegisterByUserId(string userId)
+        public ActionResult<string> GetPJERJRegisterByUserId(string userId)
         {
-            return UserManager.FindUserByIdAsync(userId).PJERJRegistration;
+            var user = UserManager.FindUserById(userId);
+            if (user != null)
+            {
+                return user.PJERJRegistration;
+            }
+            return BadRequest("Id não encontrado.");
         }
         [HttpGet("InfoUser/{userId}")]
         [AllowAnonymous]
-        public InfoUser GetInfoUserById(string userId)
+        public ActionResult<InfoUser> GetInfoUserById(string userId)
         {
-            var user = UserManager.FindUserByIdAsync(userId);
-            //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
-            var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-            return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+            var user = UserManager.FindUserById(userId);
+            if (user != null)
+            {
+                //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
+                var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
+                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+            }
+            return BadRequest("Id não encontrado.");
         }
         [HttpGet("InfoUserRegister/{register}")]
         [AllowAnonymous]
@@ -234,7 +240,9 @@ namespace SCM2020___Server.Controllers
         [AllowAnonymous]
         public IActionResult GetListUser(string query)
         {
-            var listUser = UserManager.Users.Where(x => x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query));
+            System.Collections.Generic.List<ApplicationUser> listUser = (query != string.Empty) ? UserManager.Users.Where(x => 
+            x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query)).ToList() 
+            : UserManager.Users.ToList();
             return Ok(listUser);
         }
         //[HttpDelete("Delete")]

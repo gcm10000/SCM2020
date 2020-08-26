@@ -43,11 +43,6 @@ namespace SCM2020___Server.Controllers
             var monitoring = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
             return monitoring;
         }
-        [HttpGet("Patrimony/{patrimony}")]
-        public IActionResult ShowByPatrimony(string patrimony)
-        {
-            return Ok();
-        }
         [HttpGet("CheckWorkOrder/{workorder}")]
         public bool CheckWorkOrder(string workorder)
         {
@@ -62,11 +57,11 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<Monitoring>(raw);
-            var SCMId = userManager.FindByPJERJRegistrationAsync(deserialized.SCMEmployeeId).Id;
+            var SCMId = userManager.FindByPJERJRegistration(deserialized.SCMEmployeeId).Id;
             Monitoring monitoring = new Monitoring(raw);
             //NOME DO FUNCIONÁRIO
             monitoring.SCMEmployeeId = SCMId;
-            var UserId = userManager.FindByCompleteNameAsync(deserialized.EmployeeId);
+            var UserId = userManager.FindByCompleteName(deserialized.EmployeeId);
             monitoring.EmployeeId = (UserId).Id;
             context.Monitoring.Add(monitoring);
             await context.SaveChangesAsync();

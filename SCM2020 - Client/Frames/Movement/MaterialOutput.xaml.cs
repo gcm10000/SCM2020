@@ -352,7 +352,6 @@ namespace SCM2020___Client.Frames
 
             Task.Run(() =>
             {
-
                 var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
 
                 var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
@@ -366,10 +365,10 @@ namespace SCM2020___Client.Frames
                 //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
 
                 var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
-                MessageBox.Show(result2);
+                MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 PrincipalMonitoring = monitoring;
-            }).Wait();
+            });
         }
         private void UpdateOutput()
         {

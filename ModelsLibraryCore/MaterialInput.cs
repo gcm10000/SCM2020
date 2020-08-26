@@ -12,7 +12,6 @@ namespace ModelsLibraryCore
         public MaterialInput(string raw)
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            this.DocDate = input.DocDate;
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
             this.PermanentProducts = input.PermanentProducts;
@@ -30,32 +29,18 @@ namespace ModelsLibraryCore
         /// </summary>
         public Regarding Regarding { get; set; }
         /// <summary>
-        /// Funcionário que solicitou a entrada do material.
-        /// </summary>
-        //[Required]
-        //public string EmployeeId { get; set; }
-        ///// <summary>
-        ///// Funcionário que fez a entrada do material.
-        ///// </summary>
-        //[Required]
-        //public string SCMEmployeeId { get; set; }
-        /// <summary>
         /// Data da movimentação.
         /// </summary>
         [Required]
         public DateTime MovingDate { get; set; }
         /// <summary>
-        /// Data da Ordem de Serviço.
-        /// </summary>
-        public DateTime DocDate { get; set; }
-        /// <summary>
         /// Ordem de serviço.
         /// </summary>
+        [Required]
         public string WorkOrder { get; set; }
         /// <summary>
         /// Materiais consumíveis da devolução.
         /// </summary>
-        [Required]
         public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
         /// <summary>
         /// Materiais permanentes da devolução.
