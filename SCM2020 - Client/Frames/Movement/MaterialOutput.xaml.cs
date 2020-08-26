@@ -184,7 +184,7 @@ namespace SCM2020___Client.Frames
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
 
-            List<PermanentProduct> products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+            var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => string.IsNullOrWhiteSpace(x.WorkOrder));
             foreach (var product in products)
             {
                 PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid(new SearchPermanentProduct(product));

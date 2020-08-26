@@ -66,8 +66,6 @@ namespace SCM2020___Client.Frames.Movement
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
                 var userId = resultMonitoring.EmployeeId;
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
-                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
-                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
                 this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = resultMonitoring.MovingDate; this.OSDatePicker.DisplayDate = resultMonitoring.MovingDate; }));
@@ -125,8 +123,6 @@ namespace SCM2020___Client.Frames.Movement
                     MessageBox.Show($"Ordem de serviço foi fechada na data {closingDate.ToString("dd/MM/yyyy")}.", "Ordem de serviço está fechada.", MessageBoxButton.OK, MessageBoxImage.Error);
                     InputData(false, false);
                     ClearData();
-                    this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
-                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
                 }
             }
         }
@@ -138,6 +134,9 @@ namespace SCM2020___Client.Frames.Movement
             this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.SelectedIndex = 0; }));
             this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.Text = string.Empty; }));
             this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
+
+            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
+            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
         }
 
         private void InputData(bool IsEnable, bool OSDatePickerIsEnable)
@@ -645,7 +644,7 @@ namespace SCM2020___Client.Frames.Movement
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
 
-            List<PermanentProduct> products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+            var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => !string.IsNullOrWhiteSpace(x.WorkOrder));
             foreach (var product in products)
             {
                 var information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{product.InformationProduct}").ToString(), Helper.Authentication);
