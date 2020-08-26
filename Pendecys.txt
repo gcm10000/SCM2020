@@ -12,10 +12,17 @@
 - FUNCIONÁRIO SCM EM CADA PRODUTO NULL OK
 - COLOCAR NOME DO FUNCIONÁRIO NA MOVIMENTAÇÃO DE ENTRADA E SAÍDA OK
 - Mexer na impressão das movimentações (pendente)
-- Retirar objeto DocDate da devolução de materiais (pendente)
+- Retirar objeto DocDate da devolução de materiais (OK)
 - Modificar as impressões das movimentações (!!!);
 - Revisar migração de setores no software Utility
 - Importação de produtos permanentes (PENDENTE);
+- LIMPAR DATAGRID DA CONSULTA DE ENTRADA POR FORNECEDOR TODA VEZ QUE EXECUTAR UMA NOVA BUSCA (OK)
+- FUNCIONÁRIO SCM EM CADA PRODUTO NULL (OK)
+- PRODUTOS CONSUMÍVEIS COMO REQUISITO PARA MOVIMENTAÇÃO DE ENTRADA (OK)
+- PESQUISA DE PRODUTOS PERMANENTES EM DEVOLUÇÃO SOMENTE APARECE PRODUTOS QUE TEM ORDEM DE SERVIÇO PREENCHIDA (OK)
+- PESQUISA DE PRODUTOS PERMAMENTES EM SAÍDA SOMENTE APARECE PRODUTOS QUE NÃO TEM ORDEM DE SERVIÇO PREENCHIDA (OK)
+- VERIFICAR NULO NA CONSULTA (pendente)
+- VERIFICAR NULO NAS PESQUISAS DE PRODUTO (pendente)
 - Tratar objetos nulos no servidor
 - Adicionar relatório financeiro;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
