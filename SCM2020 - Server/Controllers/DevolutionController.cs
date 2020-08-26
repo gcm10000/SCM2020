@@ -180,7 +180,6 @@ namespace SCM2020___Server.Controllers
                 lPermanent.AddRange(devolution.PermanentProducts);
 
             devolution.ConsumptionProducts = devolutionFromJson.ConsumptionProducts;
-            devolution.DocDate = devolutionFromJson.DocDate;
             //devolution.EmployeeId = oldMaterialInput.EmployeeId;
             devolution.MovingDate = devolutionFromJson.MovingDate;
             devolution.PermanentProducts = devolutionFromJson.PermanentProducts;

@@ -66,6 +66,8 @@ namespace SCM2020___Client.Frames.Movement
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
                 var userId = resultMonitoring.EmployeeId;
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
+                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
                 this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = resultMonitoring.MovingDate; this.OSDatePicker.DisplayDate = resultMonitoring.MovingDate; }));
@@ -412,10 +414,6 @@ namespace SCM2020___Client.Frames.Movement
             {
                 Regarding = ((Regarding)(ReferenceComboBox.SelectedIndex + 1)),
                 WorkOrder = OSTextBox.Text,
-                //DocDate não deveria existir. Tratamentos diretos sobre ordem de serviço constitui-se na classe Monitoring.
-                DocDate = DateTime.Now,
-                //Data da criação de objeto
-                //ou seja, da primeira movimentação
                 MovingDate = OSDatePicker.SelectedDate.Value,
             };
 
