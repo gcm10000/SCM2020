@@ -79,5 +79,29 @@ namespace SCM2020___Client.Templates.Query
                 this.Products.Add(product);
             }
         }
+        public string RenderizeHtml()
+        {
+            string itemsContent = string.Empty;
+            foreach (var product in Products)
+            {
+                itemsContent += "<tr>" +
+                                    $"<td>{product.Code}</td>" +
+                                    $"<td>{product.Description}</td>" +
+                                    $"<td>{product.Quantity}</td>" +
+                                    $"<td>{product.Unity}</td>" +
+                                    $"<td>{product.Patrimony}</td>" +
+                                    $"<td>{product.MoveDate.ToString("dd/MM/yyyy")}</td>" +
+                                "</tr>";
+            }
+
+            Html = Html.Replace("@Invoice", Invoice);
+            Html = Html.Replace("@Vendor", Vendor);
+            Html = Html.Replace("@SCMRegistration", SCMRegistration);
+            Html = Html.Replace("@SCMEmployee", SCMEmployee);
+            Html = Html.Replace("@InvoiceDate", InvoiceDate.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
+            return Html.ToString();
+        }
+
     }
 }

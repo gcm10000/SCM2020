@@ -27,7 +27,7 @@ namespace SCM2020___Client.Frames.Query
     public partial class InputByVendor : UserControl
     {
         WebBrowser webBrowser = Helper.MyWebBrowser;
-        SCM2020___Client.Templates.Query.InputByVendor inputDocument;
+        SCM2020___Client.Templates.Query.InputByVendor template;
 
 
         //NOTA FISCAL, DATA DA MOVIMENTAÇÃO, FORNECEDOR, FUNCIONÁRIO
@@ -60,24 +60,24 @@ namespace SCM2020___Client.Frames.Query
             //Zerar todos os dados anteriores...
             Clear();
 
-            inputDocument = new Templates.Query.InputByVendor(invoice);
+            template = new Templates.Query.InputByVendor(invoice);
 
-            foreach (var product in inputDocument.Products)
+            foreach (var product in template.Products)
             {
                 this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Add(product); }));
             }
 
-            this.InvoiceText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InvoiceText.Text = inputDocument.Invoice; }));
-            this.VendorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.VendorTextBox.Text = inputDocument.Vendor; }));
-            this.RegistrationSCMTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegistrationSCMTextBox.Text = inputDocument.SCMRegistration; }));
-            this.SCMEmployeeTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SCMEmployeeTextBox.Text = inputDocument.SCMEmployee; }));
-            this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = this.WorkOrderDateDatePicker.DisplayDate = inputDocument.InvoiceDate; }));
+            this.InvoiceText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InvoiceText.Text = template.Invoice; }));
+            this.VendorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.VendorTextBox.Text = template.Vendor; }));
+            this.RegistrationSCMTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegistrationSCMTextBox.Text = template.SCMRegistration; }));
+            this.SCMEmployeeTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SCMEmployeeTextBox.Text = template.SCMEmployee; }));
+            this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = this.WorkOrderDateDatePicker.DisplayDate = template.InvoiceDate; }));
 
             AllowButtons();
         }
         private void Clear()
         {
-            inputDocument = null;
+            template = null;
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
             this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
@@ -95,18 +95,18 @@ namespace SCM2020___Client.Frames.Query
         {
             PrintORExport = false;
             //DocumentInputByVendor template = new DocumentInputByVendor(ProductsToShow, info);
-            //Document = template.RenderizeHtml();
-            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            //this.webBrowser.NavigateToString(Document);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
             //DocumentInputByVendor template = new DocumentInputByVendor(ProductsToShow, info);
-            //var result = template.RenderizeHtml();
-            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            //this.webBrowser.NavigateToString(result);
+            var result = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(result);
         }
 
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
