@@ -641,6 +641,8 @@ namespace SCM2020___Client.Frames.Movement
             if (query == string.Empty)
                 return;
 
+            query = System.Uri.EscapeDataString(query);
+
             Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{query}");
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));

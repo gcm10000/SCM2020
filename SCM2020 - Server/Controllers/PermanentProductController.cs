@@ -84,7 +84,12 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Search/{patrimony}")]
         public IActionResult SearchByPatrimony(string patrimony)
         {
+            patrimony = System.Uri.UnescapeDataString(patrimony);
+            if (string.IsNullOrWhiteSpace(patrimony))
+                return Ok();
+
             patrimony = patrimony.Trim();
+
             var productPermanent = context.PermanentProduct.Where(x => x.Patrimony.Contains(patrimony));
             if (productPermanent != null)
             {

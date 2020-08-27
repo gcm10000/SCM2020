@@ -79,20 +79,7 @@ namespace SCM2020___Client.Frames
         public MaterialOutput()
         {
             InitializeComponent();
-            //ProductToOutput productToOutput = new ProductToOutput()
-            //{
-            //    Id = 1,
-            //    Description = "TESTE 123",
-            //    Code = 999,
-            //    NewProduct = false,
-            //    QuantityAdded = 0,
-            //    Quantity = 10,
-            //    ProductChanged = false,
-            //    //ConsumptionProduct 
-            //};
 
-            //ProductToAddDataGrid.Items.Add(productToOutput);
-            //ProductToAddDataGrid.Items.Add(productToOutput);
         }
 
         private bool previousOutputExists = false;
@@ -101,6 +88,9 @@ namespace SCM2020___Client.Frames
         {
             if (query == string.Empty)
                 return;
+
+            query = System.Uri.EscapeDataString(query);
+
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");

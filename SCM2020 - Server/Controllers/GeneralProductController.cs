@@ -100,6 +100,10 @@ namespace SCM2020___Server.Controllers
         public IActionResult Search(string query)
         {
             query = System.Uri.UnescapeDataString(query);
+
+            if (string.IsNullOrWhiteSpace(query))
+                return Ok();
+
             string[] querySplited = query.Trim().Split(' ');
 
             var lproduct = context.ConsumptionProduct.ToList()

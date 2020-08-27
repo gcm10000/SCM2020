@@ -49,6 +49,8 @@ namespace SCM2020___Client.Frames
         {
             if (query == string.Empty)
                 return;
+            query = System.Uri.EscapeDataString(query);
+
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
             Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
