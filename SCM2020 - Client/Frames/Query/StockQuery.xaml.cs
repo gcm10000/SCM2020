@@ -59,17 +59,24 @@ namespace SCM2020___Client.Frames.Query
         }
         private void SearchStock(string query)
         {
-            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Clear(); }));
+            Clear();
 
-            List<ModelsLibraryCore.ConsumptionProduct> result = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
-            foreach (var item in result)
+            products = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+            foreach (var item in products)
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(item); }));
             }
-            products = result;
             this.Export_Button.IsEnabled = true;
             this.Print_Button.IsEnabled = true;
 
+        }
+
+        private void Clear()
+        {
+            products = null;
+            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Clear(); }));
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
         }
 
         //True to print, False to export.
