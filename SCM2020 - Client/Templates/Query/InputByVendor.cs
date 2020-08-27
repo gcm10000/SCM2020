@@ -58,7 +58,7 @@ namespace SCM2020___Client.Templates.Query
                 MessageBox.Show("Funcionário não encontrado.", "Funcionário não encontrado", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            //Show data in screen
+            //Exibir dados na tela
             Invoice = inputByVendor.Invoice;
             InvoiceDate = inputByVendor.MovingDate;
             Vendor = APIClient.GetData<ModelsLibraryCore.Vendor>(new Uri(Helper.Server, $"vendor/{inputByVendor.VendorId}").ToString(), Helper.Authentication).Name;
