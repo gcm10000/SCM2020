@@ -570,16 +570,17 @@ namespace SCM2020___Client.Frames.Movement
                 Task.Run(() => ConsumpterProductSearch(workOrder));
         }
 
-        private void ConsumpterProductSearch(string workOrder)
+        private void ConsumpterProductSearch(string query)
         {
-            if (workOrder == string.Empty)
+            if (query == string.Empty)
                 return;
 
+            query = System.Uri.EscapeDataString(query);
             //Limpa datagrid de consumo
             this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Clear(); ConsumpterProductToAddDataGrid.UnselectAll(); }));
+            
 
-
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{workOrder}");
+            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
             var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
@@ -589,7 +590,7 @@ namespace SCM2020___Client.Frames.Movement
                 double productInputQuantity = 0.00d;
                 try
                 {
-                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{workOrder}").ToString(), Helper.Authentication);
+                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{query}").ToString(), Helper.Authentication);
                     var productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == infoProduct.Id);
                     productInputQuantity = productInput.Quantity;
                 }

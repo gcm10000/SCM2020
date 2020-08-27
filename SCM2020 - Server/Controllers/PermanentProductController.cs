@@ -84,6 +84,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Search/{patrimony}")]
         public IActionResult SearchByPatrimony(string patrimony)
         {
+            patrimony = patrimony.Trim();
             var productPermanent = context.PermanentProduct.Where(x => x.Patrimony.Contains(patrimony));
             if (productPermanent != null)
             {

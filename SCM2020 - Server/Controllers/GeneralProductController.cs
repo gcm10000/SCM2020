@@ -99,7 +99,8 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Search/{query}")]
         public IActionResult Search(string query)
         {
-            string[] querySplited = query.Split(' ');
+            query = System.Uri.UnescapeDataString(query);
+            string[] querySplited = query.Trim().Split(' ');
 
             var lproduct = context.ConsumptionProduct.ToList()
                 .Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
