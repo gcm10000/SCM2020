@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,15 +55,31 @@ namespace SCM2020___Client.Frames.Query
             {
                 if (previousTextSearch == query)
                     return;
-                previousTextSearch = query;
+
                 Task.Run(() => SearchStock(query));
             }
         }
         private void SearchStock(string query)
         {
             Clear();
+            previousTextSearch = query;
+            if (query == string.Empty)
+            {
+                return;
+            }
             query = System.Uri.EscapeDataString(query);
-            products = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+            try
+            {
+                products = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Produto não encontrado.", "Produto inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if ((products == null) || (products.Count == 0))
+                return;
             foreach (var item in products)
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(item); }));
