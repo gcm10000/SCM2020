@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -41,7 +43,7 @@ namespace SCM2020___Client.Frames.Query
             if (previousTextSearch == query)
                 return;
             previousTextSearch = query;
-            SearchStock(query);
+            Task.Run(() => SearchStock(query));
         }
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -52,15 +54,17 @@ namespace SCM2020___Client.Frames.Query
                 if (previousTextSearch == query)
                     return;
                 previousTextSearch = query;
-                SearchStock(query);
+                Task.Run(() => SearchStock(query));
             }
         }
         private void SearchStock(string query)
         {
+            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Clear(); }));
+
             List<ModelsLibraryCore.ConsumptionProduct> result = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
             foreach (var item in result)
             {
-                this.QueryDataGrid.Items.Add(item);
+                this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(item); }));
             }
             products = result;
             this.Export_Button.IsEnabled = true;

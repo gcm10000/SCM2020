@@ -102,7 +102,6 @@ namespace SCM2020___Client.Frames.Query
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            //DocumentInputByVendor template = new DocumentInputByVendor(ProductsToShow, info);
             Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
@@ -111,7 +110,6 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            //DocumentInputByVendor template = new DocumentInputByVendor(ProductsToShow, info);
             var result = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(result);
