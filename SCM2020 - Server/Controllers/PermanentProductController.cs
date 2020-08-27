@@ -85,6 +85,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult SearchByPatrimony(string patrimony)
         {
             patrimony = System.Uri.UnescapeDataString(patrimony);
+
             if (string.IsNullOrWhiteSpace(patrimony))
                 return Ok();
 

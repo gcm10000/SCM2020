@@ -110,58 +110,6 @@ namespace SCM2020___Client.Frames
                 this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
             }
         }
-        private void ConsumpterProductSearch()
-        {
-            string textBoxValue = string.Empty;
-
-            if (textBoxValue == string.Empty)
-                return;
-
-            this.TxtSearchConsumpterProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearchConsumpterProduct.Text; }));
-            
-            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
-
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
-
-
-            List<ConsumptionProduct> products = new List<ConsumptionProduct>();
-
-            int index = -1;
-            if (int.TryParse(textBoxValue, out _))
-            {
-                Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-                Task.Run(() =>
-                {
-                    var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
-                    products.Add(singleProduct);
-                    index = products.FindIndex(x => x.Id == singleProduct.Id);
-
-                });
-            }
-
-            var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
-            products.AddRange(data);
-
-            if (index > -1)
-            {
-                var myProduct = products[index];
-                products[index] = products[0];
-                products[0] = myProduct;
-            }
-
-            foreach (var item in products.ToList())
-            {
-                ProductToOutput productsToOutput = new ProductToOutput()
-                {
-                    Id = item.Id,
-                    Code = item.Code,
-                    Description = item.Description,
-                    Quantity = item.Stock,
-                };
-                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
-
-            }
-        }
         private void PermanentProductSearch()
         {
             string textBoxValue = string.Empty;
@@ -169,6 +117,9 @@ namespace SCM2020___Client.Frames
 
             if (textBoxValue == string.Empty)
                 return;
+
+            textBoxValue = System.Uri.EscapeDataString(textBoxValue);
+
 
             Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
 

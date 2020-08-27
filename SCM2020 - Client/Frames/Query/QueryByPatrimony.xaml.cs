@@ -60,6 +60,8 @@ namespace SCM2020___Client.Frames.Query
         {
             if (patrimony == string.Empty)
                 return;
+
+            patrimony = System.Uri.EscapeDataString(patrimony);
             var result = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"permamentproduct/Search/{patrimony}").ToString(), Helper.Authentication);
             foreach (var item in result)
             {
