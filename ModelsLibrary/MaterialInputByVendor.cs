@@ -31,9 +31,10 @@ namespace ModelsLibrary
         /// Entrada por Id do produto.
         /// </summary>
         public ICollection<AuxiliarConsumption> AuxiliarConsumptions { get; set; }
-        //Colocar as informações do produto permanente
-        //dentro da entrada por fornecedor?
-        //public ICollection<AuxiliarPermanent> AuxiliarPermanents { get; set; }
+        /// <summary>
+        /// Materiais permanentes presente na entrada.
+        /// </summary>
+        public ICollection<AuxiliarPermanent> PermanentProducts { get; set; }
         public int VendorId { get; set; }
         /// <summary>
         /// Id do funcionário que cadastrou a entrada.
