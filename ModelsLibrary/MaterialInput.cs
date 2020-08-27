@@ -26,14 +26,6 @@ namespace ModelsLibrary
         /// </summary>
         public Regarding Regarding { get; set; }
         /// <summary>
-        /// Funcionário que solicitou a entrada do material.
-        /// </summary>
-        public string EmployeeId { get; set; }
-        /// <summary>
-        /// Funcionário que fez a entrada do material.
-        /// </summary>
-        public string SCMEmployeeId { get; set; }
-        /// <summary>
         /// Data da movimentação.
         /// </summary>
         public DateTime MovingDate { get; set; }
