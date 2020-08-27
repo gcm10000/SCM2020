@@ -66,8 +66,8 @@ namespace SCM2020___Client.Frames.Query
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(item); }));
             }
-            this.Export_Button.IsEnabled = true;
-            this.Print_Button.IsEnabled = true;
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
 
         }
 
@@ -76,7 +76,7 @@ namespace SCM2020___Client.Frames.Query
             products = null;
             this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Clear(); }));
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
         }
 
         //True to print, False to export.
