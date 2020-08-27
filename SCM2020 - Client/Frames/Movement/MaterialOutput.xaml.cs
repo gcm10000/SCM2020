@@ -589,25 +589,10 @@ namespace SCM2020___Client.Frames
             if (!DataToPrintORExportWasRescued)
             {
                 DataToPrintORExportWasRescued = true;
-                string workOrder = System.Uri.EscapeDataString(PrincipalMonitoring.Work_Order);
-
-                List<DocumentMovement.Product> resultSearch = null;
-                var t = Task.Run(() => resultSearch = DocumentMovement.ProductsAtWorkOrder(workOrder));
-                DocumentMovement.QueryMovement queryMovement = new DocumentMovement.QueryMovement()
-                {
-                    Sector = InfoUser.Sector.NameSector,
-                    Situation = (PrincipalMonitoring.Situation) ? "FECHADA" : "ABERTA",
-                    WorkOrder = PrincipalMonitoring.Work_Order,
-                    WorkOrderDate = PrincipalMonitoring.MovingDate,
-                    SolicitationEmployee = InfoUser.Name,
-                    RegisterApplication = int.Parse(InfoUser.Register)
-                };
-                t.Wait();
-
-                DocumentToPrintORExport = new DocumentMovement(resultSearch, queryMovement);
             }
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
             PrintORExport = true;
-            Document = DocumentToPrintORExport.RenderizeHtml();
+            Document = movement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
 
@@ -656,15 +641,9 @@ namespace SCM2020___Client.Frames
             if (!DataToPrintORExportWasRescued)
             {
                 DataToPrintORExportWasRescued = true;
-                string workOrder = PrincipalMonitoring.Work_Order;
-
-                DocumentMovement.ResultSearch resultSearch = null;
-                var t = Task.Run(() => resultSearch = DocumentMovement.Search(workOrder));
-                t.Wait();
-                var InformationQuery = resultSearch.InformationQuery;
-
-                DocumentToPrintORExport = new DocumentMovement(resultSearch.ProductsToShow, resultSearch.InformationQuery);
             }
+
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
 
             PrintORExport = false;
             Document = DocumentToPrintORExport.RenderizeHtml();
