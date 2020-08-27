@@ -10,11 +10,9 @@ namespace ModelsLibrary
         public MaterialInput(string raw)
         {
             var input = JsonConvert.DeserializeObject<MaterialInput>(raw);
-            this.EmployeeId = input.EmployeeId;
             this.MovingDate = input.MovingDate;
             this.ConsumptionProducts = input.ConsumptionProducts;
             this.Regarding = input.Regarding;
-            this.SCMEmployeeId = input.SCMEmployeeId;
             this.WorkOrder = input.WorkOrder;
         }
         /// <summary>

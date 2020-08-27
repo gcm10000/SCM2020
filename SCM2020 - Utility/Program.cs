@@ -408,8 +408,6 @@ namespace SCM2020___Utility
                         {
                             MovingDate = DateTime.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "data da movimentação").Value),
                             WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
-                            SCMEmployeeId = resultSCMId,
-                            EmployeeId = resultEmployeeId,
                             Regarding = regarding,
                             ConsumptionProducts = new List<AuxiliarConsumption>()
                         {
