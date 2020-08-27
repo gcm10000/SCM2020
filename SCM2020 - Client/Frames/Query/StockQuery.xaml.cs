@@ -60,7 +60,7 @@ namespace SCM2020___Client.Frames.Query
         private void SearchStock(string query)
         {
             Clear();
-
+            query = System.Uri.EscapeDataString(query);
             products = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
             foreach (var item in products)
             {
