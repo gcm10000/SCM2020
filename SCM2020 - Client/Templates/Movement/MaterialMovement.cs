@@ -28,7 +28,7 @@ namespace SCM2020___Client.Templates.Movement
         public MaterialMovement(string workOrder)
         {
             Search(workOrder);
-            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "MaterialMovement.html");
+            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "Movement", "MaterialMovement.html");
             Html = System.IO.File.ReadAllText(pathFileHtml);
         }
         public void Search(string workOrder)
@@ -74,9 +74,9 @@ namespace SCM2020___Client.Templates.Movement
             this.ClosingDate = Monitoring.ClosingDate;
 
 
-            var ProductsToShow = ProductsAtWorkOrder(workOrder);
+            Products = ProductsAtWorkOrder(workOrder);
         }
-        public static List<MaterialMovementPrintExport> ProductsAtWorkOrder(string workOrder)
+        public List<MaterialMovementPrintExport> ProductsAtWorkOrder(string workOrder)
         {
 
             List<MaterialMovementPrintExport> ProductsToShow = new List<MaterialMovementPrintExport>();
@@ -232,12 +232,12 @@ namespace SCM2020___Client.Templates.Movement
                                 "</tr>";
             }
 
-            Html = Html.Replace("@WorkOrderDate", itemsContent);
-            Html = Html.Replace("@WorkOrder", itemsContent);
-            Html = Html.Replace("@Sitution", itemsContent);
-            Html = Html.Replace("@RegisterApplicant", itemsContent);
-            Html = Html.Replace("@NameApplicant", itemsContent);
-            Html = Html.Replace("@Sector", itemsContent);
+            Html = Html.Replace("@WorkOrderDate", WorkOrderDate.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@WorkOrder", WorkOrder);
+            Html = Html.Replace("@Situation", Situation);
+            Html = Html.Replace("@RegisterApplicant", RegisterApplication);
+            Html = Html.Replace("@NameApplicant", SolicitationEmployee);
+            Html = Html.Replace("@Sector", Sector);
             Html = Html.Replace("@LISTOFITEMS", itemsContent);
             return Html.ToString();
         }
