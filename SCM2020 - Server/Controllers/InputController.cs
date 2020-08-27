@@ -38,6 +38,9 @@ namespace SCM2020___Server.Controllers
         public IActionResult ShowByInvoice(string invoice)
         {
             invoice = System.Uri.UnescapeDataString(invoice);
+            invoice = invoice.Trim();
+            if (string.IsNullOrWhiteSpace(invoice))
+                return Ok();
             var record = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }

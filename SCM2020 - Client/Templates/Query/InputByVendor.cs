@@ -65,6 +65,7 @@ namespace SCM2020___Client.Templates.Query
             SCMRegistration = InfoUser.Register;
 
             //Produtos na nota fiscal
+            Products = new List<Product>();
             foreach (var item in inputByVendor.ConsumptionProducts)
             {
                 ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);

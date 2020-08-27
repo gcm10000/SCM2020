@@ -61,7 +61,8 @@ namespace SCM2020___Client.Frames.Query
             Clear();
 
             template = new Templates.Query.InputByVendor(invoice);
-
+            if (template.Products == null)
+                return;
             foreach (var product in template.Products)
             {
                 this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Add(product); }));
@@ -81,6 +82,13 @@ namespace SCM2020___Client.Frames.Query
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
             this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
+
+            this.InvoiceText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InvoiceText.Text = string.Empty; }));
+            this.VendorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.VendorTextBox.Text = string.Empty; }));
+            this.RegistrationSCMTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegistrationSCMTextBox.Text = string.Empty; }));
+            this.SCMEmployeeTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SCMEmployeeTextBox.Text = string.Empty; }));
+            this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = null; this.WorkOrderDateDatePicker.DisplayDate = DateTime.Today; }));
+
         }
         private void AllowButtons()
         {
