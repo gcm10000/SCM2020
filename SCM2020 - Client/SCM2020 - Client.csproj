@@ -10,16 +10,12 @@
   <ItemGroup>
     <Compile Remove="Exporter - Cópia\**" />
     <Compile Remove="NovaPasta1\**" />
-    <Compile Remove="NovaPasta\**" />
     <EmbeddedResource Remove="Exporter - Cópia\**" />
     <EmbeddedResource Remove="NovaPasta1\**" />
-    <EmbeddedResource Remove="NovaPasta\**" />
     <None Remove="Exporter - Cópia\**" />
     <None Remove="NovaPasta1\**" />
-    <None Remove="NovaPasta\**" />
     <Page Remove="Exporter - Cópia\**" />
     <Page Remove="NovaPasta1\**" />
-    <Page Remove="NovaPasta\**" />
   </ItemGroup>
 
   <ItemGroup>

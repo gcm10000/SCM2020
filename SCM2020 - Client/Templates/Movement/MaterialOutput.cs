@@ -9,8 +9,8 @@ namespace SCM2020___Client.Templates.Movement
     {
         private string Html;
 
-        List<SCM2020___Client.Frames.Query.QueryByPatrimony.ProductDataGrid> Products;
-        public MaterialOutput(List<SCM2020___Client.Frames.Query.QueryByPatrimony.ProductDataGrid> Products)
+        List<Models.MaterialMovementPrintExport> Products;
+        public MaterialOutput(List<Models.MaterialMovementPrintExport> Products)
         {
             this.Products = Products;
             var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "query", "MaterialOutput.html");
@@ -22,15 +22,23 @@ namespace SCM2020___Client.Templates.Movement
             foreach (var product in Products)
             {
                 itemsContent += "<tr>" +
+                                    $"<td>{product.MoveDate.ToString("dd/MM/yyyy")}</td>" +
                                     $"<td>{product.Code}</td>" +
                                     $"<td>{product.Description}</td>" +
+                                    $"<td>{product.Quantity}</td>" +
+                                    $"<td>{product.Unity}</td>" +
+                                    $"<td>{product.Movement}</td>" +
                                     $"<td>{product.Patrimony}</td>" +
-                                    $"<td>{product.WorkOrder}</td>" +
-                                    $"<td>{product.Employee}</td>" +
                                 "</tr>";
             }
 
-            Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
+            Html = Html.Replace("@WorkOrderDate", itemsContent);
+            Html = Html.Replace("@WorkOrder", itemsContent);
+            Html = Html.Replace("@Sitution", itemsContent);
+            Html = Html.Replace("@RegisterApplicant", itemsContent);
+            Html = Html.Replace("@NameApplicant", itemsContent);
+            Html = Html.Replace("@Sector", itemsContent);
+            Html = Html.Replace("@LISTOFITEMS", itemsContent);
             return Html.ToString();
         }
     }
