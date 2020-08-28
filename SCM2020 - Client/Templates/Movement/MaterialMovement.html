@@ -5,49 +5,154 @@
     <title>Movimentação de Saída</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style type="text/css">
+        .tableFooter {
+            width: 100%;
+        }
+        .tableFooter td:first-child {
+            text-align: right;
+        }
+        .tableFooter td:nth-child(2) {
+            border-bottom: 1px solid #E6E6E6;
+        }
+        .tableFooter td:nth-child(3) {
+            text-align: right;
+        }
+        .tableFooter td:nth-child(4) {
+            border-bottom: 1px solid #E6E6E6;
+        }
+        hr {
+            height: 1px;
+            color: #E6E6E6;
+            background-color: #E6E6E6;
+            border: none;
+        }
+        .header, .header-space,
+        .footer, .footer-space {
+            height: 175px;
+            width: 100%;
+        }
 
+        .header {
+            position: fixed;
+            top: 0;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+    <style type="text/css">
+        @media print {
+
+        }
+    </style>
 </head>
 <body>
-    <table class="table">
+    <table width="100%">
         <thead>
             <tr>
-                <th scope="col">Ordem de Serviço</th>
-                <th scope="col">Data da O.S</th>
-                <th scope="col">Situação</th>
-                <th scope="col">Matricula do Funcionário</th>
-                <th scope="col">Nome do Funcionário</th>
-                <th scope="col">Setor</th>
+                <td>
+                    <div class="header-space">&nbsp;</div>
+                </td>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>@WorkOrder</td>
-                <td>@WorkOrderDate</td>
-                <td>@Situation</td>
-                <td>@RegisterApplicant</td>
-                <td>@NameApplicant</td>
-                <td>@Sector</td>
+                <td>
+                    <div style="width: 100%;">
+                        <h4 style="font-weight:bold; text-align: center;">REQUISIÇÃO DE MATERIAIS</h4>
+                        <br />
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Ordem de Serviço</th>
+                                    <th scope="col">Data da O.S</th>
+                                    <th scope="col">Situação</th>
+                                    <th scope="col">Matricula do Funcionário</th>
+                                    <th scope="col">Nome do Funcionário</th>
+                                    <th scope="col">Setor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@WorkOrder</td>
+                                    <td>@WorkOrderDate</td>
+                                    <td>@Situation</td>
+                                    <td>@RegisterApplicant</td>
+                                    <td>@NameApplicant</td>
+                                    <td>@Sector</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <br />
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">SKU</th>
+                                    <th scope="col">Descrição</th>
+                                    <th scope="col">Quantidade</th>
+                                    <th scope="col">Unidade</th>
+                                    <th scope="col">Movimentação</th>
+                                    <th scope="col">Patrimônio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @LISTOFITEMS
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
             </tr>
         </tbody>
-    </table>
-    <br />
-    <br />
-    <table class="table">
-        <thead>
+        <tfoot>
             <tr>
-                <th scope="col">Data</th>
-                <th scope="col">SKU</th>
-                <th scope="col">Descrição</th>
-                <th scope="col">Quantidade</th>
-                <th scope="col">Unidade</th>
-                <th scope="col">Movimentação</th>
-                <th scope="col">Patrimônio</th>
+                <td>
+                    <div class="footer-space">&nbsp;</div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @LISTOFITEMS
-        </tbody>
+        </tfoot>
     </table>
+
+    <!--<div class="header" style="text-align: center;">
+        <h3>Poder Judiciário do Estado do Rio de Janeiro - PJERJ</h3>
+        <h3>Departamento de Segurança Eletrônica e de Telecomunicações - DETEL</h3>
+        <p>Serviço de Controle de Materiais</p>
+        <br />
+    </div>
+
+    <div class="footer">
+        <hr />
+        <p style="text-align:center;">Não há necessidade da assinatura do Supervisor Técnico, a não ser que haja algum dano na mesma.</p>
+        <table class="tableFooter">
+            <colgroup>
+                <col style="width:auto;" />
+                <col style="width:42%;" />
+                <col style="width:10%;" />
+                <col style="width:20%;" />
+            </colgroup>
+            <tr>
+                <td>Técnico Responsável:</td>
+                <td></td>
+                <td>Matrícula:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-top: 12px;">Supervisor Técnico:</td>
+                <td style="padding-top: 12px;"></td>
+                <td style="padding-top: 12px;">Matrícula:</td>
+                <td style="padding-top: 12px;"></td>
+            </tr>
+            <tr>
+                <td style="padding-top: 12px;">Serviço de Controle de Materiais:</td>
+                <td style="padding-top: 12px;"></td>
+                <td style="padding-top: 12px;">Matrícula:</td>
+                <td style="padding-top: 12px;"></td>
+            </tr>
+        </table>
+    </div>-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
