@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Win32;
+using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,8 +37,10 @@ namespace SCM2020___Client
             PopupQueries.HorizontalOffset = 70;
             PopupReport.HorizontalOffset = 68;
 
-            LoginScreen screen = new LoginScreen();
-            screen.ShowDialog();
+            //LoginScreen screen = new LoginScreen();
+            //screen.ShowDialog();
+
+            SignIn();
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Task.Run(() => 
@@ -56,6 +60,18 @@ namespace SCM2020___Client
             //}
         }
 
+        private void SignIn()
+        {
+            var signIn = APIClient.MakeSignIn(new Uri(Helper.Server, "user/login/").ToString(),
+    Registration: "59450",
+    IsPJERJRegistration: true,
+    Password: "SenhaSecreta#2020");
+
+            Helper.Authentication = signIn.Headers.Authorization;
+            Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            Helper.CurrentSector = signIn.Sector;
+            Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+        }
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var listView = sender as ListView;
