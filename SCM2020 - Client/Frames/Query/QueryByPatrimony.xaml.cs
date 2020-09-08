@@ -57,6 +57,7 @@ namespace SCM2020___Client.Frames.Query
         private void Search(string patrimony)
         {
             ClearData();
+            PrintExportEnable(false);
 
             if (patrimony == string.Empty)
                 return;
@@ -84,11 +85,13 @@ namespace SCM2020___Client.Frames.Query
                 
                 //Adiciona no datagrid
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(product); }));
+                //Adiciona na lista
+                listQuery.Add(product);
             }
             try
             {
                 ResultQueryByPatrimony = new Templates.Query.QueryByPatrimony(listQuery);
-
+                PrintExportEnable(true);
             }
             catch (Exception ex)
             {
@@ -101,6 +104,11 @@ namespace SCM2020___Client.Frames.Query
         {
             this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { QueryDataGrid.Items.Clear(); }));
         }
+        private void PrintExportEnable(bool IsEnable)
+        {
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Print_Button.IsEnabled = IsEnable; }));
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Export_Button.IsEnabled = IsEnable; }));
+        }
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
@@ -112,7 +120,6 @@ namespace SCM2020___Client.Frames.Query
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-
             PrintORExport = true;
 
             Document = ResultQueryByPatrimony.RenderizeHtml();
