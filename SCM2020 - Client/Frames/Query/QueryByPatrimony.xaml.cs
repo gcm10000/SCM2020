@@ -58,11 +58,13 @@ namespace SCM2020___Client.Frames.Query
         }
         private void Search(string patrimony)
         {
+            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { QueryDataGrid.Items.Clear(); }));
+
             if (patrimony == string.Empty)
                 return;
 
             patrimony = System.Uri.EscapeDataString(patrimony);
-            var result = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"permamentproduct/Search/{patrimony}").ToString(), Helper.Authentication);
+            var result = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"PermanentProduct/Search/{patrimony}").ToString(), Helper.Authentication);
             foreach (var item in result)
             {
                 //Pega informações referente ao produto
