@@ -75,6 +75,9 @@
     <None Update="Templates\Movement\MaterialMovement.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Templates\Movement\table.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Templates\QueryByDate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

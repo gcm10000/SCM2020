@@ -3,30 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <title>Movimentação de Saída</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-    <link rel="stylesheet" href="table.css">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge" />-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="table.css" />
     <style type="text/css">
-/*        .tableFooter {
+
+        .tableFooter {
             width: 100%;
         }
-        .tableFooter td:first-child {
-            text-align: right;
-        }
-        .tableFooter td:nth-child(2) {
-            border-bottom: 1px solid #E6E6E6;
-        }
-        .tableFooter td:nth-child(3) {
-            text-align: right;
-        }
-        .tableFooter td:nth-child(4) {
-            border-bottom: 1px solid #E6E6E6;
-        }
+
+            .tableFooter td:first-child {
+                text-align: right;
+            }
+
+            .tableFooter td:nth-child(2) {
+                border-bottom: 1px solid #E6E6E6;
+            }
+
+            .tableFooter td:nth-child(3) {
+                text-align: right;
+            }
+
+            .tableFooter td:nth-child(4) {
+                border-bottom: 1px solid #E6E6E6;
+            }
+
         hr {
             height: 1px;
             color: #E6E6E6;
             background-color: #E6E6E6;
             border: none;
         }
+
         .header, .header-space,
         .footer, .footer-space {
             height: 175px;
@@ -37,37 +46,27 @@
             position: fixed;
             top: 0;
         }
+
         .footer {
             position: fixed;
             bottom: 0;
-        }*/
+        }
     </style>
     <style type="text/css">
-        @media print {
-
-        }
+        /*        @media print {
+            .row,
+            .any-custom-class-that-uses-flex {
+                display: block !important;
+            }
+            html, body {
+                height: 99%;
+                display: block !important;
+            }
+        }*/
     </style>
 </head>
 <body>
-    <table class="content-table">
-        <thead>
-            <tr>
-                <th>column1</th>
-                <th>column2</th>
-                <th>column3</th>
-                <th>column4</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>cell1</td>
-                <td>cell2</td>
-                <td>cell3</td>
-                <td>cell4</td>
-            </tr>
-        </tbody>
-    </table>
-    <!--<table width="100%" class="content-table">
+    <table width="100%" class="content-table">
         <thead>
             <tr>
                 <td>
@@ -79,7 +78,7 @@
             <tr>
                 <td>
                     <div style="width: 100%;">
-                        <h4 style="font-weight:bold; text-align: center;">REQUISIÇÃO DE MATERIAIS</h4>
+                        <h3 style="font-weight:bold; text-align: center;">REQUISIÇÃO DE MATERIAIS</h3>
                         <br />
                         <table class="table">
                             <thead>
@@ -94,12 +93,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>@WorkOrder</td>
-                                    <td>@WorkOrderDate</td>
-                                    <td>@Situation</td>
-                                    <td>@RegisterApplicant</td>
-                                    <td>@NameApplicant</td>
-                                    <td>@Sector</td>
+                                    <td>T1/20</td>
+                                    <td>12/08/2020</td>
+                                    <td>ABERTA</td>
+                                    <td>59450</td>
+                                    <td>Gabriel Machado</td>
+                                    <td>Administrador</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -118,7 +117,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @LISTOFITEMS
+                                <tr><td>13/08/2020</td><td>5448</td><td>BATERIA 9V</td><td>2</td><td>PÇ</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>13/08/2020</td><td>266</td><td>Cabo de Alimentação C/Conector RJ-11 </td><td>3</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>13/08/2020</td><td>1026</td><td>Discador Telefonico Mod Dc5 Compatec </td><td>1</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>13/08/2020</td><td>269</td><td>Cabo Espiral P/ Monofone </td><td>1</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>13/08/2020</td><td>269</td><td>Cabo Espiral P/ Monofone </td><td>1</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>14/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td>101010</td></tr>
+                                <tr><td>24/08/2020</td><td>19</td><td>Capsula Transmissora Tx</td><td>12</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>24/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>25/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>ENTRADA</td><td>101010</td></tr>
+                                <tr><td>28/08/2020</td><td>263</td><td>Cordão de Alimentação Preto P/   Apa Ict</td><td>50</td><td>Rolo</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>266</td><td>Cabo de Alimentação C/Conector RJ-11 </td><td>3</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1513</td><td>ADAPTADOR DE TOMADA 10/ 20A- 3 PINOS P/ 2 REDONDOS.</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>99</td><td>Aparelho Telefonico Alcatel Mod 4125</td><td>6</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>45</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>18</td><td>Pasta Térmica Implastec 15g</td><td>55</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1241</td><td>Resistor 2k2 1/8w</td><td>45</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>494</td><td>Resistor100 Homs1/8-5%</td><td>44</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>495</td><td>Resistor 22Khomes1/8-5%</td><td>4</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>109</td><td>Aparelho Telefônico p/ Surdo Surtel 2</td><td>4</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>80</td><td>Placa de Ramal Balanceada 4015 Intelbras</td><td>89</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>69</td><td>Placa de Cpu Alcatel </td><td>45</td><td></td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>4</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1905</td><td>Capacitor Eletrolítico 4700Mfx10V</td><td>6</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1904</td><td>Interfone Amelco(Mod.IC65 Coletivo)</td><td>66</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1903</td><td>FONE DE CABEÇA MONOAURICULAR C/ MICROFONE QDRJ9E35 USB.</td><td>12</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1902</td><td>Plug Monob-(2P+T.N.Padrão C/Saída Axial 10A-250V) </td><td>5</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                <tr><td>28/08/2020</td><td>1901</td><td>Adaptador 2P+T Padrão Novo (UNIVERSAL/ 10 A.) </td><td>6</td><td>peça</td><td>SAÍDA</td><td></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -132,9 +158,9 @@
                 </td>
             </tr>
         </tfoot>
-    </table>-->
+    </table>
 
-    <!--<div class="header" style="text-align: center;">
+    <div class="header" style="text-align: center;">
         <h3>Poder Judiciário do Estado do Rio de Janeiro - PJERJ</h3>
         <h3>Departamento de Segurança Eletrônica e de Telecomunicações - DETEL</h3>
         <p>Serviço de Controle de Materiais</p>
@@ -170,9 +196,9 @@
                 <td style="padding-top: 12px;"></td>
             </tr>
         </table>
-    </div>-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    </div>
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>-->
 </body>
 </html>
