@@ -8,6 +8,54 @@
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
     <link rel="stylesheet" href="table.css" />
     <style type="text/css">
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        }
+
+        .content-table {
+            border-collapse: collapse;
+            border: 4px;
+            margin: 25px 0;
+            font-size: 0.9em;
+            min-width: 400px;
+            font-family: sans-serif;
+        }
+
+            .content-table thead tr {
+                background-color: #fff;
+                color: #000;
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .content-table th,
+            .content-table td {
+                padding: 12px 15px;
+            }
+
+            .content-table tbody tr {
+                border-bottom: 1px solid #dddddd;
+            }
+
+                .content-table tbody tr:nth-of-type(even) {
+                    background-color: #f3f3f3;
+                }
+
+                .content-table tbody tr:last-of-type {
+                    border-bottom: 2px solid #dddddd;
+                }
+
+        h3 {
+            font-size: 1.4rem;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: .5rem;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+            color: inherit;
+        }
 
         .tableFooter {
             width: 100%;
@@ -93,12 +141,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>T1/20</td>
-                                    <td>12/08/2020</td>
-                                    <td>ABERTA</td>
-                                    <td>59450</td>
-                                    <td>Gabriel Machado</td>
-                                    <td>Administrador</td>
+                                    <td>@WorkOrder</td>
+                                    <td>@WorkOrderDate</td>
+                                    <td>@Situation</td>
+                                    <td>@RegisterApplicant</td>
+                                    <td>@NameApplicant</td>
+                                    <td>@Sector</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -117,34 +165,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>13/08/2020</td><td>5448</td><td>BATERIA 9V</td><td>2</td><td>PÇ</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>13/08/2020</td><td>266</td><td>Cabo de Alimentação C/Conector RJ-11 </td><td>3</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>13/08/2020</td><td>1026</td><td>Discador Telefonico Mod Dc5 Compatec </td><td>1</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>13/08/2020</td><td>269</td><td>Cabo Espiral P/ Monofone </td><td>1</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>13/08/2020</td><td>269</td><td>Cabo Espiral P/ Monofone </td><td>1</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>14/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td>101010</td></tr>
-                                <tr><td>24/08/2020</td><td>19</td><td>Capsula Transmissora Tx</td><td>12</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>24/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>25/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>ENTRADA</td><td>101010</td></tr>
-                                <tr><td>28/08/2020</td><td>263</td><td>Cordão de Alimentação Preto P/   Apa Ict</td><td>50</td><td>Rolo</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>266</td><td>Cabo de Alimentação C/Conector RJ-11 </td><td>3</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1513</td><td>ADAPTADOR DE TOMADA 10/ 20A- 3 PINOS P/ 2 REDONDOS.</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>99</td><td>Aparelho Telefonico Alcatel Mod 4125</td><td>6</td><td>Unid</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>45</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>18</td><td>Pasta Térmica Implastec 15g</td><td>55</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>1</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1241</td><td>Resistor 2k2 1/8w</td><td>45</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>494</td><td>Resistor100 Homs1/8-5%</td><td>44</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>495</td><td>Resistor 22Khomes1/8-5%</td><td>4</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>109</td><td>Aparelho Telefônico p/ Surdo Surtel 2</td><td>4</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>80</td><td>Placa de Ramal Balanceada 4015 Intelbras</td><td>89</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>69</td><td>Placa de Cpu Alcatel </td><td>45</td><td></td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1906</td><td>Aparelho Telefônico Intelbras TC500</td><td>4</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1905</td><td>Capacitor Eletrolítico 4700Mfx10V</td><td>6</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1904</td><td>Interfone Amelco(Mod.IC65 Coletivo)</td><td>66</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1903</td><td>FONE DE CABEÇA MONOAURICULAR C/ MICROFONE QDRJ9E35 USB.</td><td>12</td><td>UND.</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1902</td><td>Plug Monob-(2P+T.N.Padrão C/Saída Axial 10A-250V) </td><td>5</td><td>peça</td><td>SAÍDA</td><td></td></tr>
-                                <tr><td>28/08/2020</td><td>1901</td><td>Adaptador 2P+T Padrão Novo (UNIVERSAL/ 10 A.) </td><td>6</td><td>peça</td><td>SAÍDA</td><td></td></tr>
+                                @LISTOFITEMS
                             </tbody>
                         </table>
                     </div>
@@ -168,7 +189,7 @@
     </div>
 
     <div class="footer">
-        <hr />
+        <!--<hr />-->
         <p style="text-align:center;">Não há necessidade da assinatura do Supervisor Técnico, a não ser que haja algum dano na mesma.</p>
         <table class="tableFooter">
             <colgroup>

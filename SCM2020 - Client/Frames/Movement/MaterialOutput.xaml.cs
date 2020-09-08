@@ -581,7 +581,6 @@ namespace SCM2020___Client.Frames
 
         bool DataToPrintORExportWasRescued = false;
         bool PrintORExport = false;
-        DocumentMovement DocumentToPrintORExport = null;
         string Document = string.Empty;
 
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
@@ -646,7 +645,7 @@ namespace SCM2020___Client.Frames
             SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
 
             PrintORExport = false;
-            Document = DocumentToPrintORExport.RenderizeHtml();
+            Document = movement.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
