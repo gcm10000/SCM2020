@@ -44,11 +44,11 @@ namespace SCM2020___Server.Controllers
             return monitoring;
         }
         [HttpGet("CheckWorkOrder/{workorder}")]
-        public bool CheckWorkOrder(string workorder)
+        public IActionResult CheckWorkOrder(string workorder)
         {
             workorder = System.Uri.UnescapeDataString(workorder);
-            var result = context.Monitoring.Any(x => x.Work_Order == workorder);
-            return result;
+            var result = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
+            return Ok(result.Situation);
         }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]
@@ -120,6 +120,8 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Reopen/{workOrder}")]
         public async Task<IActionResult> Reopen(string workOrder)
         {
+            workOrder = System.Uri.UnescapeDataString(workOrder);
+
             var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
             monitoring.Situation = false;
             monitoring.ClosingDate = null;

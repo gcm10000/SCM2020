@@ -130,6 +130,9 @@ namespace SCM2020___Client
                     case 3:
                         source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
                         break;
+                    case 4:
+                        source = new Uri("Frames/Movement/Reopen.xaml", UriKind.Relative);
+                        break;
                 }
                 PopupMovement.IsOpen = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))

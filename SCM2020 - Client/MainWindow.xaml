@@ -61,6 +61,9 @@
                                         <ListBoxItem>
                                             <TextBlock Text="Fechamento"></TextBlock>
                                         </ListBoxItem>
+                                    <ListBoxItem>
+                                            <TextBlock Text="Abrir Ordem de Serviço"></TextBlock>
+                                        </ListBoxItem>
                                     </ListBox>
                                 </Popup>
                                 <materialDesign:PackIcon Kind="ImportExport"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>

@@ -33,7 +33,6 @@ namespace SCM2020___Client.Frames.Movement
         {
             //Captura a ordem de serviço escrita pelo usuário
             string workOrder = OSTextBox.Text;
-            workOrder = System.Uri.EscapeDataString(workOrder);
 
             MessageBoxResult resultBox = MessageBox.Show("Deseja realmente abrir a ordem de serviço?", "Você tem certeza disso", MessageBoxButton.YesNo, MessageBoxImage.Question);
             //Se o usuário selecionou o botão sim...
@@ -41,22 +40,28 @@ namespace SCM2020___Client.Frames.Movement
             {
                 Task.Run(() =>
                 {
-                    ModelsLibraryCore.Monitoring Monitoring;
                     //Checar se a ordem de serviço existe
                     try
                     {
                         workOrder = System.Uri.EscapeDataString(workOrder);
-                        Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        bool SituationMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"Monitoring/CheckWorkOrder/{workOrder}").ToString(), Helper.Authentication);
+                        if (SituationMonitoring)
+                        {
+                            //Abrir ordem de serviço
+                            var result = APIClient.GetData<string>(new Uri(Helper.Server, $"monitoring/reopen/{workOrder}").ToString(), Helper.Authentication);
+                            //Exibe mensagem recebida do recebidor ao usuário.
+                            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ordem de serviço encontra-se aberta.", "Ordem de serviço aberta", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Ordem de serviço inexistente.", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Ordem de serviço inexistente", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    //Abrir ordem de serviço
-                    var result = APIClient.GetData<string>(new Uri(Helper.Server, $"monitoring/reopen/{workOrder}").ToString(), Helper.Authentication);
-                    //Exibe mensagem recebida do recebidor ao usuário.
-                    MessageBox.Show(result.DeserializeJson<string>());
                 });
             }
         }
