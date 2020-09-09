@@ -1,6 +1,8 @@
 ﻿using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -95,7 +97,39 @@ namespace SCM2020___Client.Frames.Query
         }
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
+            Helper.SetOptionsToPrint();
+            if (PrintORExport)
+            {
+                webBrowser.PrintDocument();
+            }
+            else
+            {
+                string printer = Helper.GetPrinter("PDF");
+                string tempFile = string.Empty;
+                try
+                {
+                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    {
+                        file.Write(Document);
+                        file.Flush();
+                    }
 
+                    //"f=" The input file
+                    //"p=" The temporary default printer
+                    //"d|delete" Delete file when finished
+                    var p = new Process();
+                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
+                    p.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+            }
+            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
