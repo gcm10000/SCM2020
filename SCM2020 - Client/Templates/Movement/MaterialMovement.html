@@ -57,6 +57,7 @@
             color: inherit;
         }
 
+
         .tableFooter {
             width: 100%;
         }
@@ -101,16 +102,19 @@
         }
     </style>
     <style type="text/css">
-        /*        @media print {
-            .row,
-            .any-custom-class-that-uses-flex {
-                display: block !important;
+        @media print {
+            table {
+                page-break-inside: auto
             }
-            html, body {
-                height: 99%;
-                display: block !important;
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto
             }
-        }*/
+            .content-table td {
+                page-break-before: auto
+            }
+        }
     </style>
 </head>
 <body>

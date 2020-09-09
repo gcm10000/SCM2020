@@ -10,10 +10,26 @@
 - Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido (OK?);
 - LIMPAR DATAGRID DA CONSULTA DE ENTRADA POR FORNECEDOR TODA VEZ QUE EXECUTAR UMA NOVA BUSCA OK
 - FUNCIONÁRIO SCM EM CADA PRODUTO NULL OK
-- COLOCAR NOME DO FUNCIONÁRIO NA MOVIMENTAÇÃO DE ENTRADA E SAÍDA OK
+- COLOCAR NOME DO FUNCIONÁRIO NA MOVIMENTAÇÃO DE ENTRADA E SAÍDA (OK)
 - Mexer na impressão das movimentações (pendente)
 - Retirar objeto DocDate da devolução de materiais (OK)
-- Modificar as impressões das movimentações (OK) - SOLUÇÃO: REFAZER A MÃO, SEM A FRAMEWORK BOOTSTRAP;
+- Modificar as impressões das movimentações (OK!?) - SOLUÇÃO: REFAZER A MÃO, SEM A FRAMEWORK BOOTSTRAP; https://pt.stackoverflow.com/questions/50681/como-evitar-quebra-de-p%C3%A1gina-brusca-ao-imprimir-uma-table-html
+  'page-break-inside: avoid' causa bug no internet explorer. A primeira página fica vazia e é a correção é dada na segunda página a diante.
+
+          @media print {
+            table {
+                page-break-inside: auto
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto
+            }
+            .content-table td {
+                page-break-before: auto
+            }
+        }
+
 - Revisar migração de setores no software Utility
 - Importação de produtos permanentes (PENDENTE);
 - LIMPAR DATAGRID DA CONSULTA DE ENTRADA POR FORNECEDOR TODA VEZ QUE EXECUTAR UMA NOVA BUSCA (OK)

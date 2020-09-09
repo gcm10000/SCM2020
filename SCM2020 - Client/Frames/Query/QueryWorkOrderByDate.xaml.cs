@@ -36,7 +36,8 @@ namespace SCM2020___Client.Frames.Query
             // Garantir que a linha selecionada foi clicada e não um espaço em branco
             var row = ItemsControl.ContainerFromElement((DataGrid)sender,
                                                 e.OriginalSource as DependencyObject) as DataGridRow;
-            if (row == null) return;
+            if (row == null) 
+                return;
 
             QueryWorkOrderByDateDataGrid workOrder = row.Item as QueryWorkOrderByDateDataGrid;
             Helper.WorkOrderByPass = workOrder.WorkOrder;
