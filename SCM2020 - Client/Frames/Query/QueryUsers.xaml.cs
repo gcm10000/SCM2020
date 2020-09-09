@@ -23,9 +23,24 @@ namespace SCM2020___Client.Frames.Query
         bool PrintORExport = false;
         string Document = string.Empty;
         WebBrowser webBrowser = Helper.MyWebBrowser;
+        Templates.Query.QueryUsers queryUsers;
         public QueryUsers()
         {
             InitializeComponent();
+        }
+
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string 
+        }
+        private void Search(string search)
+        {
+
         }
 
         private void UsersDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -48,7 +63,7 @@ namespace SCM2020___Client.Frames.Query
             PrintORExport = false;
 
             Document = ResultMovement.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted; ;
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
 
@@ -88,5 +103,6 @@ namespace SCM2020___Client.Frames.Query
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
+
     }
 }

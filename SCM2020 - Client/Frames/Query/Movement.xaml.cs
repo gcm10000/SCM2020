@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using System.Windows.Threading;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -41,29 +41,32 @@ namespace SCM2020___Client.Frames.Query
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
+            {
+                string workOrder = TxtSearch.Text;
+                Task.Run(() => Search(workOrder));
+            }
         }
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Search(TxtSearch.Text); //TxtSearch.Text equivale a workOrder
-
+            string workOrder = TxtSearch.Text;
+            Task.Run(() => Search(workOrder));
         }
         private void Search(string workOrder)
         {
             //Zerar todos os dados anteriores...
-            this.Export_Button.IsEnabled = false;
-            this.Print_Button.IsEnabled = false;
-            ProductMovementDataGrid.Items.Clear();
-            ProductsToShow = null;
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
+            this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
+            
+            this.OSText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSText.Text = string.Empty; }));
+            this.RegisterApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicationTextBox.Text = string.Empty; }));
+            this.ApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicationTextBox.Text = string.Empty; }));
+            this.SectorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SectorTextBox.Text = string.Empty; }));
+            this.SituationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SituationTextBox.Text = string.Empty; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = string.Empty; }));
+            this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.Text = string.Empty; }));
+            this.ClosureOSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ClosureOSDatePicker.SelectedDate = null; }));
 
-            OSText.Text = string.Empty;
-            RegisterApplicationTextBox.Text = string.Empty;
-            ApplicationTextBox.Text = string.Empty;
-            SectorTextBox.Text = string.Empty;
-            SituationTextBox.Text = string.Empty;
-            ServiceLocalizationTextBox.Text = string.Empty;
-            WorkOrderDateDatePicker.SelectedDate = null;
-            ClosureOSDatePicker.SelectedDate = null;
 
             try
             {
@@ -77,11 +80,21 @@ namespace SCM2020___Client.Frames.Query
             
             if (ResultMovement == null)
             {
-                this.Export_Button.IsEnabled = true;
-                this.Print_Button.IsEnabled = true;
+                this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
+                this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
 
                 return;
             }
+
+            this.OSText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSText.Text = ResultMovement.WorkOrder; }));
+            this.RegisterApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicationTextBox.Text = ResultMovement.RegisterApplication.ToString(); }));
+            this.ApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicationTextBox.Text = ResultMovement.Application; }));
+            this.SectorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SectorTextBox.Text = ResultMovement.Sector; }));
+            this.SituationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SituationTextBox.Text = ResultMovement.Situation; }));
+            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = ResultMovement.ServiceLocalization; }));
+            this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = ResultMovement.WorkOrderDate; }));
+            this.ClosureOSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder; }));
+
 
             OSText.Text = ResultMovement.WorkOrder;
             RegisterApplicationTextBox.Text = ResultMovement.RegisterApplication.ToString();
