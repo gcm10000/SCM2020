@@ -48,6 +48,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Frames\Query\QueryWorkOrderByDate.cs">
+      <Generator>MSBuild:Compile</Generator>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Exporter\Document-Exporter.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

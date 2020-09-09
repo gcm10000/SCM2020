@@ -8,10 +8,10 @@ namespace SCM2020___Client.Templates.Query
     public class QueryWorkOrderByDate
     {
         private string Html;
-        private List<SCM2020___Client.Frames.Query.QueryWorkOrderByDate.QueryWorkOrderByDateDataGrid> WorkOrders;
+        private List<SCM2020___Client.Models.QueryWorkOrderByDate> WorkOrders;
         private DateTime InitialDate { get; }
         private DateTime FinalDate { get; }
-        public QueryWorkOrderByDate(List<SCM2020___Client.Frames.Query.QueryWorkOrderByDate.QueryWorkOrderByDateDataGrid> queryWorkOrderByDate, DateTime InitialDate, DateTime FinalDate)
+        public QueryWorkOrderByDate(List<SCM2020___Client.Models.QueryWorkOrderByDate> queryWorkOrderByDate, DateTime InitialDate, DateTime FinalDate)
         {
             this.WorkOrders = queryWorkOrderByDate;
             this.InitialDate = InitialDate;
