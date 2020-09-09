@@ -7,7 +7,7 @@
 - Exportador com problema de renderização; Possivelmente seja problema do Internet Explorer 7, atualizar via registro. (Mais informações: https://stackoverflow.com/questions/24316333/bootstrap-grids-in-internet-explorer-7 ) (OK);
 - Reabrir ordem de serviço (OK);
 - Consulta do patrimônio (OK);
-- Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido (OK?);
+- Consulta por ordem de serviço com filtragem por data. Apresentar informação da ordem de serviço redirecionando para a tela Consulta -> Movimentação com o campo 'Pesquisa' preenchido (OK);
 - LIMPAR DATAGRID DA CONSULTA DE ENTRADA POR FORNECEDOR TODA VEZ QUE EXECUTAR UMA NOVA BUSCA OK
 - FUNCIONÁRIO SCM EM CADA PRODUTO NULL OK
 - COLOCAR NOME DO FUNCIONÁRIO NA MOVIMENTAÇÃO DE ENTRADA E SAÍDA (OK)
@@ -30,8 +30,9 @@
             }
         }
 
-- Revisar migração de setores no software Utility
+- Revisar migração de setores no software Utility (pendente)
 - Importação de produtos permanentes (PENDENTE);
+- Consulta de usuários (pendente);
 - LIMPAR DATAGRID DA CONSULTA DE ENTRADA POR FORNECEDOR TODA VEZ QUE EXECUTAR UMA NOVA BUSCA (OK)
 - FUNCIONÁRIO SCM EM CADA PRODUTO NULL (OK)
 - PRODUTOS CONSUMÍVEIS COMO REQUISITO PARA MOVIMENTAÇÃO DE ENTRADA (OK)
@@ -42,8 +43,8 @@
 - Tratar objetos nulos no servidor
 - Adicionar relatório financeiro;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
-- Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail;
-- Modificar a movimentação;
+- Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail (pendente);
+- Modificar a movimentação (pendente);
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
