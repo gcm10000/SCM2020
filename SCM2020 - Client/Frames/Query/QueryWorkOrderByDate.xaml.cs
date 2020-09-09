@@ -77,6 +77,11 @@ namespace SCM2020___Client.Frames.Query
                 ResultQueryWorkOrder = new Templates.Query.QueryWorkOrderByDate(dataQuery, new DateTime(initialYear, initialMonth, initialDay), new DateTime(finalYear, finalMonth, finalDay));
             });
         }
+        private void ButtonsEnable(bool isEnable)
+        {
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
+        }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
