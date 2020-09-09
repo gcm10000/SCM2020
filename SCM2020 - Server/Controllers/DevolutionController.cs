@@ -56,7 +56,7 @@ namespace SCM2020___Server.Controllers
                 inputs.AddRange(newinputs);
             }
 
-            return Ok(inputs.ToList());
+            return Ok(inputs);
         }
         [Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]
