@@ -48,7 +48,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
-            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
+            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay, 23, 59, 59);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
 
             var listMaterialInput = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts);
