@@ -34,14 +34,9 @@ namespace SCM2020___Client.Frames.Query
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Garantir que a linha selecionada foi clicada e não um espaço em branco
-            var row = ItemsControl.ContainerFromElement((DataGrid)sender,
-                                                e.OriginalSource as DependencyObject) as DataGridRow;
-            if (row == null) 
-                return;
+            Models.QueryWorkOrderByDate workOrderSelected = this.ShowByDateDataGrid.SelectedItem as Models.QueryWorkOrderByDate;
 
-            SCM2020___Client.Models.QueryWorkOrderByDate workOrder = row.Item as SCM2020___Client.Models.QueryWorkOrderByDate;
-            Helper.WorkOrderByPass = workOrder.WorkOrder;
+            Helper.WorkOrderByPass = workOrderSelected.WorkOrder;
             FrameWindow frame = new FrameWindow(new Uri("Frames/Query/Movement.xaml", UriKind.Relative));
             frame.Show();
         }
@@ -64,17 +59,19 @@ namespace SCM2020___Client.Frames.Query
             Task.Run(() =>
             {
                 this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Clear(); }));
-                var result = APIClient.GetData<List<ModelsLibraryCore.Monitoring>>(new Uri(Helper.Server, $"monitoring/searchbydate/{initialDay}/{initialMonth}/{initialYear}/{finalDay}/{finalMonth}/{finalYear}").ToString(), Helper.Authentication);
+                string url = new Uri(Helper.Server, $"Monitoring/SearchByDate/{initialDay}-{initialMonth}-{initialYear}/{finalDay}-{finalMonth}-{finalYear}").ToString();
+                var result = APIClient.GetData<List<ModelsLibraryCore.Monitoring>>(url, Helper.Authentication);
                 List<Models.QueryWorkOrderByDate> dataQuery = new List<Models.QueryWorkOrderByDate>();
                 foreach (var item in result)
                 {
                     SCM2020___Client.Models.QueryWorkOrderByDate workorder = new SCM2020___Client.Models.QueryWorkOrderByDate()
                     {
                         WorkOrder = item.Work_Order,
-                        Date = item.MovingDate
+                        MovingDate = item.MovingDate,
+                        ClosingDate = item.ClosingDate
                     };
                     this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Add(workorder); }));
-                    dataQuery.Add(new Models.QueryWorkOrderByDate() { Date = item.MovingDate, WorkOrder = item.Work_Order });
+                    dataQuery.Add(workorder);
                 }
                 ResultQueryWorkOrder = new Templates.Query.QueryWorkOrderByDate(dataQuery, new DateTime(initialYear, initialMonth, initialDay), new DateTime(finalYear, finalMonth, finalDay));
             });

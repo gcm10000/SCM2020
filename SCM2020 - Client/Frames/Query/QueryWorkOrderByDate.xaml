@@ -82,7 +82,8 @@
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}"/>
-                    <DataGridTextColumn Header=" Data da Ordem de Serviço" Binding="{Binding DateWorkOrder}"/>
+                    <DataGridTextColumn Header=" Data Inicial" Binding="{Binding Date}"/>
+                    <DataGridTextColumn Header=" Data de Fechamento" Binding="{Binding Date}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

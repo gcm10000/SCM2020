@@ -129,7 +129,7 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Ordem de serviço aberta com sucesso.");
         }
-        [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
+        [HttpGet("SearchByDate/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
