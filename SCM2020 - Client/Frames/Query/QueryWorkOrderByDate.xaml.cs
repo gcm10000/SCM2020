@@ -53,7 +53,8 @@ namespace SCM2020___Client.Frames.Query
             var finalDay = this.FinalDate.DisplayDate.Day;
             var finalMonth = this.FinalDate.DisplayDate.Month;
             var finalYear = this.FinalDate.DisplayDate.Year;
-
+            
+            ButtonsEnable(false);
             Search(initialDay, initialMonth, initialYear, finalDay, finalMonth, finalYear);
         }
         private void Search(int initialDay, int initialMonth, int initialYear, int finalDay, int finalMonth, int finalYear)
@@ -75,6 +76,8 @@ namespace SCM2020___Client.Frames.Query
                     dataQuery.Add(workorder);
                 }
                 ResultQueryWorkOrder = new Templates.Query.QueryWorkOrderByDate(dataQuery, new DateTime(initialYear, initialMonth, initialDay), new DateTime(finalYear, finalMonth, finalDay));
+                if ((dataQuery.Count > 0) && (dataQuery != null))
+                    ButtonsEnable(true);
             });
         }
         private void ButtonsEnable(bool isEnable)
