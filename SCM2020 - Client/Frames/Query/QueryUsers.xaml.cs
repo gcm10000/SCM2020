@@ -53,16 +53,24 @@ namespace SCM2020___Client.Frames.Query
             
             try
             {
-                var result = APIClient.GetData<InfoUser>();
-                foreach (var item in collection)
+                var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.Server, $"User/InfoUserRegister/").ToString(), Helper.Authentication);
+                List<Models.QueryUsers> ListUsers = new List<Models.QueryUsers>();
+                foreach (var user in result)
                 {
-
+                    Models.QueryUsers userToAdd = new Models.QueryUsers()
+                    {
+                        Name = user.Name,
+                        Register = user.Register,
+                        Sector = user.Sector.NameSector,
+                        ThirdParty = user.ThirdParty,
+                    };
+                    ListUsers.Add(userToAdd);
                 }
-                queryUsers = new Templates.Query.QueryUsers()
+                queryUsers = new Templates.Query.QueryUsers(ListUsers);
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -79,8 +87,8 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-
-            Document = ResultMovement.RenderizeHtml();
+            
+            Document = queryUsers.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
 
@@ -90,7 +98,7 @@ namespace SCM2020___Client.Frames.Query
         {
             PrintORExport = false;
 
-            Document = ResultMovement.RenderizeHtml();
+            Document = queryUsers.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }

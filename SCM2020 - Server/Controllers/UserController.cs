@@ -234,6 +234,18 @@ namespace SCM2020___Server.Controllers
                 return new InfoUser(user.Id, user.Name, user.PJERJRegistration, string.Empty, currentSector);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
+        }
+        [HttpGet("search/{query}")]
+        [AllowAnonymous]
+        public ActionResult<InfoUser> SearchByQuery(string query)
+        {
+            var AppUsers = UserManager.Users.Where(x => x.PJERJRegistration.Contains(query) || x.Name.Contains(query)).ToList();
+            System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
+            foreach (var AppUser in AppUsers)
+            {
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.PJERJRegistration, string.Empty, ControlDbContext.Sectors.Find(AppUser.IdSector)));
+            }
+            return Ok(infoUsers);
 
         }
         [HttpGet("ListUser/{query}")]
