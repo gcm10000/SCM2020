@@ -25,10 +25,11 @@ namespace SCM2020___Client.Templates.Query
             string itemsContent = string.Empty;
             foreach (var workOrder in WorkOrders)
             {
+                var closingDate = (workOrder.ClosingDate != null) ? workOrder.ClosingDate.Value.ToString("dd/MM/yyyy") : string.Empty;
                 itemsContent += "<tr>" +
                                     $"<td>{workOrder.WorkOrder}</td>" +
                                     $"<td>{workOrder.MovingDate.ToString("dd/MM/yyyy")}</td>" +
-                                    $"<td>{workOrder.ClosingDate.Value.ToString("dd/MM/yyyy")}</td>" +
+                                    $"<td>{closingDate}</td>" +
                                 "</tr>";
             }
 
