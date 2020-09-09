@@ -219,7 +219,7 @@ namespace SCM2020___Server.Controllers
             {
                 //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+                return new InfoUser(user.Id, user.Name, string.Empty, user.PJERJRegistration, currentSector);
             }
             return BadRequest("Id não encontrado.");
         }
@@ -231,7 +231,7 @@ namespace SCM2020___Server.Controllers
             {
                 var user = UserManager.Users.First(x => x.UserName == register);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, currentSector);
+                return new InfoUser(user.Id, user.Name, string.Empty, user.PJERJRegistration, currentSector);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
 

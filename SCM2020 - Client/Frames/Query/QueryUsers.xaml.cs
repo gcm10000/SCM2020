@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ModelsLibraryCore;
+using ModelsLibraryCore.RequestingClient;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -34,22 +37,40 @@ namespace SCM2020___Client.Frames.Query
         {
             if (e.Key == Key.Enter)
             {
-                string workOrder = TxtSearch.Text;
-                Task.Run(() => Search(workOrder));
+                string queryUser = TxtSearch.Text;
+                Task.Run(() => Search(queryUser));
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string workOrder = TxtSearch.Text;
-            Task.Run(() => Search(workOrder));
+            string queryUser = TxtSearch.Text;
+            Task.Run(() => Search(queryUser));
         }
-        private void Search(string query)
+        private void Search(string queryUser)
         {
+            ButtonEnable(false);
+            
+            try
+            {
+                var result = APIClient.GetData<InfoUser>();
+                foreach (var item in collection)
+                {
 
-            queryUsers = new Templates.Query.QueryUsers();
+                }
+                queryUsers = new Templates.Query.QueryUsers()
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
+        private void ButtonEnable(bool isEnable)
+        {
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
+        }
         private void UsersDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
