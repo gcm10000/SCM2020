@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,16 +32,22 @@ namespace SCM2020___Client.Frames.Query
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                string workOrder = TxtSearch.Text;
+                Task.Run(() => Search(workOrder));
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string 
+            string workOrder = TxtSearch.Text;
+            Task.Run(() => Search(workOrder));
         }
-        private void Search(string search)
+        private void Search(string query)
         {
 
+            queryUsers = new Templates.Query.QueryUsers();
         }
 
         private void UsersDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)

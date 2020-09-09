@@ -96,22 +96,14 @@ namespace SCM2020___Client.Frames.Query
             this.ClosureOSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder; }));
 
 
-            OSText.Text = ResultMovement.WorkOrder;
-            RegisterApplicationTextBox.Text = ResultMovement.RegisterApplication.ToString();
-            ApplicationTextBox.Text = ResultMovement.Application;
-            SectorTextBox.Text = ResultMovement.Sector;
-            SituationTextBox.Text = ResultMovement.Situation;
-            ServiceLocalizationTextBox.Text = ResultMovement.ServiceLocalization;
-            WorkOrderDateDatePicker.SelectedDate = ResultMovement.WorkOrderDate;
-            ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder;
 
             ProductsToShow = ResultMovement.Products;
             foreach (var product in ProductsToShow)
             {
-                ProductMovementDataGrid.Items.Add(product);
+                this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Add(product); }));
             }
-            this.Export_Button.IsEnabled = true;
-            this.Print_Button.IsEnabled = true;
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
 
             ProductMovementDataGrid.UnselectAll();
         }
