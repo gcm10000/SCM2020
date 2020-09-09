@@ -77,7 +77,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Data" Binding="{Binding MoveDate}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Data" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
