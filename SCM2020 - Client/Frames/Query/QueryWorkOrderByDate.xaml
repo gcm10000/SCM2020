@@ -82,8 +82,8 @@
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}"/>
-                    <DataGridTextColumn Header=" Data Inicial" Binding="{Binding Date}"/>
-                    <DataGridTextColumn Header=" Data de Fechamento" Binding="{Binding Date}"/>
+                    <DataGridTextColumn Header=" Data Inicial" Binding="{Binding Path=MovingDate, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                    <DataGridTextColumn Header=" Data de Fechamento" Binding="{Binding Path=ClosingDate, StringFormat='{}{0:dd/MM/yyyy}'}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

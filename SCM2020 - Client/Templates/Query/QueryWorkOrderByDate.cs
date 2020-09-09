@@ -27,7 +27,8 @@ namespace SCM2020___Client.Templates.Query
             {
                 itemsContent += "<tr>" +
                                     $"<td>{workOrder.WorkOrder}</td>" +
-                                    $"<td>{workOrder.Date.ToString("dd/MM/yyyy")}</td>" +
+                                    $"<td>{workOrder.MovingDate.ToString("dd/MM/yyyy")}</td>" +
+                                    $"<td>{workOrder.ClosingDate.Value.ToString("dd/MM/yyyy")}</td>" +
                                 "</tr>";
             }
 
