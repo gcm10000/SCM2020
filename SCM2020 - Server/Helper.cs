@@ -88,6 +88,8 @@ namespace SCM2020___Server
         }
         public static bool MultiplesContains(this string bigstr, params string[] content)
         {
+            bigstr = bigstr.ToLowerInvariant();
+            content = content.Select(s => s.ToLowerInvariant()).ToArray();
                 foreach (var item in content)
                 {
                     if (!content.Any(x => bigstr.Contains(item.RemoveDiacritics())))

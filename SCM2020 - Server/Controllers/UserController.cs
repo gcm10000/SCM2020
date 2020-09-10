@@ -239,7 +239,16 @@ namespace SCM2020___Server.Controllers
         [AllowAnonymous]
         public ActionResult<InfoUser> SearchByQuery(string query)
         {
-            var AppUsers = UserManager.Users.Where(x => x.PJERJRegistration.Contains(query) || x.Name.Contains(query)).ToList();
+            query = System.Uri.UnescapeDataString(query);
+
+            if (string.IsNullOrWhiteSpace(query))
+                return Ok();
+
+            string[] querySplited = query.Trim().Split(' ');
+
+            var allUsers = UserManager.Users.ToList();
+
+            var AppUsers = allUsers.Where(x => x.PJERJRegistration.RemoveDiacritics().MultiplesContains(querySplited) || x.Name.RemoveDiacritics().MultiplesContains(querySplited));
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
             {
@@ -253,7 +262,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult GetListUser(string query)
         {
             System.Collections.Generic.List<ApplicationUser> listUser = (query != string.Empty) ? UserManager.Users.Where(x => 
-            x.CPFRegistration.Contains(query) || x.PJERJRegistration.Contains(query) || x.Name.Contains(query)).ToList() 
+            x.CPFRegistration.Contains(query) || x.PJERJRegistration.MultiplesContains(query) || x.Name.MultiplesContains(query)).ToList() 
             : UserManager.Users.ToList();
             return Ok(listUser);
         }
