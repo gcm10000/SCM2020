@@ -218,6 +218,9 @@ namespace SCM2020___Client
                     case 5:
                         source = new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative);
                         break;
+                    case 6:
+                        source = new Uri("Frames/Query/QueryUsers.xaml", UriKind.Relative);
+                        break;
                 }
                 PopupQueries.IsOpen = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))

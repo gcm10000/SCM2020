@@ -126,6 +126,9 @@
                                         <ListBoxItem>
                                             <TextBlock Text="Ordem de Serviço por Data"></TextBlock>
                                         </ListBoxItem>
+                                        <ListBoxItem>
+                                            <TextBlock Text="Consulta de Funcionários"></TextBlock>
+                                        </ListBoxItem>
                                     </ListBox>
                                 </Popup>
                                 <materialDesign:PackIcon Kind="Search"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>

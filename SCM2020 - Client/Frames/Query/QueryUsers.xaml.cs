@@ -49,11 +49,12 @@ namespace SCM2020___Client.Frames.Query
         }
         private void Search(string queryUser)
         {
+            this.UsersDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.UsersDataGrid.Items.Clear(); }));
             ButtonEnable(false);
             
             try
             {
-                var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.Server, $"User/InfoUserRegister/").ToString(), Helper.Authentication);
+                var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.Server, $"User/search/{queryUser}").ToString(), Helper.Authentication);
                 List<Models.QueryUsers> ListUsers = new List<Models.QueryUsers>();
                 foreach (var user in result)
                 {
@@ -64,9 +65,11 @@ namespace SCM2020___Client.Frames.Query
                         Sector = user.Sector.NameSector,
                         ThirdParty = user.ThirdParty,
                     };
+                    this.UsersDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.UsersDataGrid.Items.Add(userToAdd); }));
                     ListUsers.Add(userToAdd);
                 }
                 queryUsers = new Templates.Query.QueryUsers(ListUsers);
+                ButtonEnable(true);
             }
             catch (Exception ex)
             {
