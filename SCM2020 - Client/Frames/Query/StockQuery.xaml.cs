@@ -26,8 +26,7 @@ namespace SCM2020___Client.Frames.Query
     public partial class StockQuery : UserControl
     {
         WebBrowser webBrowser = Helper.MyWebBrowser;
-        List<ModelsLibraryCore.ConsumptionProduct> products = null;
-
+        List<Models.StockQuery> products = null;
         public StockQuery()
         {
             InitializeComponent();
@@ -61,6 +60,7 @@ namespace SCM2020___Client.Frames.Query
         }
         private void SearchStock(string query)
         {
+            List<ModelsLibraryCore.ConsumptionProduct> productsGetted = null;
             Clear();
             previousTextSearch = query;
             if (query == string.Empty)
@@ -70,7 +70,7 @@ namespace SCM2020___Client.Frames.Query
             query = System.Uri.EscapeDataString(query);
             try
             {
-                products = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+                productsGetted = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
 
             }
             catch (HttpRequestException)
@@ -78,9 +78,9 @@ namespace SCM2020___Client.Frames.Query
                 MessageBox.Show("Produto não encontrado.", "Produto inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if ((products == null) || (products.Count == 0))
+            if ((productsGetted == null) || (productsGetted.Count == 0))
                 return;
-            foreach (var item in products)
+            foreach (var item in productsGetted)
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(item); }));
             }

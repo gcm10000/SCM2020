@@ -7,10 +7,11 @@ namespace SCM2020___Client
 {
     public class StockQueryDocument
     {
-        private List<ModelsLibraryCore.ConsumptionProduct> Products;
+        private List<Models.StockQuery> Products;
         private string Html;
-        public StockQueryDocument(List<ModelsLibraryCore.ConsumptionProduct> Products)
+        public StockQueryDocument(List<Models.StockQuery> Products)
         {
+
             this.Products = Products;
 
             var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "StockQuery.html");

@@ -5,14 +5,13 @@ using System.Text;
 
 namespace SCM2020___Client.Models
 {
-    class StockQuery
+    public class StockQuery
     {
         public StockQuery(ModelsLibraryCore.ConsumptionProduct consumptionProduct)
         {
             this.Code = consumptionProduct.Code;
             this.Description = consumptionProduct.Description;
             this.NumberLocalization = consumptionProduct.NumberLocalization;
-            this.Id = consumptionProduct.Id;
             this.Localization = consumptionProduct.Localization;
             this.MaximumStock = consumptionProduct.MaximumStock;
             this.MininumStock = consumptionProduct.MininumStock;
@@ -22,10 +21,6 @@ namespace SCM2020___Client.Models
 
             this.Group = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{consumptionProduct.Group}").ToString(), Helper.Authentication).GroupName;
         }
-        /// <summary>
-        /// Chave primária.
-        /// </summary>
-        public int Id { get; set; }
         /// <summary>
         /// Código do produto.
         /// </summary>
