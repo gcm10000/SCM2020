@@ -107,7 +107,7 @@ namespace SCM2020___Server.Controllers
             string[] querySplited = query.Trim().Split(' ');
 
             var lproduct = context.ConsumptionProduct.ToList()
-                .Where(x => x.Description.RemoveDiacritics().MultiplesContains(querySplited) || x.Code.ToString().Contains(query));
+                .Where(x => x.Description.MultiplesContainsWords(querySplited) || x.Code.ToString().Contains(query));
             if (query.IsDigitsOnly())
             {
                 lproduct = lproduct.AsEnumerable()

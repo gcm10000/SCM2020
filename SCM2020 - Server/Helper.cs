@@ -100,7 +100,23 @@ namespace SCM2020___Server
                 }
                 return false;
         }
-       public static string RemoveDiacritics(this string text)
+        public static bool MultiplesContainsWords(this string mystr, params string[] words)
+        {
+            mystr = mystr.ToLowerInvariant();
+            words = words.Select(s => s.ToLowerInvariant().RemoveDiacritics()).ToArray();
+            if (mystr.Contains("machado"))
+            {
+
+            }
+            bool contains = true;
+
+            foreach (var word in words)
+            {
+                contains = contains && mystr.Contains(word);
+            }
+            return contains;
+        }
+        public static string RemoveDiacritics(this string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();

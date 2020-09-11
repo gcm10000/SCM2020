@@ -248,7 +248,7 @@ namespace SCM2020___Server.Controllers
 
             var allUsers = UserManager.Users.ToList();
 
-            var AppUsers = allUsers.Where(x => x.PJERJRegistration.RemoveDiacritics().MultiplesContains(querySplited) || x.Name.RemoveDiacritics().MultiplesContains(querySplited));
+            var AppUsers = allUsers.Where(x => x.Name.MultiplesContainsWords(querySplited) || x.PJERJRegistration.Contains(query));
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
             {
