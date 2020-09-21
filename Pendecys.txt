@@ -56,6 +56,7 @@
     Possível solução: https://stackoverflow.com/questions/49223932/wpf-datagrid-grouping-leads-to-horrible-memory-consumption
     https://stackoverflow.com/questions/27838500/datagrid-with-groups-and-virtualizingpanel-isvirtualizingwhengrouping-true
         <DataGrid x:Name="dataGrid" VirtualizingPanel.IsVirtualizingWhenGrouping="True">
+        Solução: VirtualizingStackPanel.IsVirtualizing="True"
 
 - Evitar repetição de dados em listagem de patrimônio e inventário
 

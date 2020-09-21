@@ -101,7 +101,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}" ></DataGridTextColumn>
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>

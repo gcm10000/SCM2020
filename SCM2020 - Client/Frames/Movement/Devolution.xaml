@@ -115,7 +115,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
@@ -175,7 +175,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
@@ -230,7 +230,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
@@ -255,7 +255,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>

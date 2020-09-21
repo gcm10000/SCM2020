@@ -83,9 +83,6 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in productsGetted)
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(new Models.StockQuery(item)); }));
-                //if (this.QueryDataGrid.Items.Count < 100)
-                //{
-                //}
             }
             //products = productsGetted;
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));

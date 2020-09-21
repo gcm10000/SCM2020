@@ -79,7 +79,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header=" Matrícula" Binding="{Binding Register}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Nome" Binding="{Binding Name}"></DataGridTextColumn>

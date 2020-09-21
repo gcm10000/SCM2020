@@ -74,7 +74,7 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="False">
+                                  VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" Data" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}"></DataGridTextColumn>
