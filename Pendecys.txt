@@ -41,9 +41,9 @@
 - VERIFICAR NULO NA CONSULTA (pendente) (OK)
 - VERIFICAR NULO NAS PESQUISAS DE PRODUTO (pendente) (OK)
 - Tratar objetos nulos no servidor (OK)
-- Adicionar relatório financeiro;
+- Adicionar relatório financeiro (2.0);
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
-- Sistema de notificação do estoque mínimo e estoque máximo. [Notificar pelo próprio sistema e pelo e-mail (pendente) (OK)];
+- Sistema de notificação do estoque mínimo e estoque máximo. [Notificar pelo próprio sistema e pelo e-mail (pendente) (2.0)];
 - Modificar a movimentação (pendente);
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
