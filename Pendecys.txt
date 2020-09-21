@@ -38,20 +38,21 @@
 - PRODUTOS CONSUMÍVEIS COMO REQUISITO PARA MOVIMENTAÇÃO DE ENTRADA (OK)
 - PESQUISA DE PRODUTOS PERMANENTES EM DEVOLUÇÃO SOMENTE APARECE PRODUTOS QUE TEM ORDEM DE SERVIÇO PREENCHIDA (OK)
 - PESQUISA DE PRODUTOS PERMAMENTES EM SAÍDA SOMENTE APARECE PRODUTOS QUE NÃO TEM ORDEM DE SERVIÇO PREENCHIDA (OK)
-- VERIFICAR NULO NA CONSULTA (pendente)
-- VERIFICAR NULO NAS PESQUISAS DE PRODUTO (pendente)
-- Tratar objetos nulos no servidor
+- VERIFICAR NULO NA CONSULTA (pendente) (OK)
+- VERIFICAR NULO NAS PESQUISAS DE PRODUTO (pendente) (OK)
+- Tratar objetos nulos no servidor (OK)
 - Adicionar relatório financeiro;
 - Adicionar os produtos permanentes, importando-os da planilha SUB-UNIDADE;
-- Sistema de notificação do estoque mínimo e estoque máximo. Notificar pelo próprio sistema e pelo e-mail (pendente);
+- Sistema de notificação do estoque mínimo e estoque máximo. [Notificar pelo próprio sistema e pelo e-mail (pendente) (OK)];
 - Modificar a movimentação (pendente);
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
-- Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle
+- Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle (2.0)
+- Janela exibindo informações do produto com imagem.
 - BUGS na correlação de entrada e saída:
   • Impossibilidade de fazer devolução APENAS de produtos permanentes
   • Impossibilidade de apagar permanente da movimentação de saída
-- Checar aparente vazamento de memória no DataGridView:
+- Checar aparente vazamento de memória no DataGridView (OK):
     https://stackoverflow.com/questions/1702087/apparent-memory-leak-in-datagridview
     Possível solução: https://stackoverflow.com/questions/49223932/wpf-datagrid-grouping-leads-to-horrible-memory-consumption
     https://stackoverflow.com/questions/27838500/datagrid-with-groups-and-virtualizingpanel-isvirtualizingwhengrouping-true
