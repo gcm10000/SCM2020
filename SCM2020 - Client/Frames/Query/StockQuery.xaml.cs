@@ -1,6 +1,7 @@
 ﻿using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
@@ -26,7 +27,7 @@ namespace SCM2020___Client.Frames.Query
     public partial class StockQuery : UserControl
     {
         WebBrowser webBrowser = Helper.MyWebBrowser;
-        List<ModelsLibraryCore.ConsumptionProduct> products = null;
+        List<Models.StockQuery> products = new List<Models.StockQuery>();
         public StockQuery()
         {
             InitializeComponent();
@@ -82,17 +83,19 @@ namespace SCM2020___Client.Frames.Query
                 return;
             foreach (var item in productsGetted)
             {
-                this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(new Models.StockQuery(item)); }));
+                //var myitem = new Models.StockQuery(item);
+                products.Add(new Models.StockQuery(item));
             }
-            //products = productsGetted;
+            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.ItemsSource = products; this.QueryDataGrid.Items.Refresh(); }));
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
         }
 
         private void Clear()
         {
-            products = null;
-            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Clear(); }));
+            products.Clear();
+            //this.QueryDataGrid.Items.Refresh();
+            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Refresh(); }));
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
         }
@@ -104,16 +107,16 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            //StockQueryDocument template = new StockQueryDocument(products);
-            //Document = template.RenderizeHtml();
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            //StockQueryDocument template = new StockQueryDocument(products);
-            //Document = template.RenderizeHtml();
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
@@ -156,6 +159,11 @@ namespace SCM2020___Client.Frames.Query
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
-
+        private void QueryDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            //PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
+            //e.Column.Header = propertyDescriptor.DisplayName;
+            e.Cancel = true;
+        }
     }
 }
