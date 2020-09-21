@@ -104,8 +104,8 @@ namespace SCM2020___Client.Frames.Query
             }
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
-
-            ProductMovementDataGrid.UnselectAll();
+            
+            this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {

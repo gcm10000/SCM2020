@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using System.Linq;
 using Path = System.IO.Path;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -40,14 +42,23 @@ namespace SCM2020___Client.Frames.Query
                 ESTOQUE MÁXIMO -> GENERALPRODUCT
                 UNIDADE -> GENERALPRODUCT
              */
-
             var initialDate = InitialDate.SelectedDate.Value;
             var finalDate = FinalDate.SelectedDate.Value;
+            Task.Run(() => Search(initialDate, finalDate));
+            
+        }
+
+        private void Search(DateTime initialDate, DateTime finalDate)
+        {
+            ButtonEnable(false);
+            this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Clear(); }));
+
+
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"input/Date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             var materialOutputInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"output/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             var materialDevolutionInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.Server, $"devolution/date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
             InitialDateTime = initialDate.Date;
-            FinalDateTime = FinalDate.DisplayDate;
+            FinalDateTime = finalDate.Date;
 
             products = new List<QueryByDateDocument.Product>();
             foreach (var item in materialInputByVendorInDate)
@@ -130,11 +141,16 @@ namespace SCM2020___Client.Frames.Query
 
             foreach (var product in products)
             {
-                this.ShowByDateDataGrid.Items.Add(product);
+                this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Add(product); }));
             }
 
-            this.Export_Button.IsEnabled = true;
-            this.Print_Button.IsEnabled = true;
+            ButtonEnable(true);
+        }
+
+        private void ButtonEnable(bool isEnable)
+        {
+            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
+            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
