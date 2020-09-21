@@ -26,7 +26,7 @@ namespace SCM2020___Client.Frames.Query
     public partial class StockQuery : UserControl
     {
         WebBrowser webBrowser = Helper.MyWebBrowser;
-        List<Models.StockQuery> products = null;
+        List<ModelsLibraryCore.ConsumptionProduct> products = null;
         public StockQuery()
         {
             InitializeComponent();
@@ -83,10 +83,13 @@ namespace SCM2020___Client.Frames.Query
             foreach (var item in productsGetted)
             {
                 this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(new Models.StockQuery(item)); }));
+                //if (this.QueryDataGrid.Items.Count < 100)
+                //{
+                //}
             }
+            //products = productsGetted;
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
-
         }
 
         private void Clear()
@@ -104,16 +107,16 @@ namespace SCM2020___Client.Frames.Query
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            StockQueryDocument template = new StockQueryDocument(products);
-            Document = template.RenderizeHtml();
+            //StockQueryDocument template = new StockQueryDocument(products);
+            //Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
-            StockQueryDocument template = new StockQueryDocument(products);
-            Document = template.RenderizeHtml();
+            //StockQueryDocument template = new StockQueryDocument(products);
+            //Document = template.RenderizeHtml();
             this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
             this.webBrowser.NavigateToString(Document);
         }
