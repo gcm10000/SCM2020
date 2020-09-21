@@ -47,8 +47,8 @@
 - Modificar a movimentação (pendente);
 - Possibilitar abertura da ordem de serviço para modificações, desde que notifique ao supervisor;
 - Sistematizar os funcionários;
-- Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle (2.0)
-- Janela exibindo informações do produto com imagem.
+- Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle (2.0);
+- Janela exibindo informações do produto com imagem (2.0);
 - BUGS na correlação de entrada e saída:
   • Impossibilidade de fazer devolução APENAS de produtos permanentes
   • Impossibilidade de apagar permanente da movimentação de saída
@@ -77,8 +77,9 @@ Ordem do tratamento dos bugs:
 Bugs tratados no cliente:
   1. Movimentações:
 	1. Saída (recorrigir)
-	2. Entrada
-    3. 
+	2. Devolução 
+    2. Entrada
 	
  2. Consulta:
 	1. Movimentação
+    2. Consulta de Estoque - Impressão (retificar)
