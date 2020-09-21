@@ -58,7 +58,7 @@
 - Adicionar relatório financeiro (2.0);
 - Adicionar gráfico 'Diagrama de Pareto' no Painel de Controle (2.0);
 - Janela exibindo informações do produto com imagem (2.0);
-- Evitar repetição de dados em listagem de patrimônio e inventário
+- Evitar repetição de dados em listagem de patrimônio e inventário (refazer, retirando websocket)
 
 Embora tenha algumas pendências, o projeto está teoricamente pronto entretanto haja vista dos bugs que necessitam terem um olhar cuidadoso.
 Ordem do tratamento dos bugs:

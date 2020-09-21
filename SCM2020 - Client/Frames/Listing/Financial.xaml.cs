@@ -13,6 +13,11 @@ using System.Windows.Shapes;
 
 namespace SCM2020___Client.Frames.Listing
 {
+    //Financeiro:
+    //SKU - DESCRIÇÃO - VALOR UNITÁRIO - VALOR TOTAL - DANFE
+
+    //FILTRO: PRODUTO [SKU ou DESCRIÇÃO] ou DATA
+
     /// <summary>
     /// Interação lógica para Financial.xam
     /// </summary>

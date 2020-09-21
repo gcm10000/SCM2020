@@ -94,7 +94,6 @@ namespace SCM2020___Client.Frames.Query
         private void Clear()
         {
             products.Clear();
-            //this.QueryDataGrid.Items.Refresh();
             this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Refresh(); }));
             this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
             this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
