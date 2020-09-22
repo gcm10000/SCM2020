@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SCM2020___Server.Repositories
 {
+    //https://medium.com/tableless/criando-um-chat-completo-com-asp-net-core-mvc-e-signalr-ec0380f28dbe
     public class ConnectionsRepository
     {
         private readonly Dictionary<string, User> connections = new Dictionary<string, User>();
