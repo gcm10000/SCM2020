@@ -79,7 +79,7 @@ namespace ModelsLibraryCore
             {
                 stock1 = value;
                 if (ValueChanged != null)
-                    ValueChanged(this, null);
+                    ValueChanged(this);
             }
         }
         public static event ValueChangedEventHandler ValueChanged;
