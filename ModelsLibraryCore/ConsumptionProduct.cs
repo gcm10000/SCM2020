@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibraryCore
 {
-    public delegate void ValueChangedEventHandler(double value);
+    public delegate void ValueChangedEventHandler(ConsumptionProduct ConsumptionProduct);
     /// <summary>
     /// Informações sobre o produto. Esta classe contém números sobre o produto.
     /// </summary>
@@ -68,20 +68,20 @@ namespace ModelsLibraryCore
         /// </summary>
         public uint NumberLocalization { get; set; }
         [Required]
-        public double stock { get; set; }
+        public double stock1 { get; set; }
         /// <summary>
         /// Quantidade atual do produto encontrado no estoque.
         /// </summary>
         [NotMapped]
-        public double Stock { get => stock; 
+        public double Stock { get => stock1; 
             set 
             {
-                stock = value;
+                stock1 = value;
                 if (ValueChanged != null)
-                    ValueChanged(value);
+                    ValueChanged(this);
             }
         }
-        public event ValueChangedEventHandler ValueChanged;
+        public static event ValueChangedEventHandler ValueChanged;
         /// <summary>
         /// Quantidade mínima cujo produto necessita.
         /// </summary>

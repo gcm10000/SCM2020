@@ -36,6 +36,7 @@ namespace SCM2020___Server
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
 
             services.AddControllersWithViews();
 
@@ -51,6 +52,26 @@ namespace SCM2020___Server
                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                  ClockSkew = TimeSpan.Zero
              });
+        }
+
+        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
+        {
+            //Armazena no banco de dados enquanto não tiver enviado para todos os funcionários.
+            //Após ter enviado a todos, pode apagar
+            int SKU = ConsumptionProduct.Id;
+            string message = string.Empty;
+            //.Where(Roles == "SCM")
+            if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
+            {
+                //Envia aos clientes com a role SCM alertando material com pouco estoque
+                message = $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.";
+            }
+
+            if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
+            {
+                //Envia aos clientes com a role SCM alertando material com muito estoque
+                message = $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.";
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
