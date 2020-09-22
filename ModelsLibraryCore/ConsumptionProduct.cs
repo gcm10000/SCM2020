@@ -68,7 +68,7 @@ namespace ModelsLibraryCore
         /// </summary>
         public uint NumberLocalization { get; set; }
         [Required]
-        public double stock1 { get; set; }
+        private double stock1 { get; set; }
         /// <summary>
         /// Quantidade atual do produto encontrado no estoque.
         /// </summary>
