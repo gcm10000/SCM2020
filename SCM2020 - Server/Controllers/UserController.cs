@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using Microsoft.AspNetCore.Http;
 using System.Web;
-
+using System.Collections.Generic;
 
 namespace SCM2020___Server.Controllers
 {
@@ -33,7 +33,7 @@ namespace SCM2020___Server.Controllers
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
             this.ControlDbContext = controlDbContext;
-            this.UserManager = userManager;
+            Helper.Users = this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
         }

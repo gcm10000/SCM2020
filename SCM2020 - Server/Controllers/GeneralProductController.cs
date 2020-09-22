@@ -7,6 +7,7 @@ using ModelsLibraryCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace SCM2020___Server.Controllers
 {
@@ -16,7 +17,7 @@ namespace SCM2020___Server.Controllers
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
-        public GeneralProductController(ControlDbContext context) { this.context = context; }
+        public GeneralProductController(ControlDbContext context, UserManager<ApplicationUser> userManager) { this.context = context; Helper.Users = userManager;  }
 
         [Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]

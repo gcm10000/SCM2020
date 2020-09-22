@@ -64,10 +64,7 @@ namespace SCM2020___Client.Frames.Query
             List<ModelsLibraryCore.ConsumptionProduct> productsGetted = null;
             Clear();
             previousTextSearch = query;
-            if (query == string.Empty)
-            {
-                return;
-            }
+
             query = System.Uri.EscapeDataString(query);
             try
             {

@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ModelsLibraryCore;
 using Newtonsoft.Json.Linq;
 
 namespace SCM2020___Server
 {
     public static class Helper
     {
+        public static UserManager<ApplicationUser> Users { get; set; }
         public static async Task<string> RawFromBody(ControllerBase controllerBase)
         {
             string postData = string.Empty;
@@ -104,10 +106,7 @@ namespace SCM2020___Server
         {
             mystr = mystr.ToLowerInvariant();
             words = words.Select(s => s.ToLowerInvariant().RemoveDiacritics()).ToArray();
-            if (mystr.Contains("machado"))
-            {
-
-            }
+            
             bool contains = true;
 
             foreach (var word in words)

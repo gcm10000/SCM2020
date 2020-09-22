@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SCM2020___Server
 {
@@ -36,7 +38,6 @@ namespace SCM2020___Server
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
 
             services.AddControllersWithViews();
 
@@ -54,13 +55,17 @@ namespace SCM2020___Server
              });
         }
 
-        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
+        private async void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
         {
             //Armazena no banco de dados enquanto não tiver enviado para todos os funcionários.
             //Após ter enviado a todos, pode apagar
             int SKU = ConsumptionProduct.Id;
             string message = string.Empty;
             //.Where(Roles == "SCM")
+            //var users = await this.UserManager.Users.ToListAsync();
+            //var user = users.Single(x => x.Id == "c2b6353b-38b4-4118-b6cb-7c769e5e5922");
+            users.Single(x => x.Id == "c2b6353b-38b4-4118-b6cb-7c769e5e5922");
+            
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com pouco estoque
@@ -106,6 +111,9 @@ namespace SCM2020___Server
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
+
         }
     }
 }
