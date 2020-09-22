@@ -68,15 +68,15 @@ namespace ModelsLibraryCore
         /// </summary>
         public uint NumberLocalization { get; set; }
         [Required]
-        public double stock { get; set; }
+        public double stock1 { get; set; }
         /// <summary>
         /// Quantidade atual do produto encontrado no estoque.
         /// </summary>
         [NotMapped]
-        public double Stock { get => stock; 
+        public double Stock { get => stock1; 
             set 
             {
-                stock = value;
+                stock1 = value;
                 if (ValueChanged != null)
                     ValueChanged(value);
             }
