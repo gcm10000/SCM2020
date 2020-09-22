@@ -8,6 +8,7 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication;
 
@@ -26,13 +27,15 @@ namespace SCM2020___Utility
 
         static void Main(string[] args)
         {
-            //CRUD
-            //CREATE -> GENERIC POST V
-            //READ -> GENERIC GET V
-            //UPDATE -> GENERIC POST V
-            //DELETE -> INT DELETE
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-            SignUpAdministrator();
+        //CRUD
+        //CREATE -> GENERIC POST V
+        //READ -> GENERIC GET V
+        //UPDATE -> GENERIC POST V
+        //DELETE -> INT DELETE
+
+        SignUpAdministrator();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
