@@ -90,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DeleteAllTables.sql" />
+    <Content Include="SISTEMA STK.MDB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ModelsLibrary\ModelsLibrary.csproj">

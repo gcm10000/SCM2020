@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +11,9 @@ namespace SCM2020___Utility
 {
     class SCMAccess
     {
-        public const string ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=""C:\Users\Gabriel\Documents\SISTEMA STK.MDB""";
+        private static readonly string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static string fullNameDatabase = Path.Combine(currentDirectory, "SISTEMA STK.MDB");
+        public static readonly string ConnectionString = $"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\"{fullNameDatabase}\"";
         OleDbConnection aConnection;
         OleDbCommand aCommand;
         public SCMAccess(string ConnectionString, string TableName)
