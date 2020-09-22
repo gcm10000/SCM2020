@@ -17,7 +17,7 @@ namespace SCM2020___Server.Controllers
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
-        public GeneralProductController(ControlDbContext context, UserManager<ApplicationUser> userManager) { this.context = context; Helper.Users = userManager;  }
+        public GeneralProductController(ControlDbContext context) { this.context = context;  }
 
         [Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]

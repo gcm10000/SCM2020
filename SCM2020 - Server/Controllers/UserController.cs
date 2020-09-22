@@ -33,9 +33,11 @@ namespace SCM2020___Server.Controllers
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
             this.ControlDbContext = controlDbContext;
-            Helper.Users = this.UserManager = userManager;
+            this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
+
+            Helper.Users = new List<ApplicationUser>(userManager.Users);
         }
         [HttpGet("Get")]
         [Authorize(Roles = Roles.Administrator)]

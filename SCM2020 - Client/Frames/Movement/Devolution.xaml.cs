@@ -89,7 +89,6 @@ namespace SCM2020___Client.Frames.Movement
             //Se o monitoramento vinculado a ordem de serviço é existente
             if (resultMonitoring != null)
             {
-                previousDevolutionExists = true;
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
                     
@@ -105,6 +104,7 @@ namespace SCM2020___Client.Frames.Movement
                     try
                     {
                         previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        previousDevolutionExists = true;
                         this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)previousMaterialInput.Regarding) - 1; }));
 
                         RescueProducts(previousMaterialInput);

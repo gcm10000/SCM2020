@@ -48,7 +48,10 @@ namespace SCM2020___Server.Controllers
         {
             workorder = System.Uri.UnescapeDataString(workorder);
             var result = context.Monitoring.SingleOrDefault(x => x.Work_Order == workorder);
-            return Ok(result.Situation);
+            bool situation = false;
+            if (result != null)
+                situation = result.Situation;
+            return Ok(situation);
         }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]

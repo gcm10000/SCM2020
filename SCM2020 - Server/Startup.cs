@@ -64,9 +64,10 @@ namespace SCM2020___Server
             //.Where(Roles == "SCM")
             //var users = await this.UserManager.Users.ToListAsync();
             //var user = users.Single(x => x.Id == "c2b6353b-38b4-4118-b6cb-7c769e5e5922");
-            var user = Helper.Users.Users.Single(x => x.Id == "c2b6353b-38b4-4118-b6cb-7c769e5e5922");
+            //var user = Helper.Users.Single(x => x.Id == "c2b6353b-38b4-4118-b6cb-7c769e5e5922");
+            var users = Helper.Users;
             
-            
+
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com pouco estoque
@@ -105,6 +106,7 @@ namespace SCM2020___Server
 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

@@ -15,7 +15,7 @@ namespace SCM2020___Server
 {
     public static class Helper
     {
-        public static UserManager<ApplicationUser> Users { get; set; }
+        public static List<ApplicationUser> Users { get; set; }
         public static async Task<string> RawFromBody(ControllerBase controllerBase)
         {
             string postData = string.Empty;
