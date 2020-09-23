@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Collections.Generic;
+using SCM2020___Server.Hubs;
 
 namespace SCM2020___Server
 {
@@ -53,6 +54,8 @@ namespace SCM2020___Server
                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                  ClockSkew = TimeSpan.Zero
              });
+
+            services.AddSignalR();
         }
 
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
@@ -115,6 +118,11 @@ namespace SCM2020___Server
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            //app.UseSignalR(routes => routes.MapHub<NotifyHub>("/notify"));
+            app.UseEndpoints(endpoints => 
+            {
+                endpoints.MapHub<NotifyHub>("/notify");
+            });
             ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
 
         }
