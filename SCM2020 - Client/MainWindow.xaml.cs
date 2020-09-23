@@ -72,20 +72,14 @@ namespace SCM2020___Client
 
                 //send
                 //connection.InvokeCoreAsync("notify", new[] {   } });
-                List<User> userlist = null;
                 connection.On("Receive", (object sender, object message) =>
                 {
                     //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
                 });
 
-                connection.On("notify", (List<User> users, User user) => 
+                connection.On("notify", (string message) => 
                 {
-                    userlist = users;
-                    foreach (var item in users)
-                    {
-                        MessageBox.Show($"{item.Name} está conectado.");
-
-                    }
+                    MessageBox.Show(message);
                 });
             });
             Helper.MyWebBrowser = WebBrowser;

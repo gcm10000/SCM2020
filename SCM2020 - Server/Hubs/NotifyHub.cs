@@ -16,7 +16,7 @@ namespace SCM2020___Server.Hubs
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
             connections.Add(Context.ConnectionId, user);
-            Clients.All.SendAsync("notify", connections.GetAllUser(), user);
+            Clients.All.SendAsync("notify", "Bem-vindo");
             return base.OnConnectedAsync();
         }
 
@@ -31,15 +31,9 @@ namespace SCM2020___Server.Hubs
             await Clients.Client(connections.GetUserId(message.Destination)).SendAsync("Receive", message.Sender, message.Data);
         }
 
-        public async void SendNotify()
+        public async void SendNotify(string uniqueID, string message)
         {
-            foreach (var user in connections.GetAllUser())
-            {
-                Clients.All.SendAsync("notify", connections.GetAllUser(), user);
-            }
-        }
-        public async void Send(string uniqueID, string message)
-        {
+            if (connections)
             await Clients.Client(uniqueID).SendAsync("notify", message);
         }
     }

@@ -24,6 +24,10 @@ namespace SCM2020___Server.Repositories
                 connections.Remove(uniqueID);
             }
         }
+        public bool ExistsUniqueID(string UniqueID)
+        {
+            return connections.TryGetValue(UniqueID, out _);
+        }
         public string GetUserId(long id)
         {
             return connections.FirstOrDefault(x => x.Value.Key == id).Key;
