@@ -218,7 +218,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
@@ -301,7 +301,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
@@ -326,7 +326,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" Código" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>

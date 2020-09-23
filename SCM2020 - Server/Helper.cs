@@ -104,7 +104,7 @@ namespace SCM2020___Server
         }
         public static bool MultiplesContainsWords(this string mystr, params string[] words)
         {
-            mystr = mystr.ToLowerInvariant();
+            mystr = mystr.ToLowerInvariant().RemoveDiacritics();
             words = words.Select(s => s.ToLowerInvariant().RemoveDiacritics()).ToArray();
             
             bool contains = true;

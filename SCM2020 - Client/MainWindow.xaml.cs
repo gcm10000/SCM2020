@@ -26,6 +26,7 @@ namespace SCM2020___Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<User> users { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -55,13 +56,24 @@ namespace SCM2020___Client
             Task.Run(() => 
             {
                 var connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:52991/notify")
+                .WithUrl("http://localhost:52991/notify")
                 .Build();
                 connection.StartAsync().Wait();
-                connection.InvokeAsync("Send");
-                connection.On("Receive", (Message message) => 
+                connection.InvokeAsync("notify");
+                User[] userlist = null;
+                //connection.On("Receive", (sender, message) => 
+                //{
+                //    Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
+                //});
+
+                connection.On("notify", (User[] users) => 
                 {
-                    Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
+                    userlist = users;
+                    foreach (var item in users)
+                    {
+                        MessageBox.Show($"");
+
+                    }
                 });
             });
             Helper.MyWebBrowser = WebBrowser;
