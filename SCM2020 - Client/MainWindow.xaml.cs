@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Win32;
+using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
@@ -48,6 +50,19 @@ namespace SCM2020___Client
                 Helper.WebHost = WebAssemblyLibrary.Server.WebAssembly.CreateWebHostBuilder().Build();
                 Helper.WebHost.Run();
                 //Default url is http://localhost:5000/
+            });
+
+            Task.Run(() => 
+            {
+                var connection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:52991/notify")
+                .Build();
+                connection.StartAsync().Wait();
+                connection.InvokeAsync("Send");
+                connection.On("Receive", (Message message) => 
+                {
+                    Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
+                });
             });
             Helper.MyWebBrowser = WebBrowser;
 
