@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client
 {
@@ -55,16 +56,28 @@ namespace SCM2020___Client
 
             Task.Run(() => 
             {
+                DateTime startDt = new DateTime(1970, 1, 1);
+                TimeSpan timeSpan = DateTime.UtcNow - startDt;
+                long millis = (long)timeSpan.TotalMilliseconds;
+                var user = new User()
+                {
+                    DateTimeConnection = DateTime.Now,
+                    Key = millis,
+                    Name = "Gabriel " + millis
+                }.ToJson();
+
                 var connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:52991/notify")
+                .WithUrl("http://localhost:52991/notify?user=")
                 .Build();
                 connection.StartAsync().Wait();
-                connection.InvokeAsync("notify");
+                
+                //send
+                //connection.InvokeCoreAsync("notify", new[] {   } });
                 User[] userlist = null;
-                //connection.On("Receive", (sender, message) => 
-                //{
-                //    Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
-                //});
+                connection.On("Receive", (object sender, object message) =>
+                {
+                    //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
+                });
 
                 connection.On("notify", (User[] users) => 
                 {
