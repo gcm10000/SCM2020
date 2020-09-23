@@ -27,7 +27,6 @@ namespace SCM2020___Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<User> users { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -70,21 +69,21 @@ namespace SCM2020___Client
                 .WithUrl("http://localhost:52991/notify?user=" + user)
                 .Build();
                 connection.StartAsync().Wait();
-                
+
                 //send
                 //connection.InvokeCoreAsync("notify", new[] {   } });
-                User[] userlist = null;
+                List<User> userlist = null;
                 connection.On("Receive", (object sender, object message) =>
                 {
                     //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
                 });
 
-                connection.On("notify", (User[] users) => 
+                connection.On("notify", (List<User> users, User user) => 
                 {
                     userlist = users;
                     foreach (var item in users)
                     {
-                        MessageBox.Show($"");
+                        MessageBox.Show($"{item.Name} está conectado.");
 
                     }
                 });

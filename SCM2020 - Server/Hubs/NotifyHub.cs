@@ -20,9 +20,27 @@ namespace SCM2020___Server.Hubs
             return base.OnConnectedAsync();
         }
 
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            connections.Remove(Context.ConnectionId);
+            return base.OnDisconnectedAsync(exception);
+        }
+
         public async Task SendMessage(Message message)
         {
             await Clients.Client(connections.GetUserId(message.Destination)).SendAsync("Receive", message.Sender, message.Data);
+        }
+
+        public async void SendNotify()
+        {
+            foreach (var user in connections.GetAllUser())
+            {
+                Clients.All.SendAsync("notify", connections.GetAllUser(), user);
+            }
+        }
+        public async void Send(string uniqueID, string message)
+        {
+            await Clients.Client(uniqueID).SendAsync("notify", message);
         }
     }
 }
