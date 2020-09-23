@@ -67,7 +67,7 @@ namespace SCM2020___Client
                 }.ToJson();
 
                 var connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:52991/notify?user=")
+                .WithUrl("http://localhost:52991/notify?user=" + user)
                 .Build();
                 connection.StartAsync().Wait();
                 
