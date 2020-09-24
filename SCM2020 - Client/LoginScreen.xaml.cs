@@ -39,10 +39,21 @@ namespace SCM2020___Client
             //password SenhaSecreta#2020
             var user = UserTextBox.Text;
             var password = PasswordTextBox.Password;
-            var t = Task.Run(() => SignIn(user, password));
+            var t = Task.Run(() => 
+            { 
+                if (SignIn(user, password))
+                {
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                        // your code
+                        MainWindow window = new MainWindow();
+                        window.Show();
+                        this.Close();
+                    });
+                }
+            });
 
         }
-        private void SignIn(string user, string password)
+        private bool SignIn(string user, string password)
         {
             try
             {
@@ -55,7 +66,8 @@ namespace SCM2020___Client
                 Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
                 Helper.CurrentSector = signIn.Sector;
                 Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
-                MessageBox.Show("Login realizado com sucesso.", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Login realizado com sucesso.", "Informação", MessageBoxButton.OK, MessageBoxImage.Information);
+                return true;
             }
             catch (AggregateException ex)
             {
@@ -75,6 +87,7 @@ namespace SCM2020___Client
                 MessageBox.Show(ex.Message, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
             }
             //É preciso de outro catch para credenciais erradas.
+            return false;
         }
     }
 }

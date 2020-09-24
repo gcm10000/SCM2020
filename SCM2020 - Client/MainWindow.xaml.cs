@@ -43,7 +43,7 @@ namespace SCM2020___Client
             //LoginScreen screen = new LoginScreen();
             //screen.ShowDialog();
 
-            SignIn();
+            //SignIn();
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Task.Run(() => 
