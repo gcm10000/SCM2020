@@ -11,11 +11,6 @@ namespace SCM2020___Server.Hubs
 {
     public class NotifyHub : Hub
     {
-        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
-        {
-
-        }
-
         public static ConnectionsRepository connections { get; } = new ConnectionsRepository();
         public override Task OnConnectedAsync()
         {

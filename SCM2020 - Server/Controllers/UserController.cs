@@ -47,9 +47,27 @@ namespace SCM2020___Server.Controllers
 
         }
 
-        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
+        private async void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
         {
+            //var users = Helper.Users;
             
+            if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
+            {
+                var SCM = UserManager.Users.Where(x => x.IdSector == 2);
+                NotifyHub. .ConnectionsRepository;
+                foreach (var item in )
+                {
+                    //Envia aos clientes com a role SCM alertando material com pouco estoque
+                    await NotifyHub.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
+                }
+            }
+
+            if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
+            {
+                //Envia aos clientes com a role SCM alertando material com muito estoque
+                await NotifyHub.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
+            }
+
         }
 
         [HttpGet("Get")]
