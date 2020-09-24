@@ -36,6 +36,8 @@ namespace SCM2020___Client.Templates.Query
             Html = Html.Replace("@InitialDate", InitialDate.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@FinalDate", FinalDate.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@LISTOFWORKORDERS", itemsContent);
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+
             return Html;
         }
     }

@@ -13,11 +13,13 @@ using System.Linq;
 using System.Management;
 using Microsoft.Win32;
 using Microsoft.AspNetCore.Hosting;
+using System.Reflection;
 
 namespace SCM2020___Client
 {
     static class Helper
     {
+        public static readonly string CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         /// <summary>
         /// Endereço do servidor.
         /// </summary>

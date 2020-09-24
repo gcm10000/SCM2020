@@ -34,6 +34,7 @@ namespace SCM2020___Client
                                 "</tr>";
             }
             Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
             return Html.ToString();
         }
 

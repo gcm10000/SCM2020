@@ -30,7 +30,7 @@ namespace SCM2020___Client
         public InventoryOfficerPreview(ICollection<Product> Products)
         {
             this.Products = Products;
-            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "InventoryOfficer.html");
+            var pathFileHtml = Path.Combine(Helper.CurrentDirectory, "templates", "InventoryOfficer.html");
             html = System.IO.File.ReadAllText(pathFileHtml);
         }
 
@@ -49,6 +49,7 @@ namespace SCM2020___Client
                 StringBuilder.AppendLine(line);
             }
             html = html.Replace("@PRODUCTS", StringBuilder.ToString());
+            html = html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
             return html;
         }
     }
