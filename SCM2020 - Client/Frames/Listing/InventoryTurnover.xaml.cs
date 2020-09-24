@@ -100,6 +100,7 @@ namespace SCM2020___Client.Frames.Query
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
                         var document = DocumentText(webBrowser);
+                        document = document.Replace("css/bootstrap.min.css", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
                         file.Write(document);
                         file.Flush();
                     }
@@ -132,11 +133,6 @@ namespace SCM2020___Client.Frames.Query
             }
             return html;
         }
-        private void WebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
-        {
-            var document = (HTMLDocument)webBrowser.Document;
-            var _Html = document.body.outerHTML;
-        }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -144,10 +140,10 @@ namespace SCM2020___Client.Frames.Query
             this.ButtonInventoryTurnover.IsEnabled = true;
             var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
             var content = File.ReadAllText(path);
-            content = content.Replace("@BootstrapDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
-            content = content.Replace("@SignalrDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "signalr.js")).AbsoluteUri);
-            content = content.Replace("@SocketHubDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "sockethub.js")).AbsoluteUri);
-            this.webBrowser.NavigateToString(content);
+            //content = content.Replace("@BootstrapDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+            //content = content.Replace("@SignalrDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "signalr", "signalr.js")).AbsoluteUri);
+            //content = content.Replace("@SocketHubDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "sockethub.js")).AbsoluteUri);
+            this.webBrowser.Navigate(path);
 
         }
 

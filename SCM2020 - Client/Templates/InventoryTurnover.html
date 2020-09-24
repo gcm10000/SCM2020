@@ -4,14 +4,14 @@
     <title>Teste</title>
     <meta charset="utf-8" />
     <script>
-        //$.ajaxSetup({ cache: false });
+                //$.ajaxSetup({ cache: false });
     </script>
-    <link rel="stylesheet" href="@BootstrapDirectory">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <style type="text/css">
         body {
             overflow-x: hidden;
-        }
 
+        }
         .threedots {
             border: none;
             border-radius: 50%;
@@ -27,11 +27,10 @@
             -ms-user-select: none;
             user-select: none;
         }
-
-            .threedots:after {
-                content: '\2807';
-                /*font-size: 72px;*/
-            }
+        .threedots:after {
+            content: '\2807';
+            /*font-size: 72px;*/
+        }
 
         @media print {
             th:last-child, td:last-child {
@@ -56,8 +55,8 @@
         </tbody>
     </table>
 
-    <script src="@SignalrDirectory"></script>
-    <script src="@SocketHubDirectory"></script>
+    <script src="js/signalr/signalr.js"></script>
+    <script src="js/sockethub.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
