@@ -47,7 +47,7 @@ namespace SCM2020___Server.Controllers
 
         }
 
-        private async void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
+        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
             //var users = Helper.Users;
             
@@ -62,10 +62,13 @@ namespace SCM2020___Server.Controllers
                 SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
             }
 
+            ConsumptionProduct.ValueChanged -= ConsumptionProduct_ValueChanged;
+            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
+
         }
         private async void SendMessage(string message)
         {
-            var SCM = UserManager.Users.Where(x => x.IdSector == 2);
+            var SCM = Helper.Users.Where(x => x.IdSector == 2);
             var onlineSCM = NotifyHub.Connections.GetAllUser();
             foreach (var userSCM in SCM)
             {

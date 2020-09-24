@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ModelsLibraryCore
 {
-    public delegate void ValueChangedEventHandler(ConsumptionProduct ConsumptionProduct);
+    public delegate void ValueChangedEventHandler(ConsumptionProduct ConsumptionProduct, EventArgs e);
     /// <summary>
     /// Informações sobre o produto. Esta classe contém números sobre o produto.
     /// </summary>
@@ -77,9 +78,12 @@ namespace ModelsLibraryCore
         public double Stock { get => stock1; 
             set 
             {
-                stock1 = value;
-                if (ValueChanged != null)
-                    ValueChanged(this);
+                if (stock1 != value)
+                {
+                    stock1 = value;
+                    if (ValueChanged != null)
+                        ValueChanged(this, new EventArgs());
+                }
             }
         }
         public static event ValueChangedEventHandler ValueChanged;
