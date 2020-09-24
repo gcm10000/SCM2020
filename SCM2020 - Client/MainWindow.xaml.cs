@@ -62,13 +62,12 @@ namespace SCM2020___Client
                 {
                     DateTimeConnection = DateTime.Now,
                     Key = millis,
-                    Name = "Gabriel " + millis
+                    Id = Helper.NameIdentifier
                 }.ToJson();
 
                 var connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:52991/notify?user=" + user)
                 .Build();
-                connection.StartAsync().Wait();
 
                 //send
                 //connection.InvokeCoreAsync("notify", new[] {   } });
@@ -81,6 +80,8 @@ namespace SCM2020___Client
                 {
                     MessageBox.Show(message);
                 });
+                
+                connection.StartAsync().Wait();
             });
             Helper.MyWebBrowser = WebBrowser;
 

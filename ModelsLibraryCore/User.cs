@@ -6,7 +6,7 @@ namespace ModelsLibraryCore
 {
     public class User
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
         public Int64 Key { get; set; }
         public DateTime DateTimeConnection { get; set; }
     }
