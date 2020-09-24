@@ -68,11 +68,16 @@ namespace SCM2020___Client.Frames.Query
             {
                 //Pega informações referente ao produto
                 var informationProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.InformationProduct}").ToString(), Helper.Authentication);
-                var workOrder = System.Uri.EscapeDataString(item.WorkOrder);
-                //Pega informações referente a ordem de serviço
-                var informationOS = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
-                //Pega informações referente ao técnico
-                var InfoUser = APIClient.GetData<ModelsLibraryCore.InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{informationOS.EmployeeId}").ToString(), Helper.Authentication);
+                ModelsLibraryCore.InfoUser InfoUser = null;
+                if (item.WorkOrder != null)
+                {
+                    var workOrder = System.Uri.EscapeDataString(item.WorkOrder);
+                    //Pega informações referente a ordem de serviço
+                    ModelsLibraryCore.Monitoring informationOS = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                    //Pega informações referente ao técnico
+                    InfoUser = APIClient.GetData<ModelsLibraryCore.InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{informationOS.EmployeeId}").ToString(), Helper.Authentication);
+
+                }
 
                 SCM2020___Client.Models.QueryByPatrimony product = new SCM2020___Client.Models.QueryByPatrimony()
                 {
@@ -80,7 +85,7 @@ namespace SCM2020___Client.Frames.Query
                     Description = informationProduct.Description,
                     Patrimony = item.Patrimony,
                     WorkOrder = item.WorkOrder,
-                    Employee = InfoUser.Name
+                    Employee = (InfoUser == null) ? string.Empty : InfoUser.Name
                 };
                 
                 //Adiciona no datagrid
