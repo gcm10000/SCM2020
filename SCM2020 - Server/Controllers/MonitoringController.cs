@@ -136,7 +136,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
             DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
-            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay, 23, 59, 59);
+            DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay);
 
             var result = context.Monitoring.Where(t => (t.MovingDate >= dateStart) && (t.MovingDate <= dateEnd));
 

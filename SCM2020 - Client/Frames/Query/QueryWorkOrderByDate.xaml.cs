@@ -46,13 +46,13 @@ namespace SCM2020___Client.Frames.Query
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
             //QueryWorkOrderByDateDataGrid 
-            var initialDay = this.InitialDate.DisplayDate.Day;
-            var initialMonth = this.InitialDate.DisplayDate.Month;
-            var initialYear = this.InitialDate.DisplayDate.Year;
+            var initialDay = this.InitialDate.SelectedDate.Value.Day;
+            var initialMonth = this.InitialDate.SelectedDate.Value.Month;
+            var initialYear = this.InitialDate.SelectedDate.Value.Year;
 
-            var finalDay = this.FinalDate.DisplayDate.Day;
-            var finalMonth = this.FinalDate.DisplayDate.Month;
-            var finalYear = this.FinalDate.DisplayDate.Year;
+            var finalDay = this.FinalDate.SelectedDate.Value.Day;
+            var finalMonth = this.FinalDate.SelectedDate.Value.Month;
+            var finalYear = this.FinalDate.SelectedDate.Value.Year;
             
             ButtonsEnable(false);
             Search(initialDay, initialMonth, initialYear, finalDay, finalMonth, finalYear);

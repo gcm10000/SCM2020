@@ -85,6 +85,8 @@ namespace SCM2020___Client.Templates.Query
             Html = Html.Replace("@ServiceLocalization", ServiceLocalization);
             Html = Html.Replace("@ClosureDate", (ClosureWorkOrder == null) ? "" : ClosureWorkOrder.Value.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+
             return Html.ToString();
         }
         public void Search(string workOrder)

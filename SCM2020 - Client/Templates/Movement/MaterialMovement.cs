@@ -239,6 +239,8 @@ namespace SCM2020___Client.Templates.Movement
             Html = Html.Replace("@NameApplicant", SolicitationEmployee);
             Html = Html.Replace("@Sector", Sector);
             Html = Html.Replace("@LISTOFITEMS", itemsContent);
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+
             return Html.ToString();
         }
     }

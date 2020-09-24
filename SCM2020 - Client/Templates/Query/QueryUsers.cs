@@ -29,6 +29,8 @@ namespace SCM2020___Client.Templates.Query
             }
 
             Html = Html.Replace("@LISTOFUSERS", itemsContent);
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+
             return Html;
         }
     }

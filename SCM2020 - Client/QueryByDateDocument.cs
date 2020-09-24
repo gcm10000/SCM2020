@@ -55,6 +55,8 @@ namespace SCM2020___Client
             Html = Html.Replace("@LISTOFPRODUCTS", itemsContent);
             Html = Html.Replace("@InitialDate", InitialDateTime.ToString("dd/MM/yyyy"));
             Html = Html.Replace("@FinalDate", InitialDateTime.ToString("dd/MM/yyyy"));
+            Html = Html.Replace("@BootstrapDirectory", new System.Uri(Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+
             return Html.ToString();
         }
 
