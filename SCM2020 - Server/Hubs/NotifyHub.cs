@@ -33,7 +33,7 @@ namespace SCM2020___Server.Hubs
 
         public async void SendNotify(string uniqueID, string message)
         {
-            if (connections)
+            //if (connections)
             await Clients.Client(uniqueID).SendAsync("notify", message);
         }
     }
