@@ -1,4 +1,5 @@
 ﻿using ModelsLibraryCore.RequestingClient;
+using MSHTML;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,29 +54,37 @@ namespace SCM2020___Client.Frames.Query
         {
             InitializeComponent();
             Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
-
+            this.Print_Button.IsEnabled = true;
+            this.Export_Button.IsEnabled = true;
         }
 
         bool PrintORExport = false;
-        string Document = string.Empty;
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
             // faz requisição da string html por websocket
             // coloca na string Document
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            ExportPrint();
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            ExportPrint();
         }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
+            
+        }
+
+        private void ExportPrint()
+        {
             Helper.SetOptionsToPrint();
+            
             if (PrintORExport)
             {
                 webBrowser.PrintDocument();
@@ -90,7 +99,8 @@ namespace SCM2020___Client.Frames.Query
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
-                        file.Write(Document);
+                        var document = DocumentText(webBrowser);
+                        file.Write(document);
                         file.Flush();
                     }
 
@@ -110,13 +120,34 @@ namespace SCM2020___Client.Frames.Query
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
+        private string DocumentText(WebBrowser webBrowser)
+        {
+            HTMLDocument doc = webBrowser.Document as HTMLDocument;
+
+            var collection = doc.getElementsByTagName("html");
+            string html = string.Empty;
+            foreach (IHTMLElement item in collection)
+            {
+                html = item.outerHTML;
+            }
+            return html;
+        }
+        private void WebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            var document = (HTMLDocument)webBrowser.Document;
+            var _Html = document.body.outerHTML;
+        }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             this.ButtonSearchProducts.IsEnabled = false;
             this.ButtonInventoryTurnover.IsEnabled = true;
             var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
-            this.webBrowser.Navigate(path);
+            var content = File.ReadAllText(path);
+            content = content.Replace("@BootstrapDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
+            content = content.Replace("@SignalrDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "signalr.js")).AbsoluteUri);
+            content = content.Replace("@SocketHubDirectory", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "js", "sockethub.js")).AbsoluteUri);
+            this.webBrowser.NavigateToString(content);
 
         }
 
