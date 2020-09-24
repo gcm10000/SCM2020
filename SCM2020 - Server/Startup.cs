@@ -123,7 +123,6 @@ namespace SCM2020___Server
             {
                 endpoints.MapHub<NotifyHub>("/notify");
             });
-            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
 
         }
     }

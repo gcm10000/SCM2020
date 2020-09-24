@@ -17,6 +17,8 @@ using SCM2020___Server.Context;
 using Microsoft.AspNetCore.Http;
 using System.Web;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
+using SCM2020___Server.Hubs;
 
 namespace SCM2020___Server.Controllers
 {
@@ -30,15 +32,26 @@ namespace SCM2020___Server.Controllers
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
-        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
+        IHubContext<NotifyHub> NotifyHub;
+
+        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> NotifyHub)
         {
             this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
+            this.NotifyHub = NotifyHub;
 
             Helper.Users = new List<ApplicationUser>(userManager.Users);
+            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
+
         }
+
+        private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct)
+        {
+            
+        }
+
         [HttpGet("Get")]
         [Authorize(Roles = Roles.Administrator)]
         public ActionResult<string> Get() 
