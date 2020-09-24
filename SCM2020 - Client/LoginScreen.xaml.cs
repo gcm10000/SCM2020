@@ -44,7 +44,6 @@ namespace SCM2020___Client
                 if (SignIn(user, password))
                 {
                     Application.Current.Dispatcher.Invoke((Action)delegate {
-                        // your code
                         MainWindow window = new MainWindow();
                         window.Show();
                         this.Close();
