@@ -32,6 +32,7 @@ namespace SCM2020___Server.Hubs
         //    await Clients.Client(connections.GetUserId(message.Destination)).SendAsync("Receive", message.Sender, message.Data);
         //}
 
+
         public async void SendToAll(string message)
         {
             await Clients.All.SendAsync("notify", message);

@@ -53,27 +53,28 @@ namespace SCM2020___Server.Controllers
             
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
-                var SCM = UserManager.Users.Where(x => x.IdSector == 2);
-                var onlineSCM = NotifyHub.Connections.GetAllUser();
-                foreach (var onlineIndividual in onlineSCM)
-                {
-                    if (SCM.Any(x => x.Id == onlineIndividual.Id))
-                    {
-                        onlineIndividual.
-                    }
-                }
-
-                foreach (var item in )
-                {
-                    //Envia aos clientes com a role SCM alertando material com pouco estoque
-                    await Notification.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
-                }
+                SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com muito estoque
-                await NotifyHub.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
+                SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
+            }
+
+        }
+        private async void SendMessage(string message)
+        {
+            var SCM = UserManager.Users.Where(x => x.IdSector == 2);
+            var onlineSCM = NotifyHub.Connections.GetAllUser();
+            foreach (var userSCM in SCM)
+            {
+                var user = onlineSCM.SingleOrDefault(x => x.Id == userSCM.Id);
+                if (user != null)
+                {
+                    var uniqueID = NotifyHub.Connections.GetKey(user);
+                    await Notification.Clients.Client(uniqueID).SendAsync("notify", message);
+                }
             }
 
         }
