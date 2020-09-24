@@ -32,11 +32,16 @@ namespace SCM2020___Server.Repositories
         {
             return connections.FirstOrDefault(x => x.Value.Key == id).Key;
         }
+        public string GetKey(User user)
+        {
+            return connections.FirstOrDefault(x => x.Value == user).Key;
+        }
         public List<User> GetAllUser()
         {
             return (from con in connections
                     select con.Value
             ).ToList();
         }
+        
     }
 }

@@ -32,15 +32,15 @@ namespace SCM2020___Server.Controllers
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
-        IHubContext<NotifyHub> NotifyHub;
+        IHubContext<NotifyHub> Notification;
 
-        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> NotifyHub)
+        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
             this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
-            this.NotifyHub = NotifyHub;
+            this.Notification = Notification;
 
             Helper.Users = new List<ApplicationUser>(userManager.Users);
             ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
@@ -54,11 +54,19 @@ namespace SCM2020___Server.Controllers
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 var SCM = UserManager.Users.Where(x => x.IdSector == 2);
-                NotifyHub. .ConnectionsRepository;
+                var onlineSCM = NotifyHub.Connections.GetAllUser();
+                foreach (var onlineIndividual in onlineSCM)
+                {
+                    if (SCM.Any(x => x.Id == onlineIndividual.Id))
+                    {
+                        onlineIndividual.
+                    }
+                }
+
                 foreach (var item in )
                 {
                     //Envia aos clientes com a role SCM alertando material com pouco estoque
-                    await NotifyHub.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
+                    await Notification.Clients.Client(uniqueID).SendAsync("notify", $"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
                 }
             }
 

@@ -11,11 +11,11 @@ namespace SCM2020___Server.Hubs
 {
     public class NotifyHub : Hub
     {
-        public static ConnectionsRepository connections { get; } = new ConnectionsRepository();
+        public static ConnectionsRepository Connections { get; } = new ConnectionsRepository();
         public override Task OnConnectedAsync()
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
-            connections.Add(Context.ConnectionId, user);
+            Connections.Add(Context.ConnectionId, user);
             SendToAll($"{user.Id} está conectado.");
             SendNotify(Context.ConnectionId, "Você está conectado!");
             return base.OnConnectedAsync();
@@ -23,7 +23,7 @@ namespace SCM2020___Server.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            connections.Remove(Context.ConnectionId);
+            Connections.Remove(Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
 
