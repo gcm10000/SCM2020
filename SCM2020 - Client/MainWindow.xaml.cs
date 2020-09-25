@@ -6,6 +6,7 @@ using ModelsLibraryCore.RequestingClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,10 @@ namespace SCM2020___Client
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
+    //NOTIFICATION WINDOWS 10:
+    //https://docs.microsoft.com/en-us/windows/uwp/design/shell/tiles-and-notifications/send-local-toast-desktop?tabs=msix-sparse
+    //https://www.youtube.com/watch?v=WhY9ytvZvKE
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -93,6 +98,7 @@ namespace SCM2020___Client
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
         }
+
 
         private void SignIn()
         {

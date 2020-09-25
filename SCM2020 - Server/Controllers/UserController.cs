@@ -33,6 +33,7 @@ namespace SCM2020___Server.Controllers
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
         IHubContext<NotifyHub> Notification;
+        static bool EventActived = false;
 
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
@@ -43,8 +44,11 @@ namespace SCM2020___Server.Controllers
             this.Notification = Notification;
 
             Helper.Users = new List<ApplicationUser>(userManager.Users);
-            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
-
+            if (!EventActived)
+            {
+                EventActived = true;
+                ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
+            }
         }
 
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
@@ -62,8 +66,7 @@ namespace SCM2020___Server.Controllers
                 SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
             }
 
-            ConsumptionProduct.ValueChanged -= ConsumptionProduct_ValueChanged;
-            ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
+
 
         }
         private async void SendMessage(string message)
