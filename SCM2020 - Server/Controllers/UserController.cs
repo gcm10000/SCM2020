@@ -76,7 +76,7 @@ namespace SCM2020___Server.Controllers
                 if (user != null)
                 {
                     var uniqueID = NotifyHub.Connections.GetKey(user);
-                    await Notification.Clients.Client(uniqueID).SendAsync("notify", message);
+                    await Notification.Clients.Client(uniqueID).SendAsync("notify", new NotificationMessage(null, );
 
                 }
             }
