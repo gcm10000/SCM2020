@@ -6,15 +6,13 @@ using System.Windows.Forms;
 
 namespace ModelsLibraryCore
 {
-    public class NotificationMessage
+    public class ProductMessage : INotification
     {
-        public ToolTipIcon Icon { get; }
-        public int Code { get; }
         public string Description { get; }
-
+        public ToolTipIcon Icon { get; }
         public string Message { get; }
 
-        public NotificationMessage(ToolTipIcon icon, int code, string description, string message)
+        public ProductMessage(ToolTipIcon icon, int code, string description, string message)
         {
             Icon = icon;
             Code = code;
