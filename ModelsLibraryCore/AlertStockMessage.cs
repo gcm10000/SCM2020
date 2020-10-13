@@ -5,19 +5,21 @@ using System.Windows.Forms;
 
 namespace ModelsLibraryCore
 {
-    public class SolicitationMessage : INotification
+    class AlertStockMessage : INotification
     {
         public ToolTipIcon Icon { get; }
         public string Message { get; }
         public int[] Destination { get; }
-        public Monitoring Monitoring { get; }
-        //public InputOutput { get; }
-        public SolicitationMessage(ToolTipIcon icon, string message, int[] destination, Monitoring monitoring)
+        public int Code { get; }
+        public string Description { get; }
+
+        public AlertStockMessage(ToolTipIcon icon, string message, int[] destination, int code, string description)
         {
             Icon = icon;
             Message = message;
             Destination = destination;
-            Monitoring = monitoring;
+            Code = code;
+            Description = description;
         }
     }
 }
