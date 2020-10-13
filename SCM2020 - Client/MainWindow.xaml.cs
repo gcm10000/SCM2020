@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Win32;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
-using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,9 +108,11 @@ namespace SCM2020___Client
             //    this.MovementItem.Visibility = Visibility.Collapsed;
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
-
-
-
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Application.Current.Shutdown();
         }
 
 

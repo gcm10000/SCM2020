@@ -18,7 +18,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Security.Authentication;
-using Notifications.Wpf;
 
 namespace SCM2020___Client
 {

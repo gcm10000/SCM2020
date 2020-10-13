@@ -57,13 +57,13 @@ namespace SCM2020___Server.Controllers
             
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
-                SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque deficiente.");
+                SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.");
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com muito estoque
-                SendMessage($"Produto {ConsumptionProduct.Id} {ConsumptionProduct.Description} está com estoque excedente.");
+                SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.");
             }
 
 

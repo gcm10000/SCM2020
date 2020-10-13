@@ -16,8 +16,8 @@ namespace SCM2020___Server.Hubs
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
             Connections.Add(Context.ConnectionId, user);
-            SendToAll($"{user.Id} está conectado.");
-            SendNotify(Context.ConnectionId, "Você está conectado!");
+            //SendToAll($"{user.Id} está conectado.");
+            //SendNotify(Context.ConnectionId, "Você está conectado!");
             return base.OnConnectedAsync();
         }
 
