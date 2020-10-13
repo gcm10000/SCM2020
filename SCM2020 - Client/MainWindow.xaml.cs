@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Win32;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +31,18 @@ namespace SCM2020___Client
     //NOTIFICATION WINDOWS 10:
     //https://docs.microsoft.com/en-us/windows/uwp/design/shell/tiles-and-notifications/send-local-toast-desktop?tabs=msix-sparse
     //https://www.youtube.com/watch?v=WhY9ytvZvKE
+
     public partial class MainWindow : Window
     {
+        System.Windows.Forms.NotifyIcon notifyIcon1;
         public MainWindow()
         {
+            notifyIcon1 = new System.Windows.Forms.NotifyIcon();
+            notifyIcon1.Icon = System.Drawing.SystemIcons.Exclamation;
+            notifyIcon1.BalloonTipTitle = "Sistema de Controle de Materiais";
+            notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+            notifyIcon1.Visible = true;
+
             InitializeComponent();
             PopupMovement.VerticalOffset = -8;
             PopupRegister.VerticalOffset = -8;
@@ -83,7 +92,10 @@ namespace SCM2020___Client
 
                 connection.On("notify", (string message) => 
                 {
-                    MessageBox.Show(message);
+                    notifyIcon1.BalloonTipText = message;
+                    notifyIcon1.ShowBalloonTip(30000);
+                    //MessageBox.Show(message);
+
                 });
                 
                 connection.StartAsync().Wait();
@@ -97,6 +109,9 @@ namespace SCM2020___Client
             //    this.MovementItem.Visibility = Visibility.Collapsed;
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
+
+
+
         }
 
 

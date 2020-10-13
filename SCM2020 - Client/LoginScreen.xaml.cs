@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Security.Authentication;
+using Notifications.Wpf;
 
 namespace SCM2020___Client
 {
@@ -39,11 +40,12 @@ namespace SCM2020___Client
             //password SenhaSecreta#2020
             var user = UserTextBox.Text;
             var password = PasswordTextBox.Password;
-            var t = Task.Run(() => 
-            { 
+            var t = Task.Run(() =>
+            {
                 if (SignIn(user, password))
                 {
-                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                    Application.Current.Dispatcher.Invoke((Action)delegate
+                    {
                         MainWindow window = new MainWindow();
                         window.Show();
                         this.Close();
