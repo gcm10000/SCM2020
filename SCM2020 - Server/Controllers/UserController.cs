@@ -58,14 +58,13 @@ namespace SCM2020___Server.Controllers
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 //SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.");
-                SendMessage(new SolicitationMessage());
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", null, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com muito estoque
-                //SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.");
-                SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.");
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", null, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
         }
         private async void SendMessage(INotification notification)
@@ -78,7 +77,8 @@ namespace SCM2020___Server.Controllers
                 if (user != null)
                 {
                     var uniqueID = NotifyHub.Connections.GetKey(user);
-                    await Notification.Clients.Client(uniqueID).SendAsync("notify", notification);
+                    Console.WriteLine(notification);
+                    await Notification.Clients.Client(uniqueID).SendAsync("notify", notification.ToJson());
 
                 }
             }

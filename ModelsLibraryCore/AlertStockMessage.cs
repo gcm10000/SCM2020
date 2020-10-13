@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 
 namespace ModelsLibraryCore
 {
-    class AlertStockMessage : INotification
+    public class AlertStockMessage : INotification
     {
         public ToolTipIcon Icon { get; }
         public string Message { get; }

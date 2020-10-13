@@ -39,7 +39,6 @@ namespace SCM2020___Client
             notifyIcon1 = new System.Windows.Forms.NotifyIcon();
             notifyIcon1.Icon = System.Drawing.SystemIcons.Exclamation;
             notifyIcon1.BalloonTipTitle = "Sistema de Controle de Materiais";
-            notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
             notifyIcon1.Visible = true;
 
             InitializeComponent();
@@ -59,14 +58,14 @@ namespace SCM2020___Client
             //SignIn();
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 Helper.WebHost = WebAssemblyLibrary.Server.WebAssembly.CreateWebHostBuilder().Build();
                 Helper.WebHost.Run();
                 //Default url is http://localhost:5000/
             });
 
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 DateTime startDt = new DateTime(1970, 1, 1);
                 TimeSpan timeSpan = DateTime.UtcNow - startDt;
@@ -89,14 +88,25 @@ namespace SCM2020___Client
                     //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
                 });
 
-                connection.On("notify", (string message) => 
+                EventHandler handler = null;
+                bool initialize = false;
+                connection.On("notify", (string stockMessageJson) =>
                 {
-                    notifyIcon1.BalloonTipText = message;
+                    AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
+                    notifyIcon1.BalloonTipText = stockMessage.Message;
+                    notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                    if (!initialize)
+                    {
+                        initialize = true;
+                        notifyIcon1.BalloonTipClicked += (object sender, EventArgs e) =>
+                        {
+                            //abrir janela do estoque exibindo o produto
+                            Console.WriteLine(stockMessage.Code);
+                        };
+                    }
                     notifyIcon1.ShowBalloonTip(30000);
-                    //MessageBox.Show(message);
-
                 });
-                
+
                 connection.StartAsync().Wait();
             });
             Helper.MyWebBrowser = WebBrowser;
@@ -109,9 +119,11 @@ namespace SCM2020___Client
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
         }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            notifyIcon1.Dispose();
             Application.Current.Shutdown();
         }
 

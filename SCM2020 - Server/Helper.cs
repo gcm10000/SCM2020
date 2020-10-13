@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelsLibraryCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace SCM2020___Server
@@ -139,6 +140,11 @@ namespace SCM2020___Server
                     return false;
             }
             return true;
+        }
+        public static string ToJson<T>(this T obj)
+        {
+            string output = JsonConvert.SerializeObject(obj);
+            return output;
         }
     }
 }

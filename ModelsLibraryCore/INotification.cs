@@ -11,5 +11,6 @@ namespace ModelsLibraryCore
         public string Message { get; }
         public int[] Destination { get; }
 
+
     }
 }
