@@ -65,9 +65,6 @@ namespace SCM2020___Server.Controllers
                 //Envia aos clientes com a role SCM alertando material com muito estoque
                 SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.");
             }
-
-
-
         }
         private async void SendMessage(string message)
         {
@@ -80,6 +77,7 @@ namespace SCM2020___Server.Controllers
                 {
                     var uniqueID = NotifyHub.Connections.GetKey(user);
                     await Notification.Clients.Client(uniqueID).SendAsync("notify", message);
+
                 }
             }
 
