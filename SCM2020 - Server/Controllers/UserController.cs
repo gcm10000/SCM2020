@@ -99,7 +99,12 @@ namespace SCM2020___Server.Controllers
         }
         private void StoreMessage(INotification notification, List<string> UsersId)
         {
-            StoreMessage sMessage = new StoreMessage(notification, UsersId);
+            List<UsersId> usersIds = new List<UsersId>();
+            foreach (var userid in UsersId)
+            {
+                usersIds.Add(new ModelsLibraryCore.UsersId(userid));
+            }
+            StoreMessage sMessage = new StoreMessage(notification, usersIds);
             ControlDbContext.StoreMessage.Add(sMessage);
         }
 

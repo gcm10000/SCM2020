@@ -23,16 +23,15 @@ namespace SCM2020___Server.Hubs
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
             Connections.Add(Context.ConnectionId, user);
-            var messages = context.StoreMessage.Where(x => x.UsersId.Contains(user.Id));
+            var messages = context.StoreMessage.Where(x => x.UsersId.Any(y => y.UserId == user.Id));
             foreach (var message in messages)
             {
                 SendNotify(Context.ConnectionId, message.Notification.Message);
-                message.UsersId.Remove(Context.ConnectionId);
+                message.UsersId.Remove(message.UsersId.Single(x => x.UserId == Context.ConnectionId));
                 if (message.UsersId.Count > 0)
                     context.StoreMessage.Update(message);
                 else
                     context.StoreMessage.Remove(message);
-
             }
 
             //SendToAll($"{user.Id} está conectado.");

@@ -6,19 +6,16 @@ using System.Text;
 
 namespace ModelsLibraryCore
 {
-    public class StoreMessage
+    public class UsersId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public INotification Notification { get; }
-        public ICollection<UsersId> UsersId { get; set; }
-        public StoreMessage() { }
-        public StoreMessage(INotification notification, List<UsersId> UsersId)
+        public string UserId { get; set; }
+        public UsersId() { }
+        public UsersId(string UserId)
         {
-            Notification = notification;
-            this.UsersId = UsersId;
+            this.UserId = UserId;
         }
-
     }
 }
