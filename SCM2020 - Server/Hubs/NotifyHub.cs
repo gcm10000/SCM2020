@@ -34,7 +34,7 @@ namespace SCM2020___Server.Hubs
                     context.StoreMessage.Update(message);
                 else
                     context.StoreMessage.Remove(message);
-                    
+
             }
 
             //SendToAll($"{user.Id} está conectado.");
