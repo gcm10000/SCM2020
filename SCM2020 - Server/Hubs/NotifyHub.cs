@@ -30,7 +30,11 @@ namespace SCM2020___Server.Hubs
                 List<string> users = new List<string>(message.UsersId);
                 users.Remove(Context.ConnectionId);
                 message.UsersId = users.ToArray();
-                context.StoreMessage.Update(message);
+                if (message.UsersId.Length > 0)
+                    context.StoreMessage.Update(message);
+                else
+                    context.StoreMessage.Remove(message);
+                    
             }
 
             //SendToAll($"{user.Id} está conectado.");
