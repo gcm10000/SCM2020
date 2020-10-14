@@ -17,6 +17,7 @@ namespace SCM2020___Server.Context
         public DbSet<Monitoring> Monitoring { get; set; }
         public DbSet<AuxiliarConsumption> AuxiliarConsumption { get; set; }
         public DbSet<AuxiliarPermanent> AuxiliarPermanent { get; set; }
+        public DbSet<StoreMessage> StoreMessage { get; set; }
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
 

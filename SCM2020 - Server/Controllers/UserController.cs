@@ -100,7 +100,7 @@ namespace SCM2020___Server.Controllers
         private void StoreMessage(INotification notification, string[] UsersId)
         {
             StoreMessage sMessage = new StoreMessage(notification, UsersId);
-            sMessage
+            ControlDbContext.StoreMessage.Add(sMessage);
         }
 
         [HttpGet("Get")]
