@@ -27,10 +27,8 @@ namespace SCM2020___Server.Hubs
             foreach (var message in messages)
             {
                 SendNotify(Context.ConnectionId, message.Notification.Message);
-                List<string> users = new List<string>(message.UsersId);
-                users.Remove(Context.ConnectionId);
-                message.UsersId = users.ToArray();
-                if (message.UsersId.Length > 0)
+                message.UsersId.Remove(Context.ConnectionId);
+                if (message.UsersId.Count > 0)
                     context.StoreMessage.Update(message);
                 else
                     context.StoreMessage.Remove(message);

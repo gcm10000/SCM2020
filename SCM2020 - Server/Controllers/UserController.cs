@@ -95,9 +95,9 @@ namespace SCM2020___Server.Controllers
             }
 
             if (usersIdDisconnected.Count > 0)
-                StoreMessage(notification, usersIdDisconnected.ToArray());
+                StoreMessage(notification, usersIdDisconnected);
         }
-        private void StoreMessage(INotification notification, string[] UsersId)
+        private void StoreMessage(INotification notification, List<string> UsersId)
         {
             StoreMessage sMessage = new StoreMessage(notification, UsersId);
             ControlDbContext.StoreMessage.Add(sMessage);
