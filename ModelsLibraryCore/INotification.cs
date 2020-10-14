@@ -9,7 +9,7 @@ namespace ModelsLibraryCore
     {
         public ToolTipIcon Icon { get; }
         public string Message { get; }
-        public int[] Destination { get; }
+        public string[] Destination { get; }
 
 
     }

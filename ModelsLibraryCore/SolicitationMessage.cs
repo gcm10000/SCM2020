@@ -9,10 +9,10 @@ namespace ModelsLibraryCore
     {
         public ToolTipIcon Icon { get; }
         public string Message { get; }
-        public int[] Destination { get; }
+        public string[] Destination { get; }
         public Monitoring Monitoring { get; }
         //public InputOutput { get; }
-        public SolicitationMessage(ToolTipIcon icon, string message, int[] destination, Monitoring monitoring)
+        public SolicitationMessage(ToolTipIcon icon, string message, string[] destination, Monitoring monitoring)
         {
             Icon = icon;
             Message = message;

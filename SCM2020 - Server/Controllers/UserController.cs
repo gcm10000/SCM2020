@@ -54,35 +54,53 @@ namespace SCM2020___Server.Controllers
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
             //var users = Helper.Users;
+            var SCM = Helper.Users.Where(x => x.IdSector == 2);
+            List<string> destination = new List<string>();
+            foreach (var user in SCM)
+            {
+                destination.Add(user.Id);
+            }
             
+
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 //SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.");
-                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", null, ConsumptionProduct.Code, ConsumptionProduct.Description));
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", destination.ToArray(), ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com muito estoque
-                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", null, ConsumptionProduct.Code, ConsumptionProduct.Description));
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", destination.ToArray(), ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
         }
         private async void SendMessage(INotification notification)
         {
-            var SCM = Helper.Users.Where(x => x.IdSector == 2);
             var onlineSCM = NotifyHub.Connections.GetAllUser();
-            foreach (var userSCM in SCM)
+            List<string> usersIdDisconnected = new List<string>();
+            foreach (var userSCMId in notification.Destination)
             {
-                var user = onlineSCM.SingleOrDefault(x => x.Id == userSCM.Id);
+                var user = onlineSCM.SingleOrDefault(x => x.Id == userSCMId);
+                //Dentro deste if a mensagem é enviada ao cliente
                 if (user != null)
                 {
                     var uniqueID = NotifyHub.Connections.GetKey(user);
                     Console.WriteLine(notification);
                     await Notification.Clients.Client(uniqueID).SendAsync("notify", notification.ToJson());
-
+                }
+                else //Dentro deste else indica que o usuário está desconectado
+                {
+                    usersIdDisconnected.Add(userSCMId);
                 }
             }
 
+            if (usersIdDisconnected.Count > 0)
+                StoreMessage(notification, usersIdDisconnected.ToArray());
+        }
+        private void StoreMessage(INotification notification, string[] UsersId)
+        {
+            StoreMessage sMessage = new StoreMessage(notification, UsersId);
+            sMessage
         }
 
         [HttpGet("Get")]

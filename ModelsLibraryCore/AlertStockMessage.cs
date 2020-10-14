@@ -8,11 +8,11 @@ namespace ModelsLibraryCore
     {
         public ToolTipIcon Icon { get; }
         public string Message { get; }
-        public int[] Destination { get; }
+        public string[] Destination { get; }
         public int Code { get; }
         public string Description { get; }
 
-        public AlertStockMessage(ToolTipIcon icon, string message, int[] destination, int code, string description)
+        public AlertStockMessage(ToolTipIcon icon, string message, string[] destination, int code, string description)
         {
             Icon = icon;
             Message = message;
