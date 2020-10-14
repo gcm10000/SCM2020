@@ -12,7 +12,7 @@ namespace ModelsLibraryCore
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public INotification Notification { get; }
-        public string[] UsersId { get; }
+        public string[] UsersId { get; set; }
         public StoreMessage() { }
         public StoreMessage(INotification notification, string[] UsersId)
         {
