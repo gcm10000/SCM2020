@@ -31,11 +31,11 @@ namespace SCM2020___Server.Hubs
                 users.Remove(Context.ConnectionId);
                 message.UsersId = users.ToArray();
                 context.StoreMessage.Update(message);
-
             }
 
             //SendToAll($"{user.Id} está conectado.");
             Task.Run(SaveChanges);
+
             return base.OnConnectedAsync();
         }
         public async void SaveChanges()
