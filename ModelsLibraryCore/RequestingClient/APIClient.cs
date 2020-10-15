@@ -47,7 +47,7 @@ namespace ModelsLibraryCore.RequestingClient
                 //limpa o header
                 client.DefaultRequestHeaders.Accept.Clear();
 
-                //incluir o cabeçalho Accept que será envia na requisição             
+                //incluir o cabeçalho Accept que será envia na requisição
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
 

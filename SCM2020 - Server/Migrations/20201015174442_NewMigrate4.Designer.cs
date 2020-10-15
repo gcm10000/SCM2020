@@ -3,45 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201015174442_NewMigrate4")]
+    partial class NewMigrate4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ModelsLibraryCore.AlertStockMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Icon")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AlertStockMessage");
-                });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
@@ -160,31 +138,6 @@ namespace SCM2020___Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ConsumptionProduct");
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.Destination", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AlertStockMessageId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SolicitationMessageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlertStockMessageId");
-
-                    b.HasIndex("SolicitationMessageId");
-
-                    b.ToTable("Destination");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.Group", b =>
@@ -362,23 +315,7 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Icon")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MonitoringId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StoreMessageId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("MonitoringId");
-
-                    b.HasIndex("StoreMessageId");
 
                     b.ToTable("SolicitationMessage");
                 });
@@ -476,31 +413,9 @@ namespace SCM2020___Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ModelsLibraryCore.Destination", b =>
-                {
-                    b.HasOne("ModelsLibraryCore.AlertStockMessage", null)
-                        .WithMany("Destination")
-                        .HasForeignKey("AlertStockMessageId");
-
-                    b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
-                        .WithMany("Destination")
-                        .HasForeignKey("SolicitationMessageId");
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>
-                {
-                    b.HasOne("ModelsLibraryCore.Monitoring", "Monitoring")
-                        .WithMany()
-                        .HasForeignKey("MonitoringId");
-
-                    b.HasOne("ModelsLibraryCore.StoreMessage", "StoreMessage")
-                        .WithMany()
-                        .HasForeignKey("StoreMessageId");
-                });
-
             modelBuilder.Entity("ModelsLibraryCore.StoreMessage", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.AlertStockMessage", "Notification")
+                    b.HasOne("ModelsLibraryCore.SolicitationMessage", "Notification")
                         .WithOne("StoreMessage")
                         .HasForeignKey("ModelsLibraryCore.StoreMessage", "NotificationId")
                         .OnDelete(DeleteBehavior.Cascade)

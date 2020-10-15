@@ -97,6 +97,11 @@ namespace SCM2020___Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //app.Run(async (context) =>
+            //{
+            //    //await context.Response.WriteAsync("Hello World! - " + env.EnvironmentName);
+            //});
+
             app.UseStatusCodePages(async context =>
             {
                 if (context.HttpContext.Response.StatusCode == 401)

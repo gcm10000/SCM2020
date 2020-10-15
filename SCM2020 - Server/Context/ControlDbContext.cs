@@ -18,10 +18,15 @@ namespace SCM2020___Server.Context
         public DbSet<AuxiliarConsumption> AuxiliarConsumption { get; set; }
         public DbSet<AuxiliarPermanent> AuxiliarPermanent { get; set; }
         public DbSet<StoreMessage> StoreMessage { get; set; }
+        public DbSet<UsersId> UsersId { get; set; }
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
 
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<AboutProduct>()
@@ -60,6 +65,23 @@ namespace SCM2020___Server.Context
                 .HasOne(b => b.MaterialInput)
                 .WithMany(a => a.PermanentProducts)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UsersId>()
+                .HasOne(b => b.StoreMessage)
+                .WithMany(a => a.UsersId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SolicitationMessage>()
+                .HasOne(b => b.StoreMessage)
+                .WithOne(a => a.Notification as SolicitationMessage)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<StoreMessage>(f => f.NotificationId);
+
+            modelBuilder.Entity<AlertStockMessage>()
+                .HasOne(b => b.StoreMessage)
+                .WithOne(a => a.Notification as AlertStockMessage)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<StoreMessage>(f => f.NotificationId);
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             //{

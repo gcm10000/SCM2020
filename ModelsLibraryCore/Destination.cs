@@ -6,17 +6,12 @@ using System.Text;
 
 namespace ModelsLibraryCore
 {
-    public class UsersId
+    public class Destination
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string UserId { get; set; }
-        public StoreMessage StoreMessage { get; set; }
-        public UsersId() { }
-        public UsersId(string UserId)
-        {
-            this.UserId = UserId;
-        }
+
     }
 }

@@ -3,45 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201015175424_NewMigrate5")]
+    partial class NewMigrate5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ModelsLibraryCore.AlertStockMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Code")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Icon")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AlertStockMessage");
-                });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
@@ -169,9 +147,6 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AlertStockMessageId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SolicitationMessageId")
                         .HasColumnType("int");
 
@@ -179,8 +154,6 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlertStockMessageId");
 
                     b.HasIndex("SolicitationMessageId");
 
@@ -371,14 +344,9 @@ namespace SCM2020___Server.Migrations
                     b.Property<int?>("MonitoringId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StoreMessageId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MonitoringId");
-
-                    b.HasIndex("StoreMessageId");
 
                     b.ToTable("SolicitationMessage");
                 });
@@ -478,10 +446,6 @@ namespace SCM2020___Server.Migrations
 
             modelBuilder.Entity("ModelsLibraryCore.Destination", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.AlertStockMessage", null)
-                        .WithMany("Destination")
-                        .HasForeignKey("AlertStockMessageId");
-
                     b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
                         .WithMany("Destination")
                         .HasForeignKey("SolicitationMessageId");
@@ -492,15 +456,11 @@ namespace SCM2020___Server.Migrations
                     b.HasOne("ModelsLibraryCore.Monitoring", "Monitoring")
                         .WithMany()
                         .HasForeignKey("MonitoringId");
-
-                    b.HasOne("ModelsLibraryCore.StoreMessage", "StoreMessage")
-                        .WithMany()
-                        .HasForeignKey("StoreMessageId");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.StoreMessage", b =>
                 {
-                    b.HasOne("ModelsLibraryCore.AlertStockMessage", "Notification")
+                    b.HasOne("ModelsLibraryCore.SolicitationMessage", "Notification")
                         .WithOne("StoreMessage")
                         .HasForeignKey("ModelsLibraryCore.StoreMessage", "NotificationId")
                         .OnDelete(DeleteBehavior.Cascade)

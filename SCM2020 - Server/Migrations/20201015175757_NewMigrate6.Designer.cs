@@ -10,8 +10,8 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20201014172322_NewMigrate1")]
-    partial class NewMigrate1
+    [Migration("20201015175757_NewMigrate6")]
+    partial class NewMigrate6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,6 +138,26 @@ namespace SCM2020___Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ConsumptionProduct");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.Destination", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("SolicitationMessageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SolicitationMessageId");
+
+                    b.ToTable("Destination");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.Group", b =>
@@ -308,6 +328,29 @@ namespace SCM2020___Server.Migrations
                     b.ToTable("Sectors");
                 });
 
+            modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Icon")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MonitoringId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MonitoringId");
+
+                    b.ToTable("SolicitationMessage");
+                });
+
             modelBuilder.Entity("ModelsLibraryCore.StoreMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -315,9 +358,35 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("NotificationId")
+                        .IsUnique();
+
                     b.ToTable("StoreMessage");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.UsersId", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("StoreMessageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreMessageId");
+
+                    b.ToTable("UsersId");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.Vendor", b =>
@@ -372,6 +441,37 @@ namespace SCM2020___Server.Migrations
                     b.HasOne("ModelsLibraryCore.MaterialOutput", "MaterialOutput")
                         .WithMany("PermanentProducts")
                         .HasForeignKey("MaterialOutputId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.Destination", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
+                        .WithMany("Destination")
+                        .HasForeignKey("SolicitationMessageId");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.Monitoring", "Monitoring")
+                        .WithMany()
+                        .HasForeignKey("MonitoringId");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.StoreMessage", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.SolicitationMessage", "Notification")
+                        .WithOne("StoreMessage")
+                        .HasForeignKey("ModelsLibraryCore.StoreMessage", "NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.UsersId", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.StoreMessage", "StoreMessage")
+                        .WithMany("UsersId")
+                        .HasForeignKey("StoreMessageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

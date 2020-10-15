@@ -11,8 +11,9 @@ namespace ModelsLibraryCore
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int NotificationId { get; set; }
         public INotification Notification { get; }
-        public ICollection<UsersId> UsersId { get; set; }
+        public List<UsersId> UsersId { get; set; }
         public StoreMessage() { }
         public StoreMessage(INotification notification, List<UsersId> UsersId)
         {

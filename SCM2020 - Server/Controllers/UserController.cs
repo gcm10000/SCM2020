@@ -19,6 +19,7 @@ using System.Web;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using SCM2020___Server.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 namespace SCM2020___Server.Controllers
 {
@@ -29,15 +30,17 @@ namespace SCM2020___Server.Controllers
     public class UserController : Controller
     {   
         ControlDbContext ControlDbContext;
+        static ControlDbContext StaticControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
         IHubContext<NotifyHub> Notification;
         static bool EventActived = false;
+        static List<StoreMessage> ListStoreMessage = new List<StoreMessage>();
 
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
-            this.ControlDbContext = controlDbContext;
+            StaticControlDbContext = this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
@@ -49,38 +52,53 @@ namespace SCM2020___Server.Controllers
                 EventActived = true;
                 ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
             }
+
+            //Task.Run(SaveData);
+        }
+
+        private async void SaveData()
+        {
+            if (ListStoreMessage.Count == 0)
+                return;
+            var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<ControlDbContext>();
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            using (var context = new Context.ControlDbContext(options.Options))
+            {
+                context.StoreMessage.AddRange(ListStoreMessage);
+                await context.SaveChangesAsync();
+                ListStoreMessage.Clear();
+            }
         }
 
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
             //var users = Helper.Users;
             var SCM = Helper.Users.Where(x => x.IdSector == 2);
-            List<string> destination = new List<string>();
+            List<Destination> destination = new List<Destination>();
             foreach (var user in SCM)
             {
-                destination.Add(user.Id);
+                destination.Add(new Destination() { Id = 0, UserId = user.Id });
             }
-            
 
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
                 //SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.");
-                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", destination.ToArray(), ConsumptionProduct.Code, ConsumptionProduct.Description));
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", destination, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
                 //Envia aos clientes com a role SCM alertando material com muito estoque
-                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", destination.ToArray(), ConsumptionProduct.Code, ConsumptionProduct.Description));
+                SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", destination, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
         }
         private async void SendMessage(INotification notification)
         {
             var onlineSCM = NotifyHub.Connections.GetAllUser();
             List<string> usersIdDisconnected = new List<string>();
-            foreach (var userSCMId in notification.Destination)
+            foreach (var userSCM in notification.Destination)
             {
-                var user = onlineSCM.SingleOrDefault(x => x.Id == userSCMId);
+                var user = onlineSCM.SingleOrDefault(x => x.Id == userSCM.UserId);
                 //Dentro deste if a mensagem é enviada ao cliente
                 if (user != null)
                 {
@@ -90,14 +108,18 @@ namespace SCM2020___Server.Controllers
                 }
                 else //Dentro deste else indica que o usuário está desconectado
                 {
-                    usersIdDisconnected.Add(userSCMId);
+                    usersIdDisconnected.Add(userSCM.UserId);
                 }
             }
 
             if (usersIdDisconnected.Count > 0)
-                StoreMessage(notification, usersIdDisconnected);
+            {
+                ListStoreMessage.Add(StoreMessage(notification, usersIdDisconnected));
+                SaveData();
+            }
+            
         }
-        private void StoreMessage(INotification notification, List<string> UsersId)
+        private StoreMessage StoreMessage(INotification notification, List<string> UsersId)
         {
             List<UsersId> usersIds = new List<UsersId>();
             foreach (var userid in UsersId)
@@ -105,7 +127,7 @@ namespace SCM2020___Server.Controllers
                 usersIds.Add(new ModelsLibraryCore.UsersId(userid));
             }
             StoreMessage sMessage = new StoreMessage(notification, usersIds);
-            ControlDbContext.StoreMessage.Add(sMessage);
+            return sMessage;
         }
 
         [HttpGet("Get")]

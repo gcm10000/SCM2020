@@ -88,7 +88,6 @@ namespace SCM2020___Client
                     //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
                 });
 
-                EventHandler handler = null;
                 bool initialize = false;
                 connection.On("notify", (string stockMessageJson) =>
                 {
@@ -101,7 +100,7 @@ namespace SCM2020___Client
                         notifyIcon1.BalloonTipClicked += (object sender, EventArgs e) =>
                         {
                             //abrir janela do estoque exibindo o produto
-                            Console.WriteLine(stockMessage.Code);
+                            MessageBox.Show(stockMessage.Code.ToString());
                         };
                     }
                     notifyIcon1.ShowBalloonTip(30000);

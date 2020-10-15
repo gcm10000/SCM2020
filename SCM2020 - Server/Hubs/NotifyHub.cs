@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
@@ -13,36 +15,47 @@ namespace SCM2020___Server.Hubs
     public class NotifyHub : Hub
     {
         private ControlDbContext context;
+        private IConfiguration Configuration;
+        private delegate void MessageStartedHandler(List<StoreMessage> storeMessages, string ConnectionId, User user);
         public static ConnectionsRepository Connections { get; } = new ConnectionsRepository();
-        public NotifyHub(ControlDbContext ControlDbContext)
+        public NotifyHub(ControlDbContext controlDbContext, IConfiguration Configuration)
         {
-            this.context = ControlDbContext;
+            this.context = controlDbContext;
+            this.Configuration = Configuration;
         }
 
         public override Task OnConnectedAsync()
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
             Connections.Add(Context.ConnectionId, user);
-            var messages = context.StoreMessage.Where(x => x.UsersId.Any(y => y.UserId == user.Id));
-            foreach (var message in messages)
-            {
-                SendNotify(Context.ConnectionId, message.Notification.Message);
-                message.UsersId.Remove(message.UsersId.Single(x => x.UserId == Context.ConnectionId));
-                if (message.UsersId.Count > 0)
-                    context.StoreMessage.Update(message);
-                else
-                    context.StoreMessage.Remove(message);
-            }
+            var messages = context.StoreMessage.Include(x => x.UsersId).Include(x => x.Notification).Where(x => x.UsersId.Any(y => y.UserId == user.Id));
+            
+            //MessageStartedHandler d = new MessageStartedHandler(MessageToSend);
+            //d.Invoke(new List<StoreMessage>(messages), Context.ConnectionId, user);
 
-            //SendToAll($"{user.Id} está conectado.");
-            Task.Run(SaveChanges);
+            MessageToSend(new List<StoreMessage>(messages), Context.ConnectionId, user);
+
+            //Task.Run(SaveChanges);
 
             return base.OnConnectedAsync();
         }
-        public async void SaveChanges()
+        private async void MessageToSend(List<StoreMessage> storeMessages, string ConnectionId, User user)
         {
-            await context.SaveChangesAsync();
-
+            var options = new Microsoft.EntityFrameworkCore.DbContextOptionsBuilder<ControlDbContext>();
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            using (var context = new Context.ControlDbContext(options.Options))
+            {
+                foreach (var message in storeMessages)
+                {
+                    SendNotify(ConnectionId, message.Notification.ToJson());
+                    context.UsersId.Remove(message.UsersId.Single(x => x.UserId == user.Id));
+                    if (message.UsersId.Count > 0)
+                        context.StoreMessage.Update(message);
+                    else
+                        context.StoreMessage.Remove(message);
+                }
+                await context.SaveChangesAsync();
+            }
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
