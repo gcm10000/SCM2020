@@ -54,8 +54,6 @@ namespace SCM2020___Client
             //treeNode 8 -> 6 -> 2 -> 1
             treeNode8.IsDescendant(treeNode6);
             Console.WriteLine(treeview.ToJson());
-            //Console.WriteLine(treeview.GetAllNodes().ToJson());
-            //Console.WriteLine(treeview.GetAllNodes().ToJson());
             Console.WriteLine(treeview.GetAllNodes().ToJson());
         }
 
