@@ -44,7 +44,6 @@ namespace SCM2020___Client
             TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode7 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Manager, new List<Employee>() { new Employee("Robson")  }));
             TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode8 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Supervisor, new List<Employee>() { new Employee("Daniel"), new Employee("Alex")  }));
 
-            var t = new System.Windows.Forms.TreeNode();
 
             treeview.Nodes.Add(treeNode1);
             treeview.Nodes[0].Nodes.Add(treeNode2);
