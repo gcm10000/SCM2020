@@ -22,6 +22,7 @@ namespace SCM2020___Server.Hubs
         {
             this.context = controlDbContext;
             this.Configuration = Configuration;
+
         }
 
         public override Task OnConnectedAsync()

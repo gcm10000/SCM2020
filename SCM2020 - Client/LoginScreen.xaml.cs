@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Security.Authentication;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client
 {
@@ -26,12 +27,40 @@ namespace SCM2020___Client
     /// </summary>
     public partial class LoginScreen : Window
     {
+        public CompanyPosition Position { get; set; }
+
         public LoginScreen()
         {
 
             InitializeComponent();
             UserTextBox.Focus();
+
+            var treeview = new TreeView<KeyValuePair<CompanyPosition, List<Employee>>>();
+
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode1 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Director, new List<Employee>() { new Employee("Coronel"), new Employee("Major") }));
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode2 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Engineer, new List<Employee>() { new Employee("Luiz"), new Employee("Milene") }));
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode3 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Engineer, new List<Employee>() { new Employee("Carlos"), new Employee("Ricardo")  }));
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode6 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Manager, new List<Employee>() { new Employee("Cézar Gabriel") }));
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode7 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Manager, new List<Employee>() { new Employee("Robson")  }));
+            TreeNode<KeyValuePair<CompanyPosition, List<Employee>>> treeNode8 = new TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>(new KeyValuePair<CompanyPosition, List<Employee>>(CompanyPosition.Supervisor, new List<Employee>() { new Employee("Daniel"), new Employee("Alex")  }));
+
+            var t = new System.Windows.Forms.TreeNode();
+
+            treeview.Nodes.Add(treeNode1);
+            treeview.Nodes[0].Nodes.Add(treeNode2);
+            treeview.Nodes[0].Nodes.Add(treeNode3);
+            treeview.Nodes[0].Nodes[0].Nodes.Add(treeNode6);
+            treeview.Nodes[0].Nodes[1].Nodes.Add(treeNode7);
+            treeview.Nodes[0].Nodes[0].Nodes[0].Nodes.Add(treeNode8);
+            //treeNode 8 -> 6 -> 2 -> 1
+            treeNode8.IsDescendant(treeNode6);
+            Console.WriteLine(treeview.ToJson());
+            //Console.WriteLine(treeview.GetAllNodes().ToJson());
+            //Console.WriteLine(treeview.GetAllNodes().ToJson());
+            Console.WriteLine(treeview.GetAllNodes().ToJson());
         }
+
+
 
         private void SignInButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

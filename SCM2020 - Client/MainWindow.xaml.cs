@@ -57,6 +57,10 @@ namespace SCM2020___Client
 
             //SignIn();
 
+            //var t = new System.Windows.Forms.TreeView();
+
+
+
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Task.Run(() =>
             {
