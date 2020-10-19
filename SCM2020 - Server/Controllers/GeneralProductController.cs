@@ -136,6 +136,11 @@ namespace SCM2020___Server.Controllers
 
             return Ok(listInventory);
         }
+        [HttpGet("NextNumber")]
+        public async Task<IActionResult> NextNumber()
+        {
+            
+        }
         //Remove by ID
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
