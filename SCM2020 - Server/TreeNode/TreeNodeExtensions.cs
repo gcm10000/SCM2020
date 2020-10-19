@@ -21,10 +21,6 @@ namespace SCM2020___Client
 
             return false;
         }
-        public static int NextAvaliable(this List<int> myInts)
-        {
-            int firstAvailable = Enumerable.Range(1, Int32.MaxValue).Except(myInts).First();
-            return firstAvailable;
-        }
+
     }
 }

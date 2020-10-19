@@ -146,5 +146,10 @@ namespace SCM2020___Server
             string output = JsonConvert.SerializeObject(obj);
             return output;
         }
+        public static int NextAvaliable(this List<int> myInts)
+        {
+            int firstAvailable = Enumerable.Range(1, Int32.MaxValue).Except(myInts).First();
+            return firstAvailable;
+        }
     }
 }
