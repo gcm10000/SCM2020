@@ -62,13 +62,17 @@ namespace SCM2020___Client.Frames.Register
                     MessageBox.Show(JsonConvert.DeserializeObject<string>(result.Result), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
                     if (result.Result.Contains("utilizado"))
                     {
-                        System.Windows.Forms.DialogResult messageBoxResult = (System.Windows.Forms.DialogResult)MessageBox.Show("O SKU se encontra utilizado. Gostaria cadastrar este produto utilizando outro SKU?", "Pergunta", MessageBoxButton.YesNo);
+                        System.Windows.Forms.DialogResult messageBoxResult = (System.Windows.Forms.DialogResult)MessageBox.Show("O SKU se encontra utilizado. Gostaria cadastrar este produto utilizando outro SKU?", "Pergunta", MessageBoxButton.YesNo, MessageBoxImage.Information);
                         if (messageBoxResult == System.Windows.Forms.DialogResult.Yes)
                         {
-                            RequestCodeAvaliable();
+                            CodeTextBox.Dispatcher.Invoke(new Action(() => { RequestCodeAvaliable(); }));
                             MessageBox.Show("SKU alterado. Por favor, tente novamente o cadastro do produto.");
                         }
                     }
+                }
+                else
+                {
+                    MessageBox.Show(JsonConvert.DeserializeObject<string>(result.Result), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }).Start();
         }

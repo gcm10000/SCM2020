@@ -100,7 +100,7 @@ namespace SCM2020___Utility
 
             RegisterVendors(start);
             AddGroup(start);
-            //AddSector(start);
+            AddSector(start);
             SignUpSCMEmployees();
             SignUpAll();
             AddProduct(start);
@@ -133,13 +133,63 @@ namespace SCM2020___Utility
                 Group.AddOnServer(urlAddGroup, newgroup);
             }
         }
-        //static void AddSector(AuthenticationHeaderValue Authentication)
-        //{
-        //    //Sector sector = new Sector()
-        //    //{
-                
-        //    //}
-        //}
+        static void AddSector(AuthenticationHeaderValue Authentication)
+        {
+            Sector sector1 = new Sector()
+            {
+                NameSector = "Som e CATV",
+                NumberSector = 38
+            };
+            
+            Sector sector2 = new Sector()
+            {
+                NameSector = "CFTV",
+                NumberSector = 37
+            };
+
+            Sector sector3 = new Sector()
+            {
+                NameSector = "Videoconferência",
+                NumberSector = 42
+            };
+
+            Sector sector4 = new Sector()
+            {
+                NameSector = "Segurança em Telefonia",
+                NumberSector = 34
+            };
+            /*
+             * 34, 35, 36
+                Gerência de equipamento e Laboratório,
+                Tarifação
+             */
+
+            Sector sector5 = new Sector()
+            {
+                NameSector = "Telefonia",
+                NumberSector = 37
+            };
+            Sector sector6 = new Sector()
+            {
+                NameSector = "Filmagem e edição",
+                NumberSector = 41
+            };
+            Sector sector7 = new Sector()
+            {
+                NameSector = "Núcleo de Segurança Eletrônica",
+                NumberSector = 44
+            };
+
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector2, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector3, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector4, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector5, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector6, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
+
+
+        }
         static void AddMonitoring(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(
