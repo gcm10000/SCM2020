@@ -137,9 +137,11 @@ namespace SCM2020___Server.Controllers
             return Ok(listInventory);
         }
         [HttpGet("NextNumber")]
-        public async Task<IActionResult> NextNumber()
+        public int NextNumber()
         {
-            
+            var numbers = context.ConsumptionProduct.Select(x => x.Code);
+            int nextNumber = numbers.NextAvaliable();
+            return nextNumber;
         }
         //Remove by ID
         [HttpDelete("Remove/{id}")]
