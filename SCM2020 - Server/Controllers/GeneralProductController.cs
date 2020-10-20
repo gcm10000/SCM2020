@@ -36,8 +36,8 @@ namespace SCM2020___Server.Controllers
             var raw = await Helper.RawFromBody(this);
             ConsumptionProduct newProduct = new ConsumptionProduct(raw);
 
-            //if (!context.Vendors.Any(x => x.Id == newProduct.Vendor))
-            //    return BadRequest("Não existe fornecedor com este id.");
+            if (context.ConsumptionProduct.Any(x => x.Code == newProduct.Code))
+                return BadRequest("Código já utilizado.");
             if (!context.Groups.Any(x => x.Id == newProduct.Group))
                 return BadRequest("Não existe grupo com este id.");
 
@@ -136,6 +136,7 @@ namespace SCM2020___Server.Controllers
 
             return Ok(listInventory);
         }
+        [AllowAnonymous]
         [HttpGet("NextNumber")]
         public int NextNumber()
         {

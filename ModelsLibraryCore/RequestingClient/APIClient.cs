@@ -135,6 +135,23 @@ namespace ModelsLibraryCore.RequestingClient
                 return content;
             }
         }
+
+        public static ResponseMessage PostData(Uri RequestUri, object ObjectData, AuthenticationHeaderValue authentication = null)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = authentication;
+
+                var objToJson = JsonConvert.SerializeObject(ObjectData);
+                HttpResponseMessage respToken = client.PostAsync(RequestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
+                string content = respToken.Content.ReadAsStringAsync().Result;
+                return new ResponseMessage(content, respToken);
+            }
+        }
+
         public static string DeleteData(string RequestUrl, AuthenticationHeaderValue authentication = null)
         {
             using (var client = new HttpClient())

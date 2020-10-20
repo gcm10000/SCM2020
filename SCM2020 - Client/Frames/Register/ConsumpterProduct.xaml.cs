@@ -1,4 +1,5 @@
 ﻿using ModelsLibraryCore.RequestingClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,14 @@ namespace SCM2020___Client.Frames.Register
             var groups = APIClient.GetData<List<ModelsLibraryCore.Group>>(groupUri.ToString());
             var nameGroups = groups.Select(x => x.GroupName).ToList();
             this.GroupComboBox.ItemsSource = nameGroups;
+            RequestCodeAvaliable();
+        }
+        private void RequestCodeAvaliable()
+        {
+            Uri nextNumberUri = new Uri(Helper.Server, "generalproduct/nextnumber");
+            var number = APIClient.GetData<int>(nextNumberUri.ToString());
+
+            this.CodeTextBox.Text = number.ToString();
         }
 
         private void BtnConsumpterProduct_Click(object sender, RoutedEventArgs e)
@@ -47,8 +56,20 @@ namespace SCM2020___Client.Frames.Register
             };
             new Task(() =>
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "generalProduct/Add/").ToString(), consumptionProduct, Helper.Authentication);
-                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                var result = APIClient.PostData(new Uri(Helper.Server, "generalProduct/Add/"), consumptionProduct, Helper.Authentication);
+                if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    MessageBox.Show(JsonConvert.DeserializeObject<string>(result.Result), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (result.Result.Contains("utilizado"))
+                    {
+                        System.Windows.Forms.DialogResult messageBoxResult = (System.Windows.Forms.DialogResult)MessageBox.Show("O SKU se encontra utilizado. Gostaria cadastrar este produto utilizando outro SKU?", "Pergunta", MessageBoxButton.YesNo);
+                        if (messageBoxResult == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            RequestCodeAvaliable();
+                            MessageBox.Show("SKU alterado. Por favor, tente novamente o cadastro do produto.");
+                        }
+                    }
+                }
             }).Start();
         }
     }
