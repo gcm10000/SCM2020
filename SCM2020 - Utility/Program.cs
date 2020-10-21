@@ -143,7 +143,7 @@ namespace SCM2020___Utility
             
             Sector sector2 = new Sector()
             {
-                NameSector = "CFTV",
+                NameSector = "CFTV e Alarme",
                 NumberSector = 37
             };
 
@@ -155,30 +155,39 @@ namespace SCM2020___Utility
 
             Sector sector4 = new Sector()
             {
+                NameSector = "Filmagem e Edição",
+                NumberSector = 41
+            };
+            Sector sector5 = new Sector()
+            {
+                NameSector = "Núcleo de Segurança Eletrônica",
+                NumberSector = 44
+            };
+
+            Sector sector6 = new Sector()
+            {
                 NameSector = "Segurança em Telefonia",
                 NumberSector = 34
             };
+            
+            Sector sector7 = new Sector()
+            {
+                NameSector = "Segurança em Telefonia",
+                NumberSector = 35
+            };
+            
+            Sector sector8 = new Sector()
+            {
+                NameSector = "Segurança em Telefonia",
+                NumberSector = 36
+            };
+
+
             /*
              * 34, 35, 36
                 Gerência de equipamento e Laboratório,
                 Tarifação
              */
-
-            Sector sector5 = new Sector()
-            {
-                NameSector = "Telefonia",
-                NumberSector = 37
-            };
-            Sector sector6 = new Sector()
-            {
-                NameSector = "Filmagem e edição",
-                NumberSector = 41
-            };
-            Sector sector7 = new Sector()
-            {
-                NameSector = "Núcleo de Segurança Eletrônica",
-                NumberSector = 44
-            };
 
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector2, Authentication));

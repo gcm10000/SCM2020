@@ -13,6 +13,10 @@ namespace SCM2020___Client
         public TreeNodeCollection<T> Nodes { get; }
 
         private List<TreeNode<T>> MyNodes;
+        /// <summary>
+        /// Recebe todos os nós horizontalmente.
+        /// </summary>
+        /// <returns></returns>
         public List<TreeNode<T>> GetAllNodes()
         {
             MyNodes = new List<TreeNode<T>>();
