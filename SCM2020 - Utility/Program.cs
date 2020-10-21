@@ -673,11 +673,8 @@ namespace SCM2020___Utility
             {
                 var signUp = new SignUpUserInfo()
                 {
-                    IsPJERJRegistration = true,
                     Password = "@Tj_123456",
-                    CPFRegistration = null,
-                    Occupation = "Técnico",
-                    IdSector = result.Id,
+                    Sector = result.Id,
                 };
 
                 foreach (var row in employees)
@@ -685,7 +682,7 @@ namespace SCM2020___Utility
                     Console.WriteLine($"{row.Key}: {row.Value}");
                     if (row.Key == "Matricula")
                     {
-                        signUp.PJERJRegistration = row.Value;
+                        signUp.Register = row.Value;
                     }
                     else if (row.Key == "Nonfunalm")
                     {
@@ -699,8 +696,8 @@ namespace SCM2020___Utility
                 catch (AuthenticationException)
                 {
                     //NOMES NÃO CADASTRADOS PORQUE TEM MATRÍCULAS REPETIDAS!
-                    Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
-                    signUp.PJERJRegistration = "9" + signUp.PJERJRegistration;
+                    Console.WriteLine($"A matricula {signUp.Register} já se encontra cadastrada.");
+                    signUp.Register = "9" + signUp.Register;
                 }
             }
             Console.WriteLine($"Total de {records.Count} funcionários.");
@@ -723,11 +720,8 @@ namespace SCM2020___Utility
             {
                 var signUp = new SignUpUserInfo()
                 {
-                    IsPJERJRegistration = true,
                     Password = "@Tj_123456",
-                    CPFRegistration = null,
-                    Occupation = "Técnico",
-                    IdSector = result.Id,
+                    Sector = result.Id,
                 };
 
                 foreach (var row in employees)
@@ -735,7 +729,7 @@ namespace SCM2020___Utility
                     Console.WriteLine($"{row.Key}: {row.Value}");
                     if (row.Key == "Matricula")
                     {
-                        signUp.PJERJRegistration = row.Value;
+                        signUp.Register = row.Value;
                     }
                     else if (row.Key == "Funcionario")
                     {
@@ -748,7 +742,7 @@ namespace SCM2020___Utility
                 }
                 catch (AuthenticationException)
                 {
-                    Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
+                    Console.WriteLine($"A matricula {signUp.Register} já se encontra cadastrada.");
                 }
             }
 
@@ -761,13 +755,10 @@ namespace SCM2020___Utility
                     Console.WriteLine($"O nome {nameEmployee} será cadastrado.");
                     var signUp = new SignUpUserInfo()
                     {
-                        IsPJERJRegistration = true,
                         Password = "@Tj_123456",
-                        CPFRegistration = null,
-                        Occupation = "Técnico",
-                        IdSector = result.Id,
+                        Sector = result.Id,
                         Name = nameEmployee,
-                        PJERJRegistration = "9" + registrationEmployee
+                        Register = "9" + registrationEmployee
                     };
                     SignUp(signUp);
                     Console.WriteLine($"O nome {nameEmployee} foi cadastrado.");
@@ -792,13 +783,10 @@ namespace SCM2020___Utility
             Console.WriteLine(result);
             var signUp = new SignUpUserInfo()
             {
-                IsPJERJRegistration = true,
-                CPFRegistration = null,
-                Occupation = "Desenvolvedor",
                 //O PRIMEIRO "SETOR" SERÁ ADMINISTRADOR
-                IdSector = result.Id,
+                Sector = result.Id,
                 Name = "Gabriel Machado",
-                PJERJRegistration = "59450",
+                Register = "59450",
                 Password = "SenhaSecreta#2020",
             };
 
@@ -808,7 +796,7 @@ namespace SCM2020___Utility
             }
             catch (AuthenticationException)
             {
-                Console.WriteLine($"A matricula {signUp.PJERJRegistration} já se encontra cadastrada.");
+                Console.WriteLine($"A matricula {signUp.Register} já se encontra cadastrada.");
             }
         }
         static void SignUp(SignUpUserInfo userInfo)

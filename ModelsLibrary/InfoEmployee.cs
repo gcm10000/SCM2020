@@ -11,12 +11,8 @@
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Cargo ocupado pelo funcionário.
-        /// </summary>
-        public string Occupation { get; set; }
-        /// <summary>
         /// Setor do funcionário.
         /// </summary>
-        public string Role { get; set; }
+        public int Sector { get; set; }
     }
 }
