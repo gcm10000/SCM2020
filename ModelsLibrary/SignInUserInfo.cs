@@ -1,5 +1,4 @@
-﻿
-namespace ModelsLibrary
+﻿namespace ModelsLibrary
 {
     public class SignInUserInfo
     {
