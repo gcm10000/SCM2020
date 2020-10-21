@@ -73,5 +73,10 @@ namespace ModelsLibraryCore
         /// </summary>
         [Required]
         public string ServiceLocation { get; set; }
+        /// <summary>
+        /// Setor cuja ordem de serviço está direcionada.
+        /// </summary>
+        [Required]
+        public Sector Sector { get; set; }
     }
 }
