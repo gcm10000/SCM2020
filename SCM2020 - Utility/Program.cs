@@ -158,6 +158,7 @@ namespace SCM2020___Utility
                 NameSector = "Filmagem e Edição",
                 NumberSector = 41
             };
+
             Sector sector5 = new Sector()
             {
                 NameSector = "Núcleo de Segurança Eletrônica",
@@ -182,13 +183,6 @@ namespace SCM2020___Utility
                 NumberSector = 36
             };
 
-
-            /*
-             * 34, 35, 36
-                Gerência de equipamento e Laboratório,
-                Tarifação
-             */
-
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector2, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector3, Authentication));
@@ -196,6 +190,7 @@ namespace SCM2020___Utility
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector5, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector6, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector8, Authentication));
 
 
         }
