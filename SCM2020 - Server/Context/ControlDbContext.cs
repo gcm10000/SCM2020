@@ -89,6 +89,19 @@ namespace SCM2020___Server.Context
                 .WithOne(a => a.Business)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasForeignKey<ApplicationUser>(f => f.BusinessId);
+            
+            modelBuilder.Entity<Sector>()
+                .HasOne(b => b.ApplicationUser)
+                .WithOne(a => a.Sector)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasForeignKey<ApplicationUser>(f => f.SectorId);
+
+            modelBuilder.Entity<Sector>()
+                .HasOne(b => b.Monitoring)
+                .WithOne(a => a.Sector)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasForeignKey<ApplicationUser>(f => f.SectorId);
+
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             //{

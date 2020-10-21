@@ -22,5 +22,7 @@ namespace ModelsLibraryCore
         public string NameSector { get; set; }
         [JsonIgnore]
         public Monitoring Monitoring { get; set; }
+        [JsonIgnore]
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

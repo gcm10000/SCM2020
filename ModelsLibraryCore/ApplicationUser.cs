@@ -10,6 +10,7 @@ namespace ModelsLibraryCore
         public string Register { get; set; }
         public string Name { get; set; }
         public Sector Sector { get; set; }
+        public int SectorId { get; set; }
         public Business Business { get; set; }
         public int BusinessId { get; set; }
 
