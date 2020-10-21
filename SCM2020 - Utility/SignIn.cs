@@ -32,8 +32,7 @@ namespace SCM2020___Utility
                 HttpResponseMessage respToken = client.PostAsync(url, new StringContent(
                         JsonConvert.SerializeObject(new
                         {
-                            Registration = Registration,
-                            IsPJERJRegistration = IsPJERJRegistration,
+                            Register = Registration,
                             Password = Password
                         }), Encoding.UTF8, "application/json")).Result;
 

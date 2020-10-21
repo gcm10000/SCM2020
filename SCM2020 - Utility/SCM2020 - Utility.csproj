@@ -78,9 +78,7 @@
     <Compile Include="RequestingClient\APIClient.cs" />
     <Compile Include="SCMAccess.cs" />
     <Compile Include="SignIn.cs" />
-    <Compile Include="SignInUserInfo.cs" />
     <Compile Include="SignUp.cs" />
-    <Compile Include="SignUpUserInfo.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Vendor.cs" />
   </ItemGroup>

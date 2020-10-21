@@ -5,12 +5,7 @@
         /// <summary>
         /// Matrícula do funcionário cadastrado no Tribunal de Justiça.
         /// </summary>
-        public string PJERJRegistration { get; set; }
-        /// <summary>
-        /// Cadastro de Pessoa Física. Recomendado para usuários que ainda não pertecem a matrícula do PJERJ.
-        /// Para usuários sem matrícula o CPF é uma opção para efetuar acesso.
-        /// </summary>
-        public string CPFRegistration { get; set; }
+        public string Register { get; set; }
         /// <summary>
         /// Nome do funcionário.
         /// </summary>

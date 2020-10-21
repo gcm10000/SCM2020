@@ -34,11 +34,10 @@ namespace SCM2020___Client.Frames.Register
                 ModelsLibraryCore.SignUpUserInfo employee = new ModelsLibraryCore.SignUpUserInfo
                 {
                     Name = NameTextBox.Text,
-                    PJERJRegistration = RegisterTextBox.Text,
-                    CPFRegistration = CPFTextBox.Text,
-                    Occupation = OccupationTextBox.Text,
-                    IsPJERJRegistration = (RegisterTextBox.Text.Trim() == string.Empty),
-                    IdSector = (SectorComboBox.SelectedIndex + 1),
+                    Register = RegisterTextBox.Text,
+                    //Editar
+                    //Occupation = OccupationTextBox.Text,
+                    Sector = (SectorComboBox.SelectedIndex + 1),
                     Password = PasswordBoxTextBox.Password
                 };
                 var result = APIClient.PostData(new Uri(Helper.Server, new Uri("User/NewUser/")).ToString(), employee, Helper.Authentication);
