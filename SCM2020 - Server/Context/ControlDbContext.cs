@@ -19,6 +19,7 @@ namespace SCM2020___Server.Context
         public DbSet<AuxiliarPermanent> AuxiliarPermanent { get; set; }
         public DbSet<StoreMessage> StoreMessage { get; set; }
         public DbSet<UsersId> UsersId { get; set; }
+        public DbSet<Business> Business { get; set; }
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
 

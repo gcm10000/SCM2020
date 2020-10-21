@@ -60,7 +60,7 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var deserialized = JsonConvert.DeserializeObject<Monitoring>(raw);
-            var SCMId = userManager.FindByPJERJRegistration(deserialized.SCMEmployeeId).Id;
+            var SCMId = userManager.FindByRegister(deserialized.SCMEmployeeId).Id;
             Monitoring monitoring = new Monitoring(raw);
             //NOME DO FUNCIONÁRIO
             monitoring.SCMEmployeeId = SCMId;

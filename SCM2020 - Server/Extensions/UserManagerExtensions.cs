@@ -10,9 +10,9 @@ namespace SCM2020___Server.Extensions
 {
     public static class UserManagerExtensions
     {
-        public static ApplicationUser FindByPJERJRegistration(this UserManager<ApplicationUser> UserManager, string PJERJRegistration)
+        public static ApplicationUser FindByRegister(this UserManager<ApplicationUser> UserManager, string Register)
         {
-            return UserManager.Users.FirstOrDefault(x => x.PJERJRegistration == PJERJRegistration);
+            return UserManager.Users.FirstOrDefault(x => x.Register == Register);
         }
         public static ApplicationUser FindUserById(this UserManager<ApplicationUser> UserManager, string Id)
         {
@@ -21,10 +21,6 @@ namespace SCM2020___Server.Extensions
         public static ApplicationUser FindByCompleteName(this UserManager<ApplicationUser> UserManager, string Name)
         {
             return UserManager.Users.FirstOrDefault(x => x.Name == Name);
-        }
-        public static ApplicationUser FindByCPF(this UserManager<ApplicationUser> UserManager, string CPF)
-        {
-            return UserManager.Users.FirstOrDefault(x => x.CPFRegistration == CPF);
         }
         public static async Task<ApplicationUser> GetUserByNameClaim(this UserManager<ApplicationUser> UserManager, string name)
         {

@@ -9,28 +9,20 @@ namespace ModelsLibraryCore
     public class InfoEmployee
     {
         /// <summary>
-        /// Matrícula do funcionário cadastrado no Tribunal de Justiça.
+        /// Matrícula do funcionário a ser cadastrado.
         /// </summary>
-        public string PJERJRegistration { get; set; }
-        /// <summary>
-        /// Cadastro de Pessoa Física. Recomendado para usuários que ainda não pertecem a matrícula do PJERJ.
-        /// Para usuários sem matrícula o CPF é uma opção para efetuar acesso.
-        /// </summary>
-        public string CPFRegistration { get; set; }
+        [Required]
+        public string Register { get; set; }
         /// <summary>
         /// Nome do funcionário.
         /// </summary>
         [Required(ErrorMessage = "Insira o nome.")]
         public string Name { get; set; }
         /// <summary>
-        /// Cargo ocupado pelo funcionário.
-        /// </summary>
-        [Required(ErrorMessage = "Insira o cargo.")]
-        public string Occupation { get; set; }
-        /// <summary>
         /// Setor do funcionário.
         /// </summary>
         [Required(ErrorMessage = "Insira o setor.")]
-        public int IdSector { get; set; }
+        public int Sector { get; set; }
+        public int Business { get; set; }
     }
 }

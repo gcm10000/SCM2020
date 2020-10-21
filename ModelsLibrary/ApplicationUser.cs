@@ -5,7 +5,6 @@
     /// </summary>
     public class ApplicationUser
     {
-        public string PJERJRegistration { get; set; }
-        public string CPFRegistration { get; set; }
+        public string Register { get; set; }
     }
 }

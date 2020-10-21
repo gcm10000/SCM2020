@@ -30,7 +30,6 @@ namespace SCM2020___Server.Controllers
     public class UserController : Controller
     {   
         ControlDbContext ControlDbContext;
-        static ControlDbContext StaticControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
         IConfiguration Configuration;
@@ -40,7 +39,7 @@ namespace SCM2020___Server.Controllers
 
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
-            StaticControlDbContext = this.ControlDbContext = controlDbContext;
+            this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
@@ -73,7 +72,7 @@ namespace SCM2020___Server.Controllers
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
             //var users = Helper.Users;
-            var SCM = Helper.Users.Where(x => x.IdSector == 2);
+            var SCM = Helper.Users.Where(x => x.Sector.Id == 2);
             List<Destination> destination = new List<Destination>();
             foreach (var user in SCM)
             {
@@ -142,14 +141,17 @@ namespace SCM2020___Server.Controllers
         public async Task<ActionResult<UserToken>> CreateUser()
         {
             var postData = await SignUpUserInfo();
-            var username = (postData.IsPJERJRegistration) ? postData.PJERJRegistration : postData.CPFRegistration;
-            var user = new ApplicationUser { UserName = username, Name = postData.Name, CPFRegistration = postData.CPFRegistration, PJERJRegistration = postData.PJERJRegistration, IdSector = postData.IdSector, Occupation = postData.Occupation };
+            var username = postData.Register;
+
+            var sector = ControlDbContext.Sectors.SingleOrDefault(x => x.Id == postData.Sector);
+            var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == postData.Business);
+
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, Sector = sector, Business = business };
             
-            var r1 = UserManager.FindByPJERJRegistration(postData.PJERJRegistration);
-            //MUDAR
-            var r2 = UserManager.FindByPJERJRegistration(postData.CPFRegistration);
-            if ((r1 != null) || (r2 != null))
-                return BadRequest("Já existe um usuário com algum dos dois registros.");
+            var r = UserManager.FindByRegister(postData.Register);
+
+            if (r != null)
+                return BadRequest("Já existe um usuário com este registro.");
 
             var result = await UserManager.CreateAsync(user, postData.Password);
 
@@ -160,15 +162,9 @@ namespace SCM2020___Server.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
-                    new Claim("Occupation", user.Occupation),
+                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
                 };
 
-                //var resultclaims = 
-                //await UserManager.AddClaimsAsync(
-                //user: user,
-                //claims: claims
-                //);
                 return BuildToken(claims);
             }
             else
@@ -188,7 +184,7 @@ namespace SCM2020___Server.Controllers
             var fromPOST = await SignInUserInfo();
             string strRegistration = fromPOST.Registration;
 
-            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistration(strRegistration) : UserManager.FindByCPF(strRegistration);
+            var user = UserManager.FindByRegister(strRegistration);
 
             if (user == null)
                 return BadRequest("Usuário ou senha inválidos.");
@@ -205,8 +201,7 @@ namespace SCM2020___Server.Controllers
             {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
-                    new Claim("Occupation", user.Occupation),
+                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
             };
 
             if (result.Succeeded)
@@ -221,11 +216,8 @@ namespace SCM2020___Server.Controllers
         public async Task<ActionResult<UserToken>> Update()
         {
             var fromPOST = await SignUpUserInfo();
-            string strRegistration = (fromPOST.IsPJERJRegistration) ?
-                fromPOST.PJERJRegistration : fromPOST.CPFRegistration;
 
-            var user = await UserManager.FindByNameAsync(strRegistration);
-            user.PJERJRegistration = fromPOST.PJERJRegistration;
+            var user = await UserManager.FindByNameAsync(fromPOST.Register);
             UserManager.PasswordHasher.HashPassword(user, fromPOST.Password);
 
             var updateUser = await UserManager.UpdateAsync(user);
@@ -246,11 +238,11 @@ namespace SCM2020___Server.Controllers
         public async Task<ActionResult<UserToken>> ResetPassword()
         {
             var fromPOST = await UpdateUserInfo();
-            string strRegistration = fromPOST.Registration;
+            string strRegistration = fromPOST.Register;
 
             string newPassword = fromPOST.NewPassword;
 
-            var user = (fromPOST.IsPJERJRegistration) ? UserManager.FindByPJERJRegistration(strRegistration) : UserManager.FindByCPF(strRegistration);
+            var user = UserManager.FindByRegister(strRegistration);
 
             string resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             IdentityResult passwordChangeResult = await UserManager.ResetPasswordAsync(user, resetToken, newPassword);
@@ -261,8 +253,7 @@ namespace SCM2020___Server.Controllers
             {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.IdSector.ToString()),
-                    new Claim("Occupation", user.Occupation),
+                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
             }
             ;
             if (passwordChangeResult.Succeeded)
@@ -285,7 +276,7 @@ namespace SCM2020___Server.Controllers
         [AllowAnonymous]
         public ActionResult<string> GetUserIdByPJERJRegister(string register)
         {
-            var user = UserManager.FindByPJERJRegistration(register);
+            var user = UserManager.FindByRegister(register);
             if (user != null)
             {
                 return user.Id;
@@ -299,7 +290,7 @@ namespace SCM2020___Server.Controllers
             var user = UserManager.FindUserById(userId);
             if (user != null)
             {
-                return user.PJERJRegistration;
+                return user.Register;
             }
             return BadRequest("Id não encontrado.");
         }
@@ -312,7 +303,7 @@ namespace SCM2020___Server.Controllers
             {
                 //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, string.Empty, currentSector);
+                return new InfoUser(user.Id, user.Name, user.Register, string.Empty, currentSector);
             }
             return BadRequest("Id não encontrado.");
         }
@@ -324,7 +315,7 @@ namespace SCM2020___Server.Controllers
             {
                 var user = UserManager.Users.First(x => x.UserName == register);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.PJERJRegistration, string.Empty, currentSector);
+                return new InfoUser(user.Id, user.Name, user.Register, string.Empty, currentSector);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
         }
@@ -341,11 +332,11 @@ namespace SCM2020___Server.Controllers
 
             var allUsers = UserManager.Users.ToList();
 
-            var AppUsers = allUsers.Where(x => x.Name.MultiplesContainsWords(querySplited) || x.PJERJRegistration.Contains(query));
+            var AppUsers = allUsers.Where(x => x.Name.MultiplesContainsWords(querySplited) || x.Register.Contains(query));
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
             {
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.PJERJRegistration, string.Empty, ControlDbContext.Sectors.Find(AppUser.IdSector)));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.Sector.Id)));
             }
             return Ok(infoUsers);
 
@@ -355,7 +346,7 @@ namespace SCM2020___Server.Controllers
         public IActionResult GetListUser(string query)
         {
             System.Collections.Generic.List<ApplicationUser> listUser = (query != string.Empty) ? UserManager.Users.Where(x => 
-            x.CPFRegistration.Contains(query) || x.PJERJRegistration.MultiplesContains(query) || x.Name.MultiplesContains(query)).ToList() 
+            x.Register.MultiplesContains(query) || x.Name.MultiplesContains(query)).ToList() 
             : UserManager.Users.ToList();
             return Ok(listUser);
         }
