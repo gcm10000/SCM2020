@@ -27,7 +27,6 @@ namespace SCM2020___Client
     /// </summary>
     public partial class LoginScreen : Window
     {
-        public CompanyPosition Position { get; set; }
 
         public LoginScreen()
         {
@@ -61,6 +60,10 @@ namespace SCM2020___Client
 
         private void SignInButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ConnectServer();
+        }
+        private void ConnectServer()
+        {
             //user 59450
             //password SenhaSecreta#2020
             var user = UserTextBox.Text;
@@ -77,7 +80,6 @@ namespace SCM2020___Client
                     });
                 }
             });
-
         }
         private bool SignIn(string user, string password)
         {
@@ -114,6 +116,18 @@ namespace SCM2020___Client
             }
             //É preciso de outro catch para credenciais erradas.
             return false;
+        }
+
+        private void UserTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+                ConnectServer();
+        }
+
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+                ConnectServer();
         }
     }
 }
