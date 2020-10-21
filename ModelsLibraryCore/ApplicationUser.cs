@@ -3,7 +3,7 @@
 namespace ModelsLibraryCore
 {
     /// <summary>
-    /// Modelo de dados utilizado dos funcionários do Tribunal de Justiça DGSEI - DETEL pelo Sistema de Login.
+    /// Modelo de dados utilizado dos funcionários do DETEL pelo Sistema de Login.
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
@@ -11,5 +11,7 @@ namespace ModelsLibraryCore
         public string Name { get; set; }
         public Sector Sector { get; set; }
         public Business Business { get; set; }
+        public int BusinessId { get; set; }
+
     }
 }

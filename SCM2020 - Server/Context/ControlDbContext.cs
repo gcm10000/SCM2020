@@ -83,6 +83,12 @@ namespace SCM2020___Server.Context
                 .WithOne(a => a.Notification as AlertStockMessage)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<StoreMessage>(f => f.NotificationId);
+            
+            modelBuilder.Entity<Business>()
+                .HasOne(b => b.ApplicationUser)
+                .WithOne(a => a.Business)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasForeignKey<ApplicationUser>(f => f.BusinessId);
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             //{
