@@ -7,12 +7,12 @@ namespace SCM2020___Client
     public class Employee
     {
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string IdUsers { get; set; }
 
         public Employee() { }
-        public Employee(string name)
+        public Employee(string idUsers)
         {
-            this.Name = name;
+            this.IdUsers = idUsers;
         }
     }
 }

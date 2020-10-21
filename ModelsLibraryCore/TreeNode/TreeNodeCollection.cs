@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCM2020___Client
+namespace ModelsLibraryCore
 {
     public class TreeNodeCollection<T> : CollectionBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SCM2020___Client
+namespace ModelsLibraryCore
 {
     public static class TreeNodeExtensions
     {
