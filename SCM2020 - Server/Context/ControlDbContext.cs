@@ -20,6 +20,7 @@ namespace SCM2020___Server.Context
         public DbSet<StoreMessage> StoreMessage { get; set; }
         public DbSet<UsersId> UsersId { get; set; }
         public DbSet<Business> Business { get; set; }
+
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
 
@@ -83,24 +84,14 @@ namespace SCM2020___Server.Context
                 .WithOne(a => a.Notification as AlertStockMessage)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<StoreMessage>(f => f.NotificationId);
-            
-            modelBuilder.Entity<Business>()
-                .HasOne(b => b.ApplicationUser)
-                .WithOne(a => a.Business)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasForeignKey<ApplicationUser>(f => f.BusinessId);
-            
-            modelBuilder.Entity<Sector>()
-                .HasOne(b => b.ApplicationUser)
-                .WithOne(a => a.Sector)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasForeignKey<ApplicationUser>(f => f.SectorId);
+
 
             modelBuilder.Entity<Sector>()
                 .HasOne(b => b.Monitoring)
                 .WithOne(a => a.Sector)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasForeignKey<ApplicationUser>(f => f.SectorId);
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey<Monitoring>(f => f.SectorId);
+
 
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))

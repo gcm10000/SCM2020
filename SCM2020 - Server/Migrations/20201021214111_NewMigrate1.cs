@@ -8,6 +8,35 @@ namespace SCM2020___Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AlertStockMessage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Icon = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(nullable: true),
+                    Code = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlertStockMessage", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Business",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Business", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ConsumptionProduct",
                 columns: table => new
                 {
@@ -88,26 +117,6 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Monitoring",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Work_Order = table.Column<string>(nullable: false),
-                    MovingDate = table.Column<DateTime>(nullable: false),
-                    ClosingDate = table.Column<DateTime>(nullable: true),
-                    SCMEmployeeId = table.Column<string>(nullable: false),
-                    EmployeeId = table.Column<string>(nullable: false),
-                    Situation = table.Column<bool>(nullable: false),
-                    RequestingSector = table.Column<int>(nullable: false),
-                    ServiceLocation = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Monitoring", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PermanentProduct",
                 columns: table => new
                 {
@@ -139,18 +148,6 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StoreMessage",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StoreMessage", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Vendors",
                 columns: table => new
                 {
@@ -162,6 +159,25 @@ namespace SCM2020___Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vendors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StoreMessage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NotificationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoreMessage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StoreMessage_AlertStockMessage_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "AlertStockMessage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,6 +254,68 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApplicationUser",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Register = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    SectorId = table.Column<int>(nullable: true),
+                    BusinessId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_Sectors_SectorId",
+                        column: x => x.SectorId,
+                        principalTable: "Sectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Monitoring",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Work_Order = table.Column<string>(nullable: false),
+                    MovingDate = table.Column<DateTime>(nullable: false),
+                    ClosingDate = table.Column<DateTime>(nullable: true),
+                    SCMEmployeeId = table.Column<string>(nullable: false),
+                    EmployeeId = table.Column<string>(nullable: false),
+                    Situation = table.Column<bool>(nullable: false),
+                    RequestingSector = table.Column<int>(nullable: false),
+                    ServiceLocation = table.Column<string>(nullable: false),
+                    SectorId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Monitoring", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Monitoring_Sectors_SectorId",
+                        column: x => x.SectorId,
+                        principalTable: "Sectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UsersId",
                 columns: table => new
                 {
@@ -256,6 +334,68 @@ namespace SCM2020___Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "SolicitationMessage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StoreMessageId = table.Column<int>(nullable: true),
+                    Icon = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(nullable: true),
+                    MonitoringId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SolicitationMessage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SolicitationMessage_Monitoring_MonitoringId",
+                        column: x => x.MonitoringId,
+                        principalTable: "Monitoring",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SolicitationMessage_StoreMessage_StoreMessageId",
+                        column: x => x.StoreMessageId,
+                        principalTable: "StoreMessage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Destination",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(nullable: true),
+                    AlertStockMessageId = table.Column<int>(nullable: true),
+                    SolicitationMessageId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Destination", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Destination_AlertStockMessage_AlertStockMessageId",
+                        column: x => x.AlertStockMessageId,
+                        principalTable: "AlertStockMessage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Destination_SolicitationMessage_SolicitationMessageId",
+                        column: x => x.SolicitationMessageId,
+                        principalTable: "SolicitationMessage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUser_SectorId",
+                table: "ApplicationUser",
+                column: "SectorId",
+                unique: true,
+                filter: "[SectorId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuxiliarConsumption_MaterialInputByVendorId",
@@ -288,6 +428,38 @@ namespace SCM2020___Server.Migrations
                 column: "MaterialOutputId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Destination_AlertStockMessageId",
+                table: "Destination",
+                column: "AlertStockMessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Destination_SolicitationMessageId",
+                table: "Destination",
+                column: "SolicitationMessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Monitoring_SectorId",
+                table: "Monitoring",
+                column: "SectorId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitationMessage_MonitoringId",
+                table: "SolicitationMessage",
+                column: "MonitoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitationMessage_StoreMessageId",
+                table: "SolicitationMessage",
+                column: "StoreMessageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StoreMessage_NotificationId",
+                table: "StoreMessage",
+                column: "NotificationId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UsersId_StoreMessageId",
                 table: "UsersId",
                 column: "StoreMessageId");
@@ -296,25 +468,28 @@ namespace SCM2020___Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationUser");
+
+            migrationBuilder.DropTable(
                 name: "AuxiliarConsumption");
 
             migrationBuilder.DropTable(
                 name: "AuxiliarPermanent");
 
             migrationBuilder.DropTable(
+                name: "Business");
+
+            migrationBuilder.DropTable(
                 name: "ConsumptionProduct");
+
+            migrationBuilder.DropTable(
+                name: "Destination");
 
             migrationBuilder.DropTable(
                 name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Monitoring");
-
-            migrationBuilder.DropTable(
                 name: "PermanentProduct");
-
-            migrationBuilder.DropTable(
-                name: "Sectors");
 
             migrationBuilder.DropTable(
                 name: "UsersId");
@@ -332,7 +507,19 @@ namespace SCM2020___Server.Migrations
                 name: "MaterialOutput");
 
             migrationBuilder.DropTable(
+                name: "SolicitationMessage");
+
+            migrationBuilder.DropTable(
+                name: "Monitoring");
+
+            migrationBuilder.DropTable(
                 name: "StoreMessage");
+
+            migrationBuilder.DropTable(
+                name: "Sectors");
+
+            migrationBuilder.DropTable(
+                name: "AlertStockMessage");
         }
     }
 }

@@ -28,7 +28,8 @@ namespace SCM2020___Server.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserController : Controller
-    {   
+    {
+        ApplicationDbContext ApplicationDbContext;
         ControlDbContext ControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
@@ -37,8 +38,9 @@ namespace SCM2020___Server.Controllers
         static bool EventActived = false;
         static List<StoreMessage> ListStoreMessage = new List<StoreMessage>();
 
-        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
+        public UserController(ApplicationDbContext applicationDbContext, ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
+            this.ApplicationDbContext = applicationDbContext;
             this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
@@ -72,7 +74,7 @@ namespace SCM2020___Server.Controllers
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
             //var users = Helper.Users;
-            var SCM = Helper.Users.Where(x => x.Sector.Id == 2);
+            var SCM = Helper.Users.Where(x => x.SectorId == 2);
             List<Destination> destination = new List<Destination>();
             foreach (var user in SCM)
             {
@@ -143,10 +145,7 @@ namespace SCM2020___Server.Controllers
             var postData = await SignUpUserInfo();
             var username = postData.Register;
 
-            var sector = ControlDbContext.Sectors.SingleOrDefault(x => x.Id == postData.Sector);
-            var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == postData.Business);
-
-            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, Sector = sector, Business = business };
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, SectorId = postData.Sector, BusinessId = postData.Business };
             
             var r = UserManager.FindByRegister(postData.Register);
 
@@ -162,7 +161,7 @@ namespace SCM2020___Server.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.SectorId.ToString()),
                 };
 
                 return BuildToken(claims);
@@ -201,7 +200,7 @@ namespace SCM2020___Server.Controllers
             {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.SectorId.ToString()),
             };
 
             if (result.Succeeded)
@@ -227,12 +226,12 @@ namespace SCM2020___Server.Controllers
             }
             return BadRequest();
         }
-        [HttpGet("SignOut")]
-        public async Task<IActionResult> SignOut()
-        {
-            await SignInManager.SignOutAsync();
-            return Ok("Logoff realizado com sucesso.");
-        }
+        //[HttpGet("SignOut")]
+        //public async Task<IActionResult> SignOut()
+        //{
+        //    await SignInManager.SignOutAsync();
+        //    return Ok("Logoff realizado com sucesso.");
+        //}
         [HttpPost("ResetPassword")]
         [Authorize(Roles = Roles.SCM)]
         public async Task<ActionResult<UserToken>> ResetPassword()
@@ -253,7 +252,7 @@ namespace SCM2020___Server.Controllers
             {
                     new Claim(ClaimTypes.NameIdentifier, UserManager.Users.SingleOrDefault(x => x == user).Id),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, user.Sector.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.SectorId.ToString()),
             }
             ;
             if (passwordChangeResult.Succeeded)
@@ -336,7 +335,7 @@ namespace SCM2020___Server.Controllers
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
             {
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.Sector.Id)));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.SectorId)));
             }
             return Ok(infoUsers);
 

@@ -14,7 +14,5 @@ namespace ModelsLibraryCore
         public int Id { get; set; }
         public string Name { get; set; }
         public Business() { }
-        [JsonIgnore]
-        public ApplicationUser ApplicationUser { get; set; }
     }
 }

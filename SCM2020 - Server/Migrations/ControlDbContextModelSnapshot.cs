@@ -43,6 +43,74 @@ namespace SCM2020___Server.Migrations
                     b.ToTable("AlertStockMessage");
                 });
 
+            modelBuilder.Entity("ModelsLibraryCore.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Register")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SectorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectorId")
+                        .IsUnique()
+                        .HasFilter("[SectorId] IS NOT NULL");
+
+                    b.ToTable("ApplicationUser");
+                });
+
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +184,21 @@ namespace SCM2020___Server.Migrations
                     b.HasIndex("MaterialOutputId");
 
                     b.ToTable("AuxiliarPermanent");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.Business", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Business");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.ConsumptionProduct", b =>
@@ -293,6 +376,9 @@ namespace SCM2020___Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SectorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ServiceLocation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -305,6 +391,9 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SectorId")
+                        .IsUnique();
 
                     b.ToTable("Monitoring");
                 });
@@ -441,6 +530,13 @@ namespace SCM2020___Server.Migrations
                     b.ToTable("Vendors");
                 });
 
+            modelBuilder.Entity("ModelsLibraryCore.ApplicationUser", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.Sector", null)
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("ModelsLibraryCore.ApplicationUser", "SectorId");
+                });
+
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
                 {
                     b.HasOne("ModelsLibraryCore.MaterialInputByVendor", "MaterialInputByVendor")
@@ -485,6 +581,15 @@ namespace SCM2020___Server.Migrations
                     b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
                         .WithMany("Destination")
                         .HasForeignKey("SolicitationMessageId");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.Monitoring", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.Sector", "Sector")
+                        .WithOne("Monitoring")
+                        .HasForeignKey("ModelsLibraryCore.Monitoring", "SectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>

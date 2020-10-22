@@ -40,11 +40,10 @@ namespace SCM2020___Server.Migrations.ApplicationDb
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    PJERJRegistration = table.Column<string>(nullable: true),
-                    CPFRegistration = table.Column<string>(nullable: true),
+                    Register = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    IdSector = table.Column<int>(nullable: false),
-                    Occupation = table.Column<string>(nullable: true)
+                    SectorId = table.Column<int>(nullable: true),
+                    BusinessId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
