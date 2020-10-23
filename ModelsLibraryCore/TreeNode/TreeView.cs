@@ -12,8 +12,8 @@ namespace ModelsLibraryCore
         }
         public TreeNodeCollection<T> Nodes { get; }
 
-        private List<TreeNode<T>> MyNodes;
-        public List<TreeNode<T>> GetAllNodes()
+        private ICollection<TreeNode<T>> MyNodes;
+        public ICollection<TreeNode<T>> GetAllNodes()
         {
             MyNodes = new List<TreeNode<T>>();
             foreach (TreeNode<T> subnode in Nodes)

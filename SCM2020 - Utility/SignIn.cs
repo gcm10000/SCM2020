@@ -16,7 +16,7 @@ namespace SCM2020___Utility
         public SignIn()
         {
         }
-        public HttpRequestHeaders MakeSignIn(string url, string Registration, bool IsPJERJRegistration, string Password)
+        public HttpRequestHeaders MakeSignIn(string url, string Register, string Password)
         {
             using (var client = new HttpClient())
             {
@@ -32,7 +32,7 @@ namespace SCM2020___Utility
                 HttpResponseMessage respToken = client.PostAsync(url, new StringContent(
                         JsonConvert.SerializeObject(new
                         {
-                            Register = Registration,
+                            Register = Register,
                             Password = Password
                         }), Encoding.UTF8, "application/json")).Result;
 

@@ -8,7 +8,7 @@ namespace ModelsLibraryCore
         /// Matrícula do funcionário cadastrado no Tribunal de Justiça.
         /// </summary>
         [Required]
-        public string Registration { get; set; }
+        public string Register { get; set; }
         /// <summary>
         /// Senha do funcionário.
         /// </summary>

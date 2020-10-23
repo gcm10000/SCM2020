@@ -40,7 +40,7 @@ namespace ModelsLibraryCore.RequestingClient
         //READ -> GENERIC GET
         //UPDATE -> GENERIC POST
         //DELETE -> INT DELETE
-        public static SignIn MakeSignIn(string url, string Registration, bool IsPJERJRegistration, string Password)
+        public static SignIn MakeSignIn(string url, string Register, string Password)
         {
             using (var client = new HttpClient())
             {
@@ -56,8 +56,7 @@ namespace ModelsLibraryCore.RequestingClient
                 HttpResponseMessage respToken = client.PostAsync(url, new StringContent(
                         JsonConvert.SerializeObject(new
                         {
-                            Registration = Registration,
-                            IsPJERJRegistration = IsPJERJRegistration,
+                            Register = Register,
                             Password = Password
                         }), Encoding.UTF8, "application/json")).Result;
 

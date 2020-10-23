@@ -86,8 +86,7 @@ namespace SCM2020___Client
             try
             {
                 var signIn = APIClient.MakeSignIn(new Uri(Helper.Server, "user/login/").ToString(),
-                    Registration: user,
-                    IsPJERJRegistration: true,
+                    Register: user,
                     Password: password);
 
                 Helper.Authentication = signIn.Headers.Authorization;

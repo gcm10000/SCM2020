@@ -145,7 +145,7 @@ namespace SCM2020___Server.Controllers
             var postData = await SignUpUserInfo();
             var username = postData.Register;
 
-            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, SectorId = postData.Sector, BusinessId = postData.Business };
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, SectorId = postData.Sector };
             
             var r = UserManager.FindByRegister(postData.Register);
 
@@ -181,7 +181,7 @@ namespace SCM2020___Server.Controllers
         public async Task<ActionResult<UserToken>> Login()
         {
             var fromPOST = await SignInUserInfo();
-            string strRegistration = fromPOST.Registration;
+            string strRegistration = fromPOST.Register;
 
             var user = UserManager.FindByRegister(strRegistration);
 
@@ -334,6 +334,21 @@ namespace SCM2020___Server.Controllers
             var AppUsers = allUsers.Where(x => x.Name.MultiplesContainsWords(querySplited) || x.Register.Contains(query));
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
+            {
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.SectorId)));
+            }
+            return Ok(infoUsers);
+
+        }
+        
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public ActionResult<InfoUser> ListAll()
+        {
+            var allUsers = UserManager.Users.ToList();
+
+            System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
+            foreach (var AppUser in allUsers)
             {
                 infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.SectorId)));
             }

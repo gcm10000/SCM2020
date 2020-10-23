@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelsLibraryCore;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace SCM2020___Server.Context
@@ -20,6 +21,8 @@ namespace SCM2020___Server.Context
         public DbSet<StoreMessage> StoreMessage { get; set; }
         public DbSet<UsersId> UsersId { get; set; }
         public DbSet<Business> Business { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        //public DbSet<TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>> TreeView { get; set; }
 
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
         {
@@ -84,7 +87,6 @@ namespace SCM2020___Server.Context
                 .WithOne(a => a.Notification as AlertStockMessage)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<StoreMessage>(f => f.NotificationId);
-
 
             modelBuilder.Entity<Sector>()
                 .HasOne(b => b.Monitoring)

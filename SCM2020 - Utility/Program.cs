@@ -100,7 +100,7 @@ namespace SCM2020___Utility
 
             RegisterVendors(start);
             AddGroup(start);
-            AddSector(start);
+            //AddSector(start);
             SignUpSCMEmployees();
             SignUpAll();
             AddProduct(start);
@@ -591,8 +591,7 @@ namespace SCM2020___Utility
             //var IsPJERJRegistration = bool.Parse(Console.ReadLine());
             //Console.Write("Senha: ");
             //var Password = Console.ReadLine();
-            var Registration = "59450";
-            var IsPJERJRegistration = true;
+            var Register = "59450";
             var Password = "SenhaSecreta#2020";
             System.Net.Http.Headers.AuthenticationHeaderValue authentication = null;
             try
@@ -600,8 +599,7 @@ namespace SCM2020___Utility
                 SignIn signIn = new SignIn();
                 authentication = signIn.MakeSignIn(
                     url: urlLogin,
-                    Registration: Registration,
-                    IsPJERJRegistration: IsPJERJRegistration,
+                    Register: Register,
                     Password: Password
                     ).Authorization;
 
