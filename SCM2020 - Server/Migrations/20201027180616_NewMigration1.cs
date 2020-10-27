@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SCM2020___Server.Migrations.ApplicationDb
+namespace SCM2020___Server.Migrations
 {
-    public partial class NewMigrate2 : Migration
+    public partial class NewMigration1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,7 +43,7 @@ namespace SCM2020___Server.Migrations.ApplicationDb
                     Register = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     SectorId = table.Column<int>(nullable: true),
-                    BusinessId = table.Column<int>(nullable: true)
+                    BusinessId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -11,6 +11,7 @@ namespace ModelsLibraryCore
         public string Register { get; set; }
         public string Name { get; set; }
         public int? SectorId { get; set; }
+        public int BusinessId { get; set; }
 
     }
 }

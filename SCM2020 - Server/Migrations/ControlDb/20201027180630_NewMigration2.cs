@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SCM2020___Server.Migrations
+namespace SCM2020___Server.Migrations.ControlDb
 {
-    public partial class NewMigrate1 : Migration
+    public partial class NewMigration2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,6 +56,35 @@ namespace SCM2020___Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ConsumptionProduct", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UsersId = table.Column<string>(nullable: true),
+                    BusinessId = table.Column<int>(nullable: false),
+                    Position = table.Column<int>(nullable: false),
+                    SuperiorId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupEmployees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SuperiorId = table.Column<int>(nullable: false),
+                    EmployeeId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupEmployees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,41 +283,6 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUser",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Register = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    SectorId = table.Column<int>(nullable: true),
-                    BusinessId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUser_Sectors_SectorId",
-                        column: x => x.SectorId,
-                        principalTable: "Sectors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Monitoring",
                 columns: table => new
                 {
@@ -391,13 +385,6 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUser_SectorId",
-                table: "ApplicationUser",
-                column: "SectorId",
-                unique: true,
-                filter: "[SectorId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AuxiliarConsumption_MaterialInputByVendorId",
                 table: "AuxiliarConsumption",
                 column: "MaterialInputByVendorId");
@@ -468,9 +455,6 @@ namespace SCM2020___Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUser");
-
-            migrationBuilder.DropTable(
                 name: "AuxiliarConsumption");
 
             migrationBuilder.DropTable(
@@ -484,6 +468,12 @@ namespace SCM2020___Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Destination");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "GroupEmployees");
 
             migrationBuilder.DropTable(
                 name: "Groups");

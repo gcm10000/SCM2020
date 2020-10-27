@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations.ApplicationDb
+namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201021214208_NewMigrate2")]
-    partial class NewMigrate2
+    [Migration("20201027180616_NewMigration1")]
+    partial class NewMigration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -160,7 +160,7 @@ namespace SCM2020___Server.Migrations.ApplicationDb
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BusinessId")
+                    b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")

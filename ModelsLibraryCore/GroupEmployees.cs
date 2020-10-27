@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ModelsLibraryCore
 {
-    public class GroupEmployee
+    public class GroupEmployees
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

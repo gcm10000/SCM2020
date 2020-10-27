@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations
+namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
     partial class ControlDbContextModelSnapshot : ModelSnapshot
@@ -41,74 +41,6 @@ namespace SCM2020___Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AlertStockMessage");
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BusinessId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Register")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SectorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectorId")
-                        .IsUnique()
-                        .HasFilter("[SectorId] IS NOT NULL");
-
-                    b.ToTable("ApplicationUser");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>
@@ -270,6 +202,29 @@ namespace SCM2020___Server.Migrations
                     b.ToTable("Destination");
                 });
 
+            modelBuilder.Entity("ModelsLibraryCore.Employee", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SuperiorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsersId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("ModelsLibraryCore.Group", b =>
                 {
                     b.Property<int>("Id")
@@ -284,6 +239,24 @@ namespace SCM2020___Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.GroupEmployees", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SuperiorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GroupEmployees");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.MaterialInput", b =>
@@ -528,13 +501,6 @@ namespace SCM2020___Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vendors");
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.ApplicationUser", b =>
-                {
-                    b.HasOne("ModelsLibraryCore.Sector", null)
-                        .WithOne("ApplicationUser")
-                        .HasForeignKey("ModelsLibraryCore.ApplicationUser", "SectorId");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.AuxiliarConsumption", b =>

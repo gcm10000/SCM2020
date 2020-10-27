@@ -100,7 +100,7 @@ namespace SCM2020___Utility
 
             RegisterVendors(start);
             AddGroup(start);
-            //AddSector(start);
+            AddSector(start);
             SignUpSCMEmployees();
             SignUpAll();
             AddProduct(start);
