@@ -29,7 +29,6 @@ namespace SCM2020___Server.Controllers
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserController : Controller
     {
-        ApplicationDbContext ApplicationDbContext;
         ControlDbContext ControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
@@ -38,9 +37,8 @@ namespace SCM2020___Server.Controllers
         static bool EventActived = false;
         static List<StoreMessage> ListStoreMessage = new List<StoreMessage>();
 
-        public UserController(ApplicationDbContext applicationDbContext, ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
+        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
-            this.ApplicationDbContext = applicationDbContext;
             this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;

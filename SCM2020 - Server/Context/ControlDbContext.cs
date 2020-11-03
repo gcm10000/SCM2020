@@ -89,6 +89,11 @@ namespace SCM2020___Server.Context
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasForeignKey<StoreMessage>(f => f.NotificationId);
 
+            modelBuilder.Entity<Employee>()
+                .HasOne(b => b.Employees)
+                .WithMany(a => a.Employees)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
 
             //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))

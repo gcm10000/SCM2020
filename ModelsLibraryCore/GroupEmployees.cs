@@ -11,7 +11,6 @@ namespace ModelsLibraryCore
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int SuperiorId { get; set; }
-        public int EmployeeId { get; set; }
+        public ICollection<Employee> Employees { get; set; }
     }
 }

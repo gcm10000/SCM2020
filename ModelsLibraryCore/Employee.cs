@@ -10,11 +10,10 @@ namespace ModelsLibraryCore
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string UsersId { get; set; }
-        public int BusinessId { get; set; }
-        public CompanyPosition Position { get; set; }
-        public int? SuperiorId { get; set; }
+        public int? BusinessId { get; set; }
+        public GroupEmployees Employees { get; set; }
         public Employee() { }
         public Employee(string idUsers)
         {
