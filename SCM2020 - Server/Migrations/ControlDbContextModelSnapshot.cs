@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
-namespace SCM2020___Server.Migrations.ControlDb
+namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20201027180630_NewMigration2")]
-    partial class NewMigration2
+    partial class ControlDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +365,6 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectorId")
-                        .IsUnique();
-
                     b.ToTable("Monitoring");
                 });
 
@@ -549,15 +544,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
                         .WithMany("Destination")
                         .HasForeignKey("SolicitationMessageId");
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.Monitoring", b =>
-                {
-                    b.HasOne("ModelsLibraryCore.Sector", "Sector")
-                        .WithOne("Monitoring")
-                        .HasForeignKey("ModelsLibraryCore.Monitoring", "SectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>

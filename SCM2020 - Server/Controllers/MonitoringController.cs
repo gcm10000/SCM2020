@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using SCM2020___Server.Extensions;
 using System;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SCM2020___Server.Controllers
 {
@@ -64,7 +66,19 @@ namespace SCM2020___Server.Controllers
             Monitoring monitoring = new Monitoring(raw);
             //NOME DO FUNCIONÁRIO
             monitoring.SCMEmployeeId = SCMId;
-            var UserId = userManager.FindByCompleteName(deserialized.EmployeeId);
+            //Sector sector = context.Sectors.Single(x => x.NumberSector == int.Parse(monitoring.Work_Order.Substring(2)));
+            if (int.TryParse(monitoring.Work_Order.Substring(0, 2), out int result))
+            {
+                if (context.Sectors.Any(x => x.NumberSector == result))
+                {
+                    monitoring.SectorId = context.Sectors.Single(x => x.NumberSector == result).Id;
+                }
+                else
+                {
+                    monitoring.SectorId = context.Sectors.Single(x => x.NameSector == "DETEL").Id;
+                }
+            }
+            var UserId = userManager.FindByFullName(deserialized.EmployeeId);
             monitoring.EmployeeId = (UserId).Id;
             context.Monitoring.Add(monitoring);
             await context.SaveChangesAsync();

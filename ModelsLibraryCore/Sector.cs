@@ -20,7 +20,5 @@ namespace ModelsLibraryCore
         public int NumberSector { get; set; }
         [Required]
         public string NameSector { get; set; }
-        [JsonIgnore]
-        public Monitoring Monitoring { get; set; }
     }
 }

@@ -104,10 +104,10 @@ namespace SCM2020___Utility
             SignUpSCMEmployees();
             SignUpAll();
             AddProduct(start);
-            //AddMonitoring(start);
-            //AddInputByVendor(start);
-            //AddOutput(start);
-            //AddInput(start);
+            AddMonitoring(start);
+            AddInputByVendor(start);
+            AddOutput(start);
+            AddInput(start);
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);

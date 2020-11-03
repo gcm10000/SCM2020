@@ -76,8 +76,7 @@ namespace ModelsLibraryCore
         /// <summary>
         /// Setor cuja ordem de serviço está direcionada.
         /// </summary>
-        [Required]
-        public Sector Sector { get; set; }
+        //public Sector Sector { get; set; }
         public int SectorId { get; set; }
 
     }
