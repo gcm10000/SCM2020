@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,7 @@ namespace ModelsLibraryCore
         public int Id { get; set; }
         public string UsersId { get; set; }
         public int? BusinessId { get; set; }
+        [JsonIgnore]
         public GroupEmployees Employees { get; set; }
         public Employee() { }
         public Employee(string idUsers)

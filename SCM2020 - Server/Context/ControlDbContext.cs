@@ -100,13 +100,13 @@ namespace SCM2020___Server.Context
 
             modelBuilder.Entity<EmployeeGroupSupport>()
                 .HasOne(b => b.GroupEmployeesParent)
-                .WithMany(a => a.GroupEmployees1)
+                .WithMany(a => a.GroupEmployeesParent)
                 .HasForeignKey(b => b.GroupEmployee1Id)
                 .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<EmployeeGroupSupport>()
                 .HasOne(b => b.GroupEmployeesChild)
-                .WithMany(a => a.GroupEmployees2)
+                .WithMany(a => a.GroupEmployeesChild)
                 .HasForeignKey(b => b.GroupEmployee2Id)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -160,6 +161,30 @@ namespace SCM2020___Client.Frames.Query
             //PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
             //e.Column.Header = propertyDescriptor.DisplayName;
             e.Cancel = true;
+        }
+
+        private void BtnUpdateMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            var product = ((FrameworkElement)sender).DataContext as Models.StockQuery;
+            var dialog = new SCM2020___Client.Frames.UpdateMaterial(product.ConsumptionProduct);
+            if (dialog.ShowDialog() == true)
+            {
+                //recebe os valores e atualiza lista
+            }
+
+        }
+
+        private void BtnRemoveMaterial_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Tem certeza que deseja apagar este material?", "Pergunta", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            var product = ((FrameworkElement)sender).DataContext as Models.StockQuery;
+
+            var result = APIClient.DeleteData(new Uri(Helper.Server, $"generalproduct/remove/{product.Id}").ToString(), Helper.Authentication);
+            MessageBox.Show(result.DeserializeJson<string>());
         }
     }
 }

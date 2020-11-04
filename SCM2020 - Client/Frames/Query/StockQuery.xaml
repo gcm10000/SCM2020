@@ -67,14 +67,18 @@
             <Grid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
             </Grid.Resources>
-            <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="QueryDataGrid_BeginningEdit"  VerticalAlignment="Stretch" ColumnWidth="*" HorizontalContentAlignment="Center" RowHeaderWidth="0" x:Name="QueryDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+            <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="QueryDataGrid_BeginningEdit"  VerticalAlignment="Stretch" RowHeaderWidth="0" x:Name="QueryDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True"
-                                  AutoGeneratingColumn="QueryDataGrid_AutoGeneratingColumn">
+                                  AutoGeneratingColumn="QueryDataGrid_AutoGeneratingColumn"
+                                  HorizontalAlignment="Stretch" 
+                                  HorizontalContentAlignment="Stretch" 
+                                  ColumnWidth="*"
+>
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                     <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
@@ -85,6 +89,18 @@
                     <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <StackPanel>
+                                        <Button x:Name="BtnUpdateMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Atualizar Produto" Click="BtnUpdateMaterial_Click"/>
+                                        <Button x:Name="BtnRemoveMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Remover Produto" Click="BtnRemoveMaterial_Click"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
