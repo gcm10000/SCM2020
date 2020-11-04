@@ -10,7 +10,6 @@ namespace SCM2020___Client.Models
     {
         public StockQuery(ModelsLibraryCore.ConsumptionProduct consumptionProduct)
         {
-            this.Id = consumptionProduct.Id;
             this.Code = consumptionProduct.Code;
             this.Description = consumptionProduct.Description;
             this.NumberLocalization = consumptionProduct.NumberLocalization;
@@ -24,8 +23,6 @@ namespace SCM2020___Client.Models
             this.Group = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{consumptionProduct.Group}").ToString(), Helper.Authentication).GroupName;
             ConsumptionProduct = consumptionProduct;
         }
-
-        public int Id { get; set; }
 
         /// <summary>
         /// Código do produto.

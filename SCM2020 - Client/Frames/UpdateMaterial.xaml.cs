@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ModelsLibraryCore;
+using ModelsLibraryCore.RequestingClient;
 
 namespace SCM2020___Client.Frames
 {
@@ -42,7 +43,20 @@ namespace SCM2020___Client.Frames
 
         private void BtnConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-
+            ConsumptionProduct consumptionProduct = new ConsumptionProduct()
+            {
+                Id = Product.Id,
+                Code = int.Parse(CodeTextBox.Text),
+                Description = DescriptionTextBox.Text,
+                Localization = LocalizationTextBox.Text,
+                MininumStock = int.Parse(MininumStockTextBox.Text),
+                MaximumStock = int.Parse(MaximumStockTextBox.Text),
+                NumberLocalization = uint.Parse(NumberLocalizationTextBox.Text),
+                Stock = double.Parse(StockTextBox.Text),
+                Unity = UnityTextBox.Text,
+                //Group
+            };
+            var result = APIClient.PostData(new Uri(Helper.Server, $"generalproduct/update/{Product.Id}"), consumptionProduct, Helper.Authentication);
         }
     }
 }
