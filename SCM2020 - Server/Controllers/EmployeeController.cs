@@ -28,23 +28,26 @@ namespace SCM2020___Server.Controllers
         public IActionResult Get()
         {
             //Receber todo o organograma em JSON
-            List<Employee> employees = new List<Employee>()
-            {
-                new Employee(){ Id = 1, Position = CompanyPosition.Director, BusinessId = 1, SuperiorId = null, UsersId = "aaa" },
-                new Employee(){ Id = 2, Position = CompanyPosition.Engineer, BusinessId = 2, SuperiorId = 1, UsersId = "aab" },
-                new Employee(){ Id = 3, Position = CompanyPosition.Engineer, BusinessId = 2, SuperiorId = 1, UsersId = "aac" },
-                new Employee(){ Id = 4, Position = CompanyPosition.Manager, BusinessId = 2, SuperiorId = 1, UsersId = "aad" },
-                new Employee(){ Id = 5, Position = CompanyPosition.Manager, BusinessId = 2, SuperiorId = 1, UsersId = "aae" },
-            };
-            List<GroupEmployees> groupEmployees = new List<GroupEmployees>()
-            {
-                new GroupEmployees(){ Id = 1, SuperiorId = 1, EmployeeId = 1 },
-                new GroupEmployees(){ Id = 2, SuperiorId = 2, EmployeeId = 2 },
-                new GroupEmployees(){ Id = 3, SuperiorId = 2, EmployeeId = 3 },
-                new GroupEmployees(){ Id = 4, SuperiorId = 3, EmployeeId = 5 },
-            };
+            GroupEmployees group1 = new GroupEmployees(CompanyPosition.Director);
+            Employee E1 = new Employee();
+            E1.UsersId = "E1";
+            E1.BusinessId = 1;
+            group1.GroupEmployees1 = new List<EmployeeGroupSupport>();
+            group1.Employees = new List<Employee>();
+            group1.Employees.Add(E1);
+            EmployeeGroupSupport s1 = new EmployeeGroupSupport();
+            s1.GroupEmployeesParent = group1;
+            
+            GroupEmployees group2 = new GroupEmployees(CompanyPosition.Engineer);
+            Employee E2 = new Employee();
+            E2.UsersId = "E2";
+            E2.BusinessId = 2;
+            
+            s1.GroupEmployeesChild = group2;
 
-            return Ok();
+            group1.GroupEmployees1.Add(s1);
+            
+            return Ok(group1.ToJson());
         }
         public void GetAllEmployees(ICollection<Employee> employees)
         {

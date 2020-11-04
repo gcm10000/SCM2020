@@ -23,6 +23,7 @@ namespace SCM2020___Server.Context
         public DbSet<Business> Business { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<GroupEmployees> GroupEmployees { get; set; }
+        public DbSet<EmployeeGroupSupport> EmployeeGroupSupport { get; set; }
         //public DbSet<TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>> TreeView { get; set; }
 
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
@@ -93,6 +94,22 @@ namespace SCM2020___Server.Context
                 .HasOne(b => b.Employees)
                 .WithMany(a => a.Employees)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<EmployeeGroupSupport>()
+                .HasKey(b => new { b.GroupEmployee1Id, b.GroupEmployee2Id });
+
+            modelBuilder.Entity<EmployeeGroupSupport>()
+                .HasOne(b => b.GroupEmployeesParent)
+                .WithMany(a => a.GroupEmployees1)
+                .HasForeignKey(b => b.GroupEmployee1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<EmployeeGroupSupport>()
+                .HasOne(b => b.GroupEmployeesChild)
+                .WithMany(a => a.GroupEmployees2)
+                .HasForeignKey(b => b.GroupEmployee2Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
 
 

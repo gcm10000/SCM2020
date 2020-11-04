@@ -2,7 +2,7 @@
 
 namespace SCM2020___Server.Migrations
 {
-    public partial class NewMigration2 : Migration
+    public partial class NewMigration4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,7 +10,7 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201029200051_NewMigration3")]
+    [Migration("20201104174222_NewMigration3")]
     partial class NewMigration3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

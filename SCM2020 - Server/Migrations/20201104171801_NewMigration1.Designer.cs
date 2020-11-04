@@ -10,7 +10,7 @@ using SCM2020___Server.Context;
 namespace SCM2020___Server.Migrations
 {
     [DbContext(typeof(ControlDbContext))]
-    [Migration("20201029200032_NewMigration1")]
+    [Migration("20201104171801_NewMigration1")]
     partial class NewMigration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,17 +206,15 @@ namespace SCM2020___Server.Migrations
 
             modelBuilder.Entity("ModelsLibraryCore.Employee", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BusinessId")
+                    b.Property<int?>("BusinessId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Position")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SuperiorId")
+                    b.Property<int?>("EmployeesId")
                         .HasColumnType("int");
 
                     b.Property<string>("UsersId")
@@ -224,7 +222,24 @@ namespace SCM2020___Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeesId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.EmployeeGroupSupport", b =>
+                {
+                    b.Property<int>("GroupEmployee1Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupEmployee2Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupEmployee1Id", "GroupEmployee2Id");
+
+                    b.HasIndex("GroupEmployee2Id");
+
+                    b.ToTable("EmployeeGroupSupport");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.Group", b =>
@@ -250,10 +265,7 @@ namespace SCM2020___Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SuperiorId")
+                    b.Property<int>("Position")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -546,6 +558,29 @@ namespace SCM2020___Server.Migrations
                     b.HasOne("ModelsLibraryCore.SolicitationMessage", null)
                         .WithMany("Destination")
                         .HasForeignKey("SolicitationMessageId");
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.Employee", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.GroupEmployees", "Employees")
+                        .WithMany("Employees")
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.EmployeeGroupSupport", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.GroupEmployees", "GroupEmployees1")
+                        .WithMany("GroupEmployees1")
+                        .HasForeignKey("GroupEmployee1Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ModelsLibraryCore.GroupEmployees", "GroupEmployees2")
+                        .WithMany("GroupEmployees2")
+                        .HasForeignKey("GroupEmployee2Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>

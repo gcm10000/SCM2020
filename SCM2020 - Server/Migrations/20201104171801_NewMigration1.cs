@@ -59,28 +59,12 @@ namespace SCM2020___Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UsersId = table.Column<string>(nullable: true),
-                    BusinessId = table.Column<int>(nullable: false),
-                    Position = table.Column<int>(nullable: false),
-                    SuperiorId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GroupEmployees",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SuperiorId = table.Column<int>(nullable: false),
-                    EmployeeId = table.Column<int>(nullable: false)
+                    Position = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -226,6 +210,51 @@ namespace SCM2020___Server.Migrations
                         name: "FK_StoreMessage_AlertStockMessage_NotificationId",
                         column: x => x.NotificationId,
                         principalTable: "AlertStockMessage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeGroupSupport",
+                columns: table => new
+                {
+                    GroupEmployee1Id = table.Column<int>(nullable: false),
+                    GroupEmployee2Id = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeGroupSupport", x => new { x.GroupEmployee1Id, x.GroupEmployee2Id });
+                    table.ForeignKey(
+                        name: "FK_EmployeeGroupSupport_GroupEmployees_GroupEmployee1Id",
+                        column: x => x.GroupEmployee1Id,
+                        principalTable: "GroupEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_EmployeeGroupSupport_GroupEmployees_GroupEmployee2Id",
+                        column: x => x.GroupEmployee2Id,
+                        principalTable: "GroupEmployees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsersId = table.Column<string>(nullable: true),
+                    BusinessId = table.Column<int>(nullable: true),
+                    EmployeesId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_GroupEmployees_EmployeesId",
+                        column: x => x.EmployeesId,
+                        principalTable: "GroupEmployees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -419,6 +448,16 @@ namespace SCM2020___Server.Migrations
                 column: "SolicitationMessageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployeeGroupSupport_GroupEmployee2Id",
+                table: "EmployeeGroupSupport",
+                column: "GroupEmployee2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_EmployeesId",
+                table: "Employees",
+                column: "EmployeesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SolicitationMessage_MonitoringId",
                 table: "SolicitationMessage",
                 column: "MonitoringId");
@@ -458,10 +497,10 @@ namespace SCM2020___Server.Migrations
                 name: "Destination");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "EmployeeGroupSupport");
 
             migrationBuilder.DropTable(
-                name: "GroupEmployees");
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Groups");
@@ -489,6 +528,9 @@ namespace SCM2020___Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "SolicitationMessage");
+
+            migrationBuilder.DropTable(
+                name: "GroupEmployees");
 
             migrationBuilder.DropTable(
                 name: "Monitoring");
