@@ -20,6 +20,7 @@ namespace SCM2020___Client
             public double MinimumStock { get; set; } = 0.00d;
             public double MaximumStock { get; set; } = 0.00d;
             public string Unity { get; set; }
+            public string WorkOrder { get; set; }
         }
         private List<Product> Products = null;
         private DateTime InitialDateTime;
