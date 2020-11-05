@@ -170,6 +170,9 @@ namespace SCM2020___Client.Frames.Query
             if (dialog.ShowDialog() == true)
             {
                 //recebe os valores e atualiza lista
+                product.Description = dialog.Product.Description;
+                product.ConsumptionProduct = dialog.Product;
+                this.QueryDataGrid.Items.Refresh();
             }
 
         }

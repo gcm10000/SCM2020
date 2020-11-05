@@ -65,6 +65,6 @@ namespace SCM2020___Client.Models
         /// Unidade quantitativa utilizada para medida.
         /// </summary>
         public string Unity { get; set; }
-        public ConsumptionProduct ConsumptionProduct { get; }
+        public ConsumptionProduct ConsumptionProduct { get; set; }
     }
 }

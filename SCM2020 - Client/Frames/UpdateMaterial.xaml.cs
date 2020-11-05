@@ -22,7 +22,7 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class UpdateMaterial : Window
     {
-        public ConsumptionProduct Product { get; }
+        public ConsumptionProduct Product { get; private set; }
         public UpdateMaterial()
         {
             InitializeComponent();
@@ -53,7 +53,7 @@ namespace SCM2020___Client.Frames
 
         private void BtnConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            ConsumptionProduct consumptionProduct = new ConsumptionProduct()
+            Product = new ConsumptionProduct()
             {
                 Id = Product.Id,
                 Code = int.Parse(CodeTextBox.Text),
@@ -67,9 +67,9 @@ namespace SCM2020___Client.Frames
                 Group = (GroupComboBox.SelectedIndex + 1),
                 Photo = null
             };
-            new Task(() => 
+            Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, $"generalproduct/update/{Product.Id}"), consumptionProduct, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.Server, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
                 if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -77,6 +77,7 @@ namespace SCM2020___Client.Frames
                 else
                 {
                     MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
                 }
             });
         }
