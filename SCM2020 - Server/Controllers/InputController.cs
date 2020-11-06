@@ -47,7 +47,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
-            DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay);
+            DateTime dateStart = new DateTime(StartYear, StartMonth, StartDay, 0, 0, 0);
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay, 23, 59, 59);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
 
@@ -55,8 +55,14 @@ namespace SCM2020___Server.Controllers
 
             foreach (var input in listMaterialInput)
             {
-                var newinputs = input.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
-                inputs.AddRange(newinputs);
+                var ProductsOfInput = input.ConsumptionProducts;
+                var query = ProductsOfInput.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
+                foreach (var item in query)
+                {
+                    //onde tem esse produto em listMaterialInput, resgate a nota fiscal
+                    item.WorkOrder = input.Invoice;
+                }
+                inputs.AddRange(query);
             }
 
             return Ok(inputs);

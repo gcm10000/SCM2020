@@ -18,6 +18,8 @@ namespace ModelsLibraryCore
         /// </summary>
         [JsonIgnore]
         public MaterialInputByVendor MaterialInputByVendor { get; set; }
+        [NotMapped]
+        public string WorkOrder { get; set; }
     }
     public class AuxiliarPermanent : ProductBase { }
     public abstract class ProductBase

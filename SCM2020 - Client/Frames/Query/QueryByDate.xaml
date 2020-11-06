@@ -88,7 +88,7 @@
                     <DataGridTextColumn Header=" Estoque mínimo" Binding="{Binding MinimumStock}"/>
                     <DataGridTextColumn Header=" Estoque máximo" Binding="{Binding MaximumStock}"/>
                     <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"/>
-                    <DataGridTextColumn Header=" OS/NF" Binding="{Binding OS}"/>
+                    <DataGridTextColumn Header=" OS/NF" Binding="{Binding WorkOrder}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

@@ -49,11 +49,18 @@ namespace SCM2020___Server.Controllers
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay, 23, 59, 59);
             List<AuxiliarConsumption> outputs = new List<AuxiliarConsumption>();
 
-            var listMaterialOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts);
+            var listMaterialOutput = context.MaterialOutput.Include(x => x.ConsumptionProducts);
+
             foreach (var output in listMaterialOutput)
             {
-                var newoutputs = output.ConsumptionProducts.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
-                outputs.AddRange(newoutputs);
+                var ProductsOfOutput = output.ConsumptionProducts;
+                var query = ProductsOfOutput.Where(t => (t.Date >= dateStart) && (t.Date <= dateEnd));
+                foreach (var item in query)
+                {
+                    //onde tem esse produto em listMaterialOutput, resgate a nota fiscal
+                    item.WorkOrder = output.WorkOrder;
+                }
+                outputs.AddRange(query);
             }
 
             return Ok(outputs);
