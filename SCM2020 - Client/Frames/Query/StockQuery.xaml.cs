@@ -213,7 +213,8 @@ namespace SCM2020___Client.Frames.Query
         private void SelectedRow(object item)
         {
             Models.StockQuery stock = item as Models.StockQuery;
-            MessageBox.Show(stock.Description);
+            VisualizeProduct visualizeProduct = new VisualizeProduct();
+            visualizeProduct.ShowDialog();
         }
     }
 }
