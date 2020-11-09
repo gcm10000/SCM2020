@@ -189,5 +189,31 @@ namespace SCM2020___Client.Frames.Query
             var result = APIClient.DeleteData(new Uri(Helper.Server, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
             MessageBox.Show(result.DeserializeJson<string>());
         }
+
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null)
+                return;
+            e.Handled = true;
+            DataGridRow dgr = sender as DataGridRow;
+            SelectedRow(dgr.Item);
+        }
+
+        private void QueryDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var u = e.OriginalSource as UIElement;
+            if (e.Key == Key.Enter && u != null)
+            {
+                e.Handled = true;
+                var datagrid = sender as DataGrid;
+
+                SelectedRow(datagrid.Items[datagrid.SelectedIndex]);
+            }
+        }
+        private void SelectedRow(object item)
+        {
+            Models.StockQuery stock = item as Models.StockQuery;
+            MessageBox.Show(stock.Description);
+        }
     }
 }

@@ -78,7 +78,13 @@
                                   HorizontalAlignment="Stretch" 
                                   HorizontalContentAlignment="Stretch" 
                                   ColumnWidth="*"
+                                  PreviewKeyDown="QueryDataGrid_PreviewKeyDown"
 >
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                     <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
