@@ -36,7 +36,6 @@ namespace SCM2020___Client.Frames
             this.CodeTextBox.Text = product.Code.ToString();
             this.DescriptionTextBox.Text = product.Description;
 
-
             Uri groupUri = new Uri(Helper.ServerAPI, $"group/");
             var groups = APIClient.GetData<List<ModelsLibraryCore.Group>>(groupUri.ToString());
             var nameGroups = groups.Select(x => x.GroupName).ToList();

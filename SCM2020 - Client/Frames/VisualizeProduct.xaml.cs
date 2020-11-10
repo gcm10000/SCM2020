@@ -22,6 +22,7 @@ namespace SCM2020___Client.Frames
     public partial class VisualizeProduct : Window
     {
         public ConsumptionProduct Product { get; private set; }
+        public bool RemovedProduct { get; private set; } = false;
         public VisualizeProduct()
         {
             InitializeComponent();
@@ -30,6 +31,7 @@ namespace SCM2020___Client.Frames
         {
             InitializeComponent();
             this.Product = product;
+            FillUI();
         }
 
         private void EditProduct_Click(object sender, RoutedEventArgs e)
@@ -37,15 +39,8 @@ namespace SCM2020___Client.Frames
             UpdateMaterial dialog = new UpdateMaterial(Product);
             if (dialog.ShowDialog() == true)
             {
-                //recebe os valores e atualiza lista
-                if (dialog.Product.Photo != null)
-                    this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, $"img/{dialog.Product.Photo}"));
-                this.DescriptionTextBlock.Text = dialog.Product.Description;
-                this.GroupLabel.Content = dialog.Product.Group;
-                this.MininumStockLabel.Content = dialog.Product.MininumStock;
-                this.MaximumStockLabel.Content = dialog.Product.MaximumStock;
-                this.UnityLabel.Content = dialog.Product.Unity;
-                this.LocalizationLabel.Content = dialog.Product.Localization;
+                Product = dialog.Product;
+                FillUI();
             }
         }
 
@@ -56,10 +51,10 @@ namespace SCM2020___Client.Frames
                 return;
             }
 
-            var product = ((FrameworkElement)sender).DataContext as Models.StockQuery;
-
-            var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
+            var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{Product.Id}").ToString(), Helper.Authentication);
             MessageBox.Show(result.DeserializeJson<string>());
+            RemovedProduct = true;
+            this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -72,13 +67,27 @@ namespace SCM2020___Client.Frames
             var html = APIClient.GetData(url);
             //div class="mJxzWe"
 
-            MessageBox.Show(html);
+            //MessageBox.Show(html);
         }
         private Uri SearchUri(string query)
         {
             string url = @"https://www.google.com.br/search?tbm=isch&q=" + HttpUtility.UrlEncode(query);
             Uri uri = new Uri(url);
             return uri;
+        }
+        private void FillUI()
+        {
+            if (Product.Photo != null)
+                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, $"img/{Product.Photo}"));
+            
+            this.DescriptionTextBlock.Text = $"{Product.Description} ({Product.Code})";
+            this.GroupLabel.Content = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{Product.Group}").ToString(), Helper.Authentication).GroupName;
+            this.MininumStockLabel.Content = $"Quantidade Mínima: {Product.MininumStock}";
+            this.StockLabel.Content = $"Quantidade em Estoque: {Product.Stock}";
+            this.MaximumStockLabel.Content = $"Quantidade Máxima: {Product.MaximumStock}";
+            this.UnityLabel.Content = $"Unidade: {Product.Unity}";
+            if ((Product.Localization.Trim() != string.Empty) || (Product.Localization == null))
+                this.LocalizationLabel.Content = $"Localização: {Product.Localization}";
         }
     }
 }

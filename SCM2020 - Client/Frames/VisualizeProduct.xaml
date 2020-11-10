@@ -14,7 +14,7 @@
         <Grid DockPanel.Dock="Right">
             <Grid Margin="30 30">
                 <StackPanel>
-                    <TextBlock x:Name="DescriptionTextBlock" FontSize="24" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
+                    <TextBlock x:Name="DescriptionTextBlock" FontSize="20" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
                     <Label x:Name="GroupLabel" FontSize="16">Telefonia</Label>
                     <Label x:Name="MininumStockLabel" FontSize="15">Quantidade Mínima: 10</Label>
                     <Label x:Name="StockLabel" FontSize="15">Quantidade em Estoque: 30</Label>

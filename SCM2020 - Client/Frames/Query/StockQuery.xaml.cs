@@ -213,8 +213,12 @@ namespace SCM2020___Client.Frames.Query
         private void SelectedRow(object item)
         {
             Models.StockQuery stock = item as Models.StockQuery;
-            VisualizeProduct visualizeProduct = new VisualizeProduct();
-            visualizeProduct.ShowDialog();
+            VisualizeProduct visualizeProduct = new VisualizeProduct(stock.ConsumptionProduct);
+            if (visualizeProduct.ShowDialog() == true)
+            {
+                if (visualizeProduct.RemovedProduct)
+                    this.QueryDataGrid.Items.Refresh();
+            }
         }
     }
 }
