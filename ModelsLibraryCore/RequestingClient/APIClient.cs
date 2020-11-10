@@ -193,5 +193,27 @@ namespace ModelsLibraryCore.RequestingClient
                     throw new HttpRequestException($"{respToken.StatusCode}: {respToken.Content}.\n{content}");
             }
         }
+        public static string GetData(string RequestUrl, AuthenticationHeaderValue authentication = null)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = authentication;
+
+                HttpResponseMessage respToken = client.GetAsync(RequestUrl).Result;
+
+                string content = respToken.Content.ReadAsStringAsync().Result;
+
+                if (respToken.StatusCode == HttpStatusCode.OK)
+                {
+                    return content;
+                }
+                else
+                    throw new HttpRequestException($"{respToken.StatusCode}: {respToken.Content}.\n{content}");
+            }
+        }
     }
 }

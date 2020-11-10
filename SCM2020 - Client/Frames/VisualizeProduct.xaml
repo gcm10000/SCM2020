@@ -5,24 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SCM2020___Client.Frames"
         mc:Ignorable="d"
-        Title="VisualizeProduct" Height="450" Width="800">
+        ResizeMode="CanMinimize"
+        Title="VisualizeProduct" Height="450" Width="800" Loaded="Window_Loaded">
     <DockPanel Background="White">
         <Grid DockPanel.Dock="Left" Width="450">
-            <Image x:Name="ImageProduct" Margin="30 30" Stretch="Fill" Source="C:\Users\Gabriel\Desktop\cabo bege.png"></Image>
+            <Image x:Name="ImageProduct" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="C:\Users\Gabriel\Desktop\cabo bege.png"></Image>
         </Grid>
         <Grid DockPanel.Dock="Right">
             <!--<TextBlock>d</TextBlock>-->
             <Grid Margin="30 30">
                 <StackPanel>
-                    <Label FontSize="20">Cabo Espiral (269)</Label>
+                    <TextBlock x:Name="d" FontSize="24" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
                     <Label FontSize="16">Telefonia</Label>
                     <Label FontSize="15">Quantidade Mínima: 10</Label>
                     <Label FontSize="15">Quantidade em Estoque: 30</Label>
                     <Label FontSize="15">Quantidade Máxima: 100</Label>
                     <Label FontSize="15">Unidade: UN</Label>
                     <Label FontSize="15">Localização: A-G-1</Label>
-                    
                 </StackPanel>
+                    <Grid VerticalAlignment="Bottom">
+                        <DockPanel VerticalAlignment="Bottom">
+                            <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Background="DarkRed"  Cursor="Hand" BorderBrush="{x:Null}" x:Name="RemoveProduct" Content="Remover Produto" HorizontalAlignment="Stretch" Click="RemoveProduct_Click" ></Button>
+                            <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Background="DarkBlue" Cursor="Hand" BorderBrush="{x:Null}" x:Name="EditProduct" Content="Editar Produto" HorizontalAlignment="Stretch" Margin="0 8" Click="EditProduct_Click"></Button>
+                        </DockPanel>
+                    </Grid>
             </Grid>
         </Grid>
     </DockPanel>
