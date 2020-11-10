@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
@@ -196,7 +197,11 @@ namespace SCM2020___Client.Frames.Query
                 return;
             e.Handled = true;
             DataGridRow dgr = sender as DataGridRow;
-            SelectedRow(dgr.Item);
+            if (SelectedRow(dgr.Item))
+            {
+                products.RemoveAt(this.QueryDataGrid.SelectedIndex);
+                this.QueryDataGrid.Items.Refresh();
+            }
         }
 
         private void QueryDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -207,18 +212,24 @@ namespace SCM2020___Client.Frames.Query
                 e.Handled = true;
                 var datagrid = sender as DataGrid;
 
-                SelectedRow(datagrid.Items[datagrid.SelectedIndex]);
+
+                if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
+                {
+                    var selectedItem = datagrid.SelectedItem as DataRowView;
+                    products.RemoveAt(this.QueryDataGrid.SelectedIndex);
+                    this.QueryDataGrid.Items.Refresh();
+                }
             }
         }
-        private void SelectedRow(object item)
+        private bool SelectedRow(object item)
         {
             Models.StockQuery stock = item as Models.StockQuery;
             VisualizeProduct visualizeProduct = new VisualizeProduct(stock.ConsumptionProduct);
             if (visualizeProduct.ShowDialog() == true)
             {
-                if (visualizeProduct.RemovedProduct)
-                    this.QueryDataGrid.Items.Refresh();
+                return visualizeProduct.RemovedProduct;
             }
+            return false;
         }
     }
 }

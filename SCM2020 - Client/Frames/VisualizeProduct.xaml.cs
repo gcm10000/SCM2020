@@ -52,8 +52,9 @@ namespace SCM2020___Client.Frames
             }
 
             var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{Product.Id}").ToString(), Helper.Authentication);
-            MessageBox.Show(result.DeserializeJson<string>());
+            this.DialogResult = true;
             RemovedProduct = true;
+            MessageBox.Show(result.DeserializeJson<string>());
             this.Close();
         }
 
