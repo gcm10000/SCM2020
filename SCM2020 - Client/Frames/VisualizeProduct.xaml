@@ -9,19 +9,18 @@
         Title="VisualizeProduct" Height="450" Width="800" Loaded="Window_Loaded">
     <DockPanel Background="White">
         <Grid DockPanel.Dock="Left" Width="450">
-            <Image x:Name="ImageProduct" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="C:\Users\Gabriel\Desktop\cabo bege.png"></Image>
+            <Image x:Name="ProductImage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="C:\Users\Gabriel\Desktop\cabo bege.png"></Image>
         </Grid>
         <Grid DockPanel.Dock="Right">
-            <!--<TextBlock>d</TextBlock>-->
             <Grid Margin="30 30">
                 <StackPanel>
-                    <TextBlock x:Name="d" FontSize="24" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
-                    <Label FontSize="16">Telefonia</Label>
-                    <Label FontSize="15">Quantidade Mínima: 10</Label>
-                    <Label FontSize="15">Quantidade em Estoque: 30</Label>
-                    <Label FontSize="15">Quantidade Máxima: 100</Label>
-                    <Label FontSize="15">Unidade: UN</Label>
-                    <Label FontSize="15">Localização: A-G-1</Label>
+                    <TextBlock x:Name="DescriptionTextBlock" FontSize="24" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
+                    <Label x:Name="GroupLabel" FontSize="16">Telefonia</Label>
+                    <Label x:Name="MininumStockLabel" FontSize="15">Quantidade Mínima: 10</Label>
+                    <Label x:Name="StockLabel" FontSize="15">Quantidade em Estoque: 30</Label>
+                    <Label x:Name="MaximumStockLabel" FontSize="15">Quantidade Máxima: 100</Label>
+                    <Label x:Name="UnityLabel" FontSize="15">Unidade: UN</Label>
+                    <Label x:Name="LocalizationLabel" FontSize="15">Localização: A-G-1</Label>
                 </StackPanel>
                     <Grid VerticalAlignment="Bottom">
                         <DockPanel VerticalAlignment="Bottom">

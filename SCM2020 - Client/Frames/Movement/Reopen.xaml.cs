@@ -44,11 +44,11 @@ namespace SCM2020___Client.Frames.Movement
                     try
                     {
                         workOrder = System.Uri.EscapeDataString(workOrder);
-                        bool SituationMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"Monitoring/CheckWorkOrder/{workOrder}").ToString(), Helper.Authentication);
+                        bool SituationMonitoring = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"Monitoring/CheckWorkOrder/{workOrder}").ToString(), Helper.Authentication);
                         if (SituationMonitoring)
                         {
                             //Abrir ordem de serviço
-                            var result = APIClient.GetData<string>(new Uri(Helper.Server, $"monitoring/reopen/{workOrder}").ToString(), Helper.Authentication);
+                            var result = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"monitoring/reopen/{workOrder}").ToString(), Helper.Authentication);
                             //Exibe mensagem recebida do recebidor ao usuário.
                             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                         }

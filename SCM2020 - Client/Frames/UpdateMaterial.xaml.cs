@@ -37,7 +37,7 @@ namespace SCM2020___Client.Frames
             this.DescriptionTextBox.Text = product.Description;
 
 
-            Uri groupUri = new Uri(Helper.Server, $"group/");
+            Uri groupUri = new Uri(Helper.ServerAPI, $"group/");
             var groups = APIClient.GetData<List<ModelsLibraryCore.Group>>(groupUri.ToString());
             var nameGroups = groups.Select(x => x.GroupName).ToList();
             this.GroupComboBox.ItemsSource = nameGroups;
@@ -69,7 +69,7 @@ namespace SCM2020___Client.Frames
             };
             Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
                 if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);

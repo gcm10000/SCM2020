@@ -179,7 +179,7 @@ namespace SCM2020___Client.Frames.Query
         {
             this.ProductToAddDataGrid.Items.Clear();
 
-            var listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
+            var listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
             foreach (var item in listProducts)
             {
                 this.ProductToAddDataGrid.Items.Add(item);

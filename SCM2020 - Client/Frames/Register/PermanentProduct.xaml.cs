@@ -37,7 +37,7 @@ namespace SCM2020___Client.Frames.Register
                 InformationProduct = product.Id,
                 Patrimony = PatrimonyTextBox.Text
             };
-            var result = APIClient.PostData(new Uri(Helper.Server, $"permanentproduct/add").ToString(), permanentProduct, Helper.Authentication);
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"permanentproduct/add").ToString(), permanentProduct, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -47,7 +47,7 @@ namespace SCM2020___Client.Frames.Register
                 return;
             try
             {
-                product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/code/{CodeTextBox.Text.Trim()}").ToString(), Helper.Authentication);
+                product = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/code/{CodeTextBox.Text.Trim()}").ToString(), Helper.Authentication);
                 DescriptionTextBox.Text = product.Description;
             }
             catch (System.Net.Http.HttpRequestException ex)

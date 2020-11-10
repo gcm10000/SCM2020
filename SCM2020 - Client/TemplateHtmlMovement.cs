@@ -350,7 +350,7 @@ namespace SCM2020___Client
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
-                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.ServerAPI, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 userId = Monitoring.EmployeeId;
             }
             catch
@@ -361,7 +361,7 @@ namespace SCM2020___Client
             }
             try
             {
-                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
             }
             catch
             {
@@ -376,7 +376,7 @@ namespace SCM2020___Client
             {
                 Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA",
                 WorkOrder = Monitoring.Work_Order,
-                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
+                Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.ServerAPI, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector,
                 WorkOrderDate = Monitoring.MovingDate,
                 RegisterApplication = int.Parse(InfoUser.Register),
                 SolicitationEmployee = InfoUser.Name,
@@ -397,7 +397,7 @@ namespace SCM2020___Client
             ModelsLibraryCore.MaterialOutput output = null;
             try
             {
-                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
+                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist output with that workorder
             { }
@@ -405,7 +405,7 @@ namespace SCM2020___Client
             ModelsLibraryCore.MaterialInput input = null;
             try
             {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.ServerAPI, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist input with that workorder
             { }
@@ -424,7 +424,7 @@ namespace SCM2020___Client
                     foreach (var item in output.ConsumptionProducts.ToList())
                     {
                         //Task.Run for each
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                         DocumentMovement.Product product = new DocumentMovement.Product()
                         {
                             Code = infoProduct.Code,
@@ -449,7 +449,7 @@ namespace SCM2020___Client
                     {
                         //Task.Run for each
                         {
-                            ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                            ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                             DocumentMovement.Product product = new DocumentMovement.Product()
                             {
                                 Code = infoProduct.Code,
@@ -475,8 +475,8 @@ namespace SCM2020___Client
                     foreach (var item in output.PermanentProducts.ToList())
                     {
                         //Task.Run for each
-                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                         DocumentMovement.Product product = new DocumentMovement.Product()
                         {
                             Code = infoProduct.Code,
@@ -501,8 +501,8 @@ namespace SCM2020___Client
                     {
                         //Task.Run for each
 
-                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                         DocumentMovement.Product product = new DocumentMovement.Product()
                         {
                             Code = infoProduct.Code,

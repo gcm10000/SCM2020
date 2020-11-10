@@ -25,7 +25,7 @@ namespace SCM2020___Client.Frames.Register
         public ConsumpterProduct()
         {
             InitializeComponent();
-            Uri groupUri = new Uri(Helper.Server, "group/");
+            Uri groupUri = new Uri(Helper.ServerAPI, "group/");
             var groups = APIClient.GetData<List<ModelsLibraryCore.Group>>(groupUri.ToString());
             var nameGroups = groups.Select(x => x.GroupName).ToList();
             this.GroupComboBox.ItemsSource = nameGroups;
@@ -33,7 +33,7 @@ namespace SCM2020___Client.Frames.Register
         }
         private void RequestCodeAvaliable()
         {
-            Uri nextNumberUri = new Uri(Helper.Server, "generalproduct/nextnumber");
+            Uri nextNumberUri = new Uri(Helper.ServerAPI, "generalproduct/nextnumber");
             var number = APIClient.GetData<int>(nextNumberUri.ToString());
 
             this.CodeTextBox.Text = number.ToString();
@@ -56,7 +56,7 @@ namespace SCM2020___Client.Frames.Register
             };
             new Task(() =>
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "generalProduct/Add/"), consumptionProduct, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "generalProduct/Add/"), consumptionProduct, Helper.Authentication);
                 if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     MessageBox.Show(JsonConvert.DeserializeObject<string>(result.Result), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);

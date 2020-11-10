@@ -24,7 +24,7 @@ namespace SCM2020___Client.Frames.Register
         public Employee()
         {
             InitializeComponent();
-            Sectors = APIClient.GetData<List<Sector>>(new Uri(Helper.Server, "sector").ToString(), Helper.Authentication);
+            Sectors = APIClient.GetData<List<Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
         }
 
         private void BtnSaveEmployee_Click(object sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ namespace SCM2020___Client.Frames.Register
                     Sector = (SectorComboBox.SelectedIndex + 1),
                     Password = PasswordBoxTextBox.Password
                 };
-                var result = APIClient.PostData(new Uri(Helper.Server, new Uri("User/NewUser/")).ToString(), employee, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, new Uri("User/NewUser/")).ToString(), employee, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
 

@@ -36,7 +36,7 @@ namespace SCM2020___Client.Frames.Register
             {
                 ModelsLibraryCore.Group group = new ModelsLibraryCore.Group()
                 { GroupName = groupName };
-                var result = APIClient.PostData(new Uri(Helper.Server, "Group/Add").ToString(), group, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Group/Add").ToString(), group, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
         }

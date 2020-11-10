@@ -71,7 +71,7 @@ namespace SCM2020___Client.Frames
                 this.Id = PermanentProduct.Id;
                 this.InformationProduct = PermanentProduct.InformationProduct;
                 this.Patrimony = PermanentProduct.Patrimony;
-                ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);
+                ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);
             }
         }
         public Monitoring PrincipalMonitoring { get; set; }
@@ -93,7 +93,7 @@ namespace SCM2020___Client.Frames
 
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
             var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
@@ -121,7 +121,7 @@ namespace SCM2020___Client.Frames
             textBoxValue = System.Uri.EscapeDataString(textBoxValue);
 
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{textBoxValue}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{textBoxValue}");
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
 
@@ -229,7 +229,7 @@ namespace SCM2020___Client.Frames
             string userId = string.Empty;
             try
             {
-                userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
 
             }
             catch (HttpRequestException)
@@ -295,17 +295,17 @@ namespace SCM2020___Client.Frames
             {
                 var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
 
-                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
+                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
                 if (!checkMonitoring)
                 {
                     //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-                    var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
+                    var result1 = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
                     MessageBox.Show(result1.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
 
-                var result2 = APIClient.PostData(new Uri(Helper.Server, "Output/Add").ToString(), materialOutput, Helper.Authentication);
+                var result2 = APIClient.PostData(new Uri(Helper.ServerAPI, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 PrincipalMonitoring = monitoring;
@@ -373,7 +373,7 @@ namespace SCM2020___Client.Frames
 
             Task.Run(() =>
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"output/Update/{materialOutput.Id}").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -480,7 +480,7 @@ namespace SCM2020___Client.Frames
             try
             {
                 //Checar objeto monitoramento
-                monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.Server, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.ServerAPI, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
 
             }
             catch (System.Net.Http.HttpRequestException) //Ordem de serviço inexistente
@@ -493,8 +493,8 @@ namespace SCM2020___Client.Frames
             try
             {
                 var userId = monitoring.EmployeeId;
-                var result = APIClient.GetData<string>(new Uri(Helper.Server, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
-                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                var result = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/RegisterId/{userId}").ToString(), Helper.Authentication);
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
 
                 PrincipalMonitoring = monitoring;
                 if (monitoring.Situation) //Ordem de serviço encontra-se fechada.
@@ -503,7 +503,7 @@ namespace SCM2020___Client.Frames
                     return; //DISABLE FILLING DATA.
                 }
                 //ID -> MATRÍCULA
-                var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
                 InputData(false);
@@ -517,7 +517,7 @@ namespace SCM2020___Client.Frames
                 this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
                 foreach (var item in materialOutput.ConsumptionProducts)
                 {
-                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                     ProductToOutput productToOutput = new ProductToOutput()
                     {
                         Id = item.ProductId,
@@ -532,8 +532,8 @@ namespace SCM2020___Client.Frames
                 }
                 foreach (var item in materialOutput.PermanentProducts)
                 {
-                    var permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    var permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                     PermanentProductDataGrid productDataGrid = new PermanentProductDataGrid()
                     {
                         Id = item.ProductId,
@@ -660,7 +660,7 @@ namespace SCM2020___Client.Frames
                 //Zera informação
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
                 //Recebe informações
-                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
                 //Atribui o nome do funcionário no campo correspondente
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
             }

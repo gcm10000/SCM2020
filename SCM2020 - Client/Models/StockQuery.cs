@@ -20,7 +20,7 @@ namespace SCM2020___Client.Models
             this.Stock = consumptionProduct.Stock;
             this.Unity = consumptionProduct.Unity;
 
-            this.Group = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{consumptionProduct.Group}").ToString(), Helper.Authentication).GroupName;
+            this.Group = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{consumptionProduct.Group}").ToString(), Helper.Authentication).GroupName;
             ConsumptionProduct = consumptionProduct;
         }
 

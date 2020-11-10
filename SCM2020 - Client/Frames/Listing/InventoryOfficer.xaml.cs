@@ -102,7 +102,7 @@ namespace SCM2020___Client.Frames.Query
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
-            var productsServer = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, "generalproduct/").ToString(), Helper.Authentication);
+            var productsServer = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, "generalproduct/").ToString(), Helper.Authentication);
 
             foreach (var product in productsServer)
             {

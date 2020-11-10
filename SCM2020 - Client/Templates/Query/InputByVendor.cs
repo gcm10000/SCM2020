@@ -41,7 +41,7 @@ namespace SCM2020___Client.Templates.Query
             try
             {
                 invoice = System.Uri.EscapeDataString(invoice);
-                inputByVendor = APIClient.GetData<MaterialInputByVendor>(new Uri(Helper.Server, $"Input/Invoice/{invoice}").ToString(), Helper.Authentication);
+                inputByVendor = APIClient.GetData<MaterialInputByVendor>(new Uri(Helper.ServerAPI, $"Input/Invoice/{invoice}").ToString(), Helper.Authentication);
             }
             catch
             {
@@ -50,7 +50,7 @@ namespace SCM2020___Client.Templates.Query
             }
             try
             {
-                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{inputByVendor.SCMEmployeeId}").ToString(), Helper.Authentication);
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{inputByVendor.SCMEmployeeId}").ToString(), Helper.Authentication);
             }
             catch
             {
@@ -61,7 +61,7 @@ namespace SCM2020___Client.Templates.Query
             //Exibir dados na tela
             Invoice = inputByVendor.Invoice;
             InvoiceDate = inputByVendor.MovingDate;
-            Vendor = APIClient.GetData<ModelsLibraryCore.Vendor>(new Uri(Helper.Server, $"vendor/{inputByVendor.VendorId}").ToString(), Helper.Authentication).Name;
+            Vendor = APIClient.GetData<ModelsLibraryCore.Vendor>(new Uri(Helper.ServerAPI, $"vendor/{inputByVendor.VendorId}").ToString(), Helper.Authentication).Name;
             SCMEmployee = InfoUser.Name;
             SCMRegistration = InfoUser.Register;
 
@@ -69,7 +69,7 @@ namespace SCM2020___Client.Templates.Query
             Products = new List<Product>();
             foreach (var item in inputByVendor.ConsumptionProducts)
             {
-                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                 Product product = new Product()
                 {
                     Code = infoProduct.Code,

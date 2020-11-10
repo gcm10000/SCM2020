@@ -36,7 +36,7 @@ namespace SCM2020___Client.Frames.Register
                     Name = nameVendor,
                     Telephone = telephoneVendor
                 };
-                var result = APIClient.PostData(new Uri(Helper.Server, "Vendor/Add/").ToString(), vendor, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Vendor/Add/").ToString(), vendor, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
         }

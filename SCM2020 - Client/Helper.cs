@@ -23,7 +23,11 @@ namespace SCM2020___Client
         /// <summary>
         /// Endereço do servidor.
         /// </summary>
-        public static Uri Server = new Uri("http://192.168.0.124:52991/api/");
+        public static Uri Server = new Uri("http://192.168.0.124:52991/");
+        /// <summary>
+        /// Endereço do servidor API.
+        /// </summary>
+        public static Uri ServerAPI = new Uri(Server, "api/");
         /// <summary>
         /// Autenticação das credenciais.
         /// </summary>

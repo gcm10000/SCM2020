@@ -62,7 +62,7 @@ namespace SCM2020___Client.Frames.Query
             Task.Run(() =>
             {
                 this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Clear(); }));
-                var result = APIClient.GetData<List<ModelsLibraryCore.Monitoring>>(new Uri(Helper.Server, $"Monitoring/SearchByDate/{initialDay}-{initialMonth}-{initialYear}/{finalDay}-{finalMonth}-{finalYear}").ToString(), Helper.Authentication);
+                var result = APIClient.GetData<List<ModelsLibraryCore.Monitoring>>(new Uri(Helper.ServerAPI, $"Monitoring/SearchByDate/{initialDay}-{initialMonth}-{initialYear}/{finalDay}-{finalMonth}-{finalYear}").ToString(), Helper.Authentication);
                 List<Models.QueryWorkOrderByDate> dataQuery = new List<Models.QueryWorkOrderByDate>();
                 foreach (var item in result)
                 {

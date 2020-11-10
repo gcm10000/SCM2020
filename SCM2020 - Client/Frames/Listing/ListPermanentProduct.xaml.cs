@@ -62,13 +62,13 @@ namespace SCM2020___Client.Frames.Listing
             var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "listpermanentproduct.html");
             this.webBrowser.Navigate(path);
             
-            var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, "permanentproduct").ToString(), Helper.Authentication);
+            var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.ServerAPI, "permanentproduct").ToString(), Helper.Authentication);
             webBrowser.LoadCompleted += (sender, args) =>
             {
                 foreach (var permanentProduct in permanentProducts)
                 {
-                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.Server, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
+                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                    var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
                     
                     PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.WorkOrder);
 

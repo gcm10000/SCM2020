@@ -58,14 +58,14 @@ namespace SCM2020___Client.Frames.Movement
         private void RescueData(string workOrder)
         {
             workOrder = System.Uri.EscapeDataString(workOrder);
-            var uriRequest = new Uri(Helper.Server, $"monitoring/WorkOrder/{workOrder}");
+            var uriRequest = new Uri(Helper.ServerAPI, $"monitoring/WorkOrder/{workOrder}");
             Monitoring resultMonitoring = null;
             previousDevolutionExists = false;
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
                 var userId = resultMonitoring.EmployeeId;
-                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
                 this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
                 this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = resultMonitoring.MovingDate; this.OSDatePicker.DisplayDate = resultMonitoring.MovingDate; }));
@@ -103,7 +103,7 @@ namespace SCM2020___Client.Frames.Movement
 
                     try
                     {
-                        previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                        previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.ServerAPI, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
                         previousDevolutionExists = true;
                         this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)previousMaterialInput.Regarding) - 1; }));
 
@@ -161,7 +161,7 @@ namespace SCM2020___Client.Frames.Movement
             //this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { } ));
             foreach (var item in materialInput.ConsumptionProducts)
             {
-                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                 ConsumpterProductDataGrid consumpterProductDataGrid = new ConsumpterProductDataGrid()
                 {
                     Id = item.ProductId,
@@ -183,8 +183,8 @@ namespace SCM2020___Client.Frames.Movement
 
             foreach (var item in materialInput.PermanentProducts)
             {
-                var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                var infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                 PermanentProductDataGrid consumpterProductDataGrid = new PermanentProductDataGrid()
                 {
                     Id = item.ProductId,
@@ -387,7 +387,7 @@ namespace SCM2020___Client.Frames.Movement
             string userId = string.Empty;
             try
             {
-                userId = APIClient.GetData<string>(new Uri(Helper.Server, $"User/UserId/{register}").ToString());
+                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
             }
             catch (HttpRequestException)
             {
@@ -446,15 +446,15 @@ namespace SCM2020___Client.Frames.Movement
             {
                 var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
 
-                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.Server, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
+                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
                 if (!checkMonitoring)
                 {
                     //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-                    var result1 = APIClient.PostData(new Uri(Helper.Server, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
+                    var result1 = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
                     MessageBox.Show(result1.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                var result2 = APIClient.PostData(new Uri(Helper.Server, "devolution/add").ToString(), materialInput, Helper.Authentication);
+                var result2 = APIClient.PostData(new Uri(Helper.ServerAPI, "devolution/add").ToString(), materialInput, Helper.Authentication);
                 MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -506,7 +506,7 @@ namespace SCM2020___Client.Frames.Movement
                 }
             }
 
-            var result = APIClient.PostData(new Uri(Helper.Server, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -580,7 +580,7 @@ namespace SCM2020___Client.Frames.Movement
             this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Clear(); ConsumpterProductToAddDataGrid.UnselectAll(); }));
             
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
             var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
@@ -590,7 +590,7 @@ namespace SCM2020___Client.Frames.Movement
                 double productInputQuantity = 0.00d;
                 try
                 {
-                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"input/workorder/{query}").ToString(), Helper.Authentication);
+                    var infoInput = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.ServerAPI, $"input/workorder/{query}").ToString(), Helper.Authentication);
                     var productInput = infoInput.ConsumptionProducts.First(x => x.ProductId == infoProduct.Id);
                     productInputQuantity = productInput.Quantity;
                 }
@@ -643,14 +643,14 @@ namespace SCM2020___Client.Frames.Movement
 
             query = System.Uri.EscapeDataString(query);
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"PermanentProduct/search/{query}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{query}");
 
             this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
 
             var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => !string.IsNullOrWhiteSpace(x.WorkOrder));
             foreach (var product in products)
             {
-                var information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{product.InformationProduct}").ToString(), Helper.Authentication);
+                var information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{product.InformationProduct}").ToString(), Helper.Authentication);
 
                 PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid()
                 {
@@ -737,7 +737,7 @@ namespace SCM2020___Client.Frames.Movement
                 //Zera informação
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
                 //Recebe informações
-                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
+                var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
                 //Atribui o nome do funcionário no campo correspondente
                 this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
             }

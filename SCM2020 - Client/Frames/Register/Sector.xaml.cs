@@ -36,7 +36,7 @@ namespace SCM2020___Client.Frames.Register
                     NameSector = sectorName,
                     NumberSector = numberSector
                 };
-                var result = APIClient.PostData(new Uri(Helper.Server, "Sector/Add/").ToString(), sector, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Sector/Add/").ToString(), sector, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             }).Start();
         }

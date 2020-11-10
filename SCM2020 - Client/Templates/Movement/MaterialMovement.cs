@@ -43,7 +43,7 @@ namespace SCM2020___Client.Templates.Movement
             try
             {
                 workOrder = System.Uri.EscapeDataString(workOrder);
-                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.ServerAPI, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 userId = Monitoring.EmployeeId;
             }
             catch
@@ -53,7 +53,7 @@ namespace SCM2020___Client.Templates.Movement
             }
             try
             {
-                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
+                InfoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
                 Name = InfoUser.Name;
                 Register = InfoUser.Register;
             }
@@ -66,7 +66,7 @@ namespace SCM2020___Client.Templates.Movement
             //Show data in screen
             this.Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA";
             this.WorkOrder = Monitoring.Work_Order;
-            this.Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.Server, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector;
+            this.Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.ServerAPI, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector;
             this.WorkOrderDate = Monitoring.MovingDate;
             this.RegisterApplication = Register;
             this.SolicitationEmployee = Name;
@@ -84,7 +84,7 @@ namespace SCM2020___Client.Templates.Movement
             ModelsLibraryCore.MaterialOutput output = null;
             try
             {
-                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.Server, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
+                output = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"output/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist output with that workorder
             { }
@@ -92,7 +92,7 @@ namespace SCM2020___Client.Templates.Movement
             ModelsLibraryCore.MaterialInput input = null;
             try
             {
-                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.Server, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
+                input = APIClient.GetData<ModelsLibraryCore.MaterialInput>(new Uri(Helper.ServerAPI, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
             }
             catch //Doesn't exist input with that workorder
             { }
@@ -111,7 +111,7 @@ namespace SCM2020___Client.Templates.Movement
                     foreach (var item in output.ConsumptionProducts.ToList())
                     {
                         //Task.Run for each
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                         MaterialMovementPrintExport product = new MaterialMovementPrintExport()
                         {
                             Code = infoProduct.Code,
@@ -136,7 +136,7 @@ namespace SCM2020___Client.Templates.Movement
                     {
                         //Task.Run for each
                         {
-                            ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                            ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                             MaterialMovementPrintExport product = new MaterialMovementPrintExport()
                             {
                                 Code = infoProduct.Code,
@@ -162,8 +162,8 @@ namespace SCM2020___Client.Templates.Movement
                     foreach (var item in output.PermanentProducts.ToList())
                     {
                         //Task.Run for each
-                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                         MaterialMovementPrintExport product = new MaterialMovementPrintExport()
                         {
                             Code = infoProduct.Code,
@@ -188,8 +188,8 @@ namespace SCM2020___Client.Templates.Movement
                     {
                         //Task.Run for each
 
-                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.Server, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.PermanentProduct infoPermanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{infoPermanentProduct.InformationProduct}").ToString(), Helper.Authentication);
                         MaterialMovementPrintExport product = new MaterialMovementPrintExport()
                         {
                             Code = infoProduct.Code,

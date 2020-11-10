@@ -62,20 +62,20 @@ namespace SCM2020___Client.Frames.Query
             if (patrimony == string.Empty)
                 return;
             patrimony = System.Uri.EscapeDataString(patrimony);
-            var result = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.Server, $"PermanentProduct/Search/{patrimony}").ToString(), Helper.Authentication);
+            var result = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.ServerAPI, $"PermanentProduct/Search/{patrimony}").ToString(), Helper.Authentication);
             List<SCM2020___Client.Models.QueryByPatrimony> listQuery = new List<SCM2020___Client.Models.QueryByPatrimony>();
             foreach (var item in result)
             {
                 //Pega informações referente ao produto
-                var informationProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.InformationProduct}").ToString(), Helper.Authentication);
+                var informationProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.InformationProduct}").ToString(), Helper.Authentication);
                 ModelsLibraryCore.InfoUser InfoUser = null;
                 if (item.WorkOrder != null)
                 {
                     var workOrder = System.Uri.EscapeDataString(item.WorkOrder);
                     //Pega informações referente a ordem de serviço
-                    ModelsLibraryCore.Monitoring informationOS = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.Server, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
+                    ModelsLibraryCore.Monitoring informationOS = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.ServerAPI, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                     //Pega informações referente ao técnico
-                    InfoUser = APIClient.GetData<ModelsLibraryCore.InfoUser>(new Uri(Helper.Server, $"user/InfoUser/{informationOS.EmployeeId}").ToString(), Helper.Authentication);
+                    InfoUser = APIClient.GetData<ModelsLibraryCore.InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{informationOS.EmployeeId}").ToString(), Helper.Authentication);
 
                 }
 

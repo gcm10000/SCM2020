@@ -69,7 +69,7 @@ namespace SCM2020___Client.Frames.Query
             query = System.Uri.EscapeDataString(query);
             try
             {
-                productsGetted = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.Server, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
+                productsGetted = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, $"generalproduct/search/{query}").ToString(), Helper.Authentication);
 
             }
             catch (HttpRequestException)
@@ -186,7 +186,7 @@ namespace SCM2020___Client.Frames.Query
 
             var product = ((FrameworkElement)sender).DataContext as Models.StockQuery;
 
-            var result = APIClient.DeleteData(new Uri(Helper.Server, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
+            var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
             MessageBox.Show(result.DeserializeJson<string>());
         }
 

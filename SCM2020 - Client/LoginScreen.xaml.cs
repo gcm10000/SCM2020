@@ -85,7 +85,7 @@ namespace SCM2020___Client
         {
             try
             {
-                var signIn = APIClient.MakeSignIn(new Uri(Helper.Server, "user/login/").ToString(),
+                var signIn = APIClient.MakeSignIn(new Uri(Helper.ServerAPI, "user/login/").ToString(),
                     Register: user,
                     Password: password);
 

@@ -56,7 +56,7 @@ namespace SCM2020___Client.Frames.Query
             {
                 queryUser = System.Uri.EscapeDataString(queryUser);
 
-                var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.Server, $"User/search/{queryUser}").ToString(), Helper.Authentication);
+                var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.ServerAPI, $"User/search/{queryUser}").ToString(), Helper.Authentication);
                 List<Models.QueryUsers> ListUsers = new List<Models.QueryUsers>();
                 foreach (var user in result)
                 {

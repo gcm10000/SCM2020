@@ -31,7 +31,7 @@ namespace SCM2020___Client.Frames
         public InputByVendor()
         {
             InitializeComponent();
-            Uri vendorUri = new Uri(Helper.Server, "vendor/");
+            Uri vendorUri = new Uri(Helper.ServerAPI, "vendor/");
             var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             var nameVendors = vendors.Select(x => x.Name).ToList();
             this.VendorComboBox.ItemsSource = nameVendors;
@@ -53,7 +53,7 @@ namespace SCM2020___Client.Frames
 
             this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
 
-            Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{query}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
             var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
@@ -240,7 +240,7 @@ namespace SCM2020___Client.Frames
             materialInputByVendor.ConsumptionProducts = p;
             Task.Run(() =>
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
                 MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -254,7 +254,7 @@ namespace SCM2020___Client.Frames
                 MessageBoxResult resultDialog = MessageBox.Show("Você deseja apagar a entrada por fornecedor?", "Confirmação", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (resultDialog == MessageBoxResult.Yes)
                 {
-                    var result = APIClient.DeleteData(new Uri(Helper.Server, $"Input/Remove/{previousInput.Id}").ToString(), Helper.Authentication);
+                    var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"Input/Remove/{previousInput.Id}").ToString(), Helper.Authentication);
                     MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
@@ -282,7 +282,7 @@ namespace SCM2020___Client.Frames
 
             Task.Run(() => 
             {
-                var result = APIClient.PostData(new Uri(Helper.Server, $"input/update/{input.Id}").ToString(), input, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"input/update/{input.Id}").ToString(), input, Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
@@ -319,7 +319,7 @@ namespace SCM2020___Client.Frames
             previousInput = null;
             try
             {
-                previousInput = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.Server, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
+                previousInput = APIClient.GetData<ModelsLibraryCore.MaterialInputByVendor>(new Uri(Helper.ServerAPI, $"input/invoice/{invoice}").ToString(), Helper.Authentication);
                 existsInput = true;
             }
             catch (HttpRequestException) //Entrada por fornecedor inexistente
@@ -339,7 +339,7 @@ namespace SCM2020___Client.Frames
             //Preencher datagrid
             foreach (var item in previousInput.ConsumptionProducts)
             {
-                ModelsLibraryCore.ConsumptionProduct information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.Server, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                ModelsLibraryCore.ConsumptionProduct information = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
                 ConsumpterProductDataGrid product = new ConsumpterProductDataGrid()
                 {
                     Id = item.ProductId,
