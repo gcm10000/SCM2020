@@ -85,30 +85,31 @@ namespace SCM2020___Client.Frames
 
         private void ImageTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            ImageDialog();
+        }
+
+        private void UploadImage()
+        {
 
         }
 
-        private void SelectImage_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void SelectImage_Click(object sender, RoutedEventArgs e)
         {
-            var filePath = string.Empty;
-
+            ImageDialog();
+        }
+        private void ImageDialog()
+        {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "c:\\";
-            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            openFileDialog.Filter = "Arquivos de imagem (*.png, *.gif, *.jpg, *.jpeg, *.bmp)|*.png;*.gif;*.jpg;*.jpeg;*.bmp;";
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
 
             if (openFileDialog.ShowDialog() == true)
             {
                 //Get the path of specified file
-                filePath = openFileDialog.FileName;
-
+                this.ImageTextBox.Text = openFileDialog.FileName;
             }
-
-        }
-        private void UploadImage()
-        {
-
         }
     }
 }
