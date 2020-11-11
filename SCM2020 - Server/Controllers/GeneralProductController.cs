@@ -163,7 +163,7 @@ namespace SCM2020___Server.Controllers
             //10485760
             if (imageInput.Image.Length < 10485760)
             {
-                string fileName = Path.Combine(_env.WebRootPath, "img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName);
+                string fileName = Path.Combine(_env.WebRootPath, "img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
                 using (var stream = System.IO.File.Create(fileName))
                 {
                     await imageInput.Image.CopyToAsync(stream);
