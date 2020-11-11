@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SCM2020___Server.Controllers
 {
@@ -17,7 +20,8 @@ namespace SCM2020___Server.Controllers
     public class GeneralProductController : ControllerBase
     {
         ControlDbContext context;
-        public GeneralProductController(ControlDbContext context) { this.context = context;  }
+        IHostingEnvironment _env;
+        public GeneralProductController(ControlDbContext context, IHostingEnvironment env) { this.context = context;  this._env = env; }
 
         [Authorize(Roles = Roles.Administrator)]
         [HttpPost("Migrate")]
@@ -152,6 +156,19 @@ namespace SCM2020___Server.Controllers
             context.ConsumptionProduct.Remove(product);
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
+        }
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> OnPostUploadAsync(IFormFile formFile)
+        {
+            if (formFile.Length > 0)
+            {
+                string fileName = Path.Combine(_env.WebRootPath, "img", $"dsad.png");
+                using (var stream = System.IO.File.Create(fileName))
+                {
+                    await formFile.CopyToAsync(stream);
+                }
+            }
+            return Ok();
         }
     }
 }

@@ -189,18 +189,23 @@ namespace SCM2020___Client.Frames.Query
 
             var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
             MessageBox.Show(result.DeserializeJson<string>());
+            products.Remove(product);
+            this.QueryDataGrid.Items.Refresh();
         }
 
         private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender == null)
                 return;
-            e.Handled = true;
-            DataGridRow dgr = sender as DataGridRow;
-            if (SelectedRow(dgr.Item))
+            if (e.ChangedButton == MouseButton.Left)
             {
-                products.RemoveAt(this.QueryDataGrid.SelectedIndex);
-                this.QueryDataGrid.Items.Refresh();
+                e.Handled = true;
+                DataGridRow dgr = sender as DataGridRow;
+                if (SelectedRow(dgr.Item))
+                {
+                    products.RemoveAt(this.QueryDataGrid.SelectedIndex);
+                    this.QueryDataGrid.Items.Refresh();
+                }
             }
         }
 
