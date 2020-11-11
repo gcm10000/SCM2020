@@ -70,6 +70,7 @@ namespace SCM2020___Client.Frames
             };
             Task.Run(() => 
             {
+                UploadImage();
                 var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
                 if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
