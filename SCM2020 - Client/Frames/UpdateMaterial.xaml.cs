@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -68,20 +70,25 @@ namespace SCM2020___Client.Frames
                 Group = (GroupComboBox.SelectedIndex + 1),
                 Photo = null
             };
+            var photopath = this.ImageTextBox.Text;
             Task.Run(() => 
             {
-                UploadImage();
-                var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
-                if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
-                    MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                    this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
-                }
-            });
+                UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
+            }
+            );
+            //Task.Run(() => 
+            //{
+            //    var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/UploadImage/{Product.Id}"), Product, Helper.Authentication);
+            //    if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            //    {
+            //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            //        this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
+            //    }
+            //});
         }
 
         private void ImageTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -89,9 +96,23 @@ namespace SCM2020___Client.Frames
             ImageDialog();
         }
 
-        private void UploadImage()
+        private async Task<bool> UploadImage(string Url, int productId, string pathImage)
         {
+            using (var client = new HttpClient())
+            {
+                using (var content =
+                    new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture)))
+                {
+                    content.Add(new StreamContent(new FileStream(pathImage, FileMode.Open)), "Image", System.IO.Path.GetFileName(pathImage));
+                    content.Add(new StringContent(productId.ToString()), "Id");
 
+                    using (var message = await client.PostAsync(Url, content))
+                    {
+                        var input = await message.Content.ReadAsStringAsync();
+                        return message.IsSuccessStatusCode;
+                    }
+                }
+            }
         }
 
         private void SelectImage_Click(object sender, RoutedEventArgs e)

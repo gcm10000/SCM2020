@@ -157,16 +157,17 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
         }
+        [AllowAnonymous]
         [HttpPost("UploadImage")]
-        public async Task<IActionResult> OnPostUploadAsync(ImageInput imageInput)
+        public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
         {
-            //10485760
             if (imageInput.Image.Length < 10485760)
             {
                 string fileName = Path.Combine(_env.WebRootPath, "img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
                 using (var stream = System.IO.File.Create(fileName))
                 {
                     await imageInput.Image.CopyToAsync(stream);
+                    //abrir para averiguar se é uma imagem válida
                 }
             }
             return Ok("Imagem enviada com sucesso.");
