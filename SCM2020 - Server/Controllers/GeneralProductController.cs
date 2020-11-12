@@ -163,13 +163,18 @@ namespace SCM2020___Server.Controllers
         {
             if (imageInput.Image.Length < 10485760)
             {
-                string fileName = Path.Combine(_env.WebRootPath, "img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                using (var stream = System.IO.File.Create(fileName))
+                string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                var product = context.ConsumptionProduct.Find(imageInput.Id);
+                product.Photo = path;
+                string fullName = Path.Combine(_env.WebRootPath, path);
+                
+                using (var stream = System.IO.File.Create(fullName))
                 {
                     await imageInput.Image.CopyToAsync(stream);
                     //abrir para averiguar se é uma imagem válida
                 }
             }
+            await context.SaveChangesAsync();
             return Ok("Imagem enviada com sucesso.");
         }
     }
