@@ -172,8 +172,21 @@ namespace SCM2020___Server.Controllers
                 
                 using (var stream = System.IO.File.Create(fullName))
                 {
-                    await imageInput.Image.CopyToAsync(stream);
-                    //abrir para averiguar se é uma imagem válida
+                    using (var ms = new MemoryStream())
+                    {
+                        await imageInput.Image.CopyToAsync(ms);
+                        var fileBytes = ms.ToArray();
+                        //Averiguar se é uma imagem válida
+                        if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
+                        {
+                            await imageInput.Image.CopyToAsync(stream);
+                        }
+                        else
+                        {
+                            BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+                        }
+                    }
+
                 }
                 await context.SaveChangesAsync();
                 return Ok("Imagem enviada com sucesso.");
