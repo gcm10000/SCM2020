@@ -232,6 +232,7 @@ namespace SCM2020___Client.Frames.Query
             VisualizeProduct visualizeProduct = new VisualizeProduct(stock.ConsumptionProduct);
             if (visualizeProduct.ShowDialog() == true)
             {
+                stock.ConsumptionProduct = visualizeProduct.Product;
                 return visualizeProduct.RemovedProduct;
             }
             return false;

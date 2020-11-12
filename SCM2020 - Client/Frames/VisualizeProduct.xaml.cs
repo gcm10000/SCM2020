@@ -41,6 +41,7 @@ namespace SCM2020___Client.Frames
             {
                 Product = dialog.Product;
                 FillUI();
+                this.DialogResult = true;
             }
         }
 
@@ -79,7 +80,7 @@ namespace SCM2020___Client.Frames
         private void FillUI()
         {
             if (Product.Photo != null)
-                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, $"img/{Product.Photo}"));
+                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, Product.Photo));
             
             this.DescriptionTextBlock.Text = $"{Product.Description} ({Product.Code})";
             this.GroupLabel.Content = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{Product.Group}").ToString(), Helper.Authentication).GroupName;

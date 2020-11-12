@@ -9,7 +9,7 @@
         Title="VisualizeProduct" Height="450" Width="800" Loaded="Window_Loaded">
     <DockPanel Background="White">
         <Grid DockPanel.Dock="Left" Width="450">
-            <Image x:Name="ProductImage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="C:\Users\Gabriel\Desktop\cabo bege.png"></Image>
+            <Image x:Name="ProductImage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="{x:Null}"></Image>
         </Grid>
         <Grid DockPanel.Dock="Right">
             <Grid Margin="30 30">

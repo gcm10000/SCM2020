@@ -31,6 +31,7 @@ namespace SCM2020___Client.Frames
             public bool Ok { get; set; }
             public string Message { get; set; }
         }
+        public bool Successful = false;
         public ConsumptionProduct Product { get; private set; }
         public UpdateMaterial()
         {
@@ -61,6 +62,7 @@ namespace SCM2020___Client.Frames
 
         private void BtnConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
+            var photopath = this.ImageTextBox.Text;
             Product = new ConsumptionProduct()
             {
                 Id = Product.Id,
@@ -73,17 +75,18 @@ namespace SCM2020___Client.Frames
                 Stock = double.Parse(StockTextBox.Text),
                 Unity = UnityTextBox.Text,
                 Group = (GroupComboBox.SelectedIndex + 1),
-                Photo = null
+                Photo = $"img/{Product.Id}" + System.IO.Path.GetExtension(photopath)
             };
-            var photopath = this.ImageTextBox.Text;
             Task.Run(() => 
             {
                 var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
                 if (response.Ok)
                 {
+                    Successful = true;
                     Task.Run(() =>
                     {
-                        var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/UploadImage/{Product.Id}"), Product, Helper.Authentication);
+                        var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
+                        this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
                         if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
                         {
                             MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -91,7 +94,7 @@ namespace SCM2020___Client.Frames
                         else
                         {
                             MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                            this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
+                            this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
                         }
                     });
                 }
