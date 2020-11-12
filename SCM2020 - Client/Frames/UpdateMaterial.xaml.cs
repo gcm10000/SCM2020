@@ -26,6 +26,11 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class UpdateMaterial : Window
     {
+        public class ResponseMaterial
+        {
+            public bool Ok { get; set; }
+            public string Message { get; set; }
+        }
         public ConsumptionProduct Product { get; private set; }
         public UpdateMaterial()
         {
@@ -73,22 +78,29 @@ namespace SCM2020___Client.Frames
             var photopath = this.ImageTextBox.Text;
             Task.Run(() => 
             {
-                UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
+                var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
+                if (response.Ok)
+                {
+                    Task.Run(() =>
+                    {
+                        var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/UploadImage/{Product.Id}"), Product, Helper.Authentication);
+                        if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                        {
+                            MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                            this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
+                        }
+                    });
+                }
+                else
+                {
+                    MessageBox.Show(response.Message, "Erro ao enviar imagem", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             );
-            //Task.Run(() => 
-            //{
-            //    var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/UploadImage/{Product.Id}"), Product, Helper.Authentication);
-            //    if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            //    {
-            //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-            //        this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; this.Close(); }));
-            //    }
-            //});
         }
 
         private void ImageTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -96,7 +108,7 @@ namespace SCM2020___Client.Frames
             ImageDialog();
         }
 
-        private async Task<bool> UploadImage(string Url, int productId, string pathImage)
+        private ResponseMaterial UploadImage(string url, int productId, string pathImage)
         {
             using (var client = new HttpClient())
             {
@@ -106,10 +118,10 @@ namespace SCM2020___Client.Frames
                     content.Add(new StreamContent(new FileStream(pathImage, FileMode.Open)), "Image", System.IO.Path.GetFileName(pathImage));
                     content.Add(new StringContent(productId.ToString()), "Id");
 
-                    using (var message = await client.PostAsync(Url, content))
+                    using (var message = client.PostAsync(url, content).Result)
                     {
-                        var input = await message.Content.ReadAsStringAsync();
-                        return message.IsSuccessStatusCode;
+                        var response = message.Content.ReadAsStringAsync().Result;
+                        return new ResponseMaterial() { Ok = message.IsSuccessStatusCode, Message = response };
                     }
                 }
             }

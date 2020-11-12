@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SCM2020___Server.Controllers
 {
@@ -163,19 +164,24 @@ namespace SCM2020___Server.Controllers
         {
             if (imageInput.Image.Length < 10485760)
             {
-                string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                string relativeUrl = Helper.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
                 var product = context.ConsumptionProduct.Find(imageInput.Id);
-                product.Photo = path;
-                string fullName = Path.Combine(_env.WebRootPath, path);
+                product.Photo = relativeUrl;
+                string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
                 
                 using (var stream = System.IO.File.Create(fullName))
                 {
                     await imageInput.Image.CopyToAsync(stream);
                     //abrir para averiguar se é uma imagem válida
                 }
+                await context.SaveChangesAsync();
+                return Ok("Imagem enviada com sucesso.");
             }
-            await context.SaveChangesAsync();
-            return Ok("Imagem enviada com sucesso.");
+            else
+            {
+                return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
+            }
         }
     }
 }

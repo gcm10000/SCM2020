@@ -37,6 +37,12 @@ namespace SCM2020___Server
             var o = handler.ReadToken(accessToken) as JwtSecurityToken;
             return o;
         }
+        public static string Combine(string uri1, string uri2)
+        {
+            uri1 = uri1.TrimEnd('/');
+            uri2 = uri2.TrimStart('/');
+            return string.Format("{0}/{1}", uri1, uri2);
+        }
         public static Int32 Levenshtein(String a, String b)
         {
 
