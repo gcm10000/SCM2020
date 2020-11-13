@@ -59,6 +59,7 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
             </Grid.Resources>
             <WebBrowser x:Name="webBrowser"></WebBrowser>
+            <!--Adicionar datagrid aqui e evitar o uso do webbrowser-->
         </Grid>
     </DockPanel>
 </UserControl>

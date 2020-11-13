@@ -183,7 +183,7 @@ namespace SCM2020___Server.Controllers
                         }
                         else
                         {
-                            BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+                            return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
                         }
                     }
 
