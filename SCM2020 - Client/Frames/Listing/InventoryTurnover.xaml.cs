@@ -58,6 +58,8 @@ namespace SCM2020___Client.Frames.Query
             this.Export_Button.IsEnabled = true;
         }
 
+        private WebBrowser WebBrowser;
+
         bool PrintORExport = false;
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
@@ -87,7 +89,7 @@ namespace SCM2020___Client.Frames.Query
             
             if (PrintORExport)
             {
-                webBrowser.PrintDocument();
+                WebBrowser.PrintDocument();
             }
             else
             {
@@ -99,7 +101,7 @@ namespace SCM2020___Client.Frames.Query
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
-                        var document = DocumentText(webBrowser);
+                        var document = DocumentText(WebBrowser);
                         document = document.Replace("css/bootstrap.min.css", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
                         file.Write(document);
                         file.Flush();
@@ -119,7 +121,7 @@ namespace SCM2020___Client.Frames.Query
                     MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
-            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
         private string DocumentText(WebBrowser webBrowser)
         {
@@ -138,9 +140,9 @@ namespace SCM2020___Client.Frames.Query
         {
             this.ButtonSearchProducts.IsEnabled = false;
             this.ButtonInventoryTurnover.IsEnabled = true;
-            var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
-            var content = File.ReadAllText(path);
-            this.webBrowser.Navigate(path);
+            //var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
+            //var content = File.ReadAllText(path);
+            //this.webBrowser.Navigate(path);
 
         }
 
@@ -148,7 +150,8 @@ namespace SCM2020___Client.Frames.Query
         {
             this.ButtonSearchProducts.IsEnabled = false;
             this.ButtonInventoryTurnover.IsEnabled = true;
-            this.webBrowser.Visibility = Visibility.Collapsed;
+            //this.webBrowser.Visibility = Visibility.Collapsed;
+            this.InventoryTurnoverDatagrid.Visibility = Visibility.Collapsed;
             this.ProductToAddDataGrid.Visibility = Visibility.Visible;
             this.SearchGrid.Visibility = Visibility.Visible;
         }
@@ -157,7 +160,8 @@ namespace SCM2020___Client.Frames.Query
         {
             this.ButtonSearchProducts.IsEnabled = true;
             this.ButtonInventoryTurnover.IsEnabled = false;
-            this.webBrowser.Visibility = Visibility.Visible;
+            //this.webBrowser.Visibility = Visibility.Visible;
+            this.InventoryTurnoverDatagrid.Visibility = Visibility.Visible;
             this.ProductToAddDataGrid.Visibility = Visibility.Collapsed;
             this.SearchGrid.Visibility = Visibility.Collapsed;
         }

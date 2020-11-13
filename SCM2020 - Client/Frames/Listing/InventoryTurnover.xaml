@@ -107,7 +107,8 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
+            <!--<WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>-->
+            <DataGrid x:Name="InventoryTurnoverDatagrid" Visibility="Collapsed"></DataGrid>
         </Grid>
     </DockPanel>
 </UserControl>
