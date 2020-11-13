@@ -49,16 +49,14 @@ namespace SCM2020___Client.Frames.Query
         // EXTRAI O HTML COM AS MODIFICAÇÕES DO DOM, SALVA EM UM ARQUIVO TEMPORÁRIO E FAZ A REQUISIÇÃO DA EXPORTAÇÃO
 
 
-        WebAssemblyLibrary.Client.Client client;
         public InventoryTurnover()
         {
             InitializeComponent();
-            Task.Run(() => { client = new WebAssemblyLibrary.Client.Client(); });
             this.Print_Button.IsEnabled = true;
             this.Export_Button.IsEnabled = true;
         }
 
-        private WebBrowser WebBrowser;
+        private WebBrowser WebBrowser = new WebBrowser();
 
         bool PrintORExport = false;
 
@@ -204,7 +202,6 @@ namespace SCM2020___Client.Frames.Query
             //ENVIAR MENSAGEM PARA O CLIENTE...
             var product = ((FrameworkElement)sender).DataContext as ModelsLibraryCore.ConsumptionProduct;
             var productjson = product.ToJson();
-            client.Send("SendMessage", "ContentInventoryTurnover", productjson);
 
             this.ProductToAddDataGrid.UnselectAll();
         }
@@ -233,7 +230,18 @@ namespace SCM2020___Client.Frames.Query
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (sender == null)
+                return;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                e.Handled = true;
+                DataGridRow dgr = sender as DataGridRow;
+                if (SelectedRow(dgr.Item))
+                {
+                    products.RemoveAt(this.InventoryTurnoverDataGrid.SelectedIndex);
+                    this.InventoryTurnoverDataGrid.Items.Refresh();
+                }
+            }
         }
         private bool SelectedRow(object item)
         {
