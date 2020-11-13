@@ -220,7 +220,6 @@ namespace SCM2020___Client.Frames.Query
 
                 if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
                 {
-                    var selectedItem = datagrid.SelectedItem as DataRowView;
                     products.RemoveAt(this.QueryDataGrid.SelectedIndex);
                     this.QueryDataGrid.Items.Refresh();
                 }

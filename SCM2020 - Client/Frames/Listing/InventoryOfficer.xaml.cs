@@ -99,10 +99,10 @@ namespace SCM2020___Client.Frames.Query
             }
             WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
-
+        List<InventoryOfficerPreview.Product> products;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
+            products = new List<InventoryOfficerPreview.Product>();
             var productsServer = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, "generalproduct/").ToString(), Helper.Authentication);
 
             foreach (var product in productsServer)
@@ -127,12 +127,47 @@ namespace SCM2020___Client.Frames.Query
 
         private void InventoryOfficerDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            var u = e.OriginalSource as UIElement;
+            if (e.Key == Key.Enter && u != null)
+            {
+                e.Handled = true;
+                var datagrid = sender as DataGrid;
 
+
+                if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
+                {
+                    products.RemoveAt(this.InventoryOfficerDataGrid.SelectedIndex);
+                    this.InventoryOfficerDataGrid.Items.Refresh();
+                }
+            }
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (sender == null)
+                return;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                e.Handled = true;
+                DataGridRow dgr = sender as DataGridRow;
+                if (SelectedRow(dgr.Item))
+                {
+                    products.RemoveAt(this.InventoryOfficerDataGrid.SelectedIndex);
+                    this.InventoryOfficerDataGrid.Items.Refresh();
+                }
+            }
+        }
 
+        private bool SelectedRow(object item)
+        {
+            InventoryOfficerPreview.Product stock = item as InventoryOfficerPreview.Product;
+            VisualizeProduct visualizeProduct = new VisualizeProduct(stock.InformationProduct);
+            if (visualizeProduct.ShowDialog() == true)
+            {
+                stock.InformationProduct = visualizeProduct.Product;
+                return visualizeProduct.RemovedProduct;
+            }
+            return false;
         }
     }
 }
