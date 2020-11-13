@@ -151,7 +151,8 @@ namespace SCM2020___Client.Frames.Query
             this.ButtonSearchProducts.IsEnabled = false;
             this.ButtonInventoryTurnover.IsEnabled = true;
             //this.webBrowser.Visibility = Visibility.Collapsed;
-            this.InventoryTurnoverDatagrid.Visibility = Visibility.Collapsed;
+            this.InventoryTurnoverDataGrid.Visibility = Visibility.Collapsed;
+            this.InventoryTurnoverDataGrid.Visibility = Visibility.Collapsed;
             this.ProductToAddDataGrid.Visibility = Visibility.Visible;
             this.SearchGrid.Visibility = Visibility.Visible;
         }
@@ -161,7 +162,7 @@ namespace SCM2020___Client.Frames.Query
             this.ButtonSearchProducts.IsEnabled = true;
             this.ButtonInventoryTurnover.IsEnabled = false;
             //this.webBrowser.Visibility = Visibility.Visible;
-            this.InventoryTurnoverDatagrid.Visibility = Visibility.Visible;
+            this.InventoryTurnoverDataGrid.Visibility = Visibility.Visible;
             this.ProductToAddDataGrid.Visibility = Visibility.Collapsed;
             this.SearchGrid.Visibility = Visibility.Collapsed;
         }
@@ -178,16 +179,19 @@ namespace SCM2020___Client.Frames.Query
         {
             Search(TxtSearchConsumpterProduct.Text);
         }
-
+        List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
         private void Search(string product)
         {
             this.ProductToAddDataGrid.Items.Clear();
+            this.products.Clear();
 
-            var listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
+            List<ModelsLibraryCore.ConsumptionProduct> listProducts;
+            listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
             foreach (var item in listProducts)
             {
-                this.ProductToAddDataGrid.Items.Add(item);
+                products.Add(new InventoryOfficerPreview.Product(item.Id, item.Code, item.Description, item.Stock, item.Unity, item));
             }
+            this.InventoryTurnoverDataGrid.ItemsSource = products;
         }
 
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -203,6 +207,44 @@ namespace SCM2020___Client.Frames.Query
             client.Send("SendMessage", "ContentInventoryTurnover", productjson);
 
             this.ProductToAddDataGrid.UnselectAll();
+        }
+
+        private void InventoryTurnoverDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void InventoryTurnoverDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var u = e.OriginalSource as UIElement;
+            if (e.Key == Key.Enter && u != null)
+            {
+                e.Handled = true;
+                var datagrid = sender as DataGrid;
+
+
+                if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
+                {
+                    products.RemoveAt(this.InventoryTurnoverDataGrid.SelectedIndex);
+                    this.InventoryTurnoverDataGrid.Items.Refresh();
+                }
+            }
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        private bool SelectedRow(object item)
+        {
+            InventoryOfficerPreview.Product stock = item as InventoryOfficerPreview.Product;
+            VisualizeProduct visualizeProduct = new VisualizeProduct(stock.InformationProduct);
+            if (visualizeProduct.ShowDialog() == true)
+            {
+                stock.InformationProduct = visualizeProduct.Product;
+                return visualizeProduct.RemovedProduct;
+            }
+            return false;
         }
     }
 }
