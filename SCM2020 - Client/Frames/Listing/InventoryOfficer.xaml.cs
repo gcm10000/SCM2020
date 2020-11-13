@@ -33,6 +33,7 @@ namespace SCM2020___Client.Frames.Query
 
         // INVENTÁRIO OFICIAL NÃO HÁ NECESSIDADE DE ALTERAÇÃO DINÂMICA DOS DADOS
         // BASTA EXIBIR TODOS OS DADOS NUMA TABELA E TER A POSSIBILIDADE DE IMPRESSÃO
+        private WebBrowser WebBrowser = new WebBrowser();
 
         public InventoryOfficer()
         {
@@ -66,7 +67,7 @@ namespace SCM2020___Client.Frames.Query
             Helper.SetOptionsToPrint();
             if (PrintORExport)
             {
-                webBrowser.PrintDocument();
+                WebBrowser.PrintDocument();
             }
             else
             {
@@ -96,7 +97,7 @@ namespace SCM2020___Client.Frames.Query
                     MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
-            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -106,15 +107,31 @@ namespace SCM2020___Client.Frames.Query
 
             foreach (var product in productsServer)
             {
-                InventoryOfficerPreview.Product productInventory = new InventoryOfficerPreview.Product(product.Id, product.Code, product.Description, product.Stock, product.Unity);
+                InventoryOfficerPreview.Product productInventory = new InventoryOfficerPreview.Product(product.Id, product.Code, product.Description, product.Stock, product.Unity, product);
                 products.Add(productInventory);
             }
+            this.InventoryOfficerDataGrid.ItemsSource = products;
             InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
 
             var html = preview.RenderizeHTML();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(html);
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(html);
             Document = html;
+
+        }
+
+        private void InventoryOfficerDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        private void InventoryOfficerDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
 
         }
     }

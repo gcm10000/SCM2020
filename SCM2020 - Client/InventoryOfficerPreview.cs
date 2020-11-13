@@ -14,14 +14,16 @@ namespace SCM2020___Client
             public string Description { get; }
             public double Quantity { get; }
             public string Unity { get; }
+            public ModelsLibraryCore.ConsumptionProduct InformationProduct { get; set; }
 
-            public Product(int ID, int SKU, string Description, double Quantity, string Unity)
+            public Product(int ID, int SKU, string Description, double Quantity, string Unity, ModelsLibraryCore.ConsumptionProduct InformationProduct)
             {
                 this.ID = ID;
                 this.SKU = SKU;
                 this.Description = Description;
                 this.Quantity = Quantity;
                 this.Unity = Unity;
+                this.InformationProduct = InformationProduct;
             }
         }
 

@@ -58,8 +58,39 @@
             <Grid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
             </Grid.Resources>
-            <WebBrowser x:Name="webBrowser"></WebBrowser>
-            <!--Adicionar datagrid aqui e evitar o uso do webbrowser-->
+            <!--
+                SKU
+                Descrição
+                Quantidade Atual
+                Unidade
+            -->
+            <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="InventoryOfficerDataGrid_BeginningEdit"  VerticalAlignment="Stretch" RowHeaderWidth="0" x:Name="InventoryOfficerDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  HorizontalAlignment="Stretch" 
+                                  HorizontalContentAlignment="Stretch" 
+                                  ColumnWidth="*"
+                                  PreviewKeyDown="InventoryOfficerDataGrid_PreviewKeyDown"
+                                  AutoGenerateColumns="False"
+>
+                <DataGrid.ItemContainerStyle>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick"  Handler="DataGridRow_MouseDoubleClick"/>
+                    </Style>
+                </DataGrid.ItemContainerStyle>
+                <DataGrid.Columns>
+                    <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
         </Grid>
     </DockPanel>
 </UserControl>
