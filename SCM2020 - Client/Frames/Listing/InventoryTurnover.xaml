@@ -131,6 +131,15 @@
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAdd_Click"/>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
 

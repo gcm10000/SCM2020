@@ -178,6 +178,7 @@ namespace SCM2020___Client.Frames.Query
             Search(TxtSearchConsumpterProduct.Text);
         }
         List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
+        List<InventoryOfficerPreview.Product> productsAdded = new List<InventoryOfficerPreview.Product>();
         private void Search(string product)
         {
             this.ProductToAddDataGrid.Items.Clear();
@@ -200,10 +201,18 @@ namespace SCM2020___Client.Frames.Query
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             //ENVIAR MENSAGEM PARA O CLIENTE...
-            var product = ((FrameworkElement)sender).DataContext as ModelsLibraryCore.ConsumptionProduct;
-            var productjson = product.ToJson();
-
+            var product = ((FrameworkElement)sender).DataContext as InventoryOfficerPreview.Product;
+            //var productjson = product.ToJson();
+            if (productsAdded.Contains(product))
+            {
+                products.Remove(product);
+            }
+            else
+            {
+                productsAdded.Add(product);
+            }
             this.ProductToAddDataGrid.UnselectAll();
+            this.InventoryTurnoverDataGrid.Items.Refresh();
         }
 
         private void InventoryTurnoverDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
