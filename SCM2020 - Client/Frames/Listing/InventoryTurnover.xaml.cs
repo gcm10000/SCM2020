@@ -54,6 +54,7 @@ namespace SCM2020___Client.Frames.Query
             InitializeComponent();
             this.Print_Button.IsEnabled = true;
             this.Export_Button.IsEnabled = true;
+            this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
         }
 
         private WebBrowser WebBrowser = new WebBrowser();
@@ -175,13 +176,13 @@ namespace SCM2020___Client.Frames.Query
 
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            Search(TxtSearchConsumpterProduct.Text);
+            string query = TxtSearchConsumpterProduct.Text;
+            Task.Run(() => { Search(query); });
         }
         List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
         List<InventoryOfficerPreview.Product> productsAdded = new List<InventoryOfficerPreview.Product>();
         private void Search(string product)
         {
-            this.ProductToAddDataGrid.Items.Clear();
             this.products.Clear();
 
             List<ModelsLibraryCore.ConsumptionProduct> listProducts;
@@ -190,7 +191,8 @@ namespace SCM2020___Client.Frames.Query
             {
                 products.Add(new InventoryOfficerPreview.Product(item.Id, item.Code, item.Description, item.Stock, item.Unity, item));
             }
-            this.InventoryTurnoverDataGrid.ItemsSource = products;
+            this.ProductToAddDataGrid.ItemsSource = products;
+            this.ProductToAddDataGrid.Items.Refresh();
         }
 
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -205,7 +207,7 @@ namespace SCM2020___Client.Frames.Query
             //var productjson = product.ToJson();
             if (productsAdded.Contains(product))
             {
-                products.Remove(product);
+                productsAdded.Remove(product);
             }
             else
             {

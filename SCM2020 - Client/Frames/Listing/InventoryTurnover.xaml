@@ -88,12 +88,13 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="Opções" >
                         <DataGridTemplateColumn.CellTemplate>
@@ -120,6 +121,7 @@
                                   ColumnWidth="*"
                                   PreviewKeyDown="InventoryTurnoverDataGrid_PreviewKeyDown"
                                   AutoGenerateColumns="False"
+
 >
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
