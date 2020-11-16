@@ -111,6 +111,8 @@ namespace SCM2020___Client.Frames.Query
                 products.Add(productInventory);
             }
             this.InventoryOfficerDataGrid.ItemsSource = products;
+            this.InventoryOfficerDataGrid.Items.Refresh();
+
             InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
 
             var html = preview.RenderizeHTML();

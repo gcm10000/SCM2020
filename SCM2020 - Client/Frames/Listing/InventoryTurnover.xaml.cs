@@ -54,7 +54,7 @@ namespace SCM2020___Client.Frames.Query
             InitializeComponent();
             this.Print_Button.IsEnabled = true;
             this.Export_Button.IsEnabled = true;
-            this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
+            //this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
         }
 
         private WebBrowser WebBrowser = new WebBrowser();
@@ -179,11 +179,14 @@ namespace SCM2020___Client.Frames.Query
             string query = TxtSearchConsumpterProduct.Text;
             Task.Run(() => { Search(query); });
         }
-        List<InventoryOfficerPreview.Product> products = new List<InventoryOfficerPreview.Product>();
+        List<InventoryOfficerPreview.Product> products;
         List<InventoryOfficerPreview.Product> productsAdded = new List<InventoryOfficerPreview.Product>();
         private void Search(string product)
         {
-            this.products.Clear();
+            if (product.Trim() == string.Empty)
+                return;
+            products = new List<InventoryOfficerPreview.Product>();
+            this.ProductToAddDataGrid.Dispatcher.Invoke(new Action (() => { this.ProductToAddDataGrid.ItemsSource = products;  this.ProductToAddDataGrid.Items.Refresh(); }));
 
             List<ModelsLibraryCore.ConsumptionProduct> listProducts;
             listProducts = APIClient.GetData<List<ModelsLibraryCore.ConsumptionProduct>>(new Uri(Helper.ServerAPI, $"generalproduct/search/{product}").ToString(), Helper.Authentication);
@@ -191,8 +194,8 @@ namespace SCM2020___Client.Frames.Query
             {
                 products.Add(new InventoryOfficerPreview.Product(item.Id, item.Code, item.Description, item.Stock, item.Unity, item));
             }
-            this.ProductToAddDataGrid.ItemsSource = products;
-            this.ProductToAddDataGrid.Items.Refresh();
+            
+            this.ProductToAddDataGrid.Dispatcher.Invoke(new Action (() => { this.ProductToAddDataGrid.ItemsSource = products;  this.ProductToAddDataGrid.Items.Refresh(); }));
         }
 
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -214,6 +217,7 @@ namespace SCM2020___Client.Frames.Query
                 productsAdded.Add(product);
             }
             this.ProductToAddDataGrid.UnselectAll();
+            this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
             this.InventoryTurnoverDataGrid.Items.Refresh();
         }
 

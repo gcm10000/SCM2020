@@ -29,6 +29,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!--<Style x:Key="RightAlignStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>-->
     </UserControl.Resources>
     <DockPanel>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
@@ -89,14 +92,16 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True"
-                                  AutoGenerateColumns="False">
+                                  AutoGenerateColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False">
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Opções" >
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto" IsReadOnly="True"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="*"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -121,6 +126,9 @@
                                   ColumnWidth="*"
                                   PreviewKeyDown="InventoryTurnoverDataGrid_PreviewKeyDown"
                                   AutoGenerateColumns="False"
+                                  Visibility="Collapsed"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
 
 >
                 <DataGrid.ItemContainerStyle>
@@ -129,11 +137,11 @@
                     </Style>
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Opções" >
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="*"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
