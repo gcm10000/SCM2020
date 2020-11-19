@@ -134,6 +134,7 @@ namespace SCM2020___Server.Controllers
 
                 var c = context.ConsumptionProduct.Find(p2.InformationProduct);
                 c.Stock -= 1;
+                context.PermanentProduct.Update(p2);
                 context.ConsumptionProduct.Update(c);
             }
 
@@ -228,6 +229,7 @@ namespace SCM2020___Server.Controllers
                 double newest = output.PermanentProducts.Count(x => x.ProductId == currentId);
                 if (oldder != newest)
                 {
+                    productpermanentModify.WorkOrder = output.WorkOrder;
                     productconsumpterModify.Stock += oldder - newest;
                     context.ConsumptionProduct.Update(productconsumpterModify);
                 }

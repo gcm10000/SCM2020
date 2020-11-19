@@ -100,7 +100,7 @@
                     <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto" IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -139,8 +139,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

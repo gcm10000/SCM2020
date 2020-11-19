@@ -43,13 +43,22 @@ namespace SCM2020___Client.Frames.Listing
                 this.WorkOrder =  (WorkOrder == null) ? string.Empty : WorkOrder;
             }
         }
-
+        private WebBrowser WebBrowser = new WebBrowser();
+        private List<PermanentProduct> _ListPermanentProduct = new List<PermanentProduct>();
         public ListPermanentProduct()
         {
-            ManualResetEvent clientDone = new ManualResetEvent(false);
-            Task.Run(() => { if (Helper.Client == null) Helper.Client = new WebAssemblyLibrary.Client.Client(); clientDone.Set(); });
-            clientDone.WaitOne();
             InitializeComponent();
+            var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.ServerAPI, "permanentproduct").ToString(), Helper.Authentication);
+            foreach (var permanentProduct in permanentProducts)
+            {
+                var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
+
+                PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.WorkOrder);
+                this._ListPermanentProduct.Add(product);
+            }
+            this.ListPermanentProductDataGrid.ItemsSource = _ListPermanentProduct;
+            this.ListPermanentProductDataGrid.Items.Refresh();
         }
 
         private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -59,26 +68,7 @@ namespace SCM2020___Client.Frames.Listing
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "listpermanentproduct.html");
-            this.webBrowser.Navigate(path);
-            
-            var permanentProducts = APIClient.GetData<List<ModelsLibraryCore.PermanentProduct>>(new Uri(Helper.ServerAPI, "permanentproduct").ToString(), Helper.Authentication);
-            webBrowser.LoadCompleted += (sender, args) =>
-            {
-                foreach (var permanentProduct in permanentProducts)
-                {
-                    var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    var infoGroup = APIClient.GetData<ModelsLibraryCore.Group>(new Uri(Helper.ServerAPI, $"group/{infoProduct.Group}").ToString(), Helper.Authentication);
-                    
-                    PermanentProduct product = new PermanentProduct(infoProduct.Code, infoProduct.Description, permanentProduct.Patrimony, infoGroup.GroupName, permanentProduct.WorkOrder);
-
-                    var productjson = product.ToJson();
-                    Helper.Client.Send("SendMessage", "ContentListPermanentProduct", productjson);
-
-                }
-                this.Export_Button.IsEnabled = true;
-                this.Print_Button.IsEnabled = true;
-            };
+           
         }
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
@@ -134,7 +124,17 @@ namespace SCM2020___Client.Frames.Listing
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-            this.webBrowser.PrintDocument();
+            this.WebBrowser.PrintDocument();
+        }
+
+        private void ListPermanentProductDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SCM2020___Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1080">
+        Title="Sistema de Controle de Materiais" Height="600" Width="1080">
     <Window.Resources>
 
     </Window.Resources>

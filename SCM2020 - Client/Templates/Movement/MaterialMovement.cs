@@ -28,7 +28,7 @@ namespace SCM2020___Client.Templates.Movement
         public MaterialMovement(string workOrder)
         {
             Search(workOrder);
-            var pathFileHtml = Path.Combine(Directory.GetCurrentDirectory(), "templates", "Movement", "MaterialMovement.html");
+            var pathFileHtml = Path.Combine(Helper.CurrentDirectory, "templates", "Movement", "MaterialMovement.html");
             Html = System.IO.File.ReadAllText(pathFileHtml);
         }
         public void Search(string workOrder)

@@ -128,15 +128,17 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                          >
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="*"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -215,16 +217,17 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="*"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -298,15 +301,16 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="*"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
@@ -323,16 +327,17 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="*"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">

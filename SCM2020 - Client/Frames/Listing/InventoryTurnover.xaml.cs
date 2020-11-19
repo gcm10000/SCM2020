@@ -60,26 +60,35 @@ namespace SCM2020___Client.Frames.Query
         private WebBrowser WebBrowser = new WebBrowser();
 
         bool PrintORExport = false;
+        string Html = string.Empty;
 
         private void Export_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
             // faz requisição da string html por websocket
             // coloca na string Document
-            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            ExportPrint();
+            InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
+            Html = preview.RenderizeHTML();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            WebBrowser.NavigateToString(Html);
+
         }
 
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
-            //this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            ExportPrint();
+            InventoryOfficerPreview preview = new InventoryOfficerPreview(products);
+            Html = preview.RenderizeHTML();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            WebBrowser.NavigateToString(Html);
         }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            
+            WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            this.Export_Button.IsEnabled = true;
+            this.Print_Button.IsEnabled = true;
+            ExportPrint();
         }
 
         private void ExportPrint()
@@ -100,17 +109,18 @@ namespace SCM2020___Client.Frames.Query
                     tempFile = Helper.GetTempFilePathWithExtension(".tmp");
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
                     {
-                        var document = DocumentText(WebBrowser);
+                        var document = Html;
                         document = document.Replace("css/bootstrap.min.css", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
-                        file.Write(document);
-                        file.Flush();
+                        WebBrowser.NavigateToString(document);
+                        //file.Write(document);
+                        //file.Flush();
                     }
 
                     //"f=" The input file
                     //"p=" The temporary default printer
                     //"d|delete" Delete file when finished
                     var p = new Process();
-                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    p.StartInfo.FileName = System.IO.Path.Combine(Helper.CurrentDirectory, "Exporter\\document-exporter.exe");
                     //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
                     p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
                     p.Start();

@@ -76,6 +76,8 @@
                                   ColumnWidth="*"
                                   PreviewKeyDown="InventoryOfficerDataGrid_PreviewKeyDown"
                                   AutoGenerateColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
 >
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
@@ -84,10 +86,10 @@
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="*"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
