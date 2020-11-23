@@ -79,6 +79,8 @@
                                   HorizontalContentAlignment="Stretch" 
                                   ColumnWidth="*"
                                   PreviewKeyDown="QueryDataGrid_PreviewKeyDown"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
 >
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
@@ -87,18 +89,18 @@
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
                     <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MininumStock}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Máximo" Binding="{Binding MaximumStock}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Opções" >
+                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MininumStock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Estoque Máximo" Binding="{Binding MaximumStock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                     <StackPanel>
                                         <Button x:Name="BtnUpdateMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Atualizar Produto" Click="BtnUpdateMaterial_Click"/>
                                         <Button x:Name="BtnRemoveMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Remover Produto" Click="BtnRemoveMaterial_Click"/>

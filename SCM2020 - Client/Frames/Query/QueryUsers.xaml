@@ -79,12 +79,14 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header=" Matrícula" Binding="{Binding Register}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Nome" Binding="{Binding Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Empresa" Binding="{Binding ThirdParty}"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Setor" Binding="{Binding Sector}"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Matrícula" Binding="{Binding Register}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Nome" Binding="{Binding Name}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Empresa" Binding="{Binding ThirdParty}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Setor" Binding="{Binding Sector}" Width="Auto"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

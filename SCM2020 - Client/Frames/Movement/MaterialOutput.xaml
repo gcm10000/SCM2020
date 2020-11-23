@@ -135,13 +135,13 @@
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="*"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="Auto"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -230,7 +230,7 @@
                         <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnAddRemovePermanent" Cursor="Hand" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -313,7 +313,7 @@
                         <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnAdded" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -340,7 +340,7 @@
                         <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <StackPanel Width="150" Orientation="Vertical">
                                             <Button x:Name="BtnRemove" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                         </StackPanel>

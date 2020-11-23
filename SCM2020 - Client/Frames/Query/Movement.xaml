@@ -101,15 +101,17 @@
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
-                                  VirtualizingStackPanel.IsVirtualizing="True">
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}" ></DataGridTextColumn>
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Movimentação" Binding="{Binding Movement}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Data da Movimentação" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Movimentação" Binding="{Binding Movement}" Width="Auto"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

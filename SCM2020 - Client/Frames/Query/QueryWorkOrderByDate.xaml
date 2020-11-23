@@ -74,16 +74,18 @@
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
                 VirtualizingPanel.ScrollUnit="Pixel"
-                VirtualizingPanel.IsVirtualizing="False">
+                VirtualizingPanel.IsVirtualizing="False"
+                CanUserResizeColumns="False"
+                CanUserReorderColumns="False">
                 <DataGrid.ItemContainerStyle>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
                     </Style>
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}"/>
-                    <DataGridTextColumn Header=" Data Inicial" Binding="{Binding Path=MovingDate, StringFormat='{}{0:dd/MM/yyyy}'}"/>
-                    <DataGridTextColumn Header=" Data de Fechamento" Binding="{Binding Path=ClosingDate, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                    <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}" Width="Auto"/>
+                    <DataGridTextColumn Header=" Data Inicial" Binding="{Binding Path=MovingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
+                    <DataGridTextColumn Header=" Data de Fechamento" Binding="{Binding Path=ClosingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

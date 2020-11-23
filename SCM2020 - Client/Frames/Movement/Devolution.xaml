@@ -127,7 +127,7 @@
                         <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnToAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -187,7 +187,7 @@
                         <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnAddRemovePermanent" Cursor="Hand" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -241,7 +241,7 @@
                         <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <Button x:Name="BtnAdd" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
                                     </materialDesign:PopupBox>
                                 </DataTemplate>
@@ -267,7 +267,7 @@
                         <DataGridTemplateColumn Header="Opções" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                                    <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
                                         <StackPanel Width="150" Orientation="Vertical">
                                             <Button x:Name="BtnAddRemovePermanent" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
                                         </StackPanel>
