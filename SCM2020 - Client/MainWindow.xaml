@@ -128,6 +128,8 @@
                                         </ListBoxItem>
                                         <ListBoxItem>
                                             <TextBlock Text="Consulta de Funcionários"></TextBlock>
+                                        </ListBoxItem>                                        <ListBoxItem>
+                                            <TextBlock Text="Consulta de Funcionários"></TextBlock>
                                         </ListBoxItem>
                                     </ListBox>
                                 </Popup>
@@ -159,6 +161,32 @@
                                 </Popup>
                                 <materialDesign:PackIcon Kind="BooksVariant"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                                 <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem x:Name="UserItem" Height="60">
+                            <StackPanel Orientation="Horizontal">
+                                <!--
+                                    Inventário rotativo -> Alguns itens do estoque (selecionados)
+                                    Inventário oficial -> todos os itens do estoque
+                            -->
+                            <Popup x:Name="PopupUser" StaysOpen="False" Placement="Right" Margin="0">
+                                <ListBox Background="White" x:Name="d" PreviewMouseLeftButtonUp="ListBoxReport_PreviewMouseLeftButtonUp"  Padding="15, 15, 15, 15">
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário oficial"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Inventário rotativo"></TextBlock>
+                                    </ListBoxItem>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
+                                    </ListBoxItem>
+                                    <!--<ListBoxItem>
+                                        <TextBlock Text="Financeiro"></TextBlock>
+                                    </ListBoxItem>-->
+                                </ListBox>
+                                </Popup>
+                                <materialDesign:PackIcon Kind="People"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                                <TextBlock Text="Gestão de Usuários" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
                     </ListView>
