@@ -173,6 +173,9 @@ namespace SCM2020___Client
                 case 4:
                     PopupReport.IsOpen = true;
                     break;
+                case 5:
+                    PopupUser.IsOpen = true;
+                    break;
                 default:
                     break;
             }

@@ -17,9 +17,10 @@
             <Grid Height="70" DockPanel.Dock="Top" VerticalAlignment="Top" Background="#FFFFFFFF">
                 <TextBlock Text="Sistema de Controle de Materiais" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"></TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <materialDesign:PackIcon Kind="NotificationsNone" Foreground="#FF999999" Margin="10 10 0 10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                <materialDesign:PackIcon Kind="NotificationsNone" Foreground="#FF000000" Margin="10 10 0 10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                <!---RightAndAlignTopEdges-->
 
-                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="True" Margin="10">
+                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF000000" StaysOpen="True" Margin="10">
                         <StackPanel Width="150">
                             <Button Content="Conta"/>
                             <Button Content="Configurações"/>
@@ -137,9 +138,9 @@
                                 <TextBlock Text="Consultas" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem x:Name="ListingItem" Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <!--
+                    <ListViewItem x:Name="ListingItem" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <!--
                                     Inventário rotativo -> Alguns itens do estoque (selecionados)
                                     Inventário oficial -> todos os itens do estoque
                             -->
@@ -158,38 +159,28 @@
                                         <TextBlock Text="Financeiro"></TextBlock>
                                     </ListBoxItem>-->
                                 </ListBox>
-                                </Popup>
-                                <materialDesign:PackIcon Kind="BooksVariant"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
-                                <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem x:Name="UserItem" Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <!--
-                                    Inventário rotativo -> Alguns itens do estoque (selecionados)
-                                    Inventário oficial -> todos os itens do estoque
-                            -->
+                            </Popup>
+                            <materialDesign:PackIcon Kind="BooksVariant"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                            <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="UserItem" Height="60">
+                        <StackPanel Orientation="Horizontal">
                             <Popup x:Name="PopupUser" StaysOpen="False" Placement="Right" Margin="0">
-                                <ListBox Background="White" x:Name="d" PreviewMouseLeftButtonUp="ListBoxReport_PreviewMouseLeftButtonUp"  Padding="15, 15, 15, 15">
+                                <ListBox Background="White" x:Name="ListBoxUser" Padding="15, 15, 15, 15">
                                     <ListBoxItem>
-                                        <TextBlock Text="Inventário oficial"></TextBlock>
-                                    </ListBoxItem>
-                                    <ListBoxItem>
-                                        <TextBlock Text="Inventário rotativo"></TextBlock>
+                                        <TextBlock Text="Cargo"></TextBlock>
                                     </ListBoxItem>
                                     <ListBoxItem>
                                         <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
                                     </ListBoxItem>
-                                    <!--<ListBoxItem>
-                                        <TextBlock Text="Financeiro"></TextBlock>
-                                    </ListBoxItem>-->
                                 </ListBox>
-                                </Popup>
-                                <materialDesign:PackIcon Kind="People"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
-                                <TextBlock Text="Gestão de Usuários" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                    </ListView>
+                            </Popup>
+                            <materialDesign:PackIcon Kind="People"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
+                            <TextBlock Text="Gestão de Usuários" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
                 </StackPanel>
             </Grid>
             <Grid Background="#FFFFFFFF" Margin="10 0 0 0" Height="Auto" DockPanel.Dock="Right">
