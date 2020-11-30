@@ -28,14 +28,14 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveBusiness_Click(object sender, RoutedEventArgs e)
         {
-            var business = BusinessTextBox.Text;
+            var businessText = BusinessTextBox.Text;
             new Task(() =>
             {
-                ModelsLibraryCore.Business sector = new ModelsLibraryCore.Business()
+                ModelsLibraryCore.Business business = new ModelsLibraryCore.Business()
                 {
-                    Name = business
+                    Name = businessText
                 };
-                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Business/Add/").ToString(), sector, Helper.Authentication);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Business/Add/").ToString(), business, Helper.Authentication);
                 MessageBox.Show(result.DeserializeJson(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             }).Start();
         }
