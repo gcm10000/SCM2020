@@ -348,7 +348,17 @@ namespace SCM2020___Client
 
         private void UserItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            var source = new Uri("Frames/UserManager/UserManager.xaml", UriKind.Relative);
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                FrameWindow frame = new FrameWindow(source);
+                frame.Show();
+            }
+            else
+            {
+                FrameContent.Source = source;
+            }
+            GC.Collect();
         }
     }
 }
