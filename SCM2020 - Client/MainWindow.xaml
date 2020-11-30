@@ -129,10 +129,8 @@
                                         </ListBoxItem>
                                         <ListBoxItem>
                                             <TextBlock Text="Consulta de Funcionários"></TextBlock>
-                                        </ListBoxItem>                                        <ListBoxItem>
-                                            <TextBlock Text="Consulta de Funcionários"></TextBlock>
                                         </ListBoxItem>
-                                    </ListBox>
+                                </ListBox>
                                 </Popup>
                                 <materialDesign:PackIcon Kind="Search"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                                 <TextBlock Text="Consultas" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
@@ -164,9 +162,9 @@
                             <TextBlock Text="Relatórios" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="UserItem" Height="60">
+                    <ListViewItem x:Name="UserItem" Height="60" MouseLeftButtonUp="UserItem_MouseLeftButtonUp">
                         <StackPanel Orientation="Horizontal">
-                            <Popup x:Name="PopupUser" StaysOpen="False" Placement="Right" Margin="0">
+                            <!--<Popup x:Name="PopupUser" StaysOpen="False" Placement="Right" Margin="0">
                                 <ListBox Background="White" x:Name="ListBoxUser" Padding="15, 15, 15, 15">
                                     <ListBoxItem>
                                         <TextBlock Text="Cargo"></TextBlock>
@@ -175,7 +173,7 @@
                                         <TextBlock Text="Listagem de Materiais com Patrimônio"></TextBlock>
                                     </ListBoxItem>
                                 </ListBox>
-                            </Popup>
+                            </Popup>-->
                             <materialDesign:PackIcon Kind="People"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock Text="Gestão de Usuários" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
                         </StackPanel>

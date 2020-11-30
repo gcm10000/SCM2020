@@ -173,9 +173,9 @@ namespace SCM2020___Client
                 case 4:
                     PopupReport.IsOpen = true;
                     break;
-                case 5:
-                    PopupUser.IsOpen = true;
-                    break;
+                //case 5:
+                //    PopupUser.IsOpen = true;
+                //    break;
                 default:
                     break;
             }
@@ -344,6 +344,11 @@ namespace SCM2020___Client
                 }
                 GC.Collect();
             }
+        }
+
+        private void UserItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
