@@ -18,7 +18,6 @@
                 <TextBox x:Name="OccupationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <ComboBox x:Name="SectorComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16">
-                    
                 </ComboBox>
                 <TextBlock Text="Senha" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <PasswordBox x:Name="PasswordBoxTextBox" Style="{x:Null}" Height="30" FontSize="16"></PasswordBox>

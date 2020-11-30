@@ -20,11 +20,18 @@ namespace SCM2020___Client.Frames.Register
     /// </summary>
     public partial class Employee : UserControl
     {
-        List<Sector> Sectors;
+        List<ModelsLibraryCore.Sector> Sectors;
+        List<string> SectorsName;
         public Employee()
         {
             InitializeComponent();
-            Sectors = APIClient.GetData<List<Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
+            Sectors = APIClient.GetData<List<ModelsLibraryCore.Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
+            SectorsName = new List<string>();
+            foreach (var sector in Sectors)
+            {
+                SectorsName.Add(sector.NameSector);
+            }
+            SectorComboBox.ItemsSource = SectorsName;
         }
 
         private void BtnSaveEmployee_Click(object sender, RoutedEventArgs e)
@@ -37,6 +44,7 @@ namespace SCM2020___Client.Frames.Register
                     Register = RegisterTextBox.Text,
                     //Editar
                     //Occupation = OccupationTextBox.Text,
+                    //Business = 
                     Sector = (SectorComboBox.SelectedIndex + 1),
                     Password = PasswordBoxTextBox.Password
                 };
