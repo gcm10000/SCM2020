@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,10 +26,27 @@ namespace SCM2020___Client.Frames.UserManager
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
-
+            if (e.Key == Key.Enter)
+            {
+                string txtsearch = TxtSearch.Text;
+                Task.Run(new Action(() => 
+                {
+                    Search(txtsearch);
+                })); 
+            }
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string txtsearch = TxtSearch.Text;
+            Task.Run(new Action(() =>
+            {
+                Search(txtsearch);
+            }));
+
+        }
+
+        private void Search(string query)
         {
 
         }
@@ -40,7 +58,7 @@ namespace SCM2020___Client.Frames.UserManager
 
         private void QueryDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-
+            e.Cancel = true;
         }
 
         private void QueryDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
