@@ -782,7 +782,7 @@ namespace SCM2020___Utility
             Sector sector = new Sector() 
             {
                 NameSector = "Administrador",
-                NumberSector = 100
+                NumberSector = 98
             };
             var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
             Console.WriteLine(result);

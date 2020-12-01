@@ -17,6 +17,14 @@ namespace SCM2020___Server.Controllers
         public SectorController(UserManager<ApplicationUser> userManager, ControlDbContext context)
         { this.userManager = userManager; this.context = context; }
         [HttpGet]
+        public IActionResult ShowSectors()
+        {
+            var sectors = context.Sectors.ToList();
+            var AdminSector = sectors.Single(x => x.NumberSector == 98);
+            sectors.Remove(AdminSector);
+            return Ok(sectors);
+        }
+        [HttpGet("Showall")]
         public IActionResult ShowAll()
         {
             return Ok(context.Sectors.ToList());
