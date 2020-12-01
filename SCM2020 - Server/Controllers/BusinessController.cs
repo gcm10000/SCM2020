@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace SCM2020___Server.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class BusinessController : ControllerBase
     {
         ControlDbContext context;
