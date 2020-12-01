@@ -33,8 +33,8 @@ namespace SCM2020___Server.Controllers
             var raw = await Helper.RawFromBody(this);
             var sector = new Sector(raw);
             if (context.Sectors.Any(
-                x => (x.NumberSector == sector.NumberSector) || x.NameSector == sector.NameSector))
-                return BadRequest("Número ou nome do setor já existente.");
+                x => (x.NumberSector == sector.NumberSector)))
+                return BadRequest("Número do setor já existente.");
             context.Sectors.Add(sector);
             await context.SaveChangesAsync();
             var sectoroutput = context.Sectors.Single(x => (x.NameSector == sector.NameSector) && (x.NumberSector == sector.NumberSector));
@@ -65,6 +65,12 @@ namespace SCM2020___Server.Controllers
             context.Sectors.Update(sector);
             await context.SaveChangesAsync();
             return Ok("Setor atualizada com sucesso.");
+        }
+        [HttpGet("NumberSector/{numberSector}")]
+        public IActionResult NumberSector(int numberSector)
+        {
+            var sector = context.Sectors.SingleOrDefault(x => x.NumberSector == numberSector);
+            return Ok(sector);
         }
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)

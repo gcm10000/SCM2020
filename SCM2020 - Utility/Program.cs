@@ -183,6 +183,12 @@ namespace SCM2020___Utility
                 NumberSector = 36
             };
 
+            Sector sector9 = new Sector()
+            {
+                NameSector = "Desconhecido",
+                NumberSector = 99
+            };
+
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector2, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector3, Authentication));
@@ -191,6 +197,7 @@ namespace SCM2020___Utility
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector6, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector8, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector9, Authentication));
 
 
         }

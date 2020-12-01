@@ -239,13 +239,32 @@ namespace SCM2020___Client.Frames
             }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            var numberSector = OSTextBox.Text.Substring(0, 2);
+            Sector sector = null;
+            try
+            {
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/{numberSector}").ToString(), Helper.Authentication);
+                //COMPARAR SE O USUÁRIO É DO MESMO SETOR DA ORDEM DE SERVIÇO
+                if (sector != Helper.CurrentSector)
+                {
+                    if (MessageBox.Show("Funcionário não é concernente com o setor da ordem de serviço." + Environment.NewLine + "Deseja continuar?", "Atenção", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                //Setor desconhecido...
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/99").ToString(), Helper.Authentication);
+            }
             Monitoring monitoring = new Monitoring()
             {
                 SCMEmployeeId = Helper.NameIdentifier,
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
-                RequestingSector = Helper.CurrentSector.Id,
+                RequestingSector = sector.Id,//o setor é referente ao número da ordem de serviço,
                 MovingDate = dateTime,
                 Work_Order = OSTextBox.Text,
                 ServiceLocation = ServiceLocalizationTextBox.Text

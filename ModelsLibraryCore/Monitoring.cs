@@ -64,7 +64,7 @@ namespace ModelsLibraryCore
         /// </summary>
         public bool Situation { get; set; }
         /// <summary>
-        /// Setor do qual solicitou a movimentação de saída.  
+        /// Setor que solicitou a movimentação de saída.  
         /// Será tratado como ID da tabela Sectors.
         /// </summary>
         public int RequestingSector { get; set; }
