@@ -249,6 +249,9 @@ namespace SCM2020___Client
                     case 5:
                         source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
                         break;
+                    case 6:
+                        source = new Uri("Frames/Register/Business.xaml", UriKind.Relative);
+                        break;
                 }
                 PopupRegister.IsOpen = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))

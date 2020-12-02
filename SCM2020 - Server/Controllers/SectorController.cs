@@ -20,8 +20,9 @@ namespace SCM2020___Server.Controllers
         public IActionResult ShowSectors()
         {
             var sectors = context.Sectors.ToList();
-            var AdminSector = sectors.Single(x => x.NumberSector == 98);
-            sectors.Remove(AdminSector);
+            var AdminSector = sectors.SingleOrDefault(x => x.NumberSector == 98);
+            if (AdminSector != null)
+                sectors.Remove(AdminSector);
             return Ok(sectors);
         }
         [HttpGet("Showall")]

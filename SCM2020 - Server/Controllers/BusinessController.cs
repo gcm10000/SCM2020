@@ -19,12 +19,13 @@ namespace SCM2020___Server.Controllers
         {
             this.context = context;
         }
+        [HttpPost("Add")]
         public async Task<IActionResult> Add()
         {
             var raw = await Helper.RawFromBody(this);
-            var vendor = JsonConvert.DeserializeObject<Business>(raw);
+            var business = JsonConvert.DeserializeObject<Business>(raw);
 
-            context.Business.Add(vendor);
+            context.Business.Add(business);
             await context.SaveChangesAsync();
             return Ok("Adicionado com sucesso.");
         }

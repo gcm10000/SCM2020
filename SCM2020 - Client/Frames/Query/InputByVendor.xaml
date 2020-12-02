@@ -75,8 +75,8 @@
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True"
-                                  CanUserResizeColumns="False">
-                                  CanUserReorderColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
                         <DataGridTextColumn Header=" Data" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"></DataGridTextColumn>

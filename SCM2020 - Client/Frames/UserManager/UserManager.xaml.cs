@@ -48,7 +48,10 @@ namespace SCM2020___Client.Frames.UserManager
 
         private void Search(string query)
         {
-
+            if (query.Trim() == string.Empty)
+            {
+                return;
+            }
         }
 
         private void QueryDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)

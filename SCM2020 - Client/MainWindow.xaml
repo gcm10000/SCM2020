@@ -93,10 +93,10 @@
                                         <ListBoxItem>
                                             <TextBlock Text="Setor"></TextBlock>
                                         </ListBoxItem>
-                                        <!--<ListBoxItem>
-                                        <TextBlock Text="Solicitantes"></TextBlock>
-                                    </ListBoxItem>-->
-                                    </ListBox>
+                                    <ListBoxItem>
+                                        <TextBlock Text="Empresa"></TextBlock>
+                                    </ListBoxItem>
+                                </ListBox>
                                 </Popup>
                                 <materialDesign:PackIcon Kind="AddCircleOutline"  Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>
                                 <TextBlock Text="Cadastro" VerticalAlignment="Center" Margin="15 10" FontSize="18"></TextBlock>
