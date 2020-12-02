@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelsLibraryCore;
+using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> Index()
         {
             //Receber todo o organograma em JSON
-            GroupEmployees group1 = new GroupEmployees(CompanyPosition.Director);
+            GroupEmployees group1 = new GroupEmployees();
             Employee E1 = new Employee();
             E1.UsersId = "E1";
             E1.BusinessId = 1;
@@ -36,7 +37,7 @@ namespace SCM2020___Server.Controllers
             EmployeeGroupSupport s1 = new EmployeeGroupSupport();
             s1.GroupEmployeesParent = group1;
 
-            GroupEmployees group2 = new GroupEmployees(CompanyPosition.Engineer);
+            GroupEmployees group2 = new GroupEmployees();
             List<Employee> employees = new List<Employee>();
             
             Employee E2 = new Employee();
@@ -59,9 +60,33 @@ namespace SCM2020___Server.Controllers
 
             return Ok(group1.ToJson());
         }
-        public void GetAllEmployees(ICollection<Employee> employees)
-        {
+        //public void GetAllEmployees(ICollection<Employee> employees)
+        //{
 
+        //}
+        //[HttpPost("AddEmployee")]
+        [HttpPost("AddGroup")]
+        public async Task<IActionResult> Add()
+        {
+            var raw = await Helper.RawFromBody(this);
+            var group = JsonConvert.DeserializeObject<GroupEmployees>(raw);
+            ControlDbContext.GroupEmployees.Add(group);
+            await ControlDbContext.SaveChangesAsync();
+            return Ok("Grupo adicionado com sucesso.");
+        }
+        //Esse método atualiza os funcionários presentes no grupo. Sobrescreve a lista anterior.
+        [HttpPost("FillEmployeeInGroup/{id}")]
+        public async Task<IActionResult> FillEmployeeInGroup(int id)
+        {
+            var raw = await Helper.RawFromBody(this);
+            var employees = JsonConvert.DeserializeObject<List<Employee>>(raw);
+            
+            var group = ControlDbContext.GroupEmployees.Find(id);
+            group.Employees = employees;
+
+            ControlDbContext.GroupEmployees.Update(group);
+            await ControlDbContext.SaveChangesAsync();
+            return Ok("Grupo preenchido com sucesso.");
         }
     }
 }
