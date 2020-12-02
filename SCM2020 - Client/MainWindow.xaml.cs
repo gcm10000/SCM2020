@@ -121,6 +121,28 @@ namespace SCM2020___Client
             //    this.MovementItem.Visibility = Visibility.Collapsed;
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
+
+            ModelsLibraryCore.Employee employee1 = new ModelsLibraryCore.Employee()
+            {
+                UsersId = "Gabriel"
+            };
+            ModelsLibraryCore.Employee employee2 = new ModelsLibraryCore.Employee()
+            {
+                UsersId = "Rafael"
+            };
+            ModelsLibraryCore.Employee employee3 = new ModelsLibraryCore.Employee()
+            {
+                UsersId = "Miguel"
+            };
+            ModelsLibraryCore.Employee employee4 = new ModelsLibraryCore.Employee()
+            {
+                UsersId = "Lucas"
+            };
+
+            Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };
+            Grupo grupo2 = new Grupo() { Name = "Gerente", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee2, employee3 } };
+
+
         }
 
         protected override void OnClosed(EventArgs e)

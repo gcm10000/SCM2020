@@ -12,7 +12,7 @@ namespace ModelsLibraryCore
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        //public CompanyPosition Position { get; set; }
+        public string Name { get; set; }
         public ICollection<Employee> Employees { get; set; }
         [JsonIgnore]
         public ICollection<EmployeeGroupSupport> GroupEmployeesParent { get; set; }
