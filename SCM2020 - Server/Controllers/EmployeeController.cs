@@ -64,9 +64,8 @@ namespace SCM2020___Server.Controllers
         //{
 
         //}
-        //[HttpPost("AddEmployee")]
         [HttpPost("AddGroup")]
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> AddGroup()
         {
             var raw = await Helper.RawFromBody(this);
             var group = JsonConvert.DeserializeObject<GroupEmployees>(raw);
@@ -79,10 +78,15 @@ namespace SCM2020___Server.Controllers
         public async Task<IActionResult> FillEmployeeInGroup(int id)
         {
             var raw = await Helper.RawFromBody(this);
-            var employees = JsonConvert.DeserializeObject<List<Employee>>(raw);
-            
+            var employeesId = JsonConvert.DeserializeObject<List<int>>(raw);
+
             var group = ControlDbContext.GroupEmployees.Find(id);
-            group.Employees = employees;
+            foreach (var employeeId in employeesId)
+            {
+                var employee = ControlDbContext.Employees.Find(employeeId);
+
+                group.Employees.Add(employee);
+            }
 
             ControlDbContext.GroupEmployees.Update(group);
             await ControlDbContext.SaveChangesAsync();

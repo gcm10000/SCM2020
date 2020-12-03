@@ -114,6 +114,10 @@ namespace SCM2020___Client
             });
             Helper.MyWebBrowser = WebBrowser;
 
+            //GroupEmployees groupParent = new GroupEmployees() { Name = "Gerencia", };
+            //var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Employee/AddGroup"), groupParent, Helper.Authentication);
+            //MessageBox.Show(result.Result);
+
             ////Only users with role SCM and role Administrator have total access
             //if (!((Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM)))
             //{
@@ -138,6 +142,9 @@ namespace SCM2020___Client
             {
                 UsersId = "Lucas"
             };
+
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Employee/AddGroup"), employee1, Helper.Authentication);
+
 
             //Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };
             //Grupo grupo2 = new Grupo() { Name = "Gerente", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee2, employee3 } };
