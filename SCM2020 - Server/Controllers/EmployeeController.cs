@@ -100,8 +100,11 @@ namespace SCM2020___Server.Controllers
 
             parent.GroupEmployeesChild.Add(new EmployeeGroupSupport(Parent: parent.Id, Child: child.Id));
             child.GroupEmployeesParent.Add(new EmployeeGroupSupport(Parent: parent.Id, Child: child.Id));
-
-            return Ok("");
+            
+            ControlDbContext.GroupEmployees.Update(parent);
+            ControlDbContext.GroupEmployees.Update(child);
+            await ControlDbContext.SaveChangesAsync();
+            return Ok("Nó adicionado com sucesso.");
         }
     }
 }
