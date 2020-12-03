@@ -14,6 +14,8 @@ namespace ModelsLibraryCore
         [JsonIgnore]
         public int GroupEmployee2Id { get; set; }
         public GroupEmployees GroupEmployeesChild { get; set; }
+        public EmployeeGroupSupport() { }
+        public EmployeeGroupSupport(int Parent, int Child) { this.GroupEmployee1Id = Parent; this.GroupEmployee2Id = Child; }
 
     }
 }

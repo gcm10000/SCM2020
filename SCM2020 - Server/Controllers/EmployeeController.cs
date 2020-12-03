@@ -88,5 +88,20 @@ namespace SCM2020___Server.Controllers
             await ControlDbContext.SaveChangesAsync();
             return Ok("Grupo preenchido com sucesso.");
         }
+        [HttpPost("AddNode")]
+        public async Task<IActionResult> AddNode()
+        {
+            //Dois grupos por vez compõem um nó
+            var raw = await Helper.RawFromBody(this);
+            var node = JsonConvert.DeserializeObject<NewNode>(raw);
+
+            var parent = ControlDbContext.GroupEmployees.Find(node.GroupEmployeesParent);
+            var child = ControlDbContext.GroupEmployees.Find(node.GroupEmployeesParent);
+
+            parent.GroupEmployeesChild.Add(new EmployeeGroupSupport(Parent: parent.Id, Child: child.Id));
+            child.GroupEmployeesParent.Add(new EmployeeGroupSupport(Parent: parent.Id, Child: child.Id));
+
+            return Ok("");
+        }
     }
 }
