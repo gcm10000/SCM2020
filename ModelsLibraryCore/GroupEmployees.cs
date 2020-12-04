@@ -17,6 +17,7 @@ namespace ModelsLibraryCore
         [JsonIgnore]
         public ICollection<EmployeeGroupSupport> GroupEmployeesParent { get; set; }
         public ICollection<EmployeeGroupSupport> GroupEmployeesChild { get; set; }
+        public int PositionVertical { get; set; }
         public GroupEmployees() { }
         //public GroupEmployees(CompanyPosition position) { this.Position = position; }
     }

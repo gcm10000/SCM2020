@@ -5,6 +5,7 @@ using ModelsLibraryCore;
 using Newtonsoft.Json;
 using SCM2020___Server.Context;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SCM2020___Server.Controllers
@@ -22,48 +23,75 @@ namespace SCM2020___Server.Controllers
             this.ControlDbContext = controlDbContext;
             this.userManager = userManager;
         }
-        [HttpGet("teste")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult Index()
         {
-            //Receber todo o organograma em JSON
-            GroupEmployees group1 = new GroupEmployees();
-            Employee E1 = new Employee();
-            E1.UsersId = "E1";
-            E1.BusinessId = 1;
-            group1.GroupEmployeesChild = new List<EmployeeGroupSupport>();
-            group1.Employees = new List<Employee>();
-            group1.Employees.Add(E1);
-            EmployeeGroupSupport s1 = new EmployeeGroupSupport();
-            s1.GroupEmployeesParent = group1;
+            //var firstGroupEmployee = ControlDbContext.GroupEmployees.Single(x => x.PositionVertical == 0);
+            //GroupEmployees(firstGroupEmployee.GroupEmployeesChild.ToList());
 
-            GroupEmployees group2 = new GroupEmployees();
-            List<Employee> employees = new List<Employee>();
-            
-            Employee E2 = new Employee();
-            E2.UsersId = "E2";
-            E2.BusinessId = 2;
-            employees.Add(E2);
-
-            Employee E3 = new Employee();
-            E3.UsersId = "E3";
-            E3.BusinessId = 2;
-            employees.Add(E3);
-
-            group2.Employees = employees;
-            s1.GroupEmployeesChild = group2;
-
-            group1.GroupEmployeesChild.Add(s1);
-
-            ControlDbContext.GroupEmployees.Add(group1);
-            await ControlDbContext.SaveChangesAsync();
-
-            return Ok(group1.ToJson());
+            return Ok("");
         }
-        //public void GetAllEmployees(ICollection<Employee> employees)
+        //public List<EmployeeGroupSupport> GroupEmployees(List<EmployeeGroupSupport> groupEmployee)
         //{
-
+        //    for (int i = 0; i < groupEmployee.Count; i++)
+        //    {
+        //        GroupEmployees(groupEmployee[i].GroupEmployeesChild.GroupEmployeesChild.ToList());
+        //    }
         //}
+
+
+        //[HttpGet("teste")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Index()
+        //{
+        //    //Receber todo o organograma em JSON
+        //    GroupEmployees group1 = new GroupEmployees();
+        //    Employee E1 = new Employee();
+        //    E1.UsersId = "E1";
+        //    E1.BusinessId = 1;
+        //    group1.GroupEmployeesChild = new List<EmployeeGroupSupport>();
+        //    group1.Employees = new List<Employee>();
+        //    group1.Employees.Add(E1);
+        //    EmployeeGroupSupport s1 = new EmployeeGroupSupport();
+        //    s1.GroupEmployeesParent = group1;
+
+        //    GroupEmployees group2 = new GroupEmployees();
+        //    List<Employee> employees = new List<Employee>();
+            
+        //    Employee E2 = new Employee();
+        //    E2.UsersId = "E2";
+        //    E2.BusinessId = 2;
+        //    employees.Add(E2);
+
+        //    Employee E3 = new Employee();
+        //    E3.UsersId = "E3";
+        //    E3.BusinessId = 2;
+        //    employees.Add(E3);
+
+        //    group2.Employees = employees;
+        //    s1.GroupEmployeesChild = group2;
+
+        //    group1.GroupEmployeesChild.Add(s1);
+
+        //    ControlDbContext.GroupEmployees.Add(group1);
+        //    await ControlDbContext.SaveChangesAsync();
+
+        //    return Ok(group1.ToJson());
+        //}
+        [HttpGet("AllEmployees")]
+        public IActionResult GetAllEmployees()
+        {
+            List<Employee> employees = new List<Employee>();
+            var groups = ControlDbContext.GroupEmployees.ToList();
+            foreach (var group in groups)
+            {
+                foreach (var employee in group.Employees)
+                {
+                    employees.Add(employee);
+                }
+            }
+            return Ok(employees);
+        }
         [HttpPost("AddGroup")]
         public async Task<IActionResult> AddGroup()
         {
@@ -81,6 +109,7 @@ namespace SCM2020___Server.Controllers
             var employeesId = JsonConvert.DeserializeObject<List<int>>(raw);
 
             var group = ControlDbContext.GroupEmployees.Find(id);
+            group.Employees = new List<Employee>();
             foreach (var employeeId in employeesId)
             {
                 var employee = ControlDbContext.Employees.Find(employeeId);

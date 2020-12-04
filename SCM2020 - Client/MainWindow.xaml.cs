@@ -126,24 +126,25 @@ namespace SCM2020___Client
             //    this.RegisterItem.Visibility = Visibility.Collapsed;
             //}
 
-            ModelsLibraryCore.Employee employee1 = new ModelsLibraryCore.Employee()
-            {
-                UsersId = "Gabriel"
-            };
-            ModelsLibraryCore.Employee employee2 = new ModelsLibraryCore.Employee()
-            {
-                UsersId = "Rafael"
-            };
-            ModelsLibraryCore.Employee employee3 = new ModelsLibraryCore.Employee()
-            {
-                UsersId = "Miguel"
-            };
-            ModelsLibraryCore.Employee employee4 = new ModelsLibraryCore.Employee()
-            {
-                UsersId = "Lucas"
-            };
+            //ModelsLibraryCore.Employee employee1 = new ModelsLibraryCore.Employee()
+            //{
+            //    UsersId = "Gabriel"
+            //};
+            //ModelsLibraryCore.Employee employee2 = new ModelsLibraryCore.Employee()
+            //{
+            //    UsersId = "Rafael"
+            //};
+            //ModelsLibraryCore.Employee employee3 = new ModelsLibraryCore.Employee()
+            //{
+            //    UsersId = "Miguel"
+            //};
+            //ModelsLibraryCore.Employee employee4 = new ModelsLibraryCore.Employee()
+            //{
+            //    UsersId = "Lucas"
+            //};
+            List<int> ids = new List<int>() { 1 };
 
-            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Employee/AddGroup"), employee1, Helper.Authentication);
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"Employee/FillEmployeeInGroup/4"), ids, Helper.Authentication);
 
 
             //Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };
