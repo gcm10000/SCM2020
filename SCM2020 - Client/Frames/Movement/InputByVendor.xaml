@@ -8,18 +8,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
-        <Storyboard x:Key="InformationUnderLine">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="GridCursor">
-                <SplineThicknessKeyFrame KeyTime="0" Value="160 0 0 0"></SplineThicknessKeyFrame>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="10 0 0 0"></SplineThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
-        </Storyboard>
-        <Storyboard x:Key="ProductsUnderLine">
-            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="GridCursor">
-                <SplineThicknessKeyFrame KeyTime="0" Value="10 0 0 0"></SplineThicknessKeyFrame>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="160 0 0 0"></SplineThicknessKeyFrame>
-            </ThicknessAnimationUsingKeyFrames>
-        </Storyboard>
         <Style x:Key="Body_Content_DataGrid_Centering"
         TargetType="{x:Type DataGridCell}">
             <Setter Property="Template">
@@ -58,7 +46,6 @@
                 <Button Uid="0" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnInformation_Click" Cursor="Hand"></Button>
                 <Button Uid="1" x:Name="ButtonProducts" Width="150" Content="PRODUTOS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnProducts_Click" Cursor="Hand"/>
             </StackPanel>
-            <Grid x:Name="GridCursor" Width="150" Height="2" Background="#FF2196F3" HorizontalAlignment="Left" Margin="10 0"/>
         </Grid>
 
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
@@ -125,12 +112,12 @@
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" >
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Adicionada" Binding="{Binding QuantityAdded}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Futuro" Binding="{Binding QuantityFuture}" Width="Auto"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">

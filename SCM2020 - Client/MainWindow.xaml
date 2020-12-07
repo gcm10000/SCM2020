@@ -13,6 +13,7 @@
     <Window.Triggers>
 
     </Window.Triggers>
+    <!--Dropdown Menu: https://www.youtube.com/watch?v=-JMS5z_HKIg -->
     <DockPanel Background="#FFF6F6F6">
             <Grid Height="70" DockPanel.Dock="Top" VerticalAlignment="Top" Background="#FFFFFFFF">
                 <TextBlock Text="Sistema de Controle de Materiais" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"></TextBlock>
