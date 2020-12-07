@@ -43,6 +43,7 @@
             </Grid.RowDefinitions>
             <TextBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" TextWrapping="Wrap" materialDesign:HintAssist.Hint="Insira nota fiscal" FontSize="16" />
             <Button Grid.Column="1" Grid.Row="0" Content="Ir" Margin="10 0 10 0" Width="200" Background="#2196F2" BorderThickness="0" FontSize="16"></Button>
+            <!--OCULTAR/EXIBIR-->
             <TextBlock Text="Fornecedor" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0 40 25 0" FontWeight="Bold"></TextBlock>
             <ComboBox Grid.Column="1" Grid.Row="1" Margin="25 40 25 0" VerticalAlignment="Center" FontSize="16" Text="Selecione Fornecedor"></ComboBox>
             <!--<TextBox Grid.Column="1" Grid.Row="1" Margin="25 40 25 0" VerticalAlignment="Center" materialDesign:HintAssist.Hint="Fornecedor" FontSize="16" />-->
@@ -57,14 +58,7 @@
             <TextBlock Text="Estado" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0" FontSize="16" VerticalAlignment="Center" Margin="0 20 25 0" FontWeight="Bold"></TextBlock>
             <TextBlock Text="Disponível" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Foreground="Green" Margin="25 20 25 0"></TextBlock>
             <Button Grid.Column="1" Grid.Row="5" Content="PRÓXIMO PASSO" Width="200" Margin="10 45 10 0" Background="#2196F2" BorderThickness="0" FontSize="16"></Button>
+            <!--OCULTAR/EXIBIR-->
         </Grid>
-        
-        <!--<Grid DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-        </Grid>-->
     </DockPanel>
 </UserControl>
