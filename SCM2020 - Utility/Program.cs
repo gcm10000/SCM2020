@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Authentication;
+using System.Threading.Tasks;
 
 namespace SCM2020___Utility
 {
@@ -97,16 +98,16 @@ namespace SCM2020___Utility
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
+            //RegisterVendors(start);   //OK
+            //AddGroup(start);          //OK
+            //AddSector(start);         //OK
+            //SignUpSCMEmployees();     //OK
+            //SignUpAll();              //OK
+            //AddProduct(start);        //OK
+            //AddMonitoring(start);     //OK
+            //AddOutput(start);         //OK
+            //AddInputByVendor(start);  //OK
 
-            //RegisterVendors(start);
-            //AddGroup(start);
-            //AddSector(start);
-            //SignUpSCMEmployees();
-            //SignUpAll();
-            //AddProduct(start);
-            //AddMonitoring(start);
-            //AddInputByVendor(start);
-            AddOutput(start);
             AddInput(start);
 
             //var result = client1.DELETEData();
@@ -256,7 +257,7 @@ namespace SCM2020___Utility
                     MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
                     materialInputByVendor.Invoice = NF;
                     materialInputByVendor.MovingDate = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
-                    materialInputByVendor.AuxiliarConsumptions = new List<AuxiliarConsumption>();
+                    materialInputByVendor.ConsumptionProducts = new List<AuxiliarConsumption>();
                     var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
                     var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{register}"), Authentication);
                     materialInputByVendor.SCMEmployeeId = resultSCMId;
@@ -295,7 +296,7 @@ namespace SCM2020___Utility
                         auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                         auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
                         auxiliarConsumption.SCMEmployeeId = resultSCMId;
-                        materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+                        materialInputByVendor.ConsumptionProducts.Add(auxiliarConsumption);
 
                         InputByVendors.Add(materialInputByVendor);
                     }
@@ -329,8 +330,9 @@ namespace SCM2020___Utility
                         var register = oldInputByVendor.First(x => x.Key.ToLower() == "matricula do almo").Value;
                         var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{register}"), Authentication);
                         materialInputByVendor.SCMEmployeeId = resultSCMId;
+                        auxiliarConsumption.SCMEmployeeId = resultSCMId;
 
-                        materialInputByVendor.AuxiliarConsumptions.Add(auxiliarConsumption);
+                        materialInputByVendor.ConsumptionProducts.Add(auxiliarConsumption);
                     }
                     catch (System.Net.Http.HttpRequestException ex)
                     {
@@ -397,7 +399,7 @@ namespace SCM2020___Utility
                         }
                         };
                         materialOutputs.Add(materialOutput);
-                        Console.WriteLine($"Total de movimentação de saída resgatadas: {materialOutputs.Count}");
+                        Task.Run(() => Console.WriteLine($"Total de movimentação de saída resgatadas: {materialOutputs.Count}"));
                     }
                     else
                     {

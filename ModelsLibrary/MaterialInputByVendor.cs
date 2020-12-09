@@ -30,7 +30,7 @@ namespace ModelsLibrary
         /// Produtos de entrada.
         /// Entrada por Id do produto.
         /// </summary>
-        public ICollection<AuxiliarConsumption> AuxiliarConsumptions { get; set; }
+        public ICollection<AuxiliarConsumption> ConsumptionProducts { get; set; }
         /// <summary>
         /// Materiais permanentes presente na entrada.
         /// </summary>

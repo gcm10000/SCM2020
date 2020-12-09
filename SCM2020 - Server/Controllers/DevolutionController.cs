@@ -65,12 +65,13 @@ namespace SCM2020___Server.Controllers
 
             return Ok(inputs);
         }
-        [Authorize(Roles = Roles.Administrator)]
+        //[Authorize(Roles = Roles.Administrator)]
+        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
             var raw = await Helper.RawFromBody(this);
-            var deserialized = JsonConvert.DeserializeObject<MaterialInput>(raw);
+            //var deserialized = JsonConvert.DeserializeObject<MaterialInput>(raw);
 
             MaterialInput materialInput = new MaterialInput(raw);
             context.MaterialInput.Add(materialInput);
