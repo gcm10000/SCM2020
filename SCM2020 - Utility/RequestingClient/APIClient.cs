@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SCM2020___Utility.RequestingClient
@@ -20,17 +21,27 @@ namespace SCM2020___Utility.RequestingClient
             //READ -> GENERIC GET
             //UPDATE -> GENERIC POST
             //DELETE -> INT DELETE
-            using (var client = new HttpClient())
+            try
             {
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = authentication;
 
-                var objToJson = JsonConvert.SerializeObject(ObjectData);
-                HttpResponseMessage respToken = client.PostAsync(requestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
-                string content = respToken.Content.ReadAsStringAsync().Result;
-                return content;
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(
+                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = authentication;
+
+                    var objToJson = JsonConvert.SerializeObject(ObjectData);
+                    HttpResponseMessage respToken = client.PostAsync(requestUri, new StringContent(objToJson, Encoding.UTF8, "application/json")).Result;
+                    string content = respToken.Content.ReadAsStringAsync().Result;
+                    return content;
+                }
+            }
+            catch (AggregateException)
+            {
+                Console.WriteLine("Conexão mal-sucedida. Tentando reenviar dados...");
+                Thread.Sleep(300);
+                return POSTData(requestUri, ObjectData, authentication);
             }
         }
         public static ModelsLibrary.Response POSTDataSector(Uri requestUri, object ObjectData, AuthenticationHeaderValue authentication)
@@ -98,6 +109,12 @@ namespace SCM2020___Utility.RequestingClient
                     else
                         throw new HttpRequestException($"{respToken.StatusCode}: {respToken.Content}.\n{content}");
                 }
+            }
+            catch (AggregateException)
+            {
+                Console.WriteLine("Comunicação mal-executada. Tentando novamente...");
+                Thread.Sleep(300);
+                return GETData<T>(requestUri, authentication);
             }
             catch (Exception e)
             {

@@ -34,7 +34,7 @@ namespace SCM2020___Utility
             //UPDATE -> GENERIC POST V
             //DELETE -> INT DELETE
 
-            SignUpAdministrator();
+            //SignUpAdministrator();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
@@ -98,16 +98,16 @@ namespace SCM2020___Utility
             //    null);
 
 
-            RegisterVendors(start);
-            AddGroup(start);
-            AddSector(start);
-            SignUpSCMEmployees();
-            SignUpAll();
-            AddProduct(start);
+            //RegisterVendors(start);
+            //AddGroup(start);
+            //AddSector(start);
+            //SignUpSCMEmployees();
+            //SignUpAll();
+            //AddProduct(start);
             //AddMonitoring(start);
             //AddInputByVendor(start);
-            //AddOutput(start);
-            //AddInput(start);
+            AddOutput(start);
+            AddInput(start);
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);

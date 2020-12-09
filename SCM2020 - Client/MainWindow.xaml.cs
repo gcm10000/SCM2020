@@ -142,9 +142,11 @@ namespace SCM2020___Client
             //{
             //    UsersId = "Lucas"
             //};
-            List<int> ids = new List<int>() { 1 };
+            
+            
+            //List<int> ids = new List<int>() { 1 };
 
-            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"Employee/FillEmployeeInGroup/4"), ids, Helper.Authentication);
+            //var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"Employee/FillEmployeeInGroup/4"), ids, Helper.Authentication);
 
 
             //Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };

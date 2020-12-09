@@ -110,7 +110,7 @@ namespace SCM2020___Client.Frames.Query
                 }
                 else
                 {
-                    QueryByDateDocument.Product product = products.Single(x => x.ProductId == item.ProductId);
+                    QueryByDateDocument.Product product = products.Single(x => (x.ProductId == item.ProductId) && (x.WorkOrder == item.WorkOrder));
                     product.Output += item.Quantity;
                 }
             }

@@ -134,11 +134,11 @@
                           >
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
-                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}" Width="Auto"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Opções" Width="Auto">
+                        <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
+                        <DataGridTextColumn Header=" Quantidade Movimentada" Binding="{Binding QuantityAdded}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="Opções">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
