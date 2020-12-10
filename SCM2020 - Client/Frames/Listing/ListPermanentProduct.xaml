@@ -83,7 +83,7 @@
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header=" Ordem de Serviço" Binding="{Binding WorkOrder}" Width="Auto"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
 

@@ -59,6 +59,8 @@ namespace SCM2020___Client
             //GroupEmployees groupParent = new GroupEmployees() { Name = "Gabriel", };
             //var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Employee/AddGroup"), groupParent, Helper.Authentication);
             //MessageBox.Show(result.Result);
+
+            ConnectServer();
         }
 
 
@@ -71,8 +73,12 @@ namespace SCM2020___Client
         {
             //user 59450
             //password SenhaSecreta#2020
-            var user = UserTextBox.Text;
-            var password = PasswordTextBox.Password;
+
+            //var user = UserTextBox.Text;
+            //var password = PasswordTextBox.Password;
+
+            var user = "59450";
+            var password = "SenhaSecreta#2020";
             var t = Task.Run(() =>
             {
                 if (SignIn(user, password))
