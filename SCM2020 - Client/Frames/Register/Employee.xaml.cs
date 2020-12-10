@@ -36,18 +36,18 @@ namespace SCM2020___Client.Frames.Register
 
         private void BtnSaveEmployee_Click(object sender, RoutedEventArgs e)
         {
+            ModelsLibraryCore.SignUpUserInfo employee = new ModelsLibraryCore.SignUpUserInfo
+            {
+                Name = NameTextBox.Text,
+                Register = RegisterTextBox.Text,
+                //Editar
+                //Occupation = OccupationTextBox.Text,
+                Business = (BusinessComboBox.SelectedIndex + 1),
+                Sector = (SectorComboBox.SelectedIndex + 1),
+                Password = PasswordBoxTextBox.Password
+            };
             new Task(() =>
             {
-                ModelsLibraryCore.SignUpUserInfo employee = new ModelsLibraryCore.SignUpUserInfo
-                {
-                    Name = NameTextBox.Text,
-                    Register = RegisterTextBox.Text,
-                    //Editar
-                    //Occupation = OccupationTextBox.Text,
-                    //Business = 
-                    Sector = (SectorComboBox.SelectedIndex + 1),
-                    Password = PasswordBoxTextBox.Password
-                };
                 var result = APIClient.PostData(new Uri(Helper.ServerAPI, new Uri("User/NewUser/")).ToString(), employee, Helper.Authentication);
                 MessageBox.Show(result);
             }).Start();
