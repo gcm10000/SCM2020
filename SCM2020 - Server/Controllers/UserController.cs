@@ -143,7 +143,7 @@ namespace SCM2020___Server.Controllers
             var postData = await SignUpUserInfo();
             var username = postData.Register;
 
-            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, SectorId = postData.Sector };
+            var user = new ApplicationUser { UserName = username, Name = postData.Name, Register = username, SectorId = postData.Sector, BusinessId = postData.Business };
             
             var r = UserManager.FindByRegister(postData.Register);
 
