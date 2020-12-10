@@ -9,6 +9,7 @@ namespace ModelsLibrary
     public class AuxiliarConsumption : ProductBase 
     {
         public double Quantity { get; set; }
+        public string WorkOrder { get; set; }
     }
     public class AuxiliarPermanent : ProductBase { }
     public abstract class ProductBase

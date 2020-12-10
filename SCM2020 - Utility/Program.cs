@@ -105,8 +105,8 @@ namespace SCM2020___Utility
             //SignUpAll();              //OK
             //AddProduct(start);        //OK
             //AddMonitoring(start);     //OK
-            //AddOutput(start);         //OK
-            //AddInputByVendor(start);  //OK
+            AddOutput(start);           //OK
+            AddInputByVendor(start);    //OK
 
             AddInput(start);
 
@@ -375,8 +375,8 @@ namespace SCM2020___Utility
 
                     var SCMEmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula do almo").Value;
                     var resultSCMId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMEmployeeRegistration}"), Authentication);
-                    var EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value;
-                    var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMEmployeeRegistration}"), Authentication);
+                    //var EmployeeRegistration = oldMaterialOutput.First(x => x.Key.ToLower() == "matricula").Value;
+                    //var resultEmployeeId = APIClient.GETData<string>(new Uri(uriServer, $"User/UserId/{SCMEmployeeRegistration}"), Authentication);
 
                     if (!materialOutputs.Any(x => x.WorkOrder == WorkOrder))
                     {
@@ -394,7 +394,8 @@ namespace SCM2020___Utility
                                 Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "mov data").Value),
                                 Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value),
                                 SCMEmployeeId = resultSCMId,
-                                ProductId = resultProductId
+                                ProductId = resultProductId,
+                                WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value,
                             }
                         }
                         };
@@ -409,7 +410,7 @@ namespace SCM2020___Utility
                         auxiliarConsumption.Date = DateTime.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "data da movimentação").Value);
                         auxiliarConsumption.Quantity = double.Parse(oldMaterialOutput.First(x => x.Key.ToLower() == "qtd").Value);
                         auxiliarConsumption.SCMEmployeeId = resultSCMId;
-
+                        auxiliarConsumption.WorkOrder = oldMaterialOutput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
                         materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
                     }
                 }
