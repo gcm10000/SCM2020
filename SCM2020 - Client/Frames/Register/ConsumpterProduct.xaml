@@ -21,8 +21,8 @@
                 <TextBox x:Name="MininumStockTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Estoque máximo" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="MaximumStockTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Número no bloco e linha" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="NumberLocalizationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
+                <!--<TextBlock Text="Número no bloco e linha" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBox x:Name="NumberLocalizationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>-->
                 <TextBlock Text="Estoque" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="StockTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Unidade" Margin="0 20 0 5" FontSize="18"></TextBlock>

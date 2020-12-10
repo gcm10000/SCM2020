@@ -12,7 +12,7 @@ namespace SCM2020___Client.Models
         {
             this.Code = consumptionProduct.Code;
             this.Description = consumptionProduct.Description;
-            this.NumberLocalization = consumptionProduct.NumberLocalization;
+            //this.NumberLocalization = consumptionProduct.NumberLocalization;
             this.Localization = consumptionProduct.Localization;
             this.MaximumStock = consumptionProduct.MaximumStock;
             this.MininumStock = consumptionProduct.MininumStock;

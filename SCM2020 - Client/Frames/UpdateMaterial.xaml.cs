@@ -54,7 +54,7 @@ namespace SCM2020___Client.Frames
             this.LocalizationTextBox.Text = product.Localization;
             this.MininumStockTextBox.Text = product.MininumStock.ToString();
             this.MaximumStockTextBox.Text = product.MaximumStock.ToString();
-            this.NumberLocalizationTextBox.Text = product.NumberLocalization.ToString();
+            //this.NumberLocalizationTextBox.Text = product.NumberLocalization.ToString();
             this.StockTextBox.Text = product.Stock.ToString();
             this.UnityTextBox.Text = product.Unity;
 
@@ -71,7 +71,7 @@ namespace SCM2020___Client.Frames
                 Localization = LocalizationTextBox.Text,
                 MininumStock = double.Parse(MininumStockTextBox.Text),
                 MaximumStock = double.Parse(MaximumStockTextBox.Text),
-                NumberLocalization = uint.Parse(NumberLocalizationTextBox.Text),
+                //NumberLocalization = uint.Parse(NumberLocalizationTextBox.Text),
                 Stock = double.Parse(StockTextBox.Text),
                 Unity = UnityTextBox.Text,
                 Group = (GroupComboBox.SelectedIndex + 1),

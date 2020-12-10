@@ -49,7 +49,7 @@ namespace SCM2020___Client.Frames.Register
                 Localization = LocalizationTextBox.Text,
                 MininumStock = double.Parse(MininumStockTextBox.Text),
                 MaximumStock = double.Parse(MaximumStockTextBox.Text),
-                NumberLocalization = uint.Parse(NumberLocalizationTextBox.Text),
+                //NumberLocalization = uint.Parse(NumberLocalizationTextBox.Text),
                 Stock = double.Parse(StockTextBox.Text),
                 Unity = UnityTextBox.Text,
                 Photo = null

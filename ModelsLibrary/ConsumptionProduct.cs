@@ -13,7 +13,7 @@ namespace ModelsLibrary
             var productFromRaw = JObject.Parse(raw);
             this.Code = productFromRaw.Value<int>("Code");
             this.Description = productFromRaw.Value<string>("Description");
-            this.NumberLocalization = productFromRaw.Value<int>("NumberLocalization");
+            //this.NumberLocalization = productFromRaw.Value<int>("NumberLocalization");
             this.Id = productFromRaw.Value<int>("Id");
             this.Localization = productFromRaw.Value<string>("Localization");
             this.MaximumStock = productFromRaw.Value<double>("MaximumStock");
@@ -53,10 +53,10 @@ namespace ModelsLibrary
         /// Onde o produto se encontra dentro do Sistema de Materiais.
         /// </summary>
         public string Localization { get; set; }
-        /// <summary>
-        /// Número da matriz referente ao bloco e linha.
-        /// </summary>
-        public int NumberLocalization { get; set; }
+        ///// <summary>
+        ///// Número da matriz referente ao bloco e linha.
+        ///// </summary>
+        //public int NumberLocalization { get; set; }
         /// <summary>
         /// Quantidade atual do produto encontrado no estoque.
         /// </summary>
