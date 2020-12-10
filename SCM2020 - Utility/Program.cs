@@ -105,7 +105,7 @@ namespace SCM2020___Utility
             //SignUpAll();              //OK
             //AddProduct(start);        //OK
             //AddMonitoring(start);     //OK
-            AddOutput(start);           //OK
+            AddOutput(start);           //OK!
             AddInputByVendor(start);    //OK
 
             AddInput(start);
@@ -295,6 +295,7 @@ namespace SCM2020___Utility
                         auxiliarConsumption.ProductId = resultProductId;
                         auxiliarConsumption.Date = DateTime.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "data da movimentação").Value);
                         auxiliarConsumption.Quantity = int.Parse(oldInputByVendor.First(x => x.Key.ToLower() == "qtd").Value);
+                        auxiliarConsumption.WorkOrder = null;
                         auxiliarConsumption.SCMEmployeeId = resultSCMId;
                         materialInputByVendor.ConsumptionProducts.Add(auxiliarConsumption);
 
@@ -483,6 +484,7 @@ namespace SCM2020___Utility
                                 ProductId = resultProductId,
                                 Quantity = double.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "qtd").Value),
                                 SCMEmployeeId = resultSCMId,
+                                WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value
                             }
                         }
                         };
@@ -512,6 +514,7 @@ namespace SCM2020___Utility
                         auxiliarConsumption.Date = DateTime.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "data da movimentação").Value);
                         auxiliarConsumption.Quantity = double.Parse(oldMaterialInput.First(x => x.Key.ToLower() == "qtd").Value);
                         auxiliarConsumption.SCMEmployeeId = resultSCMId;
+                        auxiliarConsumption.WorkOrder = oldMaterialInput.First(x => x.Key.ToLower() == "ordem de seriço").Value;
                         materialInput.ConsumptionProducts.Add(auxiliarConsumption);
                     }
                     catch (System.Net.Http.HttpRequestException ex)
