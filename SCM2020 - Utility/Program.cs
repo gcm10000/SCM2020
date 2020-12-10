@@ -108,7 +108,7 @@ namespace SCM2020___Utility
             AddOutput(start);           //OK!
             AddInputByVendor(start);    //OK
 
-            AddInput(start);
+            AddInput(start);            //OK
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
