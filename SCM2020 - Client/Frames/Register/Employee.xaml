@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              xmlns:modelLibrary="clr-namespace:ModelsLibraryCore;assembly=ModelsLibraryCore"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <local:SectorsVM></local:SectorsVM>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <DockPanel Background="White">
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
@@ -21,7 +21,7 @@
                 <TextBlock Text="Cargo" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="OccupationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <TextBlock Text="Setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <ComboBox x:Name="SectorComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16" ItemsSource="{Binding Sectors}" DisplayMemberPath="NameSector" SelectedValuePath="Id"></ComboBox>
+                <ComboBox x:Name="SectorComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16" DisplayMemberPath="NameSector" SelectedValuePath="Id"></ComboBox>
                 <TextBlock Text="Empresa" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <ComboBox x:Name="BusinessComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16">
                 </ComboBox>

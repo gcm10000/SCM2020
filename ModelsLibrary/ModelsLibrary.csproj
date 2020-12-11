@@ -55,6 +55,7 @@
     <Compile Include="MaterialInputByVendor.cs" />
     <Compile Include="MaterialOutput.cs" />
     <Compile Include="Monitoring.cs" />
+    <Compile Include="NumberSectors.cs" />
     <Compile Include="PermanentProduct.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />

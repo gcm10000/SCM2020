@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ModelsLibrary
 {
     public class Sector
@@ -9,7 +11,7 @@ namespace ModelsLibrary
         }
         public Sector() { }
         public int Id { get; set; }
-        public int NumberSector { get; set; }
+        public List<NumberSectors> NumberSectors { get; set; }
         public string NameSector { get; set; }
     }
 }
