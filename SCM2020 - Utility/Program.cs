@@ -139,55 +139,43 @@ namespace SCM2020___Utility
             Sector sector1 = new Sector()
             {
                 NameSector = "Som e CATV",
-                NumberSector = 38
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 38 } }
             };
             
             Sector sector2 = new Sector()
             {
                 NameSector = "CFTV e Alarme",
-                NumberSector = 37
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 37 } }
             };
 
             Sector sector3 = new Sector()
             {
                 NameSector = "Videoconferência",
-                NumberSector = 42
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 42 } }
             };
 
             Sector sector4 = new Sector()
             {
                 NameSector = "Filmagem e Edição",
-                NumberSector = 41
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 41 } }
             };
 
             Sector sector5 = new Sector()
             {
                 NameSector = "Núcleo de Segurança Eletrônica",
-                NumberSector = 44
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 44 } }
             };
 
             Sector sector6 = new Sector()
             {
                 NameSector = "Segurança em Telefonia",
-                NumberSector = 34
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 34 }, new NumberSectors() { Number = 35 }, new NumberSectors() { Number = 36 } }
             };
             
             Sector sector7 = new Sector()
             {
-                NameSector = "Segurança em Telefonia",
-                NumberSector = 35
-            };
-            
-            Sector sector8 = new Sector()
-            {
-                NameSector = "Segurança em Telefonia",
-                NumberSector = 36
-            };
-
-            Sector sector9 = new Sector()
-            {
                 NameSector = "Desconhecido",
-                NumberSector = 99
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 99 } }
             };
 
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
@@ -197,8 +185,6 @@ namespace SCM2020___Utility
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector5, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector6, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
-            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector8, Authentication));
-            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector9, Authentication));
 
 
         }
@@ -675,7 +661,8 @@ namespace SCM2020___Utility
             Sector sector = new Sector()
             {
                 NameSector = "Setor de Controle de Materiais",
-                NumberSector = 90
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 90 } }
+
             };
             var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
             Console.WriteLine(result);
@@ -723,7 +710,7 @@ namespace SCM2020___Utility
             Sector sector = new Sector()
             {
                 NameSector = "DETEL",
-                NumberSector = 0
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 0 } }
             };
             var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
 
@@ -788,8 +775,8 @@ namespace SCM2020___Utility
             Sector sector = new Sector() 
             {
                 NameSector = "Administrador",
-                NumberSector = 98
-            };
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 98 } }
+            }; 
             var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
             Console.WriteLine(result);
             var signUp = new SignUpUserInfo()

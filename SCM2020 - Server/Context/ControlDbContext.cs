@@ -24,6 +24,8 @@ namespace SCM2020___Server.Context
         public DbSet<Employee> Employees { get; set; }
         public DbSet<GroupEmployees> GroupEmployees { get; set; }
         public DbSet<EmployeeGroupSupport> EmployeeGroupSupport { get; set; }
+        public DbSet<NumberSectors> NumberSectors { get; set; }
+
         //public DbSet<TreeNode<KeyValuePair<CompanyPosition, List<Employee>>>> TreeView { get; set; }
 
         public ControlDbContext(DbContextOptions<ControlDbContext> options) : base(options)
