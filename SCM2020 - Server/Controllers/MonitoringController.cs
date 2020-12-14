@@ -69,9 +69,9 @@ namespace SCM2020___Server.Controllers
             //Sector sector = context.Sectors.Single(x => x.NumberSector == int.Parse(monitoring.Work_Order.Substring(2)));
             if (int.TryParse(monitoring.Work_Order.Substring(0, 2), out int result))
             {
-                if (context.Sectors.Any(x => x.NumberSector == result))
+                if (context.Sectors.Any(x => x.NumberSectors.Any(y => y.Number == result)))
                 {
-                    monitoring.SectorId = context.Sectors.Single(x => x.NumberSector == result).Id;
+                    monitoring.SectorId = context.Sectors.Single(x => x.NumberSectors.Any(y => y.Number == result)).Id;
                 }
                 else
                 {
