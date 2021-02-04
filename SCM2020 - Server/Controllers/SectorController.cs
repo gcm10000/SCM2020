@@ -5,6 +5,7 @@ using ModelsLibraryCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace SCM2020___Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowSectors()
         {
-            var sectors = context.Sectors.ToList();
+            var sectors = context.Sectors.Include(x => x.NumberSectors).ToList();
             var AdminSector = sectors.SingleOrDefault(x => x.NumberSectors.Any(y => y.Number == 98));
             if (AdminSector != null)
                 sectors.Remove(AdminSector);
@@ -28,12 +29,12 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Showall")]
         public IActionResult ShowAll()
         {
-            return Ok(context.Sectors.ToList());
+            return Ok(context.Sectors.Include(x => x.NumberSectors).ToList());
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var list = context.Sectors.Find(id);
+            var list = context.Sectors.Include(x => x.NumberSectors).SingleOrDefault(x => x.Id == id);
             return Ok(list);
         }
         [HttpPost("Add")]
@@ -41,14 +42,15 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var sector = new Sector(raw);
-            if (context.Sectors.Any(
-                x => (x.NumberSector == sector.NumberSector)))
-                return BadRequest("Número do setor já existente.");
+            foreach (var numberSectors in sector.NumberSectors)
+            {
+                if (context.NumberSectors.Any(x => x.Number == numberSectors.Number))
+                    return BadRequest("Número do setor já existente.");
+            }
             context.Sectors.Add(sector);
             await context.SaveChangesAsync();
-            var sectoroutput = context.Sectors.Single(x => (x.NameSector == sector.NameSector) && (x.NumberSector == sector.NumberSector));
             //return Ok($"Setor {sector.NumberSector} - {sector.NameSector} adicionado com sucesso.");
-            return new ModelsLibraryCore.Response() { Id = sectoroutput.Id, Message = $"Setor {sector.NumberSector} - {sector.NameSector} adicionado com sucesso." };
+            return new ModelsLibraryCore.Response() { Id = sector.Id, Message = $"Setor {sector.NameSector} adicionado com sucesso." };
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
@@ -78,7 +80,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("NumberSector/{numberSector}")]
         public IActionResult NumberSector(int numberSector)
         {
-            var sector = context.Sectors.SingleOrDefault(x => x.NumberSector == numberSector);
+            var sector = context.Sectors.Include(x => x.NumberSectors).SingleOrDefault(x => x.NumberSectors.Any(y => y.Number == numberSector));
             return Ok(sector);
         }
         [HttpDelete("Remove/{id}")]

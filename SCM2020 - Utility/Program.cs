@@ -105,10 +105,10 @@ namespace SCM2020___Utility
             //SignUpAll();              //OK
             //AddProduct(start);        //OK
             //AddMonitoring(start);     //OK
-            AddOutput(start);           //OK!
-            AddInputByVendor(start);    //OK
+            //AddOutput(start);           //OK!
+            //AddInputByVendor(start);    //OK
 
-            AddInput(start);            //OK
+            //AddInput(start);            //OK
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
@@ -169,7 +169,7 @@ namespace SCM2020___Utility
             Sector sector6 = new Sector()
             {
                 NameSector = "Segurança em Telefonia",
-                NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 34 }, new NumberSectors() { Number = 35 }, new NumberSectors() { Number = 36 } }
+                NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 34 }, new NumberSectors() { Number = 35 }, new NumberSectors() { Number = 36 } }
             };
             
             Sector sector7 = new Sector()

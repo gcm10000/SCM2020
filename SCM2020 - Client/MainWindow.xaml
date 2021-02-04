@@ -39,7 +39,7 @@
                     <!--<Grid Height="150" Background="White">
                         --><!--LOGO--><!--
                     </Grid>-->
-                <ListView MouseLeftButtonUp="ListView_MouseLeftButtonUp" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView x:Name="VerticalMenu" MouseLeftButtonUp="ListView_MouseLeftButtonUp" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListViewItem x:Name="DashboardItem" Height="60" Background="#FFE9EDFF" Foreground="#FF4F68FF">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="ViewDashboardOutline" Margin="10" Width="25" Height="25" VerticalAlignment="Center"></materialDesign:PackIcon>

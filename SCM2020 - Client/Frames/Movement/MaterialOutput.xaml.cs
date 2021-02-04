@@ -79,7 +79,6 @@ namespace SCM2020___Client.Frames
         public MaterialOutput()
         {
             InitializeComponent();
-
         }
 
         private bool previousOutputExists = false;

@@ -11,7 +11,7 @@
             <StackPanel>
                 <TextBlock Text="Nome do setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="SectorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Número do setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
+                <TextBlock Text="Números do setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
                 <TextBox x:Name="NumberSectorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
                 <Button VerticalAlignment="Bottom" Content="Salvar Setor" Padding="5" Width="200" x:Name="BtnSaveSector" Click="BtnSaveSector_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
                     <Button.Template>

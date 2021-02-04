@@ -112,6 +112,12 @@ namespace SCM2020___Server.Context
                 .HasForeignKey(b => b.GroupEmployee2Id)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<NumberSectors>()
+                .HasOne(c => c.Sector)
+                .WithMany(e => e.NumberSectors)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+
 
 
 

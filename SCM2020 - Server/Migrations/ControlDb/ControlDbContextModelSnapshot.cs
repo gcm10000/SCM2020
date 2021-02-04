@@ -390,7 +390,12 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SectorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SectorId");
 
                     b.ToTable("NumberSectors");
                 });
@@ -432,9 +437,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.Property<string>("NameSector")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberSector")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -594,6 +596,14 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .HasForeignKey("GroupEmployee2Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ModelsLibraryCore.NumberSectors", b =>
+                {
+                    b.HasOne("ModelsLibraryCore.Sector", "Sector")
+                        .WithMany("NumberSectors")
+                        .HasForeignKey("SectorId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>

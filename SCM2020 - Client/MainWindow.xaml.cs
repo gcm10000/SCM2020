@@ -42,6 +42,11 @@ namespace SCM2020___Client
             notifyIcon1.Visible = true;
 
             InitializeComponent();
+            PopupMovement.Closed += PopupMovement_Closed;
+            PopupRegister.Closed += PopupRegister_Closed;
+            PopupQueries.Closed += PopupQueries_Closed;
+            PopupReport.Closed += PopupReport_Closed;
+
             PopupMovement.VerticalOffset = -8;
             PopupRegister.VerticalOffset = -8;
             PopupQueries.VerticalOffset = -8;
@@ -69,49 +74,50 @@ namespace SCM2020___Client
                 //Default url is http://localhost:5000/
             });
 
-            Task.Run(() =>
-            {
-                DateTime startDt = new DateTime(1970, 1, 1);
-                TimeSpan timeSpan = DateTime.UtcNow - startDt;
-                long millis = (long)timeSpan.TotalMilliseconds;
-                var user = new User()
-                {
-                    DateTimeConnection = DateTime.Now,
-                    Key = millis,
-                    Id = Helper.NameIdentifier
-                }.ToJson();
+            //Task.Run(() =>
+            //{
+            //    DateTime startDt = new DateTime(1970, 1, 1);
+            //    TimeSpan timeSpan = DateTime.UtcNow - startDt;
+            //    long millis = (long)timeSpan.TotalMilliseconds;
+            //    var user = new User()
+            //    {
+            //        DateTimeConnection = DateTime.Now,
+            //        Key = millis,
+            //        Id = Helper.NameIdentifier
+            //    }.ToJson();
 
-                var connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:52991/notify?user=" + user)
-                .Build();
+            //    var connection = new HubConnectionBuilder()
+            //    .WithUrl("http://localhost:52991/notify?user=" + user)
+            //    .Build();
 
-                //send
-                //connection.InvokeCoreAsync("notify", new[] {   } });
-                connection.On("Receive", (object sender, object message) =>
-                {
-                    //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
-                });
+            //    //send
+            //    //connection.InvokeCoreAsync("notify", new[] {   } });
+            //    connection.On("Receive", (object sender, object message) =>
+            //    {
+            //        //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
+            //    });
 
-                bool initialize = false;
-                connection.On("notify", (string stockMessageJson) =>
-                {
-                    AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
-                    notifyIcon1.BalloonTipText = stockMessage.Message;
-                    notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
-                    if (!initialize)
-                    {
-                        initialize = true;
-                        notifyIcon1.BalloonTipClicked += (object sender, EventArgs e) =>
-                        {
-                            //abrir janela do estoque exibindo o produto
-                            MessageBox.Show(stockMessage.Code.ToString());
-                        };
-                    }
-                    notifyIcon1.ShowBalloonTip(30000);
-                });
+            //    bool initialize = false;
+            //    connection.On("notify", (string stockMessageJson) =>
+            //    {
+            //        AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
+            //        notifyIcon1.BalloonTipText = stockMessage.Message;
+            //        notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+            //        if (!initialize)
+            //        {
+            //            initialize = true;
+            //            notifyIcon1.BalloonTipClicked += (object sender, EventArgs e) =>
+            //            {
+            //                //abrir janela do estoque exibindo o produto
+            //                MessageBox.Show(stockMessage.Code.ToString());
+            //            };
+            //        }
+            //        notifyIcon1.ShowBalloonTip(30000);
+            //    });
 
-                connection.StartAsync().Wait();
-            });
+            //    connection.StartAsync().Wait();
+            //});
+
             Helper.MyWebBrowser = WebBrowser;
 
             //GroupEmployees groupParent = new GroupEmployees() { Name = "Gerencia", };
@@ -155,9 +161,47 @@ namespace SCM2020___Client
 
         }
 
+        bool PreviousPopupMovement = false;
+        bool PreviousPopupRegister = false;
+        bool PreviousPopupQueries = false;
+        bool PreviousPopupReport = false;
+
+
+
+
+
+        private void PopupMovement_Closed(object sender, EventArgs e)
+        {
+            if (!ClickedInsideMenu())
+                PreviousPopupMovement = false;
+        }
+        private void PopupRegister_Closed(object sender, EventArgs e)
+        {
+            if (!ClickedInsideMenu())
+                PreviousPopupRegister = false;
+        }
+        private void PopupQueries_Closed(object sender, EventArgs e)
+        {
+            if (!ClickedInsideMenu())
+                PreviousPopupQueries = false;
+        }
+        private void PopupReport_Closed(object sender, EventArgs e)
+        {
+
+            if (!ClickedInsideMenu())
+                PreviousPopupReport = false;
+        }
+
+        private bool ClickedInsideMenu()
+        {
+            var item = VerticalMenu.SelectedItem as ListViewItem;
+            return item != null;
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            notifyIcon1.Visible = false;
             notifyIcon1.Dispose();
             Application.Current.Shutdown();
         }
@@ -174,11 +218,16 @@ namespace SCM2020___Client
             Helper.CurrentSector = signIn.Sector;
             Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
         }
+
+
         private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var listView = sender as ListView;
             var index = listView.SelectedIndex;
             var item = listView.SelectedItem as ListViewItem;
+
+
+
             if (item == null)
                 return;
             for (int i = 0; i < listView.Items.Count; i++)
@@ -190,20 +239,51 @@ namespace SCM2020___Client
             }
             item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
             item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
-
             switch (index)
             {
                 case 1:
-                    PopupMovement.IsOpen = true;
+                    if ((!PreviousPopupMovement) && (!PopupMovement.IsOpen))
+                    {
+                        PopupMovement.IsOpen = true;
+                        PreviousPopupMovement = true;
+                        PreviousPopupRegister = false;
+                        PreviousPopupQueries = false;
+                        PreviousPopupReport = false;
+                        return;
+                    }
                     break;
                 case 2:
-                    PopupRegister.IsOpen = true;
+                    if ((!PreviousPopupRegister) && (!PopupRegister.IsOpen))
+                    {
+                        PopupRegister.IsOpen = true;
+                        PreviousPopupRegister = true;
+                        PreviousPopupMovement = false;
+                        PreviousPopupQueries = false;
+                        PreviousPopupReport = false;
+                        return;
+                    }
                     break;
                 case 3:
-                    PopupQueries.IsOpen = true;
+                    if ((!PreviousPopupQueries) && (!PopupQueries.IsOpen))
+                    {
+                        PopupQueries.IsOpen = true;
+                        PreviousPopupQueries = true;
+                        PreviousPopupMovement = false;
+                        PreviousPopupRegister = false;
+                        PreviousPopupReport = false;
+                        return;
+                    }
                     break;
                 case 4:
-                    PopupReport.IsOpen = true;
+                    if ((!PreviousPopupReport) && (!PopupReport.IsOpen))
+                    {
+                        PopupReport.IsOpen = true;
+                        PreviousPopupReport = true;
+                        PreviousPopupMovement = false;
+                        PreviousPopupRegister = false;
+                        PreviousPopupQueries = false;
+                        return;
+                    }
                     break;
                 //case 5:
                 //    PopupUser.IsOpen = true;
@@ -211,6 +291,11 @@ namespace SCM2020___Client
                 default:
                     break;
             }
+
+            PreviousPopupMovement = false;
+            PreviousPopupRegister = false;
+            PreviousPopupQueries = false;
+            PreviousPopupReport = false;
         }
         private void ListViewMoving_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -240,6 +325,10 @@ namespace SCM2020___Client
                         break;
                 }
                 PopupMovement.IsOpen = false;
+                PreviousPopupMovement = false;
+                PreviousPopupRegister = false;
+                PreviousPopupQueries = false;
+                PreviousPopupReport = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                 {
                     FrameWindow frame = new FrameWindow(source);
@@ -286,6 +375,8 @@ namespace SCM2020___Client
                         break;
                 }
                 PopupRegister.IsOpen = false;
+                PreviousPopupRegister = false;
+
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                 {
                     FrameWindow frame = new FrameWindow(source);
@@ -331,6 +422,7 @@ namespace SCM2020___Client
                         break;
                 }
                 PopupQueries.IsOpen = false;
+                PreviousPopupQueries = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                 {
                     FrameWindow frame = new FrameWindow(source);
@@ -368,6 +460,10 @@ namespace SCM2020___Client
 
                 }
                 PopupReport.IsOpen = false;
+                PreviousPopupMovement = false;
+                PreviousPopupRegister = false;
+                PreviousPopupQueries = false;
+                PreviousPopupReport = false;
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                 {
                     FrameWindow frame = new FrameWindow(source);
