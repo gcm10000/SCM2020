@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Win32;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using SCM2020___Client.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -38,41 +40,44 @@ namespace SCM2020___Client
         {
             notifyIcon1 = new System.Windows.Forms.NotifyIcon();
             notifyIcon1.Icon = System.Drawing.SystemIcons.Exclamation;
-            notifyIcon1.BalloonTipTitle = "Sistema de Controle de Materiais";
+            notifyIcon1.BalloonTipTitle = "Controle de Materiais";
             notifyIcon1.Visible = true;
 
             InitializeComponent();
-            PopupMovement.Closed += PopupMovement_Closed;
-            PopupRegister.Closed += PopupRegister_Closed;
-            PopupQueries.Closed += PopupQueries_Closed;
-            PopupReport.Closed += PopupReport_Closed;
+            InitializeMenu();
 
-            PopupMovement.VerticalOffset = -8;
-            PopupRegister.VerticalOffset = -8;
-            PopupQueries.VerticalOffset = -8;
-            PopupReport.VerticalOffset = -8;
 
-            PopupMovement.HorizontalOffset = 21;
-            PopupRegister.HorizontalOffset = 76;
-            PopupQueries.HorizontalOffset = 70;
-            PopupReport.HorizontalOffset = 68;
+            //PopupMovement.Closed += PopupMovement_Closed;
+            //PopupRegister.Closed += PopupRegister_Closed;
+            //PopupQueries.Closed += PopupQueries_Closed;
+            //PopupReport.Closed += PopupReport_Closed;
 
-            //LoginScreen screen = new LoginScreen();
-            //screen.ShowDialog();
+            //PopupMovement.VerticalOffset = -8;
+            //PopupRegister.VerticalOffset = -8;
+            //PopupQueries.VerticalOffset = -8;
+            //PopupReport.VerticalOffset = -8;
 
-            //SignIn();
+            //PopupMovement.HorizontalOffset = 21;
+            //PopupRegister.HorizontalOffset = 76;
+            //PopupQueries.HorizontalOffset = 70;
+            //PopupReport.HorizontalOffset = 68;
+
 
             //var t = new System.Windows.Forms.TreeView();
 
 
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
-            Task.Run(() =>
-            {
-                Helper.WebHost = WebAssemblyLibrary.Server.WebAssembly.CreateWebHostBuilder().Build();
-                Helper.WebHost.Run();
-                //Default url is http://localhost:5000/
-            });
+            
+            //Open server local
+
+            //Task.Run(() =>
+            //{
+            //    Helper.WebHost = WebAssemblyLibrary.Server.WebAssembly.CreateWebHostBuilder().Build();
+            //    Helper.WebHost.Run();
+            //    //Default url is http://localhost:5000/
+            //});
+
 
             //Task.Run(() =>
             //{
@@ -160,44 +165,90 @@ namespace SCM2020___Client
 
 
         }
-
-        bool PreviousPopupMovement = false;
-        bool PreviousPopupRegister = false;
-        bool PreviousPopupQueries = false;
-        bool PreviousPopupReport = false;
-
-
-
-
-
-        private void PopupMovement_Closed(object sender, EventArgs e)
+        #region Menu
+        private void InitializeMenu()
         {
-            if (!ClickedInsideMenu())
-                PreviousPopupMovement = false;
-        }
-        private void PopupRegister_Closed(object sender, EventArgs e)
-        {
-            if (!ClickedInsideMenu())
-                PreviousPopupRegister = false;
-        }
-        private void PopupQueries_Closed(object sender, EventArgs e)
-        {
-            if (!ClickedInsideMenu())
-                PreviousPopupQueries = false;
-        }
-        private void PopupReport_Closed(object sender, EventArgs e)
-        {
+            var menuMovement = new List<SubItem>();
+            menuMovement.Add(new SubItem("Entrada por Fornecedor", new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative)));
+            menuMovement.Add(new SubItem("Saída", new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative)));
+            menuMovement.Add(new SubItem("Devolução", new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative)));
+            menuMovement.Add(new SubItem("Fechamento", new Uri("Frames/Movement/Closure.xaml", UriKind.Relative)));
+            menuMovement.Add(new SubItem("Reabrir Ordem de Serviço", new Uri("Frames/Movement/Reopen.xaml", UriKind.Relative)));
 
-            if (!ClickedInsideMenu())
-                PreviousPopupReport = false;
-        }
+            var menuRegister = new List<SubItem>();
+            menuRegister.Add(new SubItem("Funcionário", new Uri("Frames/Register/Employee.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Produto", new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Produto Permanente", new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Grupo", new Uri("Frames/Register/Group.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Fornecedor", new Uri("Frames/Register/Vendor.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Setor", new Uri("Frames/Register/Sector.xaml", UriKind.Relative)));
+            menuRegister.Add(new SubItem("Empresa", new Uri("Frames/Register/Business.xaml", UriKind.Relative)));
 
-        private bool ClickedInsideMenu()
-        {
-            var item = VerticalMenu.SelectedItem as ListViewItem;
-            return item != null;
-        }
+            var menuQueries = new List<SubItem>();
+            menuQueries.Add(new SubItem("Movimentação", new Uri("Frames/Query/Movement.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Entrada por Fornecedor", new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Estoque", new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Estoque pela Data", new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Patrimônio", new Uri("Frames/Query/QueryByPatrimony.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Ordem de Serviço por Data", new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative)));
 
+            var menuListingItem = new List<SubItem>();
+            menuListingItem.Add(new SubItem("Inventário Oficial", new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative)));
+            menuListingItem.Add(new SubItem("Inventário Rotativo", new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative)));
+            menuListingItem.Add(new SubItem("Listagem de Permanentes", new Uri("Frames/Listing/ListPermanentProduct.xaml", UriKind.Relative)));
+            //menuListingItem.Add(new SubItem("Financeiro (em breve)", new Uri("Frames/Listing/Financial.xaml", UriKind.Relative)));
+
+
+            var item0 = new ItemMenu("Painel de Controle", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.ViewDashboardOutline, new Uri("Frames/Dashboard.xaml", UriKind.Relative));
+            var item1 = new ItemMenu("Movimentações", menuMovement, MaterialDesignThemes.Wpf.PackIconKind.ImportExport);
+            var item2 = new ItemMenu("Cadastros", menuRegister, MaterialDesignThemes.Wpf.PackIconKind.AddCircleOutline);
+            var item3 = new ItemMenu("Consultas", menuQueries, MaterialDesignThemes.Wpf.PackIconKind.Search);
+            var item4 = new ItemMenu("Relatórios", menuListingItem, MaterialDesignThemes.Wpf.PackIconKind.BooksVariant);
+            //var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People);
+
+            Menu.Children.Add(new UserControlMenuItem(item0, this.FrameContent));
+            Menu.Children.Add(new UserControlMenuItem(item1, this.FrameContent));
+            Menu.Children.Add(new UserControlMenuItem(item2, this.FrameContent));
+            Menu.Children.Add(new UserControlMenuItem(item3, this.FrameContent));
+            Menu.Children.Add(new UserControlMenuItem(item4, this.FrameContent));
+            //Menu.Children.Add(new UserControlMenuItem(item5));
+        }
+        #endregion
+        //#region popupMenu
+        //bool PreviousPopupMovement = false;
+        //bool PreviousPopupRegister = false;
+        //bool PreviousPopupQueries = false;
+        //bool PreviousPopupReport = false;
+
+        //private void PopupMovement_Closed(object sender, EventArgs e)
+        //{
+        //    if (!ClickedInsideMenu())
+        //        PreviousPopupMovement = false;
+        //}
+        //private void PopupRegister_Closed(object sender, EventArgs e)
+        //{
+        //    if (!ClickedInsideMenu())
+        //        PreviousPopupRegister = false;
+        //}
+        //private void PopupQueries_Closed(object sender, EventArgs e)
+        //{
+        //    if (!ClickedInsideMenu())
+        //        PreviousPopupQueries = false;
+        //}
+        //private void PopupReport_Closed(object sender, EventArgs e)
+        //{
+
+        //    if (!ClickedInsideMenu())
+        //        PreviousPopupReport = false;
+        //}
+
+        //private bool ClickedInsideMenu()
+        //{
+        //    var item = VerticalMenu.SelectedItem as ListViewItem;
+        //    return item != null;
+        //}
+
+        //#endregion
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -205,6 +256,7 @@ namespace SCM2020___Client
             notifyIcon1.Dispose();
             Application.Current.Shutdown();
         }
+
 
 
         private void SignIn()
@@ -220,266 +272,281 @@ namespace SCM2020___Client
         }
 
 
-        private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var listView = sender as ListView;
-            var index = listView.SelectedIndex;
-            var item = listView.SelectedItem as ListViewItem;
+        //private void ListView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var listView = sender as ListView;
+        //    var index = listView.SelectedIndex;
+        //    var item = listView.SelectedItem as ListViewItem;
 
 
 
-            if (item == null)
-                return;
-            for (int i = 0; i < listView.Items.Count; i++)
-            {
-                var lvItem = listView.Items[i] as ListViewItem;
-                lvItem.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
-                lvItem.Background = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
-                lvItem.IsSelected = false;
-            }
-            item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
-            item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
-            switch (index)
-            {
-                case 1:
-                    if ((!PreviousPopupMovement) && (!PopupMovement.IsOpen))
-                    {
-                        PopupMovement.IsOpen = true;
-                        PreviousPopupMovement = true;
-                        PreviousPopupRegister = false;
-                        PreviousPopupQueries = false;
-                        PreviousPopupReport = false;
-                        return;
-                    }
-                    break;
-                case 2:
-                    if ((!PreviousPopupRegister) && (!PopupRegister.IsOpen))
-                    {
-                        PopupRegister.IsOpen = true;
-                        PreviousPopupRegister = true;
-                        PreviousPopupMovement = false;
-                        PreviousPopupQueries = false;
-                        PreviousPopupReport = false;
-                        return;
-                    }
-                    break;
-                case 3:
-                    if ((!PreviousPopupQueries) && (!PopupQueries.IsOpen))
-                    {
-                        PopupQueries.IsOpen = true;
-                        PreviousPopupQueries = true;
-                        PreviousPopupMovement = false;
-                        PreviousPopupRegister = false;
-                        PreviousPopupReport = false;
-                        return;
-                    }
-                    break;
-                case 4:
-                    if ((!PreviousPopupReport) && (!PopupReport.IsOpen))
-                    {
-                        PopupReport.IsOpen = true;
-                        PreviousPopupReport = true;
-                        PreviousPopupMovement = false;
-                        PreviousPopupRegister = false;
-                        PreviousPopupQueries = false;
-                        return;
-                    }
-                    break;
-                //case 5:
-                //    PopupUser.IsOpen = true;
-                //    break;
-                default:
-                    break;
-            }
+        //    if (item == null)
+        //        return;
+        //    for (int i = 0; i < listView.Items.Count; i++)
+        //    {
+        //        var lvItem = listView.Items[i] as ListViewItem;
+        //        lvItem.Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0x00));
+        //        lvItem.Background = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0xFF));
+        //        lvItem.IsSelected = false;
+        //    }
+        //    item.Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xED, 0xFF));
+        //    item.Foreground = new SolidColorBrush(Color.FromRgb(0x4F, 0x68, 0xFF));
+        //    switch (index)
+        //    {
+        //        case 1:
+        //            if ((!PreviousPopupMovement) && (!PopupMovement.IsOpen))
+        //            {
+        //                PopupMovement.IsOpen = true;
+        //                PreviousPopupMovement = true;
+        //                PreviousPopupRegister = false;
+        //                PreviousPopupQueries = false;
+        //                PreviousPopupReport = false;
+        //                return;
+        //            }
+        //            break;
+        //        case 2:
+        //            if ((!PreviousPopupRegister) && (!PopupRegister.IsOpen))
+        //            {
+        //                PopupRegister.IsOpen = true;
+        //                PreviousPopupRegister = true;
+        //                PreviousPopupMovement = false;
+        //                PreviousPopupQueries = false;
+        //                PreviousPopupReport = false;
+        //                return;
+        //            }
+        //            break;
+        //        case 3:
+        //            if ((!PreviousPopupQueries) && (!PopupQueries.IsOpen))
+        //            {
+        //                PopupQueries.IsOpen = true;
+        //                PreviousPopupQueries = true;
+        //                PreviousPopupMovement = false;
+        //                PreviousPopupRegister = false;
+        //                PreviousPopupReport = false;
+        //                return;
+        //            }
+        //            break;
+        //        case 4:
+        //            if ((!PreviousPopupReport) && (!PopupReport.IsOpen))
+        //            {
+        //                PopupReport.IsOpen = true;
+        //                PreviousPopupReport = true;
+        //                PreviousPopupMovement = false;
+        //                PreviousPopupRegister = false;
+        //                PreviousPopupQueries = false;
+        //                return;
+        //            }
+        //            break;
+        //        //case 5:
+        //        //    PopupUser.IsOpen = true;
+        //        //    break;
+        //        default:
+        //            break;
+        //    }
 
-            PreviousPopupMovement = false;
-            PreviousPopupRegister = false;
-            PreviousPopupQueries = false;
-            PreviousPopupReport = false;
-        }
-        private void ListViewMoving_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var listView = sender as ListBox;
-            var item = listView.SelectedItem as ListBoxItem;
-            var index = listView.SelectedIndex;
+        //    PreviousPopupMovement = false;
+        //    PreviousPopupRegister = false;
+        //    PreviousPopupQueries = false;
+        //    PreviousPopupReport = false;
+        //}
+        //private void ListViewMoving_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var listView = sender as ListBox;
+        //    var item = listView.SelectedItem as ListBoxItem;
+        //    var index = listView.SelectedIndex;
 
-            if (item != null)
-            {
-                Uri source = null;
-                switch (index)
-                {
-                    case 0:
-                        source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
-                        break;
-                    case 1:
-                        source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
-                        break;
-                    case 2:
-                        source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
-                        break;
-                    case 3:
-                        source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
-                        break;
-                    case 4:
-                        source = new Uri("Frames/Movement/Reopen.xaml", UriKind.Relative);
-                        break;
-                }
-                PopupMovement.IsOpen = false;
-                PreviousPopupMovement = false;
-                PreviousPopupRegister = false;
-                PreviousPopupQueries = false;
-                PreviousPopupReport = false;
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    FrameWindow frame = new FrameWindow(source);
-                    frame.Show();
-                }
-                else
-                {
-                    FrameContent.Source = source;
-                }
-                GC.Collect();
-            }
+        //    if (item != null)
+        //    {
+        //        Uri source = null;
+        //        switch (index)
+        //        {
+        //            case 0:
+        //                source = new Uri("Frames/Movement/InputByVendor.xaml", UriKind.Relative);
+        //                break;
+        //            case 1:
+        //                source = new Uri("Frames/Movement/Devolution.xaml", UriKind.Relative);
+        //                break;
+        //            case 2:
+        //                source = new Uri("Frames/Movement/MaterialOutput.xaml", UriKind.Relative);
+        //                break;
+        //            case 3:
+        //                source = new Uri("Frames/Movement/Closure.xaml", UriKind.Relative);
+        //                break;
+        //            case 4:
+        //                source = new Uri("Frames/Movement/Reopen.xaml", UriKind.Relative);
+        //                break;
+        //        }
+        //        PopupMovement.IsOpen = false;
+        //        PreviousPopupMovement = false;
+        //        PreviousPopupRegister = false;
+        //        PreviousPopupQueries = false;
+        //        PreviousPopupReport = false;
+        //        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+        //        {
+        //            FrameWindow frame = new FrameWindow(source);
+        //            frame.Show();
+        //        }
+        //        else
+        //        {
+        //            FrameContent.Source = source;
+        //        }
+        //        GC.Collect();
+        //    }
 
-        }
-        private void ListBoxRegister_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var listView = sender as ListBox;
-            var item = listView.SelectedItem as ListBoxItem;
-            var index = listView.SelectedIndex;
-            if (item != null)
-            {
-                Uri source = null;
-                switch (index)
-                {
-                    case 0:
-                        source = new Uri("Frames/Register/Employee.xaml", UriKind.Relative);
-                        break;
-                    case 1:
-                        source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
-                        break;
-                    case 2:
-                        source = new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative);
-                        break;
-                    case 3:
-                        source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
-                        break;
-                    case 4:
-                        source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
-                        break;
-                    case 5:
-                        source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
-                        break;
-                    case 6:
-                        source = new Uri("Frames/Register/Business.xaml", UriKind.Relative);
-                        break;
-                }
-                PopupRegister.IsOpen = false;
-                PreviousPopupRegister = false;
+        //}
+        //private void ListBoxRegister_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var listView = sender as ListBox;
+        //    var item = listView.SelectedItem as ListBoxItem;
+        //    var index = listView.SelectedIndex;
+        //    if (item != null)
+        //    {
+        //        Uri source = null;
+        //        switch (index)
+        //        {
+        //            case 0:
+        //                source = new Uri("Frames/Register/Employee.xaml", UriKind.Relative);
+        //                break;
+        //            case 1:
+        //                source = new Uri("Frames/Register/ConsumpterProduct.xaml", UriKind.Relative);
+        //                break;
+        //            case 2:
+        //                source = new Uri("Frames/Register/PermanentProduct.xaml", UriKind.Relative);
+        //                break;
+        //            case 3:
+        //                source = new Uri("Frames/Register/Group.xaml", UriKind.Relative);
+        //                break;
+        //            case 4:
+        //                source = new Uri("Frames/Register/Vendor.xaml", UriKind.Relative);
+        //                break;
+        //            case 5:
+        //                source = new Uri("Frames/Register/Sector.xaml", UriKind.Relative);
+        //                break;
+        //            case 6:
+        //                source = new Uri("Frames/Register/Business.xaml", UriKind.Relative);
+        //                break;
+        //        }
+        //        PopupRegister.IsOpen = false;
+        //        PreviousPopupRegister = false;
 
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    FrameWindow frame = new FrameWindow(source);
-                    frame.Show();
-                }
-                else
-                {
-                    FrameContent.Source = source;
-                }
-                GC.Collect();
-            }
-        }
-        private void ListBoxQueries_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var listView = sender as ListBox;
-            var item = listView.SelectedItem as ListBoxItem;
-            var index = listView.SelectedIndex;
-            if (item != null)
-            {
-                Uri source = null;
-                switch (index)
-                {
-                    case 0:
-                        source = new Uri("Frames/Query/Movement.xaml", UriKind.Relative);
-                        break;
-                    case 1:
-                        source = new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative);
-                        break;
-                    case 2:
-                        source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
-                        break;
-                    case 3:
-                        source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);
-                        break;
-                    case 4:
-                        source = new Uri("Frames/Query/QueryByPatrimony.xaml", UriKind.Relative);
-                        break;
-                    case 5:
-                        source = new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative);
-                        break;
-                    case 6:
-                        source = new Uri("Frames/Query/QueryUsers.xaml", UriKind.Relative);
-                        break;
-                }
-                PopupQueries.IsOpen = false;
-                PreviousPopupQueries = false;
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    FrameWindow frame = new FrameWindow(source);
-                    frame.Show();
-                }
-                else
-                {
-                    FrameContent.Source = source;
-                }
-                GC.Collect();
-            }
-        }
-        private void ListBoxReport_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var listView = sender as ListBox;
-            var item = listView.SelectedItem as ListBoxItem;
-            var index = listView.SelectedIndex;
-            if (item != null)
-            {
-                Uri source = null;
-                switch (index)
-                {
-                    case 0:
-                        source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
-                        break;
-                    case 1:
-                        source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
-                        break;
-                    case 2:
-                        source = new Uri("Frames/Listing/ListPermanentProduct.xaml", UriKind.Relative);
-                        break;
-                    case 3:
-                        source = new Uri("Frames/Listing/Financial.xaml", UriKind.Relative);
-                        break;
+        //        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+        //        {
+        //            FrameWindow frame = new FrameWindow(source);
+        //            frame.Show();
+        //        }
+        //        else
+        //        {
+        //            FrameContent.Source = source;
+        //        }
+        //        GC.Collect();
+        //    }
+        //}
+        //private void ListBoxQueries_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var listView = sender as ListBox;
+        //    var item = listView.SelectedItem as ListBoxItem;
+        //    var index = listView.SelectedIndex;
+        //    if (item != null)
+        //    {
+        //        Uri source = null;
+        //        switch (index)
+        //        {
+        //            case 0:
+        //                source = new Uri("Frames/Query/Movement.xaml", UriKind.Relative);
+        //                break;
+        //            case 1:
+        //                source = new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative);
+        //                break;
+        //            case 2:
+        //                source = new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative);
+        //                break;
+        //            case 3:
+        //                source = new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative);
+        //                break;
+        //            case 4:
+        //                source = new Uri("Frames/Query/QueryByPatrimony.xaml", UriKind.Relative);
+        //                break;
+        //            case 5:
+        //                source = new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative);
+        //                break;
+        //            case 6:
+        //                source = new Uri("Frames/Query/QueryUsers.xaml", UriKind.Relative);
+        //                break;
+        //        }
+        //        PopupQueries.IsOpen = false;
+        //        PreviousPopupQueries = false;
+        //        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+        //        {
+        //            FrameWindow frame = new FrameWindow(source);
+        //            frame.Show();
+        //        }
+        //        else
+        //        {
+        //            FrameContent.Source = source;
+        //        }
+        //        GC.Collect();
+        //    }
+        //}
+        //private void ListBoxReport_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var listView = sender as ListBox;
+        //    var item = listView.SelectedItem as ListBoxItem;
+        //    var index = listView.SelectedIndex;
+        //    if (item != null)
+        //    {
+        //        Uri source = null;
+        //        switch (index)
+        //        {
+        //            case 0:
+        //                source = new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative);
+        //                break;
+        //            case 1:
+        //                source = new Uri("Frames/Listing/InventoryTurnover.xaml", UriKind.Relative);
+        //                break;
+        //            case 2:
+        //                source = new Uri("Frames/Listing/ListPermanentProduct.xaml", UriKind.Relative);
+        //                break;
+        //            case 3:
+        //                source = new Uri("Frames/Listing/Financial.xaml", UriKind.Relative);
+        //                break;
 
-                }
-                PopupReport.IsOpen = false;
-                PreviousPopupMovement = false;
-                PreviousPopupRegister = false;
-                PreviousPopupQueries = false;
-                PreviousPopupReport = false;
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                {
-                    FrameWindow frame = new FrameWindow(source);
-                    frame.Show();
-                }
-                else
-                {
-                    FrameContent.Source = source;
-                }
-                GC.Collect();
-            }
-        }
+        //        }
+        //        PopupReport.IsOpen = false;
+        //        PreviousPopupMovement = false;
+        //        PreviousPopupRegister = false;
+        //        PreviousPopupQueries = false;
+        //        PreviousPopupReport = false;
+        //        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+        //        {
+        //            FrameWindow frame = new FrameWindow(source);
+        //            frame.Show();
+        //        }
+        //        else
+        //        {
+        //            FrameContent.Source = source;
+        //        }
+        //        GC.Collect();
+        //    }
+        //}
 
         private void UserItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var source = new Uri("Frames/UserManager/UserManager.xaml", UriKind.Relative);
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                FrameWindow frame = new FrameWindow(source);
+                frame.Show();
+            }
+            else
+            {
+                FrameContent.Source = source;
+            }
+            GC.Collect();
+        }
+
+        private void DashboardItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var source = new Uri("Frames/Dashboard.xaml", UriKind.Relative);
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
             {
                 FrameWindow frame = new FrameWindow(source);

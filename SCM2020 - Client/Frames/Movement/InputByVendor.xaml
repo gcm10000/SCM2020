@@ -34,9 +34,9 @@
             C# WPF Material Design UI: Tab Menu
         -->
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="100">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
-                <Button Uid="0" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnInformation_Click" Cursor="Hand"></Button>
-                <Button Uid="1" x:Name="ButtonProducts" Width="150" Content="PRODUTOS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF2196F3" Click="BtnProducts_Click" Cursor="Hand"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Height="49" Margin="0 0" Background="#1491F0">
+                <Button Uid="0" x:Name="ButtonInformation" Width="150" Content="INFORMAÇÕES" Height="50" Background="#51ADFF" BorderThickness="0" Foreground="#FFFFFF" Click="BtnInformation_Click" IsHitTestVisible="False" Cursor="Hand"></Button>
+                <Button Uid="1" x:Name="ButtonProducts" Width="150" Content="PRODUTOS" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFFFFF" Click="BtnProducts_Click" Cursor="Hand"/>
             </StackPanel>
         </Grid>
 

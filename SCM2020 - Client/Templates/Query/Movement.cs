@@ -113,12 +113,21 @@ namespace SCM2020___Client.Templates.Query
             }
 
 
-            //Show data in screen
+            //Setar dados na classe
+            string sector = string.Empty;
+            try
+            {
+                sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/{Monitoring.Work_Order.Substring(0, 2)}").ToString(), Helper.Authentication).NameSector;
 
+            }
+            catch (Exception)
+            {
+                sector = "Não identificado";
+            }
             this.WorkOrder = Monitoring.Work_Order;
             this.RegisterApplication = int.Parse(InfoUser.Register);
             this.Application = InfoUser.Name;
-            this.Sector = APIClient.GetData<ModelsLibraryCore.Sector>(new Uri(Helper.ServerAPI, $"sector/{Monitoring.RequestingSector}").ToString(), Helper.Authentication).NameSector;
+            this.Sector = sector;
             this.Situation = (Monitoring.Situation) ? "FECHADA" : "ABERTA";
             this.ServiceLocalization = Monitoring.ServiceLocation;
             this.WorkOrderDate = Monitoring.MovingDate;
