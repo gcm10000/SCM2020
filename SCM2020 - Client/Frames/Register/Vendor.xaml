@@ -5,15 +5,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCM2020___Client.Frames.Register"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel Background="White">
+    <DockPanel Background="#F0F0F0">
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
-                <TextBlock Text="Nome do Fornecedor" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="VendorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Telefone" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="TelephoneTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <Button VerticalAlignment="Bottom" Content="Salvar Fornecedor" Padding="5" Width="200" x:Name="BtnSaveVendor" Click="BtnSaveVendor_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Background="White" Margin="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Nome do Fornecedor" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <TextBox x:Name="VendorTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
+                        <TextBlock Text="Telefone" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
+                        <TextBox x:Name="TelephoneTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 30" Grid.Row="3"></TextBox>
+
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="BtnSaveVendor" Click="BtnSaveVendor_Click"  Content="Salvar Fornecedor"></Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                <!--<TextBlock Text="Nome do Fornecedor" Margin="0 20 0 5" FontSize="18"></TextBlock>-->
+                <!--<TextBox x:Name="VendorTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>-->
+                <!--<TextBlock Text="Telefone" Margin="0 20 0 5" FontSize="18"></TextBlock>-->
+                <!--<TextBox x:Name="TelephoneTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>-->
+                <!--<Button VerticalAlignment="Bottom" Content="Salvar Fornecedor" Padding="5" Width="200" x:Name="BtnSaveVendor" Click="BtnSaveVendor_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
@@ -26,7 +51,7 @@
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Button.Template>
-                </Button>
+                </Button>-->
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
