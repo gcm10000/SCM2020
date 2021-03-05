@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="SCM2020___Client.Frames.UserControl1"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +7,281 @@
              xmlns:local="clr-namespace:SCM2020___Client.Frames"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="#F0F0F0">
+        <!--Informações-->
+        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Visible">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="30" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Height="24" Text="DOC/SM/OS" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <Grid Margin="20 15 20 0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" FontSize="22" Text="123" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                            <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="Fornecedor" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
+                        <ComboBox FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>
+                        <TextBlock Text="Data da Movimentação" FontSize="22" Margin="20 20 20 0" Grid.Row="4"></TextBlock>
+                        <DatePicker FontSize="22" Margin="20 15 20 30" Grid.Row="5" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></DatePicker>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext1" Click="ButtonNext1_Click" Content="Próximo">
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <!--Produtos-->
+        <Grid Name="GridProducts" Margin="30" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 20" Background="#F5F5F5">
+                <Grid Margin="10 10 10 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TxtSearchConsumpterProduct" materialDesign:HintAssist.Hint="Produtos consumíveis..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchConsumpterProduct">
+                        <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" x:Name="DataGridProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
+                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                </DataGrid.Columns>
+                <local:UserTest SKU="12" Desc="Produto 1" Added="0"></local:UserTest>
+                <local:UserTest SKU="13" Desc="Produto 2" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+            </DataGrid>
+            <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext2" Click="ButtonNext2_Click" Content="Próximo" Cursor="Hand">
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <!--Conclusão-->
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" Background="#FFF1F1F1">
+            <Grid Margin="30">
+                <StackPanel>
+                    <Grid Name="GridData">
+                        <StackPanel>
+                            <ItemsControl x:Name="ListView">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="White" Margin="0 10 10 10" Width="240" Height="100">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                            <Grid Background="White" Margin="0 15 0 0">
+                                                <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
+                                                <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                    <!--Materiais selecionados-->
+                    <Grid Name="GridProducts3" Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!--Resumo-->
+                    <DataGrid Grid.Row="0" Height="685" x:Name="DataGridProducts3" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
+                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
+                            <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                        <local:UserTest SKU="12" Desc="Produto 1" Added="0"></local:UserTest>
+                        <local:UserTest SKU="13" Desc="Produto 2" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    </DataGrid>
+                    <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">
+                        <StackPanel Orientation="Horizontal">
+                                <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Click="ButtonFinish_Click" Cursor="Hand">
+                                </Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click" Content="Imprimir" Cursor="Hand">
+                                </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+                </StackPanel>
+            </Grid>
             
+        </ScrollViewer>
+        <!--<Grid Name="GridFinish" Visibility="Visible">
+            --><!--Materiais selecionados--><!--
+            <Grid Name="GridProducts2" Margin="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="70"></RowDefinition>
+                </Grid.RowDefinitions>
+                --><!--Resumo--><!--
+                <DataGrid Grid.Row="0" x:Name="DataGridProducts2" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
+                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
+                        <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                    <local:UserTest SKU="12" Desc="Produto 1" Added="0"></local:UserTest>
+                    <local:UserTest SKU="13" Desc="Produto 2" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                    <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
+                </DataGrid>
+                <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Cursor="Hand">
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+        </Grid>-->
     </Grid>
 </UserControl>

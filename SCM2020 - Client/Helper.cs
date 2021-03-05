@@ -14,6 +14,7 @@ using System.Management;
 using Microsoft.Win32;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace SCM2020___Client
 {
@@ -74,6 +75,25 @@ namespace SCM2020___Client
             oKey.SetValue("margin_top", "0.75");
             oKey.SetValue("Print_Background", "yes");
             oKey.SetValue("Shrink_To_Fit", "yes");
+        }
+
+        public static ScrollViewer GetScrollViewer(this UIElement element)
+        {
+            if (element == null) return null;
+
+            ScrollViewer retour = null;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element) && retour == null; i++)
+            {
+                if (VisualTreeHelper.GetChild(element, i) is ScrollViewer)
+                {
+                    retour = (ScrollViewer)(VisualTreeHelper.GetChild(element, i));
+                }
+                else
+                {
+                    retour = GetScrollViewer(VisualTreeHelper.GetChild(element, i) as UIElement);
+                }
+            }
+            return retour;
         }
 
         /// <summary>
@@ -204,6 +224,10 @@ namespace SCM2020___Client
                 }
             }
             return string.Empty;
+        }
+        public static bool HasProperty(this object obj, string propertyName)
+        {
+            return obj.GetType().GetProperty(propertyName) != null;
         }
     }
 }

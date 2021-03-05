@@ -21,6 +21,14 @@ namespace SCM2020___Client.ViewModel
             Source = source;
         }
 
+        public ItemMenu(ItemMenu ItemMenu)
+        {
+            this.Header = ItemMenu.Header;
+            this.Screen = ItemMenu.Screen;
+            this.Icon = ItemMenu.Icon;
+            this.Source = ItemMenu.Source;
+        }
+
         public string Header { get; private set; }
         public UserControl Screen { get; private set; }
         public List<SubItem> SubItems { get; private set; }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,9 @@ namespace SCM2020___Client
     /// </summary>
     public partial class UserControlMenuItem : UserControl
     {
+        public delegate void FrameChangedHandler(object dataContext, object sender, EventArgs e);
+        public event FrameChangedHandler FrameChanged;
+        public ListView ListView { get => listViewMenu; }
         public UserControlMenuItem(ItemMenu itemMenu, Frame frameContent)
         {
             InitializeComponent();
@@ -30,19 +34,44 @@ namespace SCM2020___Client
         }
 
         public Frame FrameContent { get; }
-
         private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listView = sender as ListView;
             var subItem = listView.SelectedItem as SubItem;
-            FrameContent.Source = subItem.Source;
+
+            var isCtrlorShiftDown = (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
+            if ((subItem != null) && isCtrlorShiftDown)
+            {
+                MessageBox.Show("Ctrl ou Shift pressionado!");
+            }
+
+            FrameContent.ContentRendered += FrameContent_ContentRendered;
+            
+            if (subItem != null)
+                FrameContent.Source = subItem.Source;
+
         }
 
         private void ListViewItemMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var item = sender as ListBoxItem;
             var itemMenu = item.DataContext as ItemMenu;
+            FrameContent.ContentRendered += FrameContent_ContentRendered;
             FrameContent.Source = itemMenu.Source;
+            
+            //if (this.listViewMenu.SelectedIndex != -1)
+            //{
+            //    this.listViewMenu.SelectedIndex = -1;
+            //}
+        }
+
+        private void FrameContent_ContentRendered(object sender, EventArgs e)
+        {
+            if (FrameChanged != null)
+                FrameChanged.Invoke(this.DataContext, this.listViewMenu.SelectedItem, e);
+
+            
+            FrameContent.ContentRendered -= FrameContent_ContentRendered;
         }
     }
 }

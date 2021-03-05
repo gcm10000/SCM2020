@@ -8,10 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <materialDesign:PackIcon Kind="{Binding Path=Icon}" Width="15" Height="15" Margin="10 16" Foreground="White"/>
-        <ListBoxItem x:Name="ListViewItemMenu" Content="{Binding Path=Header}" Padding="37 14" FontSize="15" Foreground="White" MouseLeftButtonUp="ListViewItemMenu_MouseLeftButtonUp"  Cursor="Hand" />
-        <Expander x:Name="ExpanderMenu" Header="{Binding Path=Header}" IsExpanded="False" Width="210" HorizontalAlignment="Right" Background="{x:Null}" Foreground="White">
-            <ListView x:Name="ListViewMenu" ItemsSource="{Binding Path=SubItems}" Cursor="Hand" Foreground="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
+        <materialDesign:PackIcon Kind="{Binding Path=Icon}" Width="15" Height="15" Margin="10 16" Foreground="#4F5E76"/>
+        <ListBoxItem x:Name="ListViewItemMenu" Content="{Binding Path=Header}" Padding="37 14" FontSize="15" Foreground="#4F5E76" MouseLeftButtonUp="ListViewItemMenu_MouseLeftButtonUp"  Cursor="Hand" />
+        <Expander x:Name="ExpanderMenu" Header="{Binding Path=Header}" IsExpanded="False" Width="210" HorizontalAlignment="Right" Background="{x:Null}" Foreground="#4F5E76">
+            <ListView x:Name="listViewMenu" ItemsSource="{Binding Path=SubItems}" SelectionMode="Single" Cursor="Hand" Foreground="#4F5E76" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Path=Name}" Padding="20 5"></TextBlock>

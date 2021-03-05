@@ -7,6 +7,7 @@ using SCM2020___Client.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
@@ -45,7 +46,6 @@ namespace SCM2020___Client
 
             InitializeComponent();
             InitializeMenu();
-
 
             //PopupMovement.Closed += PopupMovement_Closed;
             //PopupRegister.Closed += PopupRegister_Closed;
@@ -153,8 +153,8 @@ namespace SCM2020___Client
             //{
             //    UsersId = "Lucas"
             //};
-            
-            
+
+
             //List<int> ids = new List<int>() { 1 };
 
             //var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"Employee/FillEmployeeInGroup/4"), ids, Helper.Authentication);
@@ -162,10 +162,11 @@ namespace SCM2020___Client
 
             //Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };
             //Grupo grupo2 = new Grupo() { Name = "Gerente", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee2, employee3 } };
+            
 
 
         }
-        #region Menu
+        #region MenuVertical
         private void InitializeMenu()
         {
             var menuMovement = new List<SubItem>();
@@ -199,20 +200,64 @@ namespace SCM2020___Client
             //menuListingItem.Add(new SubItem("Financeiro (em breve)", new Uri("Frames/Listing/Financial.xaml", UriKind.Relative)));
 
 
-            var item0 = new ItemMenu("Painel de Controle", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.ViewDashboardOutline, new Uri("Frames/Dashboard.xaml", UriKind.Relative));
+            var item0 = new ItemMenu("Painel de Controle", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.ViewDashboardOutline, new Uri("Frames/Usercontrol1.xaml", UriKind.Relative));
             var item1 = new ItemMenu("Movimentações", menuMovement, MaterialDesignThemes.Wpf.PackIconKind.ImportExport);
             var item2 = new ItemMenu("Cadastros", menuRegister, MaterialDesignThemes.Wpf.PackIconKind.AddCircleOutline);
             var item3 = new ItemMenu("Consultas", menuQueries, MaterialDesignThemes.Wpf.PackIconKind.Search);
             var item4 = new ItemMenu("Relatórios", menuListingItem, MaterialDesignThemes.Wpf.PackIconKind.BooksVariant);
             //var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People);
 
-            Menu.Children.Add(new UserControlMenuItem(item0, this.FrameContent));
-            Menu.Children.Add(new UserControlMenuItem(item1, this.FrameContent));
-            Menu.Children.Add(new UserControlMenuItem(item2, this.FrameContent));
-            Menu.Children.Add(new UserControlMenuItem(item3, this.FrameContent));
-            Menu.Children.Add(new UserControlMenuItem(item4, this.FrameContent));
-            //Menu.Children.Add(new UserControlMenuItem(item5));
+            var s1 = new UserControlMenuItem(item0, this.FrameContent);
+            s1.FrameChanged += FrameChanged;
+            Menu.Children.Add(s1);
+
+            var s2 = new UserControlMenuItem(item1, this.FrameContent);
+            s2.FrameChanged += FrameChanged;
+            Menu.Children.Add(s2);
+            var s3 = new UserControlMenuItem(item2, this.FrameContent);
+            s3.FrameChanged += FrameChanged;
+            Menu.Children.Add(s3);
+            var s4 = new UserControlMenuItem(item3, this.FrameContent);
+            s4.FrameChanged += FrameChanged;
+            Menu.Children.Add(s4);
+            var s5 = new UserControlMenuItem(item4, this.FrameContent);
+            s5.FrameChanged += FrameChanged;
+            Menu.Children.Add(s5);
+            
+            s2.listViewMenu.ToString();
         }
+
+        private void FrameChanged(object dataContext, object sender, EventArgs e)
+        {
+            LoadMenu();
+            var subItemClicked = sender as SubItem;
+            var context = dataContext as ItemMenu;
+            foreach (UserControlMenuItem userControlMenuItem in this.Menu.Children)
+            {
+                //Items == Subitems
+                userControlMenuItem.listViewMenu.Items.ToString();
+                
+                if (subItemClicked != null)
+                {
+                    if ((userControlMenuItem.listViewMenu.Items.Count > 0) && (!userControlMenuItem.listViewMenu.Items.Contains(subItemClicked)))
+                    {
+                        if (userControlMenuItem.listViewMenu.SelectedIndex != -1)
+                        {
+                            userControlMenuItem.listViewMenu.SelectedIndex = -1;
+                        }
+                    }
+                }
+                if (context.Header.Contains("Painel"))
+                {
+                    if (userControlMenuItem.listViewMenu.SelectedIndex != -1)
+                    {
+                        userControlMenuItem.listViewMenu.SelectedIndex = -1;
+                    }
+                }
+                
+            }
+        }
+
         #endregion
         //#region popupMenu
         //bool PreviousPopupMovement = false;
@@ -557,6 +602,94 @@ namespace SCM2020___Client
                 FrameContent.Source = source;
             }
             GC.Collect();
+        }
+
+        private void Button1_Click(object sender, RoutedEventArgs e)
+        {
+            
+            
+
+        }
+
+        private void LoadMenu()
+        {
+            this.StackPanelMenuHorizontal.Children.Clear();
+            this.GridCursor.Visibility = Visibility.Hidden;
+            GridCursor.Margin = new Thickness((0), 0, 0, 0);
+
+
+            var src = FrameContent.Content;
+            //MessageBox.Show(FrameContent.Source.ToString());
+            if (Helper.HasProperty(src, "Menu") == false)
+                return;
+            var localMenu = src.GetType().GetProperty("Menu").GetValue(src, null);
+            var menuItems = localMenu as List<SCM2020___Client.Frames.MenuItem>;
+            SubscribeEvent((Control)src);
+            foreach (var menuItem in menuItems)
+            {
+                Button buttonMenu = new Button()
+                {
+                    Uid = menuItem.IdEvent.ToString(),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = 130,
+                    Height = 75,
+                    Background = null,
+                    BorderBrush = null,
+                    Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                    Content = menuItem.Name,
+                };
+
+                buttonMenu.Click += (sender, e) =>
+                {
+                    //MoveGridCursor((Button)e.Source);
+                    dynamic userControl = src;
+                    userControl.Button_Click(sender, e);
+                };
+                this.StackPanelMenuHorizontal.Children.Add(buttonMenu);
+            }
+            if (this.StackPanelMenuHorizontal.Children.Count == 0)
+            {
+                this.GridCursor.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                this.GridCursor.Visibility = Visibility.Visible;
+            }
+        }
+
+        public void SubscribeEvent(Control control)
+        {
+            if (typeof(Control).IsAssignableFrom(control.GetType()))
+            {
+                var myself = this;
+                
+                MethodInfo method = typeof(MainWindow).GetMethod("ScreenChanged");
+
+                EventInfo eventInfo = control.GetType().GetEvent("ScreenChanged");
+
+                // Create the delegate on the test class because that's where the
+                // method is. This corresponds with `new EventHandler(test.WriteTrace)`.
+                Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, myself, "ScreenChanged");
+                // Assign the eventhandler. This corresponds with `control.Load += ...`.
+                eventInfo.AddEventHandler(control, handler);
+            }
+        }
+
+        private void ScreenChanged(object sender, EventArgs e)
+        {
+            MoveGridCursor(((SCM2020___Client.Frames.MenuItem)sender).IdEvent);
+
+        }
+        private void MoveGridCursor(int index)
+        {
+            GridCursor.Margin = new Thickness((130 * index), 0, 0, 0);
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

@@ -13,6 +13,12 @@ namespace SCM2020___Client.ViewModel
             Source = source;
         }
 
+        public SubItem(SubItem subItem)
+        {
+            this.Name = subItem.Name;
+            this.Source = subItem.Source;
+        }
+
         public string Name { get; private set; }
         public Uri Source { get; private set; }
     }

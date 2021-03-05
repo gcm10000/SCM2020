@@ -4,20 +4,41 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SCM2020___Client.Frames"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       Title="Dashboard" Background="White">
 
     <!-- Responsive Layout and Menu Navigation Drawer: https://www.youtube.com/watch?v=oDEtZ5_kbww -->
     <!--<Grid Background="CadetBlue">
         --><!--<WebBrowser x:Name="webBrowser"></WebBrowser>--><!--
-
     </Grid>-->
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-    </Grid>
+    <ScrollViewer Background="#FFF1F1F1">
+        <StackPanel Margin="20 0">
+            <ItemsControl x:Name="ListView">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" Margin="10" Width="240" Height="100">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                <Grid Background="White" Margin="0 15 0 0">
+                                    <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
+                                    <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+    <!--<lvc:CartesianChart Name="CartesianChart" >
+        
+    </lvc:CartesianChart>-->
 </Page>
