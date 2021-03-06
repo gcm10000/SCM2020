@@ -5,42 +5,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCM2020___Client.Frames.Register"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:modelLibrary="clr-namespace:ModelsLibraryCore;assembly=ModelsLibraryCore"
              d:DesignHeight="450" d:DesignWidth="800">
-    <!--<UserControl.DataContext>
-        <local:SectorsVM></local:SectorsVM>
-    </UserControl.DataContext>-->
-    <DockPanel Background="White">
+    <DockPanel Background="#F0F0F0">
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
-                <!--EDITAR-->
-                <TextBlock Text="Nome do funcionário" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="NameTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Matrícula" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="RegisterTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Cargo" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <TextBox x:Name="OccupationTextBox" Style="{x:Null}" Height="30" FontSize="16"></TextBox>
-                <TextBlock Text="Setor" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <ComboBox x:Name="SectorComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16" DisplayMemberPath="NameSector" SelectedValuePath="Id"></ComboBox>
-                <TextBlock Text="Empresa" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <ComboBox x:Name="BusinessComboBox" Style="{x:Null}" Background="White" Height="30" FontSize="16">
-                </ComboBox>
-                <TextBlock Text="Senha" Margin="0 20 0 5" FontSize="18"></TextBlock>
-                <PasswordBox x:Name="PasswordBoxTextBox" Style="{x:Null}" Height="30" FontSize="16"></PasswordBox>
-                <Button VerticalAlignment="Bottom" Content="Salvar Funcionário" Padding="5" Width="200" x:Name="BtnSaveEmployee" Click="BtnSaveEmployee_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 30 0 0" Cursor="Hand" Background="White" Foreground="#FF2196F3">
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border Name="Border" BorderBrush="#FF2196F3" BorderThickness="1" Background="{TemplateBinding Background}">
-                                <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="Button.IsFocused" Value="True">
-                                    <Setter TargetName="Border" Property="Background" Value="White" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Background="White" Margin="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Nome do Funcionário" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <TextBox x:Name="NameTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
+                        <TextBlock Text="Matrícula" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
+                        <TextBox x:Name="RegisterTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="3"></TextBox>
+                        <TextBlock Text="Cargo" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>
+                        <TextBox x:Name="OccupationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="5"></TextBox>
+                        <TextBlock Text="Setor" FontSize="22" Margin="20 30 20 0" Grid.Row="6"></TextBlock>
+                        <ComboBox x:Name="SectorComboBox" FontSize="22" ItemsSource="{Binding Sector}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="7"></ComboBox>
+                        <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
+                        <ComboBox x:Name="BusinessComboBox" FontSize="22" ItemsSource="{Binding Business}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="9"></ComboBox>
+                        <TextBlock Text="Senha" FontSize="22" Margin="20 30 20 0" Grid.Row="10"></TextBlock>
+                        <PasswordBox x:Name="PasswordBoxTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="11"></PasswordBox>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="BtnSaveEmployee" Click="BtnSaveEmployee_Click" Content="Salvar Funcionário"></Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </DockPanel>
