@@ -42,7 +42,7 @@
                         <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
                         <ComboBox x:Name="BusinessComboBox" FontSize="22" ItemsSource="{Binding Business}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="9"></ComboBox>
                         <TextBlock Text="Senha" FontSize="22" Margin="20 30 20 0" Grid.Row="10"></TextBlock>
-                        <PasswordBox x:Name="PasswordBoxTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="11"></PasswordBox>
+                        <PasswordBox x:Name="PasswordBoxTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 30" Grid.Row="11"></PasswordBox>
                     </Grid>
                     <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">
