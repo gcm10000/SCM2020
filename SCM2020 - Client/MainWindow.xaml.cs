@@ -36,16 +36,23 @@ namespace SCM2020___Client
 
     public partial class MainWindow : Window
     {
-        System.Windows.Forms.NotifyIcon notifyIcon1;
+        System.Windows.Forms.NotifyIcon notifyIcon;
         public MainWindow()
         {
-            notifyIcon1 = new System.Windows.Forms.NotifyIcon();
-            notifyIcon1.Icon = System.Drawing.SystemIcons.Exclamation;
-            notifyIcon1.BalloonTipTitle = "Controle de Materiais";
-            notifyIcon1.Visible = true;
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Icon = System.Drawing.SystemIcons.Exclamation;
+            notifyIcon.BalloonTipTitle = "Controle de Materiais";
+            notifyIcon.BalloonTipText = "Controle de Materiais";
+            notifyIcon.Text = "Controle de Materiais";
+            notifyIcon.Visible = true;
 
             InitializeComponent();
             InitializeMenu();
+
+            WebAssemblyLibrary.Helper.SetLastVersionIE();
+            Helper.MyWebBrowser = WebBrowser;
+
+            this.Closed += MainWindow_Closed;
 
             //PopupMovement.Closed += PopupMovement_Closed;
             //PopupRegister.Closed += PopupRegister_Closed;
@@ -67,8 +74,7 @@ namespace SCM2020___Client
 
 
 
-            WebAssemblyLibrary.Helper.SetLastVersionIE();
-            
+
             //Open server local
 
             //Task.Run(() =>
@@ -123,7 +129,6 @@ namespace SCM2020___Client
             //    connection.StartAsync().Wait();
             //});
 
-            Helper.MyWebBrowser = WebBrowser;
 
             //GroupEmployees groupParent = new GroupEmployees() { Name = "Gerencia", };
             //var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Employee/AddGroup"), groupParent, Helper.Authentication);
@@ -162,9 +167,16 @@ namespace SCM2020___Client
 
             //Grupo grupo1 = new Grupo() { Name = "Chefe", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee1 } };
             //Grupo grupo2 = new Grupo() { Name = "Gerente", SuperiorIds = null, SubalternIds = null, Employees = new List<ModelsLibraryCore.Employee>() { employee2, employee3 } };
-            
 
 
+
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            notifyIcon.Visible = false;
+            notifyIcon.Dispose();
+            Application.Current.Shutdown();
         }
         #region MenuVertical
         private void InitializeMenu()
@@ -297,8 +309,8 @@ namespace SCM2020___Client
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            notifyIcon1.Visible = false;
-            notifyIcon1.Dispose();
+            notifyIcon.Visible = false;
+            notifyIcon.Dispose();
             Application.Current.Shutdown();
         }
 
@@ -604,13 +616,6 @@ namespace SCM2020___Client
             GC.Collect();
         }
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
-        {
-            
-            
-
-        }
-
         private void LoadMenu()
         {
             this.StackPanelMenuHorizontal.Children.Clear();
@@ -624,7 +629,8 @@ namespace SCM2020___Client
                 return;
             var localMenu = src.GetType().GetProperty("Menu").GetValue(src, null);
             var menuItems = localMenu as List<SCM2020___Client.Frames.MenuItem>;
-            SubscribeEvent((Control)src);
+            SubscribeEvent((Control)src, "MenuItemEventHandler");
+            SubscribeEvent((Control)src, "ScreenChanged");
             foreach (var menuItem in menuItems)
             {
                 Button buttonMenu = new Button()
@@ -637,6 +643,7 @@ namespace SCM2020___Client
                     BorderBrush = null,
                     Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
                     Content = menuItem.Name,
+                    IsEnabled = menuItem.IsEnabled
                 };
 
                 buttonMenu.Click += (sender, e) =>
@@ -657,32 +664,54 @@ namespace SCM2020___Client
             }
         }
 
-        public void SubscribeEvent(Control control)
+        private void SubscribeEvent(Control control, string thisNameMethod)
         {
             if (typeof(Control).IsAssignableFrom(control.GetType()))
             {
-                var myself = this;
-                
-                MethodInfo method = typeof(MainWindow).GetMethod("ScreenChanged");
+                try
+                {
+                    var myself = this;
 
-                EventInfo eventInfo = control.GetType().GetEvent("ScreenChanged");
+                    EventInfo eventInfo = control.GetType().GetEvent(thisNameMethod);
+                    if (eventInfo == null)
+                        return;
+                    // Create the delegate on the test class because that's where the
+                    // method is. This corresponds with `new EventHandler(test.WriteTrace)`.
+                    Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, myself, thisNameMethod);
+                    // Assign the eventhandler. This corresponds with `control.Load += ...`.
+                    eventInfo.AddEventHandler(control, handler);
+                }
+                catch (System.NullReferenceException)
+                {
+                    return;
+                }
+            }
+        }
+        public void MenuItemEventHandler(int IdEvent, bool IsEnabled)
+        {
+            List<UIElement> UICollection = null;
+            this.StackPanelMenuHorizontal.Dispatcher.Invoke(new Action(() => { UICollection = this.StackPanelMenuHorizontal.Children.Cast<UIElement>().ToList(); }));
 
-                // Create the delegate on the test class because that's where the
-                // method is. This corresponds with `new EventHandler(test.WriteTrace)`.
-                Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, myself, "ScreenChanged");
-                // Assign the eventhandler. This corresponds with `control.Load += ...`.
-                eventInfo.AddEventHandler(control, handler);
+            foreach (Button button in UICollection)
+            {
+                button.Dispatcher.Invoke(new Action(() =>
+                {
+                    if (button.Uid == IdEvent.ToString())
+                    {
+                        button.IsEnabled = IsEnabled;
+                    }
+                }));
             }
         }
 
-        private void ScreenChanged(object sender, EventArgs e)
+        public void ScreenChanged(object sender, EventArgs e)
         {
             MoveGridCursor(((SCM2020___Client.Frames.MenuItem)sender).IdEvent);
 
         }
         private void MoveGridCursor(int index)
         {
-            GridCursor.Margin = new Thickness((130 * index), 0, 0, 0);
+            GridCursor.Dispatcher.Invoke(new Action(() => { GridCursor.Margin = new Thickness((130 * index), 0, 0, 0); }));
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

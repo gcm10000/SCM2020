@@ -18,13 +18,15 @@ namespace SCM2020___Client.Frames
 {
     public class MenuItem
     {
-        public MenuItem(string Name, int IdEvent)
+        public MenuItem(string Name, int IdEvent, bool IsEnabled)
         {
             this.Name = Name;
             this.IdEvent = IdEvent;
+            this.IsEnabled = IsEnabled;
         }
         public string Name { get; set; }
         public int IdEvent { get; set; }
+        public bool IsEnabled { get; set; }
     }
     /// <summary>
     /// Interação lógica para UserControl1.xam
@@ -43,15 +45,12 @@ namespace SCM2020___Client.Frames
                     {
                         case "0":
                             ShowInfo();
-
                             break;
                         case "1":
                             ShowProducts();
-
                             break;
                         case "2":
                             ShowFinish();
-
                             break;
                     }
                     ScreenChanged?.Invoke(value, new EventArgs());
@@ -69,9 +68,9 @@ namespace SCM2020___Client.Frames
             InitializeComponent();
             Menu = new List<MenuItem>() 
             { 
-                new MenuItem(Name: "Informações", 0),
-                new MenuItem(Name: "Produtos", 1),
-                new MenuItem(Name: "Finalização", 2)
+                new MenuItem(Name: "Informações", 0, true),
+                new MenuItem(Name: "Produtos", 1, true),
+                new MenuItem(Name: "Finalização", 2, true)
             };
             CurrentMenuItem = Menu[0];
 

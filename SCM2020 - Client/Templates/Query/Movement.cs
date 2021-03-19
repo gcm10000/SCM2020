@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -98,8 +99,20 @@ namespace SCM2020___Client.Templates.Query
                 Monitoring = APIClient.GetData<ModelsLibraryCore.Monitoring>(new Uri(Helper.ServerAPI, $"monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
                 userId = Monitoring.EmployeeId;
             }
-            catch
+            catch (System.Net.Http.HttpRequestException ex)
             {
+                throw new Exception("Não foi possível conectar ao servidor.", ex);
+            }
+            catch (Exception ex)
+            {
+                while (ex != null)
+                {
+                    if (ex.GetType() == typeof(System.Net.Sockets.SocketException))
+                    {
+                        throw new Exception("Conectividade mal-sucedida.", new SocketException());
+                    }
+                    ex = ex.InnerException;
+                }
                 throw new Exception("Ordem de serviço inexistente.", new NullReferenceException());
             }
             try

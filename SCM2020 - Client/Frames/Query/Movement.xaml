@@ -4,10 +4,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:local="clr-namespace:SCM2020___Client.Frames"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <Style x:Key="Body_Content_DataGrid_Centering"
         TargetType="{x:Type DataGridCell}">
             <Setter Property="Template">
@@ -27,9 +28,149 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-    </UserControl.Resources>
-    <DockPanel Background="White">
-        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
+    </UserControl.Resources>-->
+    <Grid Background="#F0F0F0">
+        <ScrollViewer Name="SearchScrollViewer" VerticalScrollBarVisibility="Auto" Visibility="Visible" Width="Auto">
+            <StackPanel VerticalAlignment="Center">
+                <Grid Name="GridSearch" Margin="30">
+                    <Grid Margin="0 0 0 20" Background="#F5F5F5">
+                        <Grid Margin="10 10 10 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Pesquisar movimentação..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black" KeyDown="TxtSearch_KeyDown"></TextBox>
+                            <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearch" Click="ButtonSearch_Click">
+                                <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer x:Name="InfoScrollViewer" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" Margin="0 0 0 0" Padding="30 0 30 30">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Background="White" Margin="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="DOC/SM/OS" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="OSText" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
+                        <TextBlock Text="Matricula do Solicitante" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="RegisterApplicationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="3"></TextBox>
+                        <TextBlock Text="Nome do Solicitante" FontSize="22" Margin="20 15 20 0" Grid.Row="4"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="ApplicationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="5"></TextBox>
+                        <TextBlock Text="Setor" FontSize="22" Margin="20 15 20 0" Grid.Row="6"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="SectorTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="7"></TextBox>
+                        <TextBlock Text="Situação" FontSize="22" Margin="20 15 20 0" Grid.Row="8"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="SituationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="9"></TextBox>
+                        <TextBlock Text="Localização" FontSize="22" Margin="20 15 20 0" Grid.Row="10"></TextBlock>
+                        <TextBox IsEnabled="False" x:Name="ServiceLocalizationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="11"></TextBox>
+                        <TextBlock Text="Data da Abertura da Ordem de Serviço" FontSize="22" Margin="20 15 20 0" Grid.Row="12"></TextBlock>
+                        <DatePicker IsEnabled="False" x:Name="WorkOrderDateDatePicker" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="13"></DatePicker>
+                        <TextBlock Text="Data de Fechamento da Ordem de Serviço" FontSize="22" Margin="20 15 20 0" Grid.Row="14"></TextBlock>
+                        <DatePicker IsEnabled="False" x:Name="ClosureOSDatePicker" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 30" Grid.Row="15"></DatePicker>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="NextButton" Click="NextButton_Click"  Content="Próximo"></Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" Background="#FFF1F1F1">
+            <Grid Margin="30">
+                <StackPanel>
+                    <!--<Grid Name="GridData">
+                        <StackPanel>
+                            <ItemsControl x:Name="ListView">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="White" Margin="0 10 10 10" Width="240" Height="100">
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                                <Grid Background="White" Margin="0 15 0 0">
+                                                    <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
+                                                    <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>-->
+                    <!--Materiais selecionados-->
+                    <Grid Name="GridProducts3" Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!--Resumo-->
+                        <DataGrid Grid.Row="0" Height="685" x:Name="ProductMovementDataGrid" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="ProductMovementDataGrid_PreviewMouseWheel">
+                            <!--ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
+                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel"-->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="Auto" Header="Data da Movimentação" Binding="{Binding Path=MoveDate, StringFormat='{}{0:dd/MM/yyyy}'}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Quantidade" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Unidade" Binding="{Binding Path=Unity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Movimentação" Binding="{Binding Path=Movement}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click" Content="Imprimir" Cursor="Hand">
+                                </Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click" Content="Exportar" Cursor="Hand">
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+        </ScrollViewer>
+        <!--<ScrollViewer x:Name="InfoScrollViewer2" Visibility="Collapsed"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <Border BorderBrush="LightGray" CornerRadius="2,2,2,2" BorderThickness="2,2,2,2">
                 <StackPanel Margin="20" VerticalAlignment="Top" Name="Container">
                     <TextBlock Text="DOC/SM/OS" Margin="0 20 0 5" FontSize="18"></TextBlock>
@@ -51,7 +192,7 @@
                 </StackPanel>
             </Border>
         </ScrollViewer>
-        <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="0 0 10 30">
+        <DockPanel x:Name="InfoDockPanel" Visibility="Collapsed" Margin="0 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -116,6 +257,6 @@
                 </DataGrid>
             </Grid>
 
-        </DockPanel>
-    </DockPanel>
+        </DockPanel>-->
+    </Grid>
 </UserControl>

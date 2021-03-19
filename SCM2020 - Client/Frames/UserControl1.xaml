@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="#F0F0F0">
         <!--Informações-->
-        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Visible">
+        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Collapsed">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -166,6 +166,7 @@
                                   VirtualizingStackPanel.IsVirtualizing="True"
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
                                   ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
                                   PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                         <DataGrid.Columns>
