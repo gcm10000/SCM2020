@@ -7,21 +7,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <UserControl.Resources>
-        <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
-    <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10">
+    <Grid Background="#F0F0F0">
+        <Grid x:Name="GridWorkOrderByDate" Visibility="Visible" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 20" Background="#F5F5F5">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"></ColumnDefinition>
+                        <ColumnDefinition Width="15*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker Margin="0 0 15 0" Name="InitialDate" materialDesign:HintAssist.Hint="Data Inicial" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></DatePicker>
+                    <DatePicker Margin="15 0 0 0" Name="FinalDate" materialDesign:HintAssist.Hint="Data Final" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="1" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></DatePicker>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="2" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchConsumpterProduct" Click="BtnSearch_Click">
+                        <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" x:Name="DataGridShowByDate" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  MouseDoubleClick="DataGridRow_MouseDoubleClick"
+                                  PreviewMouseWheel="DataGridShowByDate_PreviewMouseWheel"
+                                  AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Ordem de Serviço" Binding="{Binding WorkOrder}" Width="Auto"/>
+                    <DataGridTextColumn Header="Data Inicial" Binding="{Binding Path=MovingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Data de Fechamento" Binding="{Binding Path=ClosingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10 0 0 0" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click"  Content="Imprimir" Cursor="Hand">
+                    </Button>
+                    <Button Margin="10 0 0 0" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click"  Content="Exportar" Cursor="Hand">
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+    <!--<DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10">
         <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -89,5 +124,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>

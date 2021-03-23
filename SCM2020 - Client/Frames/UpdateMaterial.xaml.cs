@@ -102,8 +102,7 @@ namespace SCM2020___Client.Frames
                 {
                     MessageBox.Show(response.Message, "Erro ao enviar imagem", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            );
+            });
         }
 
         private void ImageTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)

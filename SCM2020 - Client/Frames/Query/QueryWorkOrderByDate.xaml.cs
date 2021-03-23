@@ -36,7 +36,7 @@ namespace SCM2020___Client.Frames.Query
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Models.QueryWorkOrderByDate workOrderSelected = this.ShowByDateDataGrid.SelectedItem as Models.QueryWorkOrderByDate;
+            Models.QueryWorkOrderByDate workOrderSelected = ((Models.QueryWorkOrderByDate)this.DataGridShowByDate.GetObjectFromDataGridRow());
 
             Helper.WorkOrderByPass = workOrderSelected.WorkOrder;
             FrameWindow frame = new FrameWindow(new Uri("Frames/Query/Movement.xaml", UriKind.Relative));
@@ -53,15 +53,15 @@ namespace SCM2020___Client.Frames.Query
             var finalDay = this.FinalDate.SelectedDate.Value.Day;
             var finalMonth = this.FinalDate.SelectedDate.Value.Month;
             var finalYear = this.FinalDate.SelectedDate.Value.Year;
-            
-            ButtonsEnable(false);
+
+            ButtonsStatus(false);
             Search(initialDay, initialMonth, initialYear, finalDay, finalMonth, finalYear);
         }
         private void Search(int initialDay, int initialMonth, int initialYear, int finalDay, int finalMonth, int finalYear)
         {
             Task.Run(() =>
             {
-                this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Clear(); }));
+                this.DataGridShowByDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridShowByDate.Items.Clear(); }));
                 var result = APIClient.GetData<List<ModelsLibraryCore.Monitoring>>(new Uri(Helper.ServerAPI, $"Monitoring/SearchByDate/{initialDay}-{initialMonth}-{initialYear}/{finalDay}-{finalMonth}-{finalYear}").ToString(), Helper.Authentication);
                 List<Models.QueryWorkOrderByDate> dataQuery = new List<Models.QueryWorkOrderByDate>();
                 foreach (var item in result)
@@ -72,36 +72,19 @@ namespace SCM2020___Client.Frames.Query
                         MovingDate = item.MovingDate,
                         ClosingDate = item.ClosingDate
                     };
-                    this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Add(workorder); }));
                     dataQuery.Add(workorder);
                 }
+                this.DataGridShowByDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridShowByDate.ItemsSource = dataQuery; }));
+
                 ResultQueryWorkOrder = new Templates.Query.QueryWorkOrderByDate(dataQuery, new DateTime(initialYear, initialMonth, initialDay), new DateTime(finalYear, finalMonth, finalDay));
                 if ((dataQuery.Count > 0) && (dataQuery != null))
-                    ButtonsEnable(true);
+                    ButtonsStatus(true);
             });
         }
-        private void ButtonsEnable(bool isEnable)
+        private void ButtonsStatus(bool isEnable)
         {
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
-        }
-
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-            Document = ResultQueryWorkOrder.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
-
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-
-            Document = ResultQueryWorkOrder.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = isEnable; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = isEnable; }));
         }
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -143,6 +126,37 @@ namespace SCM2020___Client.Frames.Query
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+
+            Document = ResultQueryWorkOrder.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+            Document = ResultQueryWorkOrder.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void DataGridShowByDate_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
         }
     }
 }

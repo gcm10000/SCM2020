@@ -89,7 +89,7 @@ namespace SCM2020___Client.Frames.Query
                 };
                 
                 //Adiciona no datagrid
-                this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Add(product); }));
+                this.DataGridProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridProducts.Items.Add(product); }));
                 //Adiciona na lista
                 listQuery.Add(product);
             }
@@ -107,29 +107,12 @@ namespace SCM2020___Client.Frames.Query
 
         private void ClearData()
         {
-            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { QueryDataGrid.Items.Clear(); }));
+            this.DataGridProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridProducts.Items.Clear(); }));
         }
         private void PrintExportEnable(bool IsEnable)
         {
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Print_Button.IsEnabled = IsEnable; }));
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Export_Button.IsEnabled = IsEnable; }));
-        }
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-
-            Document = ResultQueryByPatrimony.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-
-            Document = ResultQueryByPatrimony.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ButtonPrint.IsEnabled = IsEnable; }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ButtonExport.IsEnabled = IsEnable; }));
         }
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -166,6 +149,38 @@ namespace SCM2020___Client.Frames.Query
                 }
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+
+            Document = ResultQueryByPatrimony.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+
+            Document = ResultQueryByPatrimony.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void DataGridProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
         }
     }
 }
