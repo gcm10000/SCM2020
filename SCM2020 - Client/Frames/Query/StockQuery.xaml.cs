@@ -85,39 +85,22 @@ namespace SCM2020___Client.Frames.Query
                 //var myitem = new Models.StockQuery(item);
                 products.Add(new Models.StockQuery(item));
             }
-            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.ItemsSource = products; this.QueryDataGrid.Items.Refresh(); }));
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
+            this.DataGridProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridProducts.ItemsSource = products; this.DataGridProducts.Items.Refresh(); }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = true; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
         }
 
         private void Clear()
         {
             products.Clear();
-            this.QueryDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.QueryDataGrid.Items.Refresh(); }));
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
+            this.DataGridProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridProducts.Items.Refresh(); }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = false; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = false; }));
         }
 
         //True to print, False to export.
         bool PrintORExport = false;
         string Document = string.Empty;
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-            StockQueryDocument template = new StockQueryDocument(products);
-            Document = template.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-            StockQueryDocument template = new StockQueryDocument(products);
-            Document = template.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
 
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -173,7 +156,7 @@ namespace SCM2020___Client.Frames.Query
                 //recebe os valores e atualiza lista
                 product.Description = dialog.Product.Description;
                 product.ConsumptionProduct = dialog.Product;
-                this.QueryDataGrid.Items.Refresh();
+                this.DataGridProducts.Items.Refresh();
             }
 
         }
@@ -190,22 +173,22 @@ namespace SCM2020___Client.Frames.Query
             var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/remove/{product.ConsumptionProduct.Id}").ToString(), Helper.Authentication);
             MessageBox.Show(result.DeserializeJson<string>());
             products.Remove(product);
-            this.QueryDataGrid.Items.Refresh();
+            this.DataGridProducts.Items.Refresh();
         }
 
-        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void DataGridProducts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender == null)
                 return;
-            if (e.ChangedButton == MouseButton.Left)
+
+            DataGrid grid = sender as DataGrid;
+            var item = grid.GetObjectFromDataGridRow();
+
+            e.Handled = true;
+            if (SelectedRow(item))
             {
-                e.Handled = true;
-                DataGridRow dgr = sender as DataGridRow;
-                if (SelectedRow(dgr.Item))
-                {
-                    products.RemoveAt(this.QueryDataGrid.SelectedIndex);
-                    this.QueryDataGrid.Items.Refresh();
-                }
+                products.RemoveAt(this.DataGridProducts.SelectedIndex);
+                this.DataGridProducts.Items.Refresh();
             }
         }
 
@@ -220,8 +203,8 @@ namespace SCM2020___Client.Frames.Query
 
                 if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
                 {
-                    products.RemoveAt(this.QueryDataGrid.SelectedIndex);
-                    this.QueryDataGrid.Items.Refresh();
+                    products.RemoveAt(this.DataGridProducts.SelectedIndex);
+                    this.DataGridProducts.Items.Refresh();
                 }
             }
         }
@@ -235,6 +218,38 @@ namespace SCM2020___Client.Frames.Query
                 return visualizeProduct.RemovedProduct;
             }
             return false;
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+            StockQueryDocument template = new StockQueryDocument(products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void DataGridProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
         }
     }
 }

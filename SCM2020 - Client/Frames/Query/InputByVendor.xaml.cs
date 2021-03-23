@@ -29,11 +29,93 @@ namespace SCM2020___Client.Frames.Query
         WebBrowser webBrowser = Helper.MyWebBrowser;
         SCM2020___Client.Templates.Query.InputByVendor template;
 
+        #region MenuBar
+        public MenuItem CurrentMenuItem
+        {
+            get => currentMenuItem;
+            private set
+            {
+                if (value != null)
+                {
+                    currentMenuItem = value;
+                    switch (value.IdEvent.ToString())
+                    {
+                        case "0":
+                            ShowSearch();
+                            break;
+                        case "1":
+                            ShowInfo();
 
-        //NOTA FISCAL, DATA DA MOVIMENTAÇÃO, FORNECEDOR, FUNCIONÁRIO
+                            break;
+                        case "2":
+                            ShowProducts();
+                            break;
+                    }
+                    ScreenChanged?.Invoke(value, new EventArgs());
+
+                }
+            }
+        }
+
+        private MenuItem currentMenuItem;
+        public List<MenuItem> Menu { get; private set; }
+        public delegate void MenuDelegate(object sender, EventArgs e);
+        public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
+        public event MenuDelegate ScreenChanged;
+        public event MenuItemEnabled MenuItemEventHandler;
+
+        private void ShowSearch()
+        {
+            this.ScrollViewerSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerSearch.Visibility = Visibility.Visible; }));
+            this.ScrollViewerInfo.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerInfo.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
+        }
+        private void ShowInfo()
+        {
+            this.ScrollViewerSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerSearch.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerInfo.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerInfo.Visibility = Visibility.Visible; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
+        }
+        private void ShowProducts()
+        {
+            this.ScrollViewerSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerSearch.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerInfo.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerInfo.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Visible; }));
+        }
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
+        }
+        private void AllowMenuItems()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Keyboard.ClearFocus(); }));
+            MenuItemEventHandler?.Invoke(1, true);
+            MenuItemEventHandler?.Invoke(2, true);
+            this.CurrentMenuItem = Menu[1];
+        }
+        private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            this.CurrentMenuItem = Menu[1];
+        }
+        private void ButtonNext_Click(object sender, RoutedEventArgs e)
+        {
+            this.CurrentMenuItem = Menu[2];
+        }
+        #endregion
+
         public InputByVendor()
         {
             InitializeComponent();
+
+            Menu = new List<MenuItem>()
+            {
+                new MenuItem(Name: "Pesquisa", 0, true),
+                new MenuItem(Name: "Informações", 1, false),
+                new MenuItem(Name: "Produtos", 2, false)
+            };
+
+            CurrentMenuItem = Menu[0];
         }
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -46,7 +128,7 @@ namespace SCM2020___Client.Frames.Query
             });
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
             string invoice = TxtSearch.Text;
             Task.Run(() => 
@@ -65,7 +147,7 @@ namespace SCM2020___Client.Frames.Query
                 return;
             foreach (var product in template.Products)
             {
-                this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Add(product); }));
+                this.DataGridProductMovement.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridProductMovement.Items.Add(product); }));
             }
 
             this.InvoiceText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InvoiceText.Text = template.Invoice; }));
@@ -75,13 +157,16 @@ namespace SCM2020___Client.Frames.Query
             this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = this.WorkOrderDateDatePicker.DisplayDate = template.InvoiceDate; }));
 
             AllowButtons();
+            AllowMenuItems();
         }
         private void Clear()
         {
             template = null;
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
-            this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
+            MenuItemEventHandler?.Invoke(1, false);
+            MenuItemEventHandler?.Invoke(2, false);
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = false; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = false; }));
+            this.DataGridProductMovement.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridProductMovement.Items.Clear(); }));
 
             this.InvoiceText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InvoiceText.Text = string.Empty; }));
             this.VendorTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.VendorTextBox.Text = string.Empty; }));
@@ -92,14 +177,14 @@ namespace SCM2020___Client.Frames.Query
         }
         private void AllowButtons()
         {
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = true; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = true; }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = true; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
         }
         //True to print, False to export.
         bool PrintORExport = false;
         string Document = string.Empty;
 
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
             Document = template.RenderizeHtml();
@@ -107,7 +192,7 @@ namespace SCM2020___Client.Frames.Query
             this.webBrowser.NavigateToString(Document);
         }
 
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
             var result = template.RenderizeHtml();
@@ -157,5 +242,21 @@ namespace SCM2020___Client.Frames.Query
         {
             e.Cancel = true;
         }
+
+        private void DataGridProductMovement_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
+
     }
 }

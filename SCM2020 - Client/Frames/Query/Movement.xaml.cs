@@ -30,6 +30,7 @@ namespace SCM2020___Client.Frames.Query
         WebBrowser webBrowser = Helper.MyWebBrowser;
         SCM2020___Client.Templates.Query.Movement ResultMovement = null;
 
+        #region MenuBar
         public MenuItem CurrentMenuItem
         {
             get => currentMenuItem;
@@ -56,12 +57,47 @@ namespace SCM2020___Client.Frames.Query
                 }
             }
         }
+
         private MenuItem currentMenuItem;
         public List<MenuItem> Menu { get; private set; }
         public delegate void MenuDelegate(object sender, EventArgs e);
         public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
         public event MenuDelegate ScreenChanged;
         public event MenuItemEnabled MenuItemEventHandler;
+
+        private void ShowSearch()
+        {
+            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Visible; }));
+            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
+        }
+        private void ShowInfo()
+        {
+            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Collapsed; }));
+            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
+        }
+        private void ShowProducts()
+        {
+            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Collapsed; }));
+            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Collapsed; }));
+            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Visible; }));
+        }
+
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
+        }
+        private void AllowMenuItems()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Keyboard.ClearFocus(); }));
+            MenuItemEventHandler?.Invoke(1, true);
+            MenuItemEventHandler?.Invoke(2, true);
+            this.CurrentMenuItem = Menu[1];
+        }
+        #endregion
+
         public Movement()
         {
             InitializeComponent();
@@ -81,16 +117,8 @@ namespace SCM2020___Client.Frames.Query
                 Search(Helper.WorkOrderByPass);
                 Helper.WorkOrderByPass = string.Empty;
             }
-            this.Focusable = false;
-            this.GridSearch.Focusable = false;
-            this.InfoScrollViewer.Focusable = false;
-            this.ScrollViewerFinish.Focusable = false;
         }
-        public void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            CurrentMenuItem = Menu[int.Parse(button.Uid)];
-        }
+
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
@@ -103,10 +131,10 @@ namespace SCM2020___Client.Frames.Query
         private void Search(string workOrder)
         {
             //Zerar todos os dados anteriores...
-            //this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = false; }));
-            //this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = false; }));
-            //this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ProductMovementDataGrid.Items.Clear(); }));
-            
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = false; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = false; }));
+
+
             this.OSText.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSText.Text = string.Empty; }));
             this.RegisterApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicationTextBox.Text = string.Empty; }));
             this.ApplicationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicationTextBox.Text = string.Empty; }));
@@ -117,6 +145,8 @@ namespace SCM2020___Client.Frames.Query
             this.ClosureOSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ClosureOSDatePicker.SelectedDate = null; }));
             if (ProductsToShow != null)
                 this.ProductsToShow.Clear();
+            MenuItemEventHandler?.Invoke(1, false);
+            MenuItemEventHandler?.Invoke(2, false);
 
             try
             {
@@ -142,19 +172,14 @@ namespace SCM2020___Client.Frames.Query
             this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = ResultMovement.ServiceLocalization; }));
             this.WorkOrderDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.WorkOrderDateDatePicker.SelectedDate = ResultMovement.WorkOrderDate; }));
             this.ClosureOSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ClosureOSDatePicker.SelectedDate = ResultMovement.ClosureWorkOrder; }));
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { Keyboard.ClearFocus(); }));
-
-
 
             ProductsToShow = ResultMovement.Products;
             this.ProductMovementDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductMovementDataGrid.ItemsSource = ProductsToShow; }));
 
             this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = true; }));
             this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
-            
-            MenuItemEventHandler?.Invoke(1, true);
-            MenuItemEventHandler?.Invoke(2, true);
-            this.CurrentMenuItem = Menu[1];
+
+            AllowMenuItems();
         }
         private void ProductMovementDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
@@ -211,24 +236,7 @@ namespace SCM2020___Client.Frames.Query
             string workOrder = TxtSearch.Text;
             Task.Run(() => Search(workOrder));
         }
-        private void ShowSearch()
-        {
-            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Visible; }));
-            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Collapsed; }));
-            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
-        }
-        private void ShowInfo()
-        {
-            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Collapsed; }));
-            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
-            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Collapsed; }));
-        }
-        private void ShowProducts()
-        {
-            this.SearchScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.SearchScrollViewer.Visibility = Visibility.Collapsed; }));
-            this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Collapsed; }));
-            this.ScrollViewerFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ScrollViewerFinish.Visibility = Visibility.Visible; }));
-        }
+
 
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
         {
@@ -260,6 +268,11 @@ namespace SCM2020___Client.Frames.Query
                     scrollViewer.LineRight();
                 e.Handled = true;
             }
+        }
+
+        private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[1];
         }
     }
 

@@ -56,7 +56,7 @@ namespace SCM2020___Client
             var path = Path.GetTempPath();
             var fileName = Guid.NewGuid().ToString() + extension;
             var directory = Path.Combine(path, "SCM");
-            if (!Directory.Exists(directory)) 
+            if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             return Path.Combine(directory, fileName);
         }
@@ -229,5 +229,24 @@ namespace SCM2020___Client
         {
             return obj.GetType().GetProperty(propertyName) != null;
         }
+
+        public static object GetObjectFromDataGridRow(this DataGrid grid)
+        {
+            try
+            {
+                if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+                {
+                    //This is the code which helps to show the data when the row is double clicked.
+                    DataGridRow dgr = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
+                    return dgr.Item;
+                }
+                return new ArgumentNullException("DataGrid encontra-se nulo ou não há um item selecionado.");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
