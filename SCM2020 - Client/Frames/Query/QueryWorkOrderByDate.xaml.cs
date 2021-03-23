@@ -30,6 +30,18 @@ namespace SCM2020___Client.Frames.Query
             InitializeComponent();
         }
 
+        private void InitialDate_Loaded(object sender, RoutedEventArgs e)
+        {
+            var textBox1 = (TextBox)InitialDate.Template.FindName("PART_TextBox", InitialDate);
+            textBox1.Background = InitialDate.Background;
+        }
+
+        private void FinalDate_Loaded(object sender, RoutedEventArgs e)
+        {
+            var textBox2 = (TextBox)FinalDate.Template.FindName("PART_TextBox", FinalDate);
+            textBox2.Background = FinalDate.Background;
+        }
+
         //True to print, False to export.
         bool PrintORExport = false;
         string Document = string.Empty;

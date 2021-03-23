@@ -11,6 +11,9 @@ using System.Linq;
 using Path = System.IO.Path;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.Windows.Input;
+using System.Drawing;
+using System.Windows.Media;
 
 namespace SCM2020___Client.Frames.Query
 {
@@ -25,6 +28,18 @@ namespace SCM2020___Client.Frames.Query
         public QueryByDate()
         {
             InitializeComponent();
+        }
+        
+        private void InitialDate_Loaded(object sender, RoutedEventArgs e)
+        {
+            var textBox1 = (TextBox)InitialDate.Template.FindName("PART_TextBox", InitialDate);
+            textBox1.Background = InitialDate.Background;
+        }
+
+        private void FinalDate_Loaded(object sender, RoutedEventArgs e)
+        {
+            var textBox2 = (TextBox)FinalDate.Template.FindName("PART_TextBox", FinalDate);
+            textBox2.Background = FinalDate.Background;
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -50,8 +65,8 @@ namespace SCM2020___Client.Frames.Query
 
         private void Search(DateTime initialDate, DateTime finalDate)
         {
-            ButtonEnable(false);
-            this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Clear(); }));
+            ButtonsStatus(false);
+            this.DataGridShowByDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridShowByDate.Items.Clear(); }));
 
 
             var materialInputByVendorInDate = APIClient.GetData<List<ModelsLibraryCore.AuxiliarConsumption>>(new Uri(Helper.ServerAPI, $"input/Date/{initialDate.Day.ToString()}-{initialDate.Month.ToString()}-{initialDate.Year.ToString()}/{finalDate.Day.ToString()}-{finalDate.Month.ToString()}-{finalDate.Year.ToString()}").ToString(), Helper.Authentication);
@@ -142,18 +157,15 @@ namespace SCM2020___Client.Frames.Query
                 }
             }
 
-            foreach (var product in products)
-            {
-                this.ShowByDateDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ShowByDateDataGrid.Items.Add(product); }));
-            }
+            this.DataGridShowByDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridShowByDate.ItemsSource = products; }));
 
-            ButtonEnable(true);
+            ButtonsStatus(true);
         }
 
-        private void ButtonEnable(bool isEnable)
+        private void ButtonsStatus(bool isEnable)
         {
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = isEnable; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = isEnable; }));
         }
 
         private void ShowByDateDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -166,25 +178,6 @@ namespace SCM2020___Client.Frames.Query
         string Document = string.Empty;
         DateTime InitialDateTime;
         DateTime FinalDateTime;
-
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-
-            QueryByDateDocument template = new QueryByDateDocument(InitialDateTime, FinalDateTime, products);
-            Document = template.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-            QueryByDateDocument template = new QueryByDateDocument(InitialDateTime, FinalDateTime, products);
-            Document = template.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
-        }
 
         private void WebBrowser_LoadCompleted(object sender, NavigationEventArgs e)
         {
@@ -223,5 +216,39 @@ namespace SCM2020___Client.Frames.Query
             }
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+            QueryByDateDocument template = new QueryByDateDocument(InitialDateTime, FinalDateTime, products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+
+            QueryByDateDocument template = new QueryByDateDocument(InitialDateTime, FinalDateTime, products);
+            Document = template.RenderizeHtml();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.webBrowser.NavigateToString(Document);
+        }
+
+        private void DataGridShowByDate_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
     }
 }
