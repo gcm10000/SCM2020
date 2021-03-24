@@ -3,24 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SCM2020___Client.Frames"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="VisualizeProduct" Height="450" Width="800" Loaded="Window_Loaded">
+        WindowStartupLocation="CenterOwner"
+        Title="Visualizador de Produto" Height="500" Width="800" Loaded="Window_Loaded">
     <DockPanel Background="White">
-        <Grid DockPanel.Dock="Left" Width="450">
-            <Image x:Name="ProductImage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30 30" Width="390" Height="390" Stretch="Fill" Source="{x:Null}"></Image>
+        <Grid DockPanel.Dock="Left" Width="450" Name="GridImage">
+            <Image x:Name="ProductImage" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="30" Width="390" Height="390" Stretch="Fill"  Source="{x:Null}"></Image>
         </Grid>
-        <Grid DockPanel.Dock="Right">
-            <Grid Margin="30 30">
-                <StackPanel>
-                    <TextBlock x:Name="DescriptionTextBlock" FontSize="20" FontFamily="Calibri" TextWrapping="WrapWithOverflow">Cabo Espiral (269)</TextBlock>
-                    <Label x:Name="GroupLabel" FontSize="16">Telefonia</Label>
-                    <Label x:Name="MininumStockLabel" FontSize="15">Quantidade Mínima: 10</Label>
-                    <Label x:Name="StockLabel" FontSize="15">Quantidade em Estoque: 30</Label>
-                    <Label x:Name="MaximumStockLabel" FontSize="15">Quantidade Máxima: 100</Label>
-                    <Label x:Name="UnityLabel" FontSize="15">Unidade: UN</Label>
-                    <Label x:Name="LocalizationLabel" FontSize="15">Localização: A-G-1</Label>
+        <Grid DockPanel.Dock="Right" Height="440">
+            <Grid Margin="30">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock x:Name="DescriptionTextBlock" FontSize="20" FontFamily="Calibri" TextWrapping="WrapWithOverflow"></TextBlock>
+                    <Label x:Name="GroupLabel" FontSize="16"></Label>
+                    <Label x:Name="MininumStockLabel" FontSize="15">Quantidade Mínima: </Label>
+                    <Label x:Name="StockLabel" FontSize="15">Quantidade em Estoque: </Label>
+                    <Label x:Name="MaximumStockLabel" FontSize="15">Quantidade Máxima: </Label>
+                    <Label x:Name="UnityLabel" FontSize="15">Unidade: </Label>
+                    <Label x:Name="LocalizationLabel" FontSize="15">Localização: </Label>
                 </StackPanel>
                     <Grid VerticalAlignment="Bottom">
                         <DockPanel VerticalAlignment="Bottom">

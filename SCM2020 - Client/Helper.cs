@@ -11,10 +11,12 @@ using System.Windows.Xps.Serialization;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Management;
+using System.Drawing;
 using Microsoft.Win32;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SCM2020___Client
 {
@@ -60,6 +62,16 @@ namespace SCM2020___Client
                 Directory.CreateDirectory(directory);
             return Path.Combine(directory, fileName);
         }
+        public static BitmapSource LoadImage(this byte[] imageData)
+        {
+            using (MemoryStream ms = new MemoryStream(imageData))
+            {
+                var decoder = BitmapDecoder.Create(ms,
+                    BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+                return decoder.Frames[0];
+            }
+        }
+
         public static void SetOptionsToPrint()
         {
             string strKey = "Software\\Microsoft\\Internet Explorer\\PageSetup";

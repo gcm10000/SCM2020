@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -81,6 +82,15 @@ namespace SCM2020___Client.Frames
                 new SummaryInfo("Data de Movimentação", "03/03/2021", PackIconKind.CalendarToday), //event
             };
             this.ListView.ItemsSource = infos;
+        }
+
+        public byte[] ImageToByteArray(System.Drawing.Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, imageIn.RawFormat);
+                return ms.ToArray();
+            }
         }
 
         public void Button_Click(object sender, RoutedEventArgs e)

@@ -49,6 +49,7 @@ namespace SCM2020___Client.Frames
             this.ListView.ItemsSource = tests;
             //string html = System.IO.File.ReadAllText("C:\\Users\\Gabriel\\Desktop\\test.html");
             //this.webBrowser.NavigateToString(html);
+
         }
     }
 }
