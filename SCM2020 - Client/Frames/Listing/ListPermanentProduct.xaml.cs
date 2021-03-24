@@ -61,80 +61,43 @@ namespace SCM2020___Client.Frames.Listing
             this.ListPermanentProductDataGrid.Items.Refresh();
         }
 
-        private void ListPermanentProductDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-           
-        }
-
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            Export();
-        }
-
-        private void Export()
-        {
-            Helper.SetOptionsToPrint();
-            string printer = Helper.GetPrinter("PDF");
-            string tempFile = string.Empty;
-            try
-            {
-                //Declara sinal para sincronismo em diferentes threads
-                ManualResetEvent receiveDone = new ManualResetEvent(false);
-
-                //Obter o DOM atual
-                string DOM = string.Empty;
-                Helper.Client.Receive("ReceiveMessage", (window, message) =>
-                {
-                    Console.WriteLine("{0}, {1}", window, message);
-                    if (window == "SetDOM")
-                    {
-                        DOM = message;
-
-                        tempFile = Helper.GetTempFilePathWithExtension(".tmp");
-                        using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, false))
-                        {
-                            file.Write(DOM);
-                            file.Flush();
-                        }
-
-                            //"f=" The input file
-                            //"p=" The temporary default printer
-                            //"d|delete" Delete file when finished
-                            var p = new Process();
-                        p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
-                            //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
-                            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
-                        p.Start();
-                    }
-                });
-
-                Helper.Client.Send("SendMessage", "GetDOM", "");
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
-            }
-        }
-
         private void Print_Button_Click(object sender, RoutedEventArgs e)
         {
             this.WebBrowser.PrintDocument();
         }
 
-        private void ListPermanentProductDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        //IMPRIMIR E EXPORTAR NO NOVO MÉTODO NÃO EFETUADO
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ListPermanentProductDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null)
+                return;
+            DataGrid grid = sender as DataGrid;
+            var item = grid.GetObjectFromDataGridRow();
+            e.Handled = true;
+        }
+
+        private void ListPermanentProductDataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
         }
     }
 }

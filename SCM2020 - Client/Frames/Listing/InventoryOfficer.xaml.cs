@@ -38,28 +38,16 @@ namespace SCM2020___Client.Frames.Query
         public InventoryOfficer()
         {
             InitializeComponent();
-
         }
         
         //True to print, False to export.
         bool PrintORExport = false;
         string Document = string.Empty;
 
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-            PrintExport();
-        }
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-            PrintExport();
-        }
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-            this.Export_Button.IsEnabled = true;
-            this.Print_Button.IsEnabled = true;
+            this.ButtonExport.IsEnabled = true;
+            this.ButtonPrint.IsEnabled = true;
         }
 
         private void PrintExport()
@@ -170,6 +158,46 @@ namespace SCM2020___Client.Frames.Query
                 return visualizeProduct.RemovedProduct;
             }
             return false;
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+            PrintExport();
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+            PrintExport();
+        }
+
+        private void InventoryOfficerDataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
+        private void InventoryOfficerDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null)
+                return;
+            DataGrid grid = sender as DataGrid;
+            var item = grid.GetObjectFromDataGridRow();
+            e.Handled = true;
+            if (SelectedRow(item))
+            {
+                products.RemoveAt(this.InventoryOfficerDataGrid.SelectedIndex);
+                this.InventoryOfficerDataGrid.Items.Refresh();
+            }
         }
     }
 }

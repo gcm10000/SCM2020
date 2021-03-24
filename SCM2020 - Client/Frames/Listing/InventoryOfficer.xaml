@@ -7,23 +7,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             Loaded="UserControl_Loaded"
-             Background="White">
-    <UserControl.Resources>
-        <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
-    <DockPanel>
+             Loaded="UserControl_Loaded">
+    <Grid Background="#F0F0F0">
+        <Grid Name="GridProducts" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DataGrid Grid.Row="0" x:Name="InventoryOfficerDataGrid" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                      IsReadOnly="True"
+                                      ScrollViewer.CanContentScroll="True" 
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                      VirtualizingPanel.ScrollUnit="Pixel"
+                                      VirtualizingStackPanel.IsVirtualizing="True"
+                                      CanUserResizeColumns="False"
+                                      CanUserReorderColumns="False"
+                                      AutoGenerateColumns="False"
+                                      MouseDoubleClick="InventoryOfficerDataGrid_MouseDoubleClick"
+                                      PreviewMouseWheel="InventoryOfficerDataGrid_PreviewMouseWheel">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="SKU" Binding="{Binding SKU}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Quantidade Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click"  Content="Imprimir" Cursor="Hand">
+                    </Button>
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click"  Content="Exportar" Cursor="Hand">
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+
+    <!--<DockPanel>
         <Grid DockPanel.Dock="Bottom" Margin="0 0 15 15" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Button Content="Exportar" Padding="5" x:Name="Export_Button" Click="Export_Button_Click"  HorizontalContentAlignment="Center" Style="{x:Null}" Margin="0 5 80 0" Cursor="Hand" HorizontalAlignment="Right" Background="White" Foreground="#FF2196F3">
                 <Button.Template>
@@ -58,12 +79,12 @@
             <Grid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
             </Grid.Resources>
-            <!--
+            --><!--
                 SKU
                 Descrição
                 Quantidade Atual
                 Unidade
-            -->
+            --><!--
             <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="InventoryOfficerDataGrid_BeginningEdit"  VerticalAlignment="Stretch" RowHeaderWidth="0" x:Name="InventoryOfficerDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
@@ -85,7 +106,7 @@
                     </Style>
                 </DataGrid.ItemContainerStyle>
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                    --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                     <DataGridTextColumn Header=" SKU" Binding="{Binding SKU}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header=" Quantidade Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
@@ -94,5 +115,5 @@
             </DataGrid>
 
         </Grid>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>
