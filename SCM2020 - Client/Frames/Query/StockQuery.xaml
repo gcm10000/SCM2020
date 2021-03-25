@@ -39,14 +39,14 @@
                                   PreviewMouseWheel="DataGridProducts_PreviewMouseWheel"
                                   AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Mínimo" Binding="{Binding MininumStock}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Stock}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Estoque Máximo" Binding="{Binding MaximumStock}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Localização" Binding="{Binding Localization}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header=" Grupo" Binding="{Binding Group}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Estoque Mínimo" Binding="{Binding MininumStock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Estoque Atual" Binding="{Binding Stock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Estoque Máximo" Binding="{Binding MaximumStock}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Unidade" Binding="{Binding Unity}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Localização" Binding="{Binding Localization}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Grupo" Binding="{Binding Group}" Width="Auto"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

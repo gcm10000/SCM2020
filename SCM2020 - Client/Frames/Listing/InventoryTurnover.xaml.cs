@@ -48,40 +48,63 @@ namespace SCM2020___Client.Frames.Query
         // SÓ HÁ UMA MANEIRA DE EXPORTAR ESSA PÁGINA SEM PERDER OS DADOS DO WEBSOCKET
         // EXTRAI O HTML COM AS MODIFICAÇÕES DO DOM, SALVA EM UM ARQUIVO TEMPORÁRIO E FAZ A REQUISIÇÃO DA EXPORTAÇÃO
 
+        public MenuItem CurrentMenuItem
+        {
+            get => currentMenuItem;
+            private set
+            {
+                if (value != null)
+                {
+                    currentMenuItem = value;
+                    switch (value.IdEvent.ToString())
+                    {
+                        case "0":
+                            ShowProducts();
+                            break;
+                        case "1":
+                            ShowFinish();
+                            break;
+                    }
+                    ScreenChanged?.Invoke(value, new EventArgs());
+
+                }
+            }
+        }
+        private MenuItem currentMenuItem;
+        public List<MenuItem> Menu { get; private set; }
+        public delegate void MenuDelegate(object sender, EventArgs e);
+        public event MenuDelegate ScreenChanged;
+
+        private void ShowProducts()
+        {
+            this.GridProducts.Visibility = Visibility.Visible;
+            this.GridProductToAdd.Visibility = Visibility.Collapsed;
+        }
+        private void ShowFinish()
+        {
+            this.GridProducts.Visibility = Visibility.Collapsed;
+            this.GridProductToAdd.Visibility = Visibility.Visible;
+        }
+
         private WebBrowser webBrowser = Helper.MyWebBrowser;
+
+        string previousTextSearch = string.Empty;
 
         public InventoryTurnover()
         {
             InitializeComponent();
-            this.Print_Button.IsEnabled = true;
-            this.Export_Button.IsEnabled = true;
-            //this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
+            Menu = new List<MenuItem>()
+            {
+                new MenuItem(Name: "Pesquisa", 0, true),
+                new MenuItem(Name: "Inventário Rotativo", 1, false)
+            };
+            CurrentMenuItem = Menu[0];
+            this.ButtonPrint.IsEnabled = true;
+            this.ButtonExport.IsEnabled = true;
         }
-
 
         bool PrintORExport = false;
         string Document = string.Empty;
-
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = false;
-            // faz requisição da string html por websocket
-            // coloca na string Document
-            InventoryOfficerPreview preview = new InventoryOfficerPreview(productsAdded);
-            Document = preview.RenderizeHTML();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            webBrowser.NavigateToString(Document);
-
-        }
-
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
-        {
-            PrintORExport = true;
-            InventoryOfficerPreview preview = new InventoryOfficerPreview(productsAdded);
-            Document = preview.RenderizeHTML();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            webBrowser.NavigateToString(Document);
-        }
 
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
@@ -121,47 +144,6 @@ namespace SCM2020___Client.Frames.Query
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
-        //private void ExportPrint()
-        //{
-        //    Helper.SetOptionsToPrint();
-            
-        //    if (PrintORExport)
-        //    {
-        //        WebBrowser.PrintDocument();
-        //    }
-        //    else
-        //    {
-        //        string printer = Helper.GetPrinter("PDF");
-        //        string tempFile = string.Empty;
-        //        try
-        //        {
-
-        //            tempFile = Helper.GetTempFilePathWithExtension(".tmp");
-        //            using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
-        //            {
-        //                var document = Html;
-        //                document = document.Replace("css/bootstrap.min.css", new System.Uri(System.IO.Path.Combine(Helper.CurrentDirectory, "templates", "css", "bootstrap.min.css")).AbsoluteUri);
-        //                WebBrowser.NavigateToString(document);
-        //                //file.Write(document);
-        //                //file.Flush();
-        //            }
-
-        //            //"f=" The input file
-        //            //"p=" The temporary default printer
-        //            //"d|delete" Delete file when finished
-        //            var p = new Process();
-        //            p.StartInfo.FileName = System.IO.Path.Combine(Helper.CurrentDirectory, "Exporter\\document-exporter.exe");
-        //            //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
-        //            p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
-        //            p.Start();
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
-        //        }
-        //    }
-        //    WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
-        //}
         private string DocumentText(WebBrowser webBrowser)
         {
             HTMLDocument doc = webBrowser.Document as HTMLDocument;
@@ -175,48 +157,30 @@ namespace SCM2020___Client.Frames.Query
             return html;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void SearchProduct_Click(object sender, RoutedEventArgs e)
         {
-            this.ButtonSearchProducts.IsEnabled = false;
-            this.ButtonInventoryTurnover.IsEnabled = true;
-            //var path = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "templates", "inventoryturnover.html");
-            //var content = File.ReadAllText(path);
-            //this.webBrowser.Navigate(path);
+            var query = TxtSearchProduct.Text;
 
+            if (previousTextSearch == query)
+                return;
+            previousTextSearch = query;
+            Task.Run(() => Search(query));
         }
 
         private void ButtonSearchProducts_Click(object sender, RoutedEventArgs e)
         {
-            this.ButtonSearchProducts.IsEnabled = false;
-            this.ButtonInventoryTurnover.IsEnabled = true;
-            //this.webBrowser.Visibility = Visibility.Collapsed;
-            this.InventoryTurnoverDataGrid.Visibility = Visibility.Collapsed;
-            this.InventoryTurnoverDataGrid.Visibility = Visibility.Collapsed;
-            this.ProductToAddDataGrid.Visibility = Visibility.Visible;
-            this.SearchGrid.Visibility = Visibility.Visible;
+            this.CurrentMenuItem = Menu[0];
         }
 
         private void ButtonInventoryTurnover_Click(object sender, RoutedEventArgs e)
         {
-            this.ButtonSearchProducts.IsEnabled = true;
-            this.ButtonInventoryTurnover.IsEnabled = false;
-            //this.webBrowser.Visibility = Visibility.Visible;
             this.InventoryTurnoverDataGrid.Visibility = Visibility.Visible;
             this.ProductToAddDataGrid.Visibility = Visibility.Collapsed;
-            this.SearchGrid.Visibility = Visibility.Collapsed;
-        }
-
-        private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
-        {
-            string workOrder = TxtSearchConsumpterProduct.Text;
-            if (e.Key == Key.Enter)
-                Search(workOrder);
-
         }
 
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            string query = TxtSearchConsumpterProduct.Text;
+            string query = TxtSearchProduct.Text;
             Task.Run(() => { Search(query); });
         }
         List<InventoryOfficerPreview.Product> products;
@@ -256,14 +220,11 @@ namespace SCM2020___Client.Frames.Query
             {
                 productsAdded.Add(product);
             }
+
             this.ProductToAddDataGrid.UnselectAll();
+            this.InventoryTurnoverDataGrid.UnselectAll();
             this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;
             this.InventoryTurnoverDataGrid.Items.Refresh();
-        }
-
-        private void InventoryTurnoverDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
         }
 
         private void InventoryTurnoverDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -298,6 +259,7 @@ namespace SCM2020___Client.Frames.Query
                 }
             }
         }
+
         private bool SelectedRow(object item)
         {
             InventoryOfficerPreview.Product stock = item as InventoryOfficerPreview.Product;
@@ -308,6 +270,97 @@ namespace SCM2020___Client.Frames.Query
                 return visualizeProduct.RemovedProduct;
             }
             return false;
+        }
+
+        private void ProductToAddDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null)
+                return;
+
+            DataGrid grid = sender as DataGrid;
+            var item = grid.GetObjectFromDataGridRow();
+
+            e.Handled = true;
+            if (SelectedRow(item))
+            {
+                products.RemoveAt(this.ProductToAddDataGrid.SelectedIndex);
+                this.ProductToAddDataGrid.Items.Refresh();
+            }
+        }
+
+        private void InventoryTurnoverDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender == null)
+                return;
+
+            DataGrid grid = sender as DataGrid;
+            var item = grid.GetObjectFromDataGridRow();
+
+            e.Handled = true;
+            if (SelectedRow(item))
+            {
+                products.RemoveAt(this.ProductToAddDataGrid.SelectedIndex);
+                this.ProductToAddDataGrid.Items.Refresh();
+            }
+        }
+
+        private void ProductToAddDataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
+        private void ButtonNext_Click(object sender, RoutedEventArgs e)
+        {
+            this.CurrentMenuItem = Menu[1];
+        }
+
+        private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            this.CurrentMenuItem = Menu[0];
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = true;
+            InventoryOfficerPreview preview = new InventoryOfficerPreview(productsAdded);
+            Document = preview.RenderizeHTML();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            webBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            PrintORExport = false;
+            InventoryOfficerPreview preview = new InventoryOfficerPreview(productsAdded);
+            Document = preview.RenderizeHTML();
+            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            webBrowser.NavigateToString(Document);
+        }
+
+        private void InventoryTurnoverDataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
+
+        private void TxtSearchProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            var query = TxtSearchProduct.Text;
+            if (e.Key == Key.Enter)
+            {
+                if (previousTextSearch == query)
+                    return;
+
+                Task.Run(() => Search(query));
+            }
         }
     }
 }

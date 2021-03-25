@@ -140,13 +140,6 @@ namespace SCM2020___Client.Frames.Query
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
-        private void QueryDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            //PropertyDescriptor propertyDescriptor = (PropertyDescriptor)e.PropertyDescriptor;
-            //e.Column.Header = propertyDescriptor.DisplayName;
-            e.Cancel = true;
-        }
-
         private void BtnUpdateMaterial_Click(object sender, RoutedEventArgs e)
         {
             var product = ((FrameworkElement)sender).DataContext as Models.StockQuery;
@@ -192,22 +185,6 @@ namespace SCM2020___Client.Frames.Query
             }
         }
 
-        private void QueryDataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var u = e.OriginalSource as UIElement;
-            if (e.Key == Key.Enter && u != null)
-            {
-                e.Handled = true;
-                var datagrid = sender as DataGrid;
-
-
-                if (SelectedRow(datagrid.Items[datagrid.SelectedIndex]))
-                {
-                    products.RemoveAt(this.DataGridProducts.SelectedIndex);
-                    this.DataGridProducts.Items.Refresh();
-                }
-            }
-        }
         private bool SelectedRow(object item)
         {
             Models.StockQuery stock = item as Models.StockQuery;
