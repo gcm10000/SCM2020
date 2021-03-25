@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using WebAssemblyLibrary;
 
 namespace SCM2020___Client.Frames.Query
@@ -74,16 +75,25 @@ namespace SCM2020___Client.Frames.Query
         public List<MenuItem> Menu { get; private set; }
         public delegate void MenuDelegate(object sender, EventArgs e);
         public event MenuDelegate ScreenChanged;
+        public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
+        public event MenuItemEnabled MenuItemEventHandler;
 
         private void ShowProducts()
         {
             this.GridProducts.Visibility = Visibility.Visible;
             this.GridProductToAdd.Visibility = Visibility.Collapsed;
         }
+
         private void ShowFinish()
         {
             this.GridProducts.Visibility = Visibility.Collapsed;
             this.GridProductToAdd.Visibility = Visibility.Visible;
+        }
+
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
         }
 
         private WebBrowser webBrowser = Helper.MyWebBrowser;
@@ -96,7 +106,7 @@ namespace SCM2020___Client.Frames.Query
             Menu = new List<MenuItem>()
             {
                 new MenuItem(Name: "Pesquisa", 0, true),
-                new MenuItem(Name: "Inventário Rotativo", 1, false)
+                new MenuItem(Name: "Inventário", 1, false)
             };
             CurrentMenuItem = Menu[0];
             this.ButtonPrint.IsEnabled = true;
@@ -221,6 +231,10 @@ namespace SCM2020___Client.Frames.Query
                 productsAdded.Add(product);
             }
 
+            MenuItemEventHandler?.Invoke(1, (productsAdded.Count > 0));
+            MenuItemEventHandler?.Invoke(1, (productsAdded.Count > 0));
+
+            
             this.ProductToAddDataGrid.UnselectAll();
             this.InventoryTurnoverDataGrid.UnselectAll();
             this.InventoryTurnoverDataGrid.ItemsSource = productsAdded;

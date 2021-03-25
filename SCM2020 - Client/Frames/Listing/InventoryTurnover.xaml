@@ -48,7 +48,7 @@
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="False" Margin="0">
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="False">
                                     <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAdd_Click"/>
                                 </materialDesign:PopupBox>
                             </DataTemplate>
@@ -89,7 +89,7 @@
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="False">
                                     <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAdd_Click"/>
                                 </materialDesign:PopupBox>
                             </DataTemplate>

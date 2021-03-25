@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1" Margin="40 0 40 0">
                 <StackPanel Orientation="Horizontal" Name="StackPanelMenuHorizontal">
-                    <!--<Button Uid="0" Click="Button1_Click" VerticalAlignment="Center" Width="130" Height="75" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Content="Informações"></Button>-->
+                    
                 </StackPanel>
                 <Grid x:Name="GridCursor" Width="130" Height="5" Background="#FF2196F3" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Grid>
                 <StackPanel VerticalAlignment="Center" Margin="0 0 3 0">
