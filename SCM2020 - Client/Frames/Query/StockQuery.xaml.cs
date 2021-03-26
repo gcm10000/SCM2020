@@ -188,6 +188,8 @@ namespace SCM2020___Client.Frames.Query
         private bool SelectedRow(object item)
         {
             Models.StockQuery stock = item as Models.StockQuery;
+            if (stock == null)
+                return false;
             VisualizeProduct visualizeProduct = new VisualizeProduct(stock.ConsumptionProduct);
             if (visualizeProduct.ShowDialog() == true)
             {

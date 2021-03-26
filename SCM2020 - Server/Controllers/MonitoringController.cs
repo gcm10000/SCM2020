@@ -55,6 +55,13 @@ namespace SCM2020___Server.Controllers
                 situation = result.Situation;
             return Ok(situation);
         }
+        [HttpGet("ExistsWorkOrder/{workorder}")]
+        public IActionResult ExistsWorkOrder(string workorder)
+        {
+            workorder = System.Uri.UnescapeDataString(workorder);
+            var result = context.Monitoring.Any(x => x.Work_Order == workorder);
+            return Ok(result);
+        }
         //[Authorize(Roles = Roles.Administrator)]
         [AllowAnonymous]
         [HttpPost("Migrate")]

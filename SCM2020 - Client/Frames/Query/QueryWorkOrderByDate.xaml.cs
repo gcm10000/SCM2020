@@ -57,7 +57,6 @@ namespace SCM2020___Client.Frames.Query
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-            //QueryWorkOrderByDateDataGrid 
             var initialDay = this.InitialDate.SelectedDate.Value.Day;
             var initialMonth = this.InitialDate.SelectedDate.Value.Month;
             var initialYear = this.InitialDate.SelectedDate.Value.Year;

@@ -29,11 +29,15 @@ namespace SCM2020___Client.Frames.Movement
             InitializeComponent();
         }
 
-        private void BtnReopen_Click(object sender, RoutedEventArgs e)
+        private void ButtonOpenWO_Click(object sender, RoutedEventArgs e)
         {
             //Captura a ordem de serviço escrita pelo usuário
-            string workOrder = OSTextBox.Text;
+            string workOrder = TextBoxWorkOrder.Text;
+            Task.Run(() => { OpenWorkOrder(workOrder); });
+        }
 
+        private void OpenWorkOrder(string workOrder)
+        {
             MessageBoxResult resultBox = MessageBox.Show("Deseja realmente abrir a ordem de serviço?", "Você tem certeza disso", MessageBoxButton.YesNo, MessageBoxImage.Question);
             //Se o usuário selecionou o botão sim...
             if (resultBox == MessageBoxResult.Yes)
@@ -57,12 +61,36 @@ namespace SCM2020___Client.Frames.Movement
                             MessageBox.Show("Ordem de serviço encontra-se aberta.", "Ordem de serviço aberta", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MessageBox.Show("Ordem de serviço inexistente", "Ordem de serviço inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                 });
+            }
+        }
+
+        private void TextBoxWorkOrder_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //Captura a ordem de serviço escrita pelo usuário
+                string workOrder = TextBoxWorkOrder.Text;
+                Task.Run(() => { OpenWorkOrder(workOrder); });
+            }
+        }
+
+        private void ScrollViewerInfo_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
             }
         }
     }

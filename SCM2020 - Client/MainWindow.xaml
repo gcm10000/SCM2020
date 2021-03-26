@@ -17,17 +17,47 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="1" Margin="40 0 40 0">
-                <StackPanel Orientation="Horizontal" Name="StackPanelMenuHorizontal">
-                    
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Name="StackPanelMenuHorizontal">
+                    <!--Buttons-->
                 </StackPanel>
-                <Grid x:Name="GridCursor" Width="130" Height="5" Background="#FF2196F3" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Grid>
-                <StackPanel VerticalAlignment="Center" Margin="0 0 3 0">
-                    <materialDesign:PopupBox HorizontalAlignment="Right" Foreground="White">
-                        <StackPanel Orientation="Vertical" Width="150">
-                            <Button Content="Sair"></Button>
-                        </StackPanel>
-                    </materialDesign:PopupBox>
-                </StackPanel>
+                    <Grid x:Name="GridCursor" Width="130" Height="5" Background="#FF2196F3" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Grid>
+                <Grid Grid.Row="2" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 3 0">
+                        <Grid Background="{x:Null}" Margin="0 0 10 0">
+                            <Border Panel.ZIndex="1000" CornerRadius="50" Visibility="Visible"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="15 0 0 20"
+                                    Padding="0,0,0,0"
+                                    Background="#CC0000"
+                                    BorderBrush="{x:Null}"
+                                    BorderThickness="0">
+                                <TextBlock FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10">9+
+                                </TextBlock>
+                            </Border>
+                            <materialDesign:PopupBox VerticalAlignment="Center" Width="25" Height="25" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True">
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="Notifications" />
+                                </materialDesign:PopupBox.ToggleContent>
+                                <StackPanel Orientation="Vertical" Width="150">
+                                    <Button Content="Sair"></Button>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                        </Grid>
+                        <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Width="25" Height="25" Foreground="White" StaysOpen="True">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="DotsVertical" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel Orientation="Vertical" Width="150">
+                                <Button Content="Sair"></Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
         <Grid>

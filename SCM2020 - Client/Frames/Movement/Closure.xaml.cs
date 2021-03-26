@@ -27,14 +27,34 @@ namespace SCM2020___Client.Frames
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateTime = (ClosureOSDateTextBox.DisplayDate == DateTime.Today) ? DateTime.Now : ClosureOSDateTextBox.DisplayDate;
-            var workOrder = OSTextBox.Text;
-            Uri uriClosure = new Uri(Helper.ServerAPI, $"Monitoring/Closure/{dateTime.Year}/{dateTime.Month}/{dateTime.Day}");
+            DateTime dateTime = (DatePickerClosureOSDate.DisplayDate == DateTime.Today) ? DateTime.Now : DatePickerClosureOSDate.DisplayDate;
+            var workOrder = TextBoxWorkOrder.Text;
             Task.Run(() =>
             {
-                var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
-                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-            }).Wait();
+                ClosureWO(workOrder, dateTime.Year, dateTime.Month, dateTime.Day);
+            });
+        }
+
+        private void ClosureWO(string workOrder, int Year, int Month, int Day)
+        {
+            Uri uriClosure = new Uri(Helper.ServerAPI, $"Monitoring/Closure/{Year}/{Month}/{Day}");
+            var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
+            MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
         }
     }
 }

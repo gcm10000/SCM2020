@@ -6,6 +6,7 @@ using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -33,6 +34,9 @@ namespace SCM2020___Client
     //NOTIFICATION WINDOWS 10:
     //https://docs.microsoft.com/en-us/windows/uwp/design/shell/tiles-and-notifications/send-local-toast-desktop?tabs=msix-sparse
     //https://www.youtube.com/watch?v=WhY9ytvZvKE
+    //SOM DE NOTIFICAÇÃO DA ALEXA: https://www.youtube.com/watch?v=SlVluRNN8aw
+    //REPRODUZIR SOM WAV EM BYTES: https://stackoverflow.com/questions/21976011/playing-byte-in-c-sharp
+
 
     public partial class MainWindow : Window
     {
@@ -53,6 +57,15 @@ namespace SCM2020___Client
             Helper.MyWebBrowser = WebBrowser;
 
             this.Closed += MainWindow_Closed;
+
+            byte[] sound = Helper.notificationSound;
+            // Place the data into a stream
+            using (MemoryStream ms = new MemoryStream(sound))
+            {
+                // Construct the sound player
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(ms);
+                player.Play();
+            }
 
             //PopupMovement.Closed += PopupMovement_Closed;
             //PopupRegister.Closed += PopupRegister_Closed;
@@ -171,6 +184,8 @@ namespace SCM2020___Client
 
 
         }
+
+
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {

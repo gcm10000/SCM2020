@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="#F0F0F0">
         <!--Informações-->
-        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Collapsed">
+        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Visible">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -49,7 +49,7 @@
             </StackPanel>
         </ScrollViewer>
         <!--Produtos-->
-        <Grid Name="GridProducts" Margin="30" Visibility="Visible">
+        <Grid Name="GridProducts" Margin="30" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>

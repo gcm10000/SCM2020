@@ -4,13 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SCM2020___Client.Frames.Movement"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel Background="White">
-        <!--
+    <Grid Background="#F0F0F0">
+        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewerInfo_PreviewMouseWheel"  Visibility="Visible">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="30" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Height="24" Text="DOC/SM/OS" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <Grid Margin="20 15 20 30" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" KeyDown="TextBoxWorkOrder_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                            <materialDesign:PackIcon Visibility="Hidden" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonOpenWO" Click="ButtonOpenWO_Click"  Content="Abrir Ordem de Serviço">
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+    <!--<DockPanel Background="White">
+        --><!--
             https://www.youtube.com/watch?v=Jma5VYwEQcY
             C# WPF Material Design UI: Tab Menu
-        -->
+        --><!--
         <ScrollViewer x:Name="InfoScrollViewer" Visibility="Visible"  VerticalScrollBarVisibility="Auto" Padding="30 0 30 30">
             <StackPanel>
                 <TextBlock Text="Ordem de Serviço" Margin="0 20 0 5" FontSize="18"></TextBlock>
@@ -31,5 +67,5 @@
                 </Button>
             </StackPanel>
         </ScrollViewer>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>

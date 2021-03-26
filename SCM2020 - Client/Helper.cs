@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 
 namespace SCM2020___Client
 {
-    static class Helper
+    static partial class Helper
     {
         public static readonly string CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         /// <summary>
