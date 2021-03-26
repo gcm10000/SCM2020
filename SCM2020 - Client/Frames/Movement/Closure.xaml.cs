@@ -127,5 +127,22 @@ namespace SCM2020___Client.Frames
             }
             return false;
         }
+
+        private void DatePickerClosureOSDate_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //Captura a ordem de serviço escrita pelo usuário
+                string workOrder = TextBoxWorkOrder.Text;
+                DateTime dateTime = (DatePickerClosureOSDate.DisplayDate == DateTime.Today) ? DateTime.Now : DatePickerClosureOSDate.DisplayDate;
+                Task.Run(() =>
+                {
+                    if (StatusWO(workOrder))
+                    {
+                        ClosureWO(workOrder, dateTime.Year, dateTime.Month, dateTime.Day);
+                    }
+                });
+            }
+        }
     }
 }
