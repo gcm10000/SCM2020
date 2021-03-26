@@ -58,7 +58,7 @@
             </DataGrid>
             <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
                 <StackPanel Orientation="Horizontal">
-                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext" Click="ButtonNext_Click"  Content="Próximo" Cursor="Hand">
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext" Click="ButtonNext_Click"  Content="Próximo" IsEnabled="False" Cursor="Hand">
                     </Button>
                 </StackPanel>
             </Grid>

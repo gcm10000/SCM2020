@@ -232,8 +232,7 @@ namespace SCM2020___Client.Frames.Query
             }
 
             MenuItemEventHandler?.Invoke(1, (productsAdded.Count > 0));
-            MenuItemEventHandler?.Invoke(1, (productsAdded.Count > 0));
-
+            ButtonNext.IsEnabled = productsAdded.Count > 0;
             
             this.ProductToAddDataGrid.UnselectAll();
             this.InventoryTurnoverDataGrid.UnselectAll();
