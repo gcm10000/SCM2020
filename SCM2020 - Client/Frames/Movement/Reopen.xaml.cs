@@ -33,7 +33,10 @@ namespace SCM2020___Client.Frames.Movement
         {
             //Captura a ordem de serviço escrita pelo usuário
             string workOrder = TextBoxWorkOrder.Text;
-            Task.Run(() => { OpenWorkOrder(workOrder); });
+            Task.Run(() => 
+            {
+                OpenWorkOrder(workOrder);
+            });
         }
 
         private void OpenWorkOrder(string workOrder)
@@ -76,7 +79,13 @@ namespace SCM2020___Client.Frames.Movement
             {
                 //Captura a ordem de serviço escrita pelo usuário
                 string workOrder = TextBoxWorkOrder.Text;
-                Task.Run(() => { OpenWorkOrder(workOrder); });
+                Task.Run(() => 
+                {
+                    if (StatusWO(workOrder))
+                    {
+                        OpenWorkOrder(workOrder); 
+                    }
+                });
             }
         }
 
@@ -92,6 +101,61 @@ namespace SCM2020___Client.Frames.Movement
                     scrollViewer.LineRight();
                 e.Handled = true;
             }
+        }
+
+        private bool StatusWO(string workOrder)
+        {
+            workOrder = System.Uri.EscapeDataString(workOrder);
+
+            Uri uriExistsWorkOrder = new Uri(Helper.ServerAPI, $"Monitoring/ExistsWorkOrder/{workOrder}");
+            var result = APIClient.GetData<bool>(uriExistsWorkOrder.ToString(), Helper.Authentication);
+            this.Dispatcher.Invoke(() =>
+            {
+                this.IconStatus.Visibility = Visibility.Visible;
+            });
+            if (result)
+            {
+                Uri uriCheckWorkOrder = new Uri(Helper.ServerAPI, $"Monitoring/CheckWorkOrder/{workOrder}");
+                var resultSituation = APIClient.GetData<bool>(uriCheckWorkOrder.ToString(), Helper.Authentication);
+                if (resultSituation)
+                {
+                    //Ordem de serviço existente e em aberto
+                    this.Dispatcher.Invoke(() => 
+                    {
+                        this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
+                        this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.ButtonOpenWO.IsEnabled = true;
+                    });
+                    return true;
+                }
+                else
+                {
+                    this.Dispatcher.Invoke(() => 
+                    {
+                        this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
+                        this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                    });
+                }
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                    this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                });
+
+            }
+            return false;
+        }
+
+        private void TextBoxWorkOrder_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string workOrder = this.TextBoxWorkOrder.Text;
+            Task.Run(() => 
+            {
+                StatusWO(workOrder);
+            });
         }
     }
 }

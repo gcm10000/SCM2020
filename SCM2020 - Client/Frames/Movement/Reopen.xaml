@@ -28,13 +28,13 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" KeyDown="TextBoxWorkOrder_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
-                            <materialDesign:PackIcon Visibility="Hidden" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" KeyDown="TextBoxWorkOrder_KeyDown" LostFocus="TextBoxWorkOrder_LostFocus" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                            <materialDesign:PackIcon Name="IconStatus" Visibility="Hidden" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">
-                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonOpenWO" Click="ButtonOpenWO_Click"  Content="Abrir Ordem de Serviço">
+                            <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonOpenWO" Click="ButtonOpenWO_Click" IsEnabled="False" Content="Abrir Ordem de Serviço">
                             </Button>
                         </StackPanel>
                     </Grid>
