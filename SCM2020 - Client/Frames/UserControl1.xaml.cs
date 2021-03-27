@@ -78,7 +78,7 @@ namespace SCM2020___Client.Frames
             List<SummaryInfo> infos = new List<SummaryInfo>()
             {
                 new SummaryInfo("DOC/SM/OS", "123456/21", PackIconKind.Invoice),
-                new SummaryInfo("Fornecedor", "Nova Rio123", PackIconKind.FlightTakeoff),
+                new SummaryInfo("Fornecedor", "Nova Rio123", PackIconKind.FlightTakeoff), //PackIconKind.Truck
                 new SummaryInfo("Data de Movimentação", "03/03/2021", PackIconKind.CalendarToday), //event
             };
             this.ListView.ItemsSource = infos;
@@ -120,6 +120,7 @@ namespace SCM2020___Client.Frames
 
         private void DataGrid_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+
         }
 
         private void ShowInfo()

@@ -46,7 +46,11 @@ namespace SCM2020___Client.Frames.DialogBox
         {
             if (Quantity_Textbox.Text == string.Empty)
                 Quantity_Textbox.Text = "0";
-            quantity = double.Parse(Quantity_Textbox.Text);
+            if (!double.TryParse(Quantity_Textbox.Text, out quantity))
+            {
+                MessageBox.Show("Este campo aceita apenas números e vírgula.", "Insira formato correto", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             this.DialogResult = true;
             this.Close();
         }

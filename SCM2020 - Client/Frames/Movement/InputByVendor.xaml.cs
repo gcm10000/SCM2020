@@ -17,6 +17,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
 using WebAssemblyLibrary;
@@ -28,17 +29,99 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class InputByVendor : UserControl
     {
+        public MenuItem CurrentMenuItem
+        {
+            get => currentMenuItem;
+            private set
+            {
+                if (value != null)
+                {
+                    currentMenuItem = value;
+                    switch (value.IdEvent.ToString())
+                    {
+                        case "0":
+                            ShowInfo();
+                            break;
+                        case "1":
+                            ShowProducts();
+                            break;
+                        case "2":
+                            ShowFinish();
+                            break;
+                    }
+                    ScreenChanged?.Invoke(value, new EventArgs());
+
+                }
+            }
+        }
+        private MenuItem currentMenuItem;
+        public List<MenuItem> Menu { get; private set; }
+        public delegate void MenuDelegate(object sender, EventArgs e);
+        public event MenuDelegate ScreenChanged;
+        public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
+        public event MenuItemEnabled MenuItemEventHandler;
+
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
+        }
+
+        private void ShowInfo()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Visible;
+            this.GridProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+
+        }
+        private void ShowProducts()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridProducts.Visibility = Visibility.Visible;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+        private void ShowFinish()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Visible;
+        }
+
         public InputByVendor()
         {
             InitializeComponent();
+
+            Menu = new List<MenuItem>()
+            {
+                new MenuItem(Name: "Informações", 0, true),
+                new MenuItem(Name: "Produtos", 1, false),
+                new MenuItem(Name: "Finalização", 2, false)
+            };
+            CurrentMenuItem = Menu[0];
+
             Uri vendorUri = new Uri(Helper.ServerAPI, "vendor/");
             var vendors = APIClient.GetData<List<Vendor>>(vendorUri.ToString());
             var nameVendors = vendors.Select(x => x.Name).ToList();
-            this.VendorComboBox.ItemsSource = nameVendors;
-            this.VendorComboBox.SelectedIndex = 0;
+            this.ComboBoxVendor.ItemsSource = nameVendors;
+            this.ComboBoxVendor.SelectedIndex = 0;
+            this.DatePickerMovingDate.SelectedDate = DateTime.Now.Date;
         }
+
+        #region AllowButtonsNext
+        private bool AllowNext1()
+        {
+            return ((this.TextBoxInvoice.Text.Trim() != string.Empty) && (this.ComboBoxVendor.Items.Count > 0) && (this.DatePickerMovingDate.SelectedDate != null) && (DateTime.TryParse(this.DatePickerMovingDate.SelectedDate.Value.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), out DateTime _)));
+        }
+
+        private bool AllowNext2()
+        {
+            return (DataGridAddedProducts.Items.Count > 0);
+        }
+        #endregion
+
         private bool existsInput = false;
         private ModelsLibraryCore.MaterialInputByVendor previousInput;
+        private List<ConsumpterProductDataGrid> ListFinalAddedProducts = new List<ConsumpterProductDataGrid>();
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
@@ -51,7 +134,7 @@ namespace SCM2020___Client.Frames
                 return;
             query = System.Uri.EscapeDataString(query);
 
-            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+            this.DataGridToAddProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridToAddProduct.Items.Clear(); }));
 
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
@@ -67,104 +150,10 @@ namespace SCM2020___Client.Frames
                     Description = item.Description,
                     Quantity = item.Stock
                 };
-                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToInput); }));
+                this.DataGridToAddProduct.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridToAddProduct.Items.Add(productsToInput); }));
             }
         }
 
-        //private void Search()
-        //{
-        //    string textBoxValue = string.Empty;
-        //    this.TxtSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtSearch.Text; }));
-
-        //    //Se o campo está vazio, não irá realizar a busca
-        //    if (textBoxValue == string.Empty)
-        //    {
-        //        return;
-        //    }
-
-        //    Uri uriProductsSearch = new Uri(Helper.Server, $"generalproduct/search/{textBoxValue}");
-
-        //    this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
-
-        //    List<ConsumptionProduct> products = new List<ConsumptionProduct>();
-
-        //    int index = -1;
-        //    if (int.TryParse(textBoxValue, out _))
-        //    {
-        //        Uri uriProductsCode = new Uri(Helper.Server, $"generalproduct/code/{textBoxValue}");
-        //        Task.Run(() => 
-        //            {
-        //                try
-        //                {
-        //                    var singleProduct = APIClient.GetData<ConsumptionProduct>(uriProductsCode.ToString());
-        //                    products.Add(singleProduct);
-        //                    index = products.FindIndex(x => x.Id == singleProduct.Id);
-        //                }
-        //                catch (System.Net.Http.HttpRequestException) { }
-        //            });
-
-        //    }
-
-        //    var data = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
-        //    products.AddRange(data);
-
-        //    if (index > -1)
-        //    {
-        //        var myProduct = products[index];
-        //        products[index] = products[0];
-        //        products[0] = myProduct;
-        //    }
-
-        //    foreach (var item in products.ToList())
-        //    {
-        //        ConsumpterProductDataGrid productsToInput = new ConsumpterProductDataGrid()
-        //        {
-        //            Id = item.Id,
-        //            Code = item.Code,
-        //            Description = item.Description,
-        //            Quantity = item.Stock
-        //        };
-        //        this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToInput); }));
-        //    }
-        //}
-
-        private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
-        }
-
-        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string query = TxtSearch.Text;
-                Task.Run(() => ConsumpterProductSearch(query));
-            }
-        }
-
-        private void VendorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //MessageBox.Show(this.VendorComboBox.ActualWidth.ToString());
-        }
-
-        private void BtnInformation_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonInformation.IsHitTestVisible = false;
-            ButtonProducts.IsHitTestVisible = true;
-            InfoScrollViewer.Visibility = Visibility.Visible;
-            InfoDockPanel.Visibility = Visibility.Visible;
-            ProductsDockPanel.Visibility = Visibility.Collapsed;
-        }
-        private void BtnProducts_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonInformation.IsHitTestVisible = true;
-            ButtonProducts.IsHitTestVisible = false;
-
-            InfoScrollViewer.Visibility = Visibility.Collapsed;
-            InfoDockPanel.Visibility = Visibility.Collapsed;
-            ProductsDockPanel.Visibility = Visibility.Visible;
-
-        }
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var product = ((FrameworkElement)sender).DataContext as ConsumpterProductDataGrid;
@@ -173,18 +162,18 @@ namespace SCM2020___Client.Frames
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
-                int index = ProductToAddDataGrid.SelectedIndex;
-                ProductToAddDataGrid.Items.Refresh();
-                ProductsAddedDataGrid.Items.Refresh();
-                if (!ProductsAddedDataGrid.Items.Contains(product))
+                int index = DataGridToAddProduct.SelectedIndex;
+                DataGridToAddProduct.Items.Refresh();
+                DataGridAddedProducts.Items.Refresh();
+                if (!DataGridAddedProducts.Items.Contains(product))
                 {
                     product.NewProduct = true;
-                    ProductsAddedDataGrid.Items.Add(product);
+                    DataGridAddedProducts.Items.Add(product);
                 }
                 else
                 {
                     if (dialog.QuantityAdded == 0)
-                        ProductsAddedDataGrid.Items.Remove(product);
+                        DataGridAddedProducts.Items.Remove(product);
                     else
                     {
                         product.QuantityAdded = dialog.QuantityAdded;
@@ -192,40 +181,32 @@ namespace SCM2020___Client.Frames
 
                     }
                 }
-                ProductToAddDataGrid.UnselectAll();
-                ProductsAddedDataGrid.UnselectAll();
+                DataGridToAddProduct.UnselectAll();
+                DataGridAddedProducts.UnselectAll();
+
+                this.ButtonNext2.IsEnabled = AllowNext2();
+                this.MenuItemEventHandler?.Invoke(2, AllowNext2());
             }
         }
-        private void ProductToAddDataGrid_Selected(object sender, RoutedEventArgs e)
-        {
-            var currentRowIndex = ProductToAddDataGrid.Items.IndexOf(ProductToAddDataGrid.CurrentItem);
-            MessageBox.Show(currentRowIndex.ToString());
-        }
 
-        private void BtnFinish_Click(object sender, RoutedEventArgs e)
-        {
-            if (!MovingDateDatePicker.SelectedDate.HasValue)
-            {
-                MessageBox.Show("Data invalida.", "Data inválida", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (existsInput)
-                UpdateInput();
-            else
-                AddInput();
-
-        }
         private void AddInput()
         {
-            DateTime dateTime = (MovingDateDatePicker.DisplayDate == DateTime.Today) ? DateTime.Now : MovingDateDatePicker.SelectedDate.Value;
+            DateTime dateTime = DateTime.Now;
+            string invoice = null;
+            int vendorId = 0;
+
+            this.DatePickerMovingDate.Dispatcher.Invoke(() => { dateTime = this.DatePickerMovingDate.SelectedDate.Value; });
+            this.TextBoxInvoice.Dispatcher.Invoke(() => { invoice = TextBoxInvoice.Text; });
+            this.ComboBoxVendor.Dispatcher.Invoke(() => { vendorId = ComboBoxVendor.SelectedIndex + 1; });
+
             MaterialInputByVendor materialInputByVendor = new MaterialInputByVendor();
-            materialInputByVendor.Invoice = InvoiceTextBox.Text;
+            materialInputByVendor.Invoice = invoice;
             materialInputByVendor.MovingDate = dateTime;
-            materialInputByVendor.VendorId = VendorComboBox.SelectedIndex + 1;
+            materialInputByVendor.VendorId = vendorId;
 
             List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
 
-            foreach (var item in ProductsAddedDataGrid.Items)
+            foreach (var item in DataGridAddedProducts.Items)
             {
                 ConsumpterProductDataGrid product = item as ConsumpterProductDataGrid;
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
@@ -247,7 +228,7 @@ namespace SCM2020___Client.Frames
         private void UpdateInput()
         {
             ModelsLibraryCore.MaterialInputByVendor input = this.previousInput;
-            if (this.ProductsAddedDataGrid.Items.Count == 0)
+            if (this.DataGridAddedProducts.Items.Count == 0)
             {
                 //Pergunta se deseja apagar
                 //Não há sentido de manter uma entrada por fornecedor com informações e sem materiais envolvidos
@@ -260,7 +241,7 @@ namespace SCM2020___Client.Frames
                 }
             }
 
-            foreach (ConsumpterProductDataGrid item in this.ProductsAddedDataGrid.Items)
+            foreach (ConsumpterProductDataGrid item in this.DataGridAddedProducts.Items)
             {
                 if (item.NewProduct)
                 {
@@ -287,26 +268,6 @@ namespace SCM2020___Client.Frames
             });
         }
         string previousInvoice = string.Empty;
-        private void InvoiceTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var invoice = InvoiceTextBox.Text;
-            if (previousInvoice == invoice)
-                return;
-            Task.Run(() => RescueData(invoice));
-            previousInvoice = invoice;
-        }
-
-        private void InvoiceTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            var invoice = InvoiceTextBox.Text;
-            if (e.Key == Key.Enter)
-            {
-                if (previousInvoice == invoice)
-                    return;
-                Task.Run(() => RescueData(invoice));
-                previousInvoice = invoice;
-            }
-        }
 
         private void RescueData(string invoice)
         {
@@ -314,7 +275,7 @@ namespace SCM2020___Client.Frames
                 return;
             invoice = System.Uri.EscapeDataString(invoice);
 
-            this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Clear(); }));
+            this.DataGridAddedProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridAddedProducts.Items.Clear(); }));
 
             previousInput = null;
             try
@@ -333,9 +294,9 @@ namespace SCM2020___Client.Frames
             }
             //Bloquear combobox e data
             InputData(false);
-            //Colocar informações
-            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = previousInput.VendorId - 1; }));
-            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = previousInput.MovingDate; }));
+            //Colocando informações
+            this.ComboBoxVendor.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxVendor.SelectedIndex = previousInput.VendorId - 1; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = previousInput.MovingDate; }));
             //Preencher datagrid
             foreach (var item in previousInput.ConsumptionProducts)
             {
@@ -349,20 +310,161 @@ namespace SCM2020___Client.Frames
                     Quantity = information.Stock,
                     ConsumptionProduct = item
                 };
-                this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Add(product); }));
+                this.DataGridAddedProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridAddedProducts.Items.Add(product); }));
             }
         }
 
         private void ClearData()
         {
-            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.SelectedIndex = 0; }));
-            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.SelectedDate = DateTime.Now; }));
-            this.ProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductsAddedDataGrid.Items.Clear(); }));
+            this.ComboBoxVendor.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxVendor.SelectedIndex = 0; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
+            this.DataGridAddedProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridAddedProducts.Items.Clear(); }));
         }
         private void InputData(bool IsEnable)
         {
-            this.VendorComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { VendorComboBox.IsEnabled = IsEnable; }));
-            this.MovingDateDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { MovingDateDatePicker.IsEnabled = IsEnable; }));
+            this.ComboBoxVendor.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxVendor.IsEnabled = IsEnable; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = IsEnable; }));
+        }
+
+        private void TextBoxInvoice_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var invoice = TextBoxInvoice.Text;
+            if (previousInvoice == invoice)
+                return;
+            Task.Run(() => RescueData(invoice));
+            previousInvoice = invoice;
+        }
+
+        private void ButtonNext1_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[1];
+        }
+        private void ButtonNext2_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[2];
+        }
+        private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string query = TxtSearch.Text;
+                Task.Run(() => ConsumpterProductSearch(query));
+            }
+        }
+
+        private void DataGridToAddProduct_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
+
+        private void DataGridAddedProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        {
+            string invoice = this.TextBoxInvoice.Text;
+            Task.Run(() => 
+            {
+                FinishMovement(invoice);
+            });
+        }
+
+        private void FinishMovement(string invoice)
+        {
+            invoice = System.Uri.EscapeDataString(invoice);
+            bool allReady = false;
+            this.Dispatcher.Invoke(() => { allReady = AllowNext1() && AllowNext2(); });
+            if (allReady)
+            {
+                var existsPreviousInput = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"input/ExistsInput/{invoice}").ToString(), Helper.Authentication);
+
+                if (existsPreviousInput)
+                    UpdateInput();
+                else
+                    AddInput();
+            }
+        }
+        private void FillSummary()
+        {
+            string invoice = null, vendor = null, strDate = null;
+
+            this.Dispatcher.Invoke(() => 
+            {
+                invoice = this.TextBoxInvoice.Text;
+                vendor = this.ComboBoxVendor.Text;
+                strDate = this.DatePickerMovingDate.SelectedDate.Value.ToString("dd/MM/yyyy");
+            });
+
+            List<SummaryInfo> infos = new List<SummaryInfo>()
+                    {
+                        new SummaryInfo("DOC/SM/OS", invoice, PackIconKind.Invoice),
+                        new SummaryInfo("Fornecedor", vendor, PackIconKind.Truck), //PackIconKind.Truck
+                        new SummaryInfo("Data de Movimentação", strDate, PackIconKind.CalendarToday), //event
+                    };
+            this.ListView.ItemsSource = infos;
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TextBoxInvoice_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+            MenuItemEventHandler?.Invoke(1, AllowNext1());
+            if (AllowNext1())
+                FillSummary();
+        }
+
+        private void ButtonPrevious1_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[0];
+        }
+
+        private void ButtonPrevious2_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[1];
+        }
+
+        private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+            MenuItemEventHandler?.Invoke(1, AllowNext1());
+            if (AllowNext1())
+                FillSummary();
+        }
+
+        private void ComboBoxVendor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AllowNext1())
+                FillSummary();
         }
     }
 }

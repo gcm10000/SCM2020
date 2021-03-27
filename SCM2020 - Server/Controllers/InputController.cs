@@ -34,6 +34,13 @@ namespace SCM2020___Server.Controllers
             var list = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
             return Ok(list);
         }
+        [HttpGet("ExistsInput/{invoice}")]
+        public IActionResult ShowById(string invoice)
+        {
+            invoice = System.Uri.UnescapeDataString(invoice);
+            var result = context.MaterialInputByVendor.Any(x => x.Invoice == invoice);
+            return Ok(result);
+        }
         [HttpGet("Invoice/{invoice}")]
         public IActionResult ShowByInvoice(string invoice)
         {
