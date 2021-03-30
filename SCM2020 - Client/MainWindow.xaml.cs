@@ -50,6 +50,7 @@ namespace SCM2020___Client
             ChooseAccess(Helper.Role); //Recomendável que este método esteja na inicialização do menu
             InitializeMenu();
             InitializeNotifyIcon();
+            this.ListViewNotification.ItemsSource = notifications;
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Helper.MyWebBrowser = WebBrowser;
@@ -102,8 +103,9 @@ namespace SCM2020___Client
                     //Exibir no máximo 20 notificações.
                     AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
                     notifyIcon.BalloonTipText = stockMessage.Message;
-                    notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
-
+                    notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+                    notifications.Add(new Notification(stockMessage.Message, System.Drawing.SystemIcons.Exclamation, DateTime.Now, stockMessage.Code));
+                    Helper.PlayNotificationSound();
                     if (!initialize)
                     {
                         initialize = true;
@@ -111,6 +113,7 @@ namespace SCM2020___Client
                         {
                             //abrir janela do estoque exibindo o produto
                             MessageBox.Show(stockMessage.Code.ToString());
+                            
                         };
                     }
                     notifyIcon.ShowBalloonTip(30000);

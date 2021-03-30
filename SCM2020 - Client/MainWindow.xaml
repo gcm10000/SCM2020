@@ -45,11 +45,27 @@
                                 </materialDesign:PopupBox.ToggleContent>
                                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Height="600" VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="Pixel">
                                     <StackPanel Orientation="Vertical" Width="600">
-                                        <ItemsControl x:Name="ListView">
+                                        <ItemsControl x:Name="ListViewNotification">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                        <StackPanel Orientation="Vertical">
-                                                            <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                                    <StackPanel>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="90"></ColumnDefinition>
+                                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+                                                            <!--Icone 50x50-->
+                                                            <Image Grid.Column="0"></Image>
+                                                            <Grid Grid.Column="1">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition></RowDefinition>
+                                                                    <RowDefinition></RowDefinition>
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock Grid.Row="0" Text="{Binding Message}"></TextBlock>
+                                                                <TextBlock Grid.Row="1" Text="{Binding Date}"></TextBlock>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <TextBlock Margin="10" Text="{Binding Message}" FontSize="13"></TextBlock>
                                                         <Grid Background="White" Margin="0 15 0 0">
                                                             <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
                                                             <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
