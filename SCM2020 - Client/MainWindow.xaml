@@ -43,9 +43,26 @@
                                 <materialDesign:PopupBox.ToggleContent>
                                     <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="Notifications" />
                                 </materialDesign:PopupBox.ToggleContent>
-                                <StackPanel Orientation="Vertical" Width="150">
-                                    <Button Content="Sair"></Button>
-                                </StackPanel>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" Height="600" VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="Pixel">
+                                        <StackPanel Orientation="Vertical" Width="600">
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
+                                        </StackPanel>
+                                    </ScrollViewer>
                             </materialDesign:PopupBox>
                         </Grid>
                         <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Width="25" Height="25" Foreground="White" StaysOpen="True">
@@ -53,7 +70,8 @@
                                 <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="DotsVertical" />
                             </materialDesign:PopupBox.ToggleContent>
                             <StackPanel Orientation="Vertical" Width="150">
-                                <Button Content="Sair"></Button>
+                                <Button Cursor="Hand" Content="Notificações"></Button>
+                                <Button Cursor="Hand" Content="Sair"></Button>
                             </StackPanel>
                         </materialDesign:PopupBox>
                     </StackPanel>

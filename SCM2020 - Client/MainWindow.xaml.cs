@@ -31,6 +31,7 @@ namespace SCM2020___Client
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
+    //popup width x height = 600 x 160
     //NOTIFICATION WINDOWS 10:
     //https://docs.microsoft.com/en-us/windows/uwp/design/shell/tiles-and-notifications/send-local-toast-desktop?tabs=msix-sparse
     //https://www.youtube.com/watch?v=WhY9ytvZvKE
@@ -43,29 +44,19 @@ namespace SCM2020___Client
         System.Windows.Forms.NotifyIcon notifyIcon;
         public MainWindow()
         {
-            notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Icon = System.Drawing.SystemIcons.Exclamation;
-            notifyIcon.BalloonTipTitle = "Controle de Materiais";
-            notifyIcon.BalloonTipText = "Controle de Materiais";
-            notifyIcon.Text = "Controle de Materiais";
-            notifyIcon.Visible = true;
+
 
             InitializeComponent();
+            ChooseAccess(Helper.Role); //Recomendável que este método esteja na inicialização do menu
             InitializeMenu();
+            InitializeNotifyIcon();
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Helper.MyWebBrowser = WebBrowser;
 
             this.Closed += MainWindow_Closed;
 
-            byte[] sound = Helper.notificationSound;
-            // Place the data into a stream
-            using (MemoryStream ms = new MemoryStream(sound))
-            {
-                // Construct the sound player
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(ms);
-                player.Play();
-            }
+            Helper.PlayNotificationSound();
 
 
             //Open server local
@@ -77,63 +68,76 @@ namespace SCM2020___Client
             //    //Default url is http://localhost:5000/
             //});
 
+            Task.Run(() =>
+            {
+                DateTime startDt = new DateTime(1970, 1, 1);
+                TimeSpan timeSpan = DateTime.UtcNow - startDt;
+                long millis = (long)timeSpan.TotalMilliseconds;
+                var user = new User()
+                {
+                    DateTimeConnection = DateTime.Now,
+                    Key = millis,
+                    Id = Helper.NameIdentifier
+                }.ToJson();
 
-            //Task.Run(() =>
-            //{
-            //    DateTime startDt = new DateTime(1970, 1, 1);
-            //    TimeSpan timeSpan = DateTime.UtcNow - startDt;
-            //    long millis = (long)timeSpan.TotalMilliseconds;
-            //    var user = new User()
-            //    {
-            //        DateTimeConnection = DateTime.Now,
-            //        Key = millis,
-            //        Id = Helper.NameIdentifier
-            //    }.ToJson();
+                var connection = new HubConnectionBuilder()
+                    .WithUrl(Helper.ServerNotify.AppendQuery("user", user))
+                    .Build();
 
-            //    var connection = new HubConnectionBuilder()
-            //    .WithUrl("http://localhost:52991/notify?user=" + user)
-            //    .Build();
+                //send
+                //connection.InvokeCoreAsync("notify", new[] { } );
+                connection.On("Receive", (object sender, object message) =>
+                {
+                    Message msg = message as Message;
+                    //Salvar notificações dentro de um arquivo JSON.
+                    //Em configurações -> notificações ter a opção de limpar as notificações, e em seguida apagar todo arquivo JSON
+                    //Como também limpar toda a lista de notificações.
+                    //Exibir no máximo 20 notificações.
 
-            //    //send
-            //    //connection.InvokeCoreAsync("notify", new[] {   } });
-            //    connection.On("Receive", (object sender, object message) =>
-            //    {
-            //        //Console.WriteLine($"{message.Sender.Key} to {message.Destination}: {message.Data}{Environment.NewLine}");
-            //    });
+                    Console.WriteLine($"{msg.Sender.Key} to {msg.Destination}: {msg.Data}{Environment.NewLine}");
+                });
 
-            //    bool initialize = false;
-            //    connection.On("notify", (string stockMessageJson) =>
-            //    {
-            //        AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
-            //        notifyIcon1.BalloonTipText = stockMessage.Message;
-            //        notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
-            //        if (!initialize)
-            //        {
-            //            initialize = true;
-            //            notifyIcon1.BalloonTipClicked += (object sender, EventArgs e) =>
-            //            {
-            //                //abrir janela do estoque exibindo o produto
-            //                MessageBox.Show(stockMessage.Code.ToString());
-            //            };
-            //        }
-            //        notifyIcon1.ShowBalloonTip(30000);
-            //    });
+                bool initialize = false;
+                connection.On("notify", (string stockMessageJson) =>
+                {
+                    AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
+                    notifyIcon.BalloonTipText = stockMessage.Message;
+                    notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+                    if (!initialize)
+                    {
+                        initialize = true;
+                        notifyIcon.BalloonTipClicked += (object sender, EventArgs e) =>
+                        {
+                            //abrir janela do estoque exibindo o produto
+                            MessageBox.Show(stockMessage.Code.ToString());
+                        };
+                    }
+                    notifyIcon.ShowBalloonTip(30000);
+                });
 
-            //    connection.StartAsync().Wait();
-            //});
-
-
-            ////Only users with role SCM and role Administrator have total access
-            //if (!((Helper.Role == ModelsLibraryCore.Roles.Administrator) || (Helper.Role == ModelsLibraryCore.Roles.SCM)))
-            //{
-            //    //Users with access restrited only does can access the Query and Listing menu
-            //    this.MovementItem.Visibility = Visibility.Collapsed;
-            //    this.RegisterItem.Visibility = Visibility.Collapsed;
-            //}
+                connection.StartAsync().Wait();
+            });
 
 
         }
 
+        private void ChooseAccess(string role)
+        {
+            //Only users with role SCM and role Administrator have total access
+            if (role == Roles.SCM)
+            {
+
+            }
+            else if (role == Roles.Administrator)
+            {
+
+            }
+            else
+            {
+                //Users with access restrited only does can access the Query and Listing menu
+
+            }
+        }
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             notifyIcon.Visible = false;
@@ -233,7 +237,15 @@ namespace SCM2020___Client
         }
 
         #endregion
-
+        private void InitializeNotifyIcon()
+        {
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Icon = System.Drawing.SystemIcons.Exclamation;
+            notifyIcon.BalloonTipTitle = "Controle de Materiais";
+            notifyIcon.BalloonTipText = "Controle de Materiais";
+            notifyIcon.Text = "Controle de Materiais";
+            notifyIcon.Visible = true;
+        }
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -241,8 +253,6 @@ namespace SCM2020___Client
             notifyIcon.Dispose();
             Application.Current.Shutdown();
         }
-
-
 
         private void SignIn()
         {
