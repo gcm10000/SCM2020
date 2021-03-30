@@ -24,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WebAssemblyLibrary;
+using SCM2020___Client.Models;
 
 namespace SCM2020___Client
 {
@@ -42,10 +43,9 @@ namespace SCM2020___Client
     public partial class MainWindow : Window
     {
         System.Windows.Forms.NotifyIcon notifyIcon;
+        List<Notification> notifications = new List<Notification>();
         public MainWindow()
         {
-
-
             InitializeComponent();
             ChooseAccess(Helper.Role); //Recomendável que este método esteja na inicialização do menu
             InitializeMenu();
@@ -89,10 +89,6 @@ namespace SCM2020___Client
                 connection.On("Receive", (object sender, object message) =>
                 {
                     Message msg = message as Message;
-                    //Salvar notificações dentro de um arquivo JSON.
-                    //Em configurações -> notificações ter a opção de limpar as notificações, e em seguida apagar todo arquivo JSON
-                    //Como também limpar toda a lista de notificações.
-                    //Exibir no máximo 20 notificações.
 
                     Console.WriteLine($"{msg.Sender.Key} to {msg.Destination}: {msg.Data}{Environment.NewLine}");
                 });
@@ -100,9 +96,14 @@ namespace SCM2020___Client
                 bool initialize = false;
                 connection.On("notify", (string stockMessageJson) =>
                 {
+                    //Salvar notificações dentro de um arquivo JSON.
+                    //Em configurações -> notificações ter a opção de limpar as notificações, e em seguida apagar todo arquivo JSON
+                    //Como também limpar toda a lista de notificações.
+                    //Exibir no máximo 20 notificações.
                     AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
                     notifyIcon.BalloonTipText = stockMessage.Message;
                     notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Error;
+
                     if (!initialize)
                     {
                         initialize = true;

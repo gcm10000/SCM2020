@@ -44,25 +44,27 @@
                                     <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="Notifications" />
                                 </materialDesign:PopupBox.ToggleContent>
                                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Height="600" VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="Pixel">
-                                        <StackPanel Orientation="Vertical" Width="600">
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                            <Button Cursor="Hand" Height="160" Content="Sair"></Button>
-                                        </StackPanel>
-                                    </ScrollViewer>
+                                    <StackPanel Orientation="Vertical" Width="600">
+                                        <ItemsControl x:Name="ListView">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                        <StackPanel Orientation="Vertical">
+                                                            <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                                        <Grid Background="White" Margin="0 15 0 0">
+                                                            <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
+                                                            <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                                        </Grid>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ScrollViewer>
                             </materialDesign:PopupBox>
                         </Grid>
                         <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Width="25" Height="25" Foreground="White" StaysOpen="True">

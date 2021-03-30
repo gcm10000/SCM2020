@@ -19,6 +19,7 @@ namespace ModelsLibraryCore
         public ICollection<Destination> Destination { get; set; }
         public int Code { get; set; }
         public string Description { get; set; }
+        public DateTime Date { get; set; }
         public AlertStockMessage() { }
         public AlertStockMessage(ToolTipIcon icon, string message, ICollection<Destination> destination, int code, string description)
         {

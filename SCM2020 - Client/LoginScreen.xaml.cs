@@ -77,8 +77,11 @@ namespace SCM2020___Client
             //var user = UserTextBox.Text;
             //var password = PasswordTextBox.Password;
 
-            var user = "59450";
-            var password = "SenhaSecreta#2020";
+            //var user = "59450";
+            //var password = "SenhaSecreta#2020";
+
+            var user = "80632";
+            var password = "@Tj_123456";
             var t = Task.Run(() =>
             {
                 if (SignIn(user, password))

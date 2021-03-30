@@ -36,7 +36,7 @@ namespace SCM2020___Server.Controllers
         IHubContext<NotifyHub> Notification;
         static bool EventActived = false;
         static List<StoreMessage> ListStoreMessage = new List<StoreMessage>();
-
+        Sector MaterialControlSector;
         public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
         {
             this.ControlDbContext = controlDbContext;
@@ -49,6 +49,7 @@ namespace SCM2020___Server.Controllers
             if (!EventActived)
             {
                 EventActived = true;
+                MaterialControlSector = this.ControlDbContext.Sectors.Single(x => x.NameSector.Contains("Controle de Materiais"));
                 ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
             }
 
@@ -71,8 +72,7 @@ namespace SCM2020___Server.Controllers
 
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
-            //var users = Helper.Users;
-            var SCM = Helper.Users.Where(x => x.SectorId == 2);
+            var SCM = Helper.Users.Where(x => x.SectorId == MaterialControlSector.Id);
             List<Destination> destination = new List<Destination>();
             foreach (var user in SCM)
             {
@@ -81,13 +81,13 @@ namespace SCM2020___Server.Controllers
 
             if (ConsumptionProduct.Stock < ConsumptionProduct.MininumStock)
             {
-                //SendMessage($"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.");
+                //Envia aos clientes com a role SCM alertando material com quantidade deficiente
                 SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque deficiente.", destination, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
 
             if (ConsumptionProduct.Stock > ConsumptionProduct.MaximumStock)
             {
-                //Envia aos clientes com a role SCM alertando material com muito estoque
+                //Envia aos clientes com a role SCM alertando material com quantidade excedente
                 SendMessage(new AlertStockMessage(ToolTipIcon.Error, $"Produto {ConsumptionProduct.Code} - {ConsumptionProduct.Description} está com estoque excedente.", destination, ConsumptionProduct.Code, ConsumptionProduct.Description));
             }
         }
@@ -114,7 +114,7 @@ namespace SCM2020___Server.Controllers
             if (usersIdDisconnected.Count > 0)
             {
                 ListStoreMessage.Add(StoreMessage(notification, usersIdDisconnected));
-                SaveData();
+                //SaveData();
             }
             
         }
