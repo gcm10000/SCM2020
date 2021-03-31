@@ -106,6 +106,11 @@ namespace SCM2020___Client
                     notifyIcon.BalloonTipText = stockMessage.Message;
                     notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
                     notifications.Insert(0, new Notification(stockMessage.Message, System.Drawing.SystemIcons.Exclamation, DateTime.UtcNow, stockMessage.Code));
+                    //Serializar em JSON a lista notifications
+                    //Criptografar em AES
+                    //Salvar em arquivo JSON criptografado
+
+                    //ou salvar em servidor?
                     Helper.PlayNotificationSound();
 
 
