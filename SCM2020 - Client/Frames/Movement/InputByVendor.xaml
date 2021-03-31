@@ -31,7 +31,7 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="TextBoxInvoice" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxInvoice_KeyUp"></TextBox>
-                            <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="teste" />
                         </Grid>
                         <TextBlock Text="Fornecedor" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
                         <ComboBox Name="ComboBoxVendor" SelectionChanged="ComboBoxVendor_SelectionChanged" FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>

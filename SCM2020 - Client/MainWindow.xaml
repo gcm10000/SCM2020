@@ -29,6 +29,7 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 3 0">
                         <Grid Background="{x:Null}" Margin="0 0 10 0">
                             <Border Panel.ZIndex="1000" CornerRadius="50" Visibility="Visible"
+                                    Name="BorderCountNewestNotification"
                                     Width="20"
                                     Height="20"
                                     Margin="15 0 0 20"
@@ -36,39 +37,35 @@
                                     Background="#CC0000"
                                     BorderBrush="{x:Null}"
                                     BorderThickness="0">
-                                <TextBlock FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10">9+
+                                <TextBlock FontWeight="SemiBold" Name="TextBlockNotificationQuantity" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10">9+
                                 </TextBlock>
                             </Border>
-                            <materialDesign:PopupBox VerticalAlignment="Center" Width="25" Height="25" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True">
+                            <materialDesign:PopupBox VerticalAlignment="Center" Width="25" Height="25" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True" PreviewMouseDown="PopupBox_PreviewMouseDown">
                                 <materialDesign:PopupBox.ToggleContent>
                                     <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="Notifications" />
                                 </materialDesign:PopupBox.ToggleContent>
                                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" Height="600" VerticalScrollBarVisibility="Visible" VirtualizingPanel.ScrollUnit="Pixel">
-                                    <StackPanel Orientation="Vertical" Width="600">
+                                    <StackPanel Orientation="Vertical" Width="600" Name="StackPanelNotification">
                                         <ItemsControl x:Name="ListViewNotification">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel>
-                                                        <Grid>
+                                                    <StackPanel Cursor="Hand" Width="600" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                                                        <Grid Margin="20 0 20 10">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="90"></ColumnDefinition>
+                                                                <ColumnDefinition Width="75"></ColumnDefinition>
                                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
                                                             <!--Icone 50x50-->
-                                                            <Image Grid.Column="0"></Image>
-                                                            <Grid Grid.Column="1">
+                                                            <!--<Image Visibility="Visible" Name="ImageNotificationIcon" Grid.Column="0"></Image>-->
+                                                            <materialDesign:PackIcon Grid.Column="0" Visibility="Visible" VerticalAlignment="Center" Kind="Warning" Foreground="#FCE100" Width="50" Height="50" />
+                                                            <Grid Grid.Column="1" VerticalAlignment="Center">
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition></RowDefinition>
-                                                                    <RowDefinition></RowDefinition>
+                                                                    <RowDefinition Height="*"></RowDefinition>
                                                                 </Grid.RowDefinitions>
-                                                                <TextBlock Grid.Row="0" Text="{Binding Message}"></TextBlock>
-                                                                <TextBlock Grid.Row="1" Text="{Binding Date}"></TextBlock>
+                                                                <TextBlock Margin="0 10 0 0" Grid.Row="0" Text="{Binding Message}" TextWrapping="Wrap"></TextBlock>
+                                                                <TextBlock Margin="0 10 0 0" Grid.Row="1" FontSize="11"  Text="{Binding RelativeTime}"></TextBlock>
                                                             </Grid>
-                                                        </Grid>
-                                                        <TextBlock Margin="10" Text="{Binding Message}" FontSize="13"></TextBlock>
-                                                        <Grid Background="White" Margin="0 15 0 0">
-                                                            <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
-                                                            <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                                                         </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>

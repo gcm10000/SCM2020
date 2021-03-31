@@ -81,25 +81,25 @@ namespace SCM2020___Client
             double delta = Math.Abs(ts.TotalSeconds);
 
             if (delta < 1 * MINUTE)
-                return ts.Seconds == 1 ? "one second ago" : ts.Seconds + " seconds ago";
+                return ts.Seconds == 1 ? "agora" :  "há " + ts.Seconds + " segundos";
 
             if (delta < 2 * MINUTE)
-                return "a minute ago";
+                return "há 1 minuto";
 
             if (delta < 45 * MINUTE)
-                return ts.Minutes + " minutes ago";
+                return "há " + ts.Minutes + " minutos";
 
             if (delta < 90 * MINUTE)
-                return "an hour ago";
+                return "há 1 hora";
 
             if (delta < 24 * HOUR)
-                return ts.Hours + " hours ago";
+                return "há " + ts.Hours + " horas";
 
             if (delta < 48 * HOUR)
-                return "yesterday";
+                return "há 1 dia";
 
             if (delta < 30 * DAY)
-                return ts.Days + " days ago";
+                return "há " + ts.Days + " dias";
 
             if (delta < 12 * MONTH)
             {
@@ -131,7 +131,20 @@ namespace SCM2020___Client
                 return decoder.Frames[0];
             }
         }
+        public static T GetChildOfType<T>(this DependencyObject depObj)
+    where T : DependencyObject
+        {
+            if (depObj == null) return null;
 
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if (result != null) return result;
+            }
+            return null;
+        }
         public static void SetOptionsToPrint()
         {
             string strKey = "Software\\Microsoft\\Internet Explorer\\PageSetup";

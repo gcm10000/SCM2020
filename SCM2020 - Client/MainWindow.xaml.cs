@@ -25,6 +25,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WebAssemblyLibrary;
 using SCM2020___Client.Models;
+using System.Threading;
 
 namespace SCM2020___Client
 {
@@ -43,21 +44,21 @@ namespace SCM2020___Client
     public partial class MainWindow : Window
     {
         System.Windows.Forms.NotifyIcon notifyIcon;
-        List<Notification> notifications = new List<Notification>();
+        List<Notification> notifications;
+
         public MainWindow()
         {
             InitializeComponent();
             ChooseAccess(Helper.Role); //Recomendável que este método esteja na inicialização do menu
             InitializeMenu();
             InitializeNotifyIcon();
-            this.ListViewNotification.ItemsSource = notifications;
+            InitializeNotification();
+            
 
             WebAssemblyLibrary.Helper.SetLastVersionIE();
             Helper.MyWebBrowser = WebBrowser;
 
             this.Closed += MainWindow_Closed;
-
-            Helper.PlayNotificationSound();
 
 
             //Open server local
@@ -104,8 +105,22 @@ namespace SCM2020___Client
                     AlertStockMessage stockMessage = stockMessageJson.DeserializeJson<AlertStockMessage>();
                     notifyIcon.BalloonTipText = stockMessage.Message;
                     notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
-                    notifications.Add(new Notification(stockMessage.Message, System.Drawing.SystemIcons.Exclamation, DateTime.Now, stockMessage.Code));
+                    notifications.Insert(0, new Notification(stockMessage.Message, System.Drawing.SystemIcons.Exclamation, DateTime.UtcNow, stockMessage.Code));
                     Helper.PlayNotificationSound();
+
+                    Application.Current.Dispatcher.Invoke(() => 
+                    {
+                        var newestNotificationsCount = notifications.Where(x => x.IsNewest).Count();
+                        this.TextBlockNotificationQuantity.Text = (newestNotificationsCount > 9) ? "9+" : newestNotificationsCount.ToString();
+                        if (newestNotificationsCount == 0)
+                            this.BorderCountNewestNotification.Visibility = Visibility.Hidden;
+                        else
+                            this.BorderCountNewestNotification.Visibility = Visibility.Visible;
+
+                        this.ListViewNotification.Items.Refresh();
+                    });
+
+                    
                     if (!initialize)
                     {
                         initialize = true;
@@ -122,6 +137,47 @@ namespace SCM2020___Client
                 connection.StartAsync().Wait();
             });
 
+
+        }
+
+        private void InitializeNotification()
+        {
+            this.notifications = new List<Notification>();
+            this.ListViewNotification.ItemsSource = notifications;
+            this.TextBlockNotificationQuantity.Text = (notifications.Where(x => x.IsNewest).Count() > 9) ? "9+" : notifications.Count.ToString();
+            if (notifications.Count == 0)
+                this.BorderCountNewestNotification.Visibility = Visibility.Hidden;
+            else
+                this.BorderCountNewestNotification.Visibility = Visibility.Visible;
+        }
+
+        private void PopupBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (!this.ListViewNotification.IsVisible)
+                {
+                    foreach (var notification in notifications)
+                    {
+                        notification.RelativeTime = Helper.RelativeTime(notification.DateTime);
+                        notification.IsNewest = false;
+                        this.ListViewNotification.Items.Refresh();
+                    }
+                    this.BorderCountNewestNotification.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+
+        private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
+        {
+            StackPanel stackPanelItem = sender as StackPanel;
+            stackPanelItem.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#E6E6E6"));
+        }
+
+        private void StackPanel_MouseLeave(object sender, MouseEventArgs e)
+        {
+            StackPanel stackPanelItem = sender as StackPanel;
+            stackPanelItem.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
 
         }
 
