@@ -108,6 +108,7 @@ namespace SCM2020___Client
                     notifications.Insert(0, new Notification(stockMessage.Message, System.Drawing.SystemIcons.Exclamation, DateTime.UtcNow, stockMessage.Code));
                     Helper.PlayNotificationSound();
 
+
                     Application.Current.Dispatcher.Invoke(() => 
                     {
                         var newestNotificationsCount = notifications.Where(x => x.IsNewest).Count();
