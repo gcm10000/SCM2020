@@ -7,32 +7,65 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <UserControl.Resources>
-        <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
+    <Grid Background="#F0F0F0">
+        <ScrollViewer Name="ScrollViewerInfo" Visibility="Visible">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="30" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Height="24" Text="DOC/SM/OS" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <Grid Margin="20 15 20 0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="TextBoxInvoice" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxInvoice_KeyUp"></TextBox>
+                            <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="teste" />
                         </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="Disable" TargetType="Button">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#FF2196F3"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    <DockPanel Background="White">
-        <!--
+                        <TextBlock Text="Data da Ordem de Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
+                        <DatePicker Name="DatePickerMovingDate" FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" SelectedDateChanged="DatePickerMovingDate_SelectedDateChanged"></DatePicker>
+                        <TextBlock Text="Local do Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="4"></TextBlock>
+                        <TextBox Name="TextBoxServiceLocalization" FontSize="22" Margin="20 15 20 0" Grid.Row="5" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Número da Matrícula do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="6"></TextBlock>
+                        <!--Ativar com key up, não com lost focus-->
+                        <TextBox Name="TextBoxRegisterApplicant" FontSize="22" Margin="20 15 20 0" Grid.Row="7" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Nome do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="8"></TextBlock>
+                        <TextBox Name="TextBoxApplicant" IsReadOnly="True" FontSize="22" Margin="20 15 20 0" Grid.Row="9" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Tipo de Saída" FontSize="22" Margin="20 20 20 0" Grid.Row="10"></TextBlock>
+                        <ComboBox Name="OutputTypeComboBox" SelectionChanged="ComboBoxVendor_SelectionChanged" FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext1" Click="ButtonNext1_Click"  Content="Próximo">
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+    <!--<DockPanel Background="White">
+        --><!--
             https://www.youtube.com/watch?v=Jma5VYwEQcY
             C# WPF Material Design UI: Tab Menu
-        -->
+        --><!--
         <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
@@ -133,7 +166,7 @@
                                   CanUserResizeColumns="False"
                           >
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
@@ -221,7 +254,7 @@
                                   CanUserReorderColumns="False"
                                   CanUserResizeColumns="False">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
@@ -305,7 +338,7 @@
                                   CanUserReorderColumns="False"
                                   CanUserResizeColumns="False">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
@@ -331,7 +364,7 @@
                                   CanUserReorderColumns="False"
                                   CanUserResizeColumns="False">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
@@ -352,6 +385,6 @@
                 </DataGrid>
             </Grid>
         </DockPanel>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>
 <!--<TextBox Style="{x:Null}" Height="30" FontSize="16" Width="{Binding ElementName=Container,Path=ActualWidth}" HorizontalAlignment="Left" MaxWidth="1000"></TextBox>-->
