@@ -161,6 +161,7 @@ namespace SCM2020___Client
         {
             if (e.ChangedButton == MouseButton.Left)
             {
+                this.PopoutNotification.StaysOpen = true;
                 if (!this.ListViewNotification.IsVisible)
                 {
                     foreach (var notification in notifications)
@@ -465,6 +466,16 @@ namespace SCM2020___Client
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
+        }
+
+        private void StackPanel_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.PopoutNotification.StaysOpen = false;
+            }
+            e.Handled = true;
+
         }
     }
 }

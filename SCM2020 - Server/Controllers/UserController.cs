@@ -49,6 +49,9 @@ namespace SCM2020___Server.Controllers
             if (!EventActived)
             {
                 EventActived = true;
+                //criar uma tabela referenciando setor(es)
+                //ID
+                //SECTORID
                 MaterialControlSector = this.ControlDbContext.Sectors.Single(x => x.NameSector.Contains("Controle de Materiais"));
                 ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
             }
@@ -102,7 +105,6 @@ namespace SCM2020___Server.Controllers
                 if (user != null)
                 {
                     var uniqueID = NotifyHub.Connections.GetKey(user);
-                    Console.WriteLine(notification);
                     await Notification.Clients.Client(uniqueID).SendAsync("notify", notification.ToJson());
                 }
                 else //Dentro deste else indica que o usuário está desconectado

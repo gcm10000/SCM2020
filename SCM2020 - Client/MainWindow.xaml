@@ -40,7 +40,7 @@
                                 <TextBlock FontWeight="SemiBold" Name="TextBlockNotificationQuantity" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10">9+
                                 </TextBlock>
                             </Border>
-                            <materialDesign:PopupBox VerticalAlignment="Center" Width="25" Height="25" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True" PreviewMouseDown="PopupBox_PreviewMouseDown">
+                            <materialDesign:PopupBox Name="PopoutNotification" VerticalAlignment="Center" Width="25" Height="25" PlacementMode="BottomAndAlignRightEdges" StaysOpen="True" PreviewMouseDown="PopupBox_PreviewMouseDown">
                                 <materialDesign:PopupBox.ToggleContent>
                                     <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="Notifications" />
                                 </materialDesign:PopupBox.ToggleContent>
@@ -49,7 +49,7 @@
                                         <ItemsControl x:Name="ListViewNotification">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Cursor="Hand" Width="600" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
+                                                    <StackPanel Cursor="Hand" Width="600" PreviewMouseDown="StackPanel_PreviewMouseDown" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave">
                                                         <Grid Margin="20 0 20 10">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="75"></ColumnDefinition>

@@ -22,7 +22,6 @@ namespace SCM2020___Server.Hubs
         {
             this.context = controlDbContext;
             this.Configuration = Configuration;
-
         }
 
         public override Task OnConnectedAsync()
@@ -30,9 +29,11 @@ namespace SCM2020___Server.Hubs
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
             Connections.Add(Context.ConnectionId, user);
             var messages = context.StoreMessage.Include(x => x.UsersId).Include(x => x.Notification).Where(x => x.UsersId.Any(y => y.UserId == user.Id));
-            
+
             //MessageStartedHandler d = new MessageStartedHandler(MessageToSend);
             //d.Invoke(new List<StoreMessage>(messages), Context.ConnectionId, user);
+            if (messages.Count() > 0)
+                return base.OnConnectedAsync();
 
             MessageToSend(new List<StoreMessage>(messages), Context.ConnectionId, user);
 
