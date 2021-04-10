@@ -24,7 +24,7 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Name="StackPanelMenuHorizontal">
                     <!--Buttons-->
                 </StackPanel>
-                    <Grid x:Name="GridCursor" Width="130" Height="5" Background="#FF2196F3" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Grid>
+                <Grid x:Name="GridCursor" Width="130" Height="5" Background="#FF2196F3" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Grid>
                 <Grid Grid.Row="2" HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 3 0">
                         <Grid Background="{x:Null}" Margin="0 0 10 0">
@@ -108,10 +108,10 @@
             </Grid>
         </Grid>
         <Grid Background="#FFF0F0F0" Margin="10 0 10 0" Height="Auto" DockPanel.Dock="Right">
-                <DockPanel>
-                    <WebBrowser x:Name="WebBrowser" Visibility="Collapsed"></WebBrowser>
-                    <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden" Source="Frames/UserControl1.xaml"></Frame>
-                </DockPanel>
-            </Grid>
+            <DockPanel>
+                <WebBrowser x:Name="WebBrowser" Visibility="Collapsed"></WebBrowser>
+                <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden" Source="Frames/UserControl1.xaml"></Frame>
+            </DockPanel>
+        </Grid>
     </DockPanel>
 </Window>

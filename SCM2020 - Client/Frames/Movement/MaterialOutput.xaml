@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid Background="#F0F0F0">
-        <ScrollViewer Name="ScrollViewerInfo" Visibility="Visible">
+        <ScrollViewer Name="ScrollViewerInfo" Visibility="Collapsed">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -59,6 +59,46 @@
                     </Grid>
                 </Grid>
             </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer Name="ScrollViewerProducts" Visibility="Visible">
+            <Grid Margin="30">
+                <StackPanel>
+                    <Grid Name="GridProducts">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <DataGrid Grid.Row="0" Height="500" x:Name="DataGridToAddConsumpterProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="DataGridAddedProducts_PreviewMouseWheel">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Descrição" Binding="{Binding Description}" Width="Auto"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Quantidade Adicionada" Binding="{Binding QuantityAdded}" Width="Auto"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Opções" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" Foreground="#FF999999" StaysOpen="True">
+                                                <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                            </materialDesign:PopupBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
         </ScrollViewer>
     </Grid>
     <!--<DockPanel Background="White">
