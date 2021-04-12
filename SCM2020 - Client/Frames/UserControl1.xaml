@@ -49,7 +49,7 @@
             </StackPanel>
         </ScrollViewer>
         <!--Produtos-->
-        <Grid Name="GridProducts" Margin="30" Visibility="Visible">
+        <Grid Name="GridProducts" Margin="30" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -85,35 +85,6 @@
                     <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
                     <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
                 </DataGrid.Columns>
-                <local:UserTest SKU="12" Desc="Produto 1" Added="0"></local:UserTest>
-                <local:UserTest SKU="13" Desc="Produto 2" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
             </DataGrid>
             <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
                 <StackPanel Orientation="Horizontal">
@@ -123,7 +94,7 @@
             </Grid>
         </Grid>
         <!--Conclusão-->
-        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" Background="#FFF1F1F1">
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Visible" Background="#FFF1F1F1">
             <Grid Margin="30">
                 <StackPanel>
                     <Grid Name="GridData">
@@ -176,35 +147,6 @@
                             <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
                             <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
                         </DataGrid.Columns>
-                        <local:UserTest SKU="12" Desc="Produto 1" Added="0"></local:UserTest>
-                        <local:UserTest SKU="13" Desc="Produto 2" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
-                        <local:UserTest SKU="14" Desc="Produto Produto Produto Produto Produto 3" Added="0"></local:UserTest>
                     </DataGrid>
                     <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">
                         <StackPanel Orientation="Horizontal">
@@ -217,6 +159,7 @@
                 </Grid>
                 </StackPanel>
             </Grid>
+            
         </ScrollViewer>
         <!--<Grid Name="GridFinish" Visibility="Visible">
             --><!--Materiais selecionados--><!--

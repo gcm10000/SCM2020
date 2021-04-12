@@ -76,6 +76,7 @@ namespace SCM2020___Client.Frames
         }
         public Monitoring PrincipalMonitoring { get; set; }
         public InfoUser InfoUser { get; set; }
+        WebBrowser WebBrowser = Helper.MyWebBrowser;
         public MaterialOutput()
         {
             InitializeComponent();
@@ -90,7 +91,7 @@ namespace SCM2020___Client.Frames
 
             query = System.Uri.EscapeDataString(query);
 
-            this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Clear(); }));
+            this.DataGridConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridConsumpterProducts.Items.Clear(); }));
 
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
@@ -106,67 +107,64 @@ namespace SCM2020___Client.Frames
                     Description = item.Description,
                     Quantity = item.Stock,
                 };
-                this.ProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ProductToAddDataGrid.Items.Add(productsToOutput); }));
+                this.DataGridConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridConsumpterProducts.Items.Add(productsToOutput); }));
             }
         }
-        private void PermanentProductSearch()
+        private void PermanentProductSearch(string query)
         {
-            string textBoxValue = string.Empty;
-            this.TxtPermanentProductSearch.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { textBoxValue = TxtPermanentProductSearch.Text; }));
-
-            if (textBoxValue == string.Empty)
+            if (query == string.Empty)
                 return;
 
-            textBoxValue = System.Uri.EscapeDataString(textBoxValue);
+            query = System.Uri.EscapeDataString(query);
 
 
-            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{textBoxValue}");
+            Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{query}");
 
-            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
 
             var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => string.IsNullOrWhiteSpace(x.WorkOrder));
             foreach (var product in products)
             {
                 PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid(new SearchPermanentProduct(product));
-                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
+                this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridPermanentProducts.Items.Add(permanentProductDataGrid); }));
             }
         }
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
         }
-        private void BtnInformation_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = false;
-            this.ButtonPermanentProducts.IsHitTestVisible = true;
-            this.ButtonFinish.IsHitTestVisible = true;
+        //private void BtnInformation_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = false;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
+        //    this.ButtonFinish.IsHitTestVisible = true;
 
-            this.InfoScrollViewer.Visibility = Visibility.Visible;
-            this.InfoDockPanel.Visibility = Visibility.Visible;
-            this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        }
-        private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = true;
-            this.ButtonPermanentProducts.IsHitTestVisible = false;
-            this.ButtonFinish.IsHitTestVisible = true;
+        //    this.InfoScrollViewer.Visibility = Visibility.Visible;
+        //    this.InfoDockPanel.Visibility = Visibility.Visible;
+        //    this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
+        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+        //}
+        //private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = true;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = false;
+        //    this.ButtonFinish.IsHitTestVisible = true;
 
-            InfoScrollViewer.Visibility = Visibility.Collapsed;
-            InfoDockPanel.Visibility = Visibility.Collapsed;
-            PermanentDockPanel.Visibility = Visibility.Visible;
-        }
-        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = true;
-            this.ButtonPermanentProducts.IsHitTestVisible = true;
-            this.ButtonFinish.IsHitTestVisible = false;
+        //    InfoScrollViewer.Visibility = Visibility.Collapsed;
+        //    InfoDockPanel.Visibility = Visibility.Collapsed;
+        //    PermanentDockPanel.Visibility = Visibility.Visible;
+        //}
+        //private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = true;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
+        //    this.ButtonFinish.IsHitTestVisible = false;
 
-            this.InfoScrollViewer.Visibility = Visibility.Collapsed;
-            this.InfoDockPanel.Visibility = Visibility.Collapsed;
-            this.FinalProductsDockPanel.Visibility = Visibility.Visible;
-            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        }
+        //    this.InfoScrollViewer.Visibility = Visibility.Collapsed;
+        //    this.InfoDockPanel.Visibility = Visibility.Collapsed;
+        //    this.FinalProductsDockPanel.Visibility = Visibility.Visible;
+        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+        //}
         List<ProductToOutput> FinalConsumpterProductsAdded = new List<ProductToOutput>();
         List<ProductToOutput> FinalPermanentProductsAdded = new List<ProductToOutput>();
 
@@ -180,12 +178,12 @@ namespace SCM2020___Client.Frames
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
-                ProductToAddDataGrid.Items.Refresh();
-                FinalConsumpterProductsAddedDataGrid.Items.Refresh();
-                if (!FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
+                DataGridConsumpterProducts.Items.Refresh();
+                DataGridFinalConsumpterProducts.Items.Refresh();
+                if (!DataGridFinalConsumpterProducts.Items.Contains(product))
                 {
                     product.NewProduct = button.Name == "BtnAdd";
-                    FinalConsumpterProductsAddedDataGrid.Items.Add(product);
+                    DataGridFinalConsumpterProducts.Items.Add(product);
                     FinalConsumpterProductsAdded.Add(product);
                 }
                 else
@@ -193,7 +191,7 @@ namespace SCM2020___Client.Frames
                     if (dialog.QuantityAdded == 0)
                     {
                         //this.previousMaterialOutput.ConsumptionProducts.Remove(product.ConsumptionProduct);
-                        FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
+                        DataGridFinalConsumpterProducts.Items.Remove(product);
                         //FinalConsumpterProductsAdded.Remove(product);
                     }
                     else
@@ -202,13 +200,13 @@ namespace SCM2020___Client.Frames
                     }
                     product.ProductChanged = true;
                 }
-                ProductToAddDataGrid.UnselectAll();
-                FinalConsumpterProductsAddedDataGrid.UnselectAll();
+                DataGridConsumpterProducts.UnselectAll();
+                DataGridFinalConsumpterProducts.UnselectAll();
             }
         }
         private void ProductToAddDataGrid_Selected(object sender, RoutedEventArgs e)
         {
-            var currentRowIndex = ProductToAddDataGrid.Items.IndexOf(ProductToAddDataGrid.CurrentItem);
+            var currentRowIndex = DataGridConsumpterProducts.Items.IndexOf(DataGridConsumpterProducts.CurrentItem);
             MessageBox.Show(currentRowIndex.ToString());
         }
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
@@ -222,9 +220,9 @@ namespace SCM2020___Client.Frames
         {
             //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
             //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
-            DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
+            DateTime dateTime = (DatePickerMovingDate.DisplayDate == DateTime.Today) ? (DateTime.Now) : DatePickerMovingDate.DisplayDate;
 
-            var register = RegisterApplicantTextBox.Text;
+            var register = TextBoxRegisterApplicant.Text;
             string userId = string.Empty;
             try
             {
@@ -238,7 +236,7 @@ namespace SCM2020___Client.Frames
             }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-            var numberSector = OSTextBox.Text.Substring(0, 2);
+            var numberSector = TextBoxWorkOrder.Text.Substring(0, 2);
             Sector sector = null;
             try
             {
@@ -265,24 +263,24 @@ namespace SCM2020___Client.Frames
                 EmployeeId = userId,
                 RequestingSector = sector.Id,//o setor é referente ao número da ordem de serviço,
                 MovingDate = dateTime,
-                Work_Order = OSTextBox.Text,
-                ServiceLocation = ServiceLocalizationTextBox.Text
+                Work_Order = TextBoxWorkOrder.Text,
+                ServiceLocation = TextBoxServiceLocalization.Text
             };
 
             //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
 
             var materialOutput = new ModelsLibraryCore.MaterialOutput
             {
-                WorkOrder = OSTextBox.Text,
+                WorkOrder = TextBoxWorkOrder.Text,
                 MovingDate = dateTime,
             };
 
-            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+            if (DataGridFinalConsumpterProducts.Items.Count > 0)
                 materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
-            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+            if (DataGridFinalPermanentProducts.Items.Count > 0)
                 materialOutput.PermanentProducts = new List<AuxiliarPermanent>();
 
-            foreach (var item in FinalConsumpterProductsAddedDataGrid.Items)
+            foreach (var item in DataGridFinalConsumpterProducts.Items)
             {
                 ProductToOutput outputProduct = item as ProductToOutput;
                 //var code = outputProduct.Code;
@@ -297,7 +295,7 @@ namespace SCM2020___Client.Frames
                 };
                 materialOutput.ConsumptionProducts.Add(auxiliarConsumption);
             }
-            foreach (var item in FinalPermanentProductsAddedDataGrid.Items)
+            foreach (var item in DataGridFinalPermanentProducts.Items)
             {
                 PermanentProductDataGrid outputPermanentProduct = item as PermanentProductDataGrid;
                 AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
@@ -332,7 +330,7 @@ namespace SCM2020___Client.Frames
         private void UpdateOutput()
         {
             ModelsLibraryCore.MaterialOutput materialOutput = this.previousMaterialOutput;
-            if ((FinalConsumpterProductsAddedDataGrid.Items.Count > 0) && (materialOutput.ConsumptionProducts == null))
+            if ((DataGridFinalConsumpterProducts.Items.Count > 0) && (materialOutput.ConsumptionProducts == null))
             {
                 materialOutput.ConsumptionProducts = new List<AuxiliarConsumption>();
             }
@@ -367,7 +365,7 @@ namespace SCM2020___Client.Frames
             foreach (var item in FinalPermanentProductsAdded)
             {
                 //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
-                if (!FinalPermanentProductsAddedDataGrid.Items.Contains(item))
+                if (!DataGridFinalPermanentProducts.Items.Contains(item))
                 {
                     var permanentProduct = materialOutput.PermanentProducts.Single(x => x.ProductId == item.Id);
                     materialOutput.PermanentProducts.Remove(permanentProduct);
@@ -397,19 +395,19 @@ namespace SCM2020___Client.Frames
         }
         private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
-            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
-            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+            this.DataGridFinalConsumpterProducts.Visibility = Visibility.Visible;
+            this.DataGridFinalPermanentProducts.Visibility = Visibility.Collapsed;
 
-            this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
-            this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
+            //this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
+            //this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
         }
         private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
-            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
-            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+            this.DataGridFinalPermanentProducts.Visibility = Visibility.Visible;
+            this.DataGridFinalConsumpterProducts.Visibility = Visibility.Collapsed;
 
-            this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
-            this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
+            //this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
+            //this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
         }
         //Método conveninente somente a produtos permanentes
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
@@ -419,7 +417,7 @@ namespace SCM2020___Client.Frames
             {
                 product.QuantityAdded += 1;
                 product.NewProduct = true;
-                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
+                this.DataGridFinalPermanentProducts.Items.Add(product);
                 this.FinalPermanentProductsAdded.Add(product);
                 //product.BtnContent = "Remover";
             }
@@ -428,12 +426,12 @@ namespace SCM2020___Client.Frames
                 //product.BtnContent = "Adicionar";
                 product.QuantityAdded -= 1;
                 product.NewProduct = false;
-                this.FinalPermanentProductsAddedDataGrid.Items.Remove(product);
+                this.DataGridFinalPermanentProducts.Items.Remove(product);
             }
-            this.PermanentProductToAddDataGrid.Items.Refresh();
-            this.FinalPermanentProductsAddedDataGrid.Items.Refresh();
-            this.PermanentProductToAddDataGrid.UnselectAll();
-            this.FinalPermanentProductsAddedDataGrid.UnselectAll();
+            this.DataGridPermanentProducts.Items.Refresh();
+            this.DataGridFinalPermanentProducts.Items.Refresh();
+            this.DataGridPermanentProducts.UnselectAll();
+            this.DataGridFinalPermanentProducts.UnselectAll();
         }
         private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
@@ -450,20 +448,23 @@ namespace SCM2020___Client.Frames
         }
         private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(PermanentProductSearch);
+            string query = TxtSearchPermanentProduct.Text;
+            Task.Run(() => { PermanentProductSearch(query); });
         }
         private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                Task.Run(PermanentProductSearch);
+                string query = TxtSearchPermanentProduct.Text;
+                Task.Run(() => { PermanentProductSearch(query); });
             }
         }
 
         string previousOS = string.Empty;
+        //KeyUp
         private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            var workOrder = OSTextBox.Text;
+            var workOrder = TextBoxWorkOrder.Text;
             if (previousOS == workOrder)
                 return;
             Task.Run(() => RescueData(workOrder));
@@ -472,7 +473,7 @@ namespace SCM2020___Client.Frames
         }
         private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            var workOrder = OSTextBox.Text;
+            var workOrder = TextBoxWorkOrder.Text;
             if (e.Key == Key.Enter)
             {
                 if (previousOS == workOrder)
@@ -525,14 +526,14 @@ namespace SCM2020___Client.Frames
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
                 InputData(false);
-                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = monitoring.MovingDate; this.OSDatePicker.DisplayDate = monitoring.MovingDate; }));
-                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = monitoring.ServiceLocation; }));
+                this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DatePickerMovingDate.SelectedDate = monitoring.MovingDate; this.DatePickerMovingDate.DisplayDate = monitoring.MovingDate; }));
+                this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxServiceLocalization.Text = monitoring.ServiceLocation; }));
 
-                this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = InfoUser.Register; }));
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = InfoUser.Name; }));
+                this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxRegisterApplicant.Text = InfoUser.Register; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxApplicant.Text = InfoUser.Name; }));
 
-                this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
-                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+                this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Clear(); }));
+                this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
                 foreach (var item in materialOutput.ConsumptionProducts)
                 {
                     var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
@@ -545,7 +546,7 @@ namespace SCM2020___Client.Frames
                         Quantity = consumpterProduct.Stock,
                         ConsumptionProduct = item
                     };
-                    this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { FinalConsumpterProductsAddedDataGrid.Items.Add(productToOutput); }));
+                    this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { DataGridFinalConsumpterProducts.Items.Add(productToOutput); }));
                     FinalConsumpterProductsAdded.Add(productToOutput);
                 }
                 foreach (var item in materialOutput.PermanentProducts)
@@ -561,12 +562,12 @@ namespace SCM2020___Client.Frames
                         QuantityAdded = 1,
                         Patrimony = permanentProduct.Patrimony,
                     };
-                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(productDataGrid); }));
+                    this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Add(productDataGrid); }));
                     FinalPermanentProductsAdded.Add(productDataGrid);
                 }
 
-                this.BtnPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnPrint.IsEnabled = true; }));
-                this.BtnExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.BtnExport.IsEnabled = true; }));
+                this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
+                this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = true; }));
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             {
@@ -574,29 +575,29 @@ namespace SCM2020___Client.Frames
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Ocorreu um Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
 
         private void ClearData()
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.Text = string.Empty; }));
-            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
-            this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.SelectedIndex = 0; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.Text = string.Empty; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
-            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
-            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+            this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.Text = string.Empty; }));
+            this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = string.Empty; }));
+            this.ComboBoxOutputType.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxOutputType.SelectedIndex = 0; }));
+            this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.Text = string.Empty; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Clear(); }));
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
         }
 
         private void InputData(bool IsEnable)
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
+            this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = IsEnable; }));
             //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
-            this.OutputTypeComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OutputTypeComboBox.IsEnabled = IsEnable; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = IsEnable; }));
+            this.ComboBoxOutputType.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxOutputType.IsEnabled = IsEnable; }));
+            this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.IsEnabled = IsEnable; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = IsEnable; }));
         }
 
         bool DataToPrintORExportWasRescued = false;
@@ -612,8 +613,8 @@ namespace SCM2020___Client.Frames
             SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
             PrintORExport = true;
             Document = movement.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
 
         }
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
@@ -621,7 +622,7 @@ namespace SCM2020___Client.Frames
             Helper.SetOptionsToPrint();
             if (PrintORExport)
             {
-                webBrowser.PrintDocument();
+                WebBrowser.PrintDocument();
             }
             else
             {
@@ -651,7 +652,7 @@ namespace SCM2020___Client.Frames
                     MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
                 }
             }
-            webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
+            this.WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
 
@@ -666,8 +667,8 @@ namespace SCM2020___Client.Frames
 
             PrintORExport = false;
             Document = movement.RenderizeHtml();
-            this.webBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.webBrowser.NavigateToString(Document);
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
         }
         private void GetName(string register)
         {
@@ -676,11 +677,11 @@ namespace SCM2020___Client.Frames
             try
             {
                 //Zera informação
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = string.Empty; }));
                 //Recebe informações
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
                 //Atribui o nome do funcionário no campo correspondente
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = infoUser.Name; }));
             }
             catch (HttpRequestException)
             {
@@ -692,14 +693,14 @@ namespace SCM2020___Client.Frames
         {
             if (e.Key == Key.Enter)
             {
-                string register = this.RegisterApplicantTextBox.Text;
+                string register = this.TextBoxRegisterApplicant.Text;
                 Task.Run(() => GetName(register));
             }
         }
 
         private void RegisterApplicantTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            string register = this.RegisterApplicantTextBox.Text;
+            string register = this.TextBoxRegisterApplicant.Text;
             Task.Run(() => GetName(register));
         }
 
@@ -722,5 +723,61 @@ namespace SCM2020___Client.Frames
         {
 
         }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ComboBoxOutputType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ButtonNext1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DataGridConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
+
+        private void DataGridPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
+
+        private void DataGridFinalConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
+
+        private void DataGridFinalPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
+
+        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

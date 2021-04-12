@@ -36,7 +36,7 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBox Name="TextBoxInvoice" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxInvoice_KeyUp"></TextBox>
+                            <TextBox Name="TextBoxWorkOrder" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxWorkOrder_KeyUp"></TextBox>
                             <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="teste" />
                         </Grid>
                         <TextBlock Text="Data da Ordem de Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
@@ -49,7 +49,7 @@
                         <TextBlock Text="Nome do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="8"></TextBlock>
                         <TextBox Name="TextBoxApplicant" IsReadOnly="True" FontSize="22" Margin="20 15 20 0" Grid.Row="9" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
                         <TextBlock Text="Tipo de Saída" FontSize="22" Margin="20 20 20 0" Grid.Row="10"></TextBlock>
-                        <ComboBox Name="OutputTypeComboBox" SelectionChanged="ComboBoxVendor_SelectionChanged" FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>
+                        <ComboBox Name="ComboBoxOutputType" SelectionChanged="ComboBoxOutputType_SelectionChanged"  FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>
                     </Grid>
                     <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">
@@ -88,7 +88,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  PreviewMouseWheel="DataGridAddedProducts_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridConsumpterProducts_PreviewMouseWheel">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
                     <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
@@ -117,7 +117,7 @@
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="TxtSearchPermanentProduct" materialDesign:HintAssist.Hint="Produtos permanentes..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
-                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchPermanentProduct">
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchPermanentProduct2">
                         <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                     </Button>
                 </Grid>
@@ -132,7 +132,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  PreviewMouseWheel="DataGridAddedProducts_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridPermanentProducts_PreviewMouseWheel">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
                     <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
@@ -179,12 +179,16 @@
                     <!--Materiais selecionados-->
                     <Grid Name="GridProducts3" Margin="0">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <!--Resumo-->
-                        <DataGrid Grid.Row="0" Height="685" x:Name="DataGridFinalConsumpterProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                        <TextBlock Grid.Row="0" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Consumíveis" Margin="0 0 0 10"></TextBlock>
+                        <DataGrid Grid.Row="1" Height="685" x:Name="DataGridFinalConsumpterProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -194,8 +198,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
-                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridFinalConsumpterProducts_PreviewMouseWheel">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
@@ -204,7 +207,9 @@
                                 <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <DataGrid Grid.Row="1" Margin="0 15 0 0" Height="685" x:Name="DataGridFinalPermanentProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                        <Separator Grid.Row="2" Margin="0 15 0 0"></Separator>
+                        <TextBlock Grid.Row="3" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Permanentes" Margin="0 20 0 0"></TextBlock>
+                        <DataGrid Grid.Row="4" Margin="0 10 0 0" Height="685" x:Name="DataGridFinalPermanentProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -214,8 +219,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  ScrollViewer.ScrollChanged="DataGrid_ScrollChanged"
-                                  PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridFinalPermanentProducts_PreviewMouseWheel">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
@@ -224,12 +228,12 @@
                                 <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
+                        <Grid Grid.Row="5" Background="#F5F5F5" Margin="0 15 0 0">
                             <StackPanel Orientation="Horizontal">
-                                <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Click="ButtonFinish_Click" Cursor="Hand">
-                                </Button>
-                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click" Content="Imprimir" Cursor="Hand">
-                                </Button>
+                                <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Click="ButtonFinish_Click"  Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="False" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext4" Content="Próximo" Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click"  Content="Imprimir" Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click"  Content="Exportar" Cursor="Hand"></Button>
                             </StackPanel>
                         </Grid>
                     </Grid>
