@@ -702,5 +702,25 @@ namespace SCM2020___Client.Frames
             string register = this.RegisterApplicantTextBox.Text;
             Task.Run(() => GetName(register));
         }
+
+        private void ButtonPrevious1_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonNext2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonNext3_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonPrevious2_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
