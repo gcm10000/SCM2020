@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:SCM2020___Client"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing"
         Title="LoginScreen" Height="500" Width="750" ResizeMode="NoResize">
     <Window.Resources>
         <Style x:Key="Triggers" TargetType="TextBox">

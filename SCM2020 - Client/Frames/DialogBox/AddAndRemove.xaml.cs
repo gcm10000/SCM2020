@@ -21,7 +21,6 @@ namespace SCM2020___Client.Frames.DialogBox
         public AddAndRemove(double QuantityAdded)
         {
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            Owner = Application.Current.MainWindow;
             InitializeComponent();
             Quantity_Textbox.Text = QuantityAdded.ToString();
             //if (Quantity_Textbox.Text == "0")

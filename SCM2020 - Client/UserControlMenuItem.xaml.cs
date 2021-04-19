@@ -23,6 +23,7 @@ namespace SCM2020___Client
         public delegate void FrameChangedHandler(object dataContext, object sender, EventArgs e);
         public event FrameChangedHandler FrameChanged;
         public ListView ListView { get => listViewMenu; }
+        private SubItem PreviousSelectedItem;
         public UserControlMenuItem(ItemMenu itemMenu, Frame frameContent)
         {
             InitializeComponent();
@@ -39,17 +40,30 @@ namespace SCM2020___Client
             var listView = sender as ListView;
             var subItem = listView.SelectedItem as SubItem;
 
-            var isCtrlorShiftDown = (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
-            if ((subItem != null) && isCtrlorShiftDown)
-            {
-                MessageBox.Show("Ctrl ou Shift pressionado!");
-            }
+            var isShiftDown = (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
 
             FrameContent.ContentRendered += FrameContent_ContentRendered;
             
             if (subItem != null)
-                FrameContent.Source = subItem.Source;
+            {
+                if (isShiftDown)
+                {
+                    FrameWindow frame = new FrameWindow(subItem.Source);
+                    frame.Show();
+                    listView.SelectionChanged -= ListViewMenu_SelectionChanged;
+                    listView.SelectedItem = PreviousSelectedItem;
+                    listView.SelectionChanged += ListViewMenu_SelectionChanged;
+                }
+                else
+                {
+                    FrameContent.Source = subItem.Source;
+                }
+            }
 
+            if (PreviousSelectedItem != subItem)
+            {
+                PreviousSelectedItem = subItem;
+            }
         }
 
         private void ListViewItemMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

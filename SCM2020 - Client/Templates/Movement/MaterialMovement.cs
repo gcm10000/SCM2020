@@ -8,6 +8,7 @@ using ModelsLibraryCore;
 using System.Threading.Tasks;
 using System.Linq;
 using SCM2020___Client.Models;
+using Monitoring = ModelsLibraryCore.Monitoring;
 
 namespace SCM2020___Client.Templates.Movement
 {

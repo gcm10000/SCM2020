@@ -237,6 +237,7 @@ namespace SCM2020___Client
             menuQueries.Add(new SubItem("Estoque pela Data", new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Patrimônio", new Uri("Frames/Query/QueryByPatrimony.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Ordem de Serviço por Data", new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Funcionários", new Uri("Frames/Query/QueryUsers.xaml", UriKind.Relative)));
 
             var menuListingItem = new List<SubItem>();
             menuListingItem.Add(new SubItem("Inventário Oficial", new Uri("Frames/Listing/InventoryOfficer.xaml", UriKind.Relative)));

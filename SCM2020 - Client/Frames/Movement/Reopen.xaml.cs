@@ -111,7 +111,7 @@ namespace SCM2020___Client.Frames.Movement
             var result = APIClient.GetData<bool>(uriExistsWorkOrder.ToString(), Helper.Authentication);
             this.Dispatcher.Invoke(() =>
             {
-                this.IconStatus.Visibility = Visibility.Visible;
+                this.PackIconStatus.Visibility = Visibility.Visible;
             });
             if (result)
             {
@@ -119,11 +119,11 @@ namespace SCM2020___Client.Frames.Movement
                 var resultSituation = APIClient.GetData<bool>(uriCheckWorkOrder.ToString(), Helper.Authentication);
                 if (resultSituation)
                 {
-                    //Ordem de serviço existente e em aberto
+                    //Ordem de serviço existente e aberta
                     this.Dispatcher.Invoke(() => 
                     {
-                        this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
-                        this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
                         this.ButtonOpenWO.IsEnabled = true;
                     });
                     return true;
@@ -132,8 +132,8 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     this.Dispatcher.Invoke(() => 
                     {
-                        this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
-                        this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
                     });
                 }
             }
@@ -141,8 +141,8 @@ namespace SCM2020___Client.Frames.Movement
             {
                 this.Dispatcher.Invoke(() =>
                 {
-                    this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
-                    this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                    this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                    this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
                 });
 
             }

@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid Background="#F0F0F0">
-        <ScrollViewer Name="ScrollViewerInfo" Visibility="Collapsed">
+        <ScrollViewer Name="ScrollViewerInfo" Visibility="Visible">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -37,19 +37,22 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="TextBoxWorkOrder" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxWorkOrder_KeyUp"></TextBox>
-                            <materialDesign:PackIcon Visibility="Visible" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="teste" />
+                            <materialDesign:PackIcon Name="PackIconStatus" Visibility="Hidden" Background="Transparent" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="Teste" />
                         </Grid>
                         <TextBlock Text="Data da Ordem de Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
                         <DatePicker Name="DatePickerMovingDate" FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" SelectedDateChanged="DatePickerMovingDate_SelectedDateChanged"></DatePicker>
                         <TextBlock Text="Local do Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="4"></TextBlock>
-                        <TextBox Name="TextBoxServiceLocalization" FontSize="22" Margin="20 15 20 0" Grid.Row="5" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBox Name="TextBoxServiceLocalization" KeyUp="TextBoxServiceLocalization_KeyUp" FontSize="22" Margin="20 15 20 0" Grid.Row="5" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
                         <TextBlock Text="Número da Matrícula do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="6"></TextBlock>
-                        <!--Ativar com key up, não com lost focus-->
-                        <TextBox Name="TextBoxRegisterApplicant" FontSize="22" Margin="20 15 20 0" Grid.Row="7" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBox Name="TextBoxRegisterApplicant" KeyUp="TextBoxRegisterApplicant_KeyUp" FontSize="22" Margin="20 15 20 0" Grid.Row="7" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
                         <TextBlock Text="Nome do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="8"></TextBlock>
-                        <TextBox Name="TextBoxApplicant" IsReadOnly="True" FontSize="22" Margin="20 15 20 0" Grid.Row="9" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBox Name="TextBoxApplicant" IsEnabled="False" KeyUp="TextBoxApplicant_KeyUp" FontSize="22" Margin="20 15 20 0" Grid.Row="9" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
                         <TextBlock Text="Tipo de Saída" FontSize="22" Margin="20 20 20 0" Grid.Row="10"></TextBlock>
-                        <ComboBox Name="ComboBoxOutputType" SelectionChanged="ComboBoxOutputType_SelectionChanged"  FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></ComboBox>
+                        <ComboBox Name="ComboBoxOutputType" SelectedIndex="0" FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3">
+                            <ComboBoxItem>Uso Interno</ComboBoxItem>
+                            <ComboBoxItem>Cautela</ComboBoxItem>
+                            <ComboBoxItem>Uso Externo</ComboBoxItem>
+                        </ComboBox>
                     </Grid>
                     <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">
@@ -72,8 +75,8 @@
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TxtSearchConsumpterProduct" materialDesign:HintAssist.Hint="Produtos consumíveis..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
-                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchConsumpterProduct">
+                    <TextBox x:Name="TxtSearchConsumpterProduct" materialDesign:HintAssist.Hint="Produtos consumíveis..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black" KeyDown="TxtSearchConsumpterProduct_KeyDown"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearchConsumpterProduct" Click="ButtonSearchConsumpterProduct_Click">
                         <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                     </Button>
                 </Grid>
@@ -90,11 +93,19 @@
                                   AutoGenerateColumns="False"
                                   PreviewMouseWheel="DataGridConsumpterProducts_PreviewMouseWheel">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Width="Auto" Header="Opções">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                    <Button x:Name="BtnAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
@@ -116,8 +127,8 @@
                         <ColumnDefinition Width="3*"></ColumnDefinition>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TxtSearchPermanentProduct" materialDesign:HintAssist.Hint="Produtos permanentes..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
-                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchPermanentProduct2">
+                    <TextBox x:Name="TxtSearchPermanentProduct" materialDesign:HintAssist.Hint="Produtos permanentes..." KeyDown="TxtPermanentProductSearch_KeyDown" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearchPermanentProduct" Click="ButtonSearchPermanentProduct_Click">
                         <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                     </Button>
                 </Grid>
@@ -134,27 +145,38 @@
                                   AutoGenerateColumns="False"
                                   PreviewMouseWheel="DataGridPermanentProducts_PreviewMouseWheel">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Width="Auto" Header="Opções">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                    <StackPanel Width="150" Orientation="Vertical">
+                                        <Button x:Name="BtnAddRemovePermanent" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious2" Click="ButtonPrevious2_Click"  Content="Anterior" Cursor="Hand"></Button>
-                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext3" Click="ButtonNext3_Click"  Content="Próximo" Cursor="Hand"></Button>
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext3" Click="ButtonNext3_Click" IsEnabled="False" Content="Próximo" Cursor="Hand"></Button>
                 </StackPanel>
             </Grid>
         </Grid>
         <!--Conclusão-->
-        <ScrollViewer Name="ScrollViewerFinish" Visibility="Visible" Background="#FFF1F1F1">
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" Background="#FFF1F1F1">
             <Grid Margin="30">
                 <StackPanel>
                     <Grid Name="GridData">
                         <StackPanel>
-                            <ItemsControl x:Name="ListView">
+                            <ItemsControl x:Name="ListView" Margin="0 0 0 15">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border Background="White" Margin="0 10 10 10" Width="240" Height="100">
@@ -177,7 +199,7 @@
                         </StackPanel>
                     </Grid>
                     <!--Materiais selecionados-->
-                    <Grid Name="GridProducts3" Margin="0">
+                    <Grid Name="GridFinish" Margin="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
@@ -200,15 +222,23 @@
                                   AutoGenerateColumns="False"
                                   PreviewMouseWheel="DataGridFinalConsumpterProducts_PreviewMouseWheel">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Opções" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                                <Button x:Name="BtnAdded" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                            </materialDesign:PopupBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Separator Grid.Row="2" Margin="0 15 0 0"></Separator>
-                        <TextBlock Grid.Row="3" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Permanentes" Margin="0 20 0 0"></TextBlock>
+                        <TextBlock Grid.Row="3" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Permanentes" Margin="0 30 0 0"></TextBlock>
                         <DataGrid Grid.Row="4" Margin="0 10 0 0" Height="685" x:Name="DataGridFinalPermanentProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
@@ -221,17 +251,26 @@
                                   AutoGenerateColumns="False"
                                   PreviewMouseWheel="DataGridFinalPermanentProducts_PreviewMouseWheel">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=SKU}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Desc}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Stock}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=Added}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="Auto" Header="Opções"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Opções" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                                <Button x:Name="BtnRemove" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemovePermanent_Click"/>
+                                            </materialDesign:PopupBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Grid Grid.Row="5" Background="#F5F5F5" Margin="0 15 0 0">
                             <StackPanel Orientation="Horizontal">
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="True" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious3" Click="ButtonPrevious3_Click" Content="Anterior" Cursor="Hand"></Button>
                                 <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Click="ButtonFinish_Click"  Cursor="Hand"></Button>
-                                <Button Margin="10 10 0 10" IsHitTestVisible="False" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext4" Content="Próximo" Cursor="Hand"></Button>
                                 <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click"  Content="Imprimir" Cursor="Hand"></Button>
                                 <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click"  Content="Exportar" Cursor="Hand"></Button>
                             </StackPanel>
@@ -245,7 +284,8 @@
         --><!--
             https://www.youtube.com/watch?v=Jma5VYwEQcY
             C# WPF Material Design UI: Tab Menu
-        --><!--
+        -->
+    <!--
         <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">

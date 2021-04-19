@@ -17,16 +17,42 @@ using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WebAssemblyLibrary;
 
 namespace SCM2020___Client
 {
     static partial class Helper
     {
         public static readonly string CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        public static string UrlServer
+        { 
+            get 
+            {
+                string pathServer = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Server.json");
+                if (File.Exists(pathServer))
+                {
+                    string jsonSerialized = File.ReadAllText(pathServer);
+                    string server = jsonSerialized.DeserializeJson<Models.ServerJson>().Server;
+                    return server;
+                }
+                else
+                {
+                    Models.ServerJson serverJson = new Models.ServerJson() { Server = "http://192.168.2.100:44306" };
+                    File.WriteAllText(pathServer, serverJson.ToJson());
+                    return serverJson.Server;
+                }
+            }
+            set 
+            {
+                string pathServer = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Server.json");
+                Models.ServerJson serverJson = new Models.ServerJson() { Server = value };
+                File.WriteAllText(pathServer, serverJson.ToJson());
+            }
+        }
         /// <summary>
         /// Endereço do servidor.
         /// </summary>
-        public static Uri Server = new Uri("http://localhost:52991/");
+        public static Uri Server = new Uri(UrlServer);
         /// <summary>
         /// Endereço do controle de API.
         /// </summary>

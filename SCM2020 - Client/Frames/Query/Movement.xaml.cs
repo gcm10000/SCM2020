@@ -119,7 +119,6 @@ namespace SCM2020___Client.Frames.Query
             }
         }
 
-
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -128,6 +127,7 @@ namespace SCM2020___Client.Frames.Query
                 Task.Run(() =>  Search(workOrder));
             }
         }
+
         private void Search(string workOrder)
         {
             //Zerar todos os dados anteriores...

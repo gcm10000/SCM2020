@@ -20,9 +20,11 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Microsoft.VisualBasic;
 using ModelsLibraryCore;
+using Monitoring = SCM2020___Client.Models.Monitoring;
 using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.Frames.Query;
 using WebAssemblyLibrary;
+using MaterialDesignThemes.Wpf;
 
 namespace SCM2020___Client.Frames
 {
@@ -31,9 +33,90 @@ namespace SCM2020___Client.Frames
     /// </summary>
     public partial class MaterialOutput : UserControl
     {
+        public MenuItem CurrentMenuItem
+        {
+            get => currentMenuItem;
+            private set
+            {
+                if (value != null)
+                {
+                    currentMenuItem = value;
+                    switch (value.IdEvent.ToString())
+                    {
+                        case "0":
+                            ShowInfo();
+                            break;
+                        case "1":
+                            ShowConsumpterProducts();
+                            break;
+                        case "2":
+                            ShowPermanentProducts();
+                            break;
+                        case "3":
+                            ShowFinish();
+                            break;
+                    }
+                    ScreenChanged?.Invoke(value, new EventArgs());
+
+                }
+            }
+        }
+        private MenuItem currentMenuItem;
+        public List<MenuItem> Menu { get; private set; }
+        public delegate void MenuDelegate(object sender, EventArgs e);
+        public event MenuDelegate ScreenChanged;
+        public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
+        public event MenuItemEnabled MenuItemEventHandler;
+
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
+        }
+
+        private void ShowInfo()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Visible;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowConsumpterProducts()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Visible;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowPermanentProducts()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Visible;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowFinish()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Visible;
+
+            List<SummaryInfo> infos = new List<SummaryInfo>()
+            {
+                new SummaryInfo("DOC/SM/OS", TextBoxWorkOrder.Text, PackIconKind.Invoice),
+                new SummaryInfo("Data da Ordem de Serviço", DatePickerMovingDate.SelectedDate.Value.ToString("dd/MM/yyyy"), PackIconKind.CalendarToday),
+                new SummaryInfo("Local de Serviço", TextBoxServiceLocalization.Text, PackIconKind.Work),
+                new SummaryInfo("Nome do Solicitante", TextBoxApplicant.Text, PackIconKind.Person),
+            };
+            this.ListView.ItemsSource = infos;
+        }
+
         class ProductToOutput
         {
-            //public string Image { get; set; }
             public int Id { get; set; }
             public int Code { get; set; }
             public double QuantityFuture { get => Quantity - QuantityAdded; }
@@ -45,6 +128,7 @@ namespace SCM2020___Client.Frames
             public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
 
         }
+
         class PermanentProductDataGrid : ProductToOutput
         {
             public string Patrimony { get; set; }
@@ -63,6 +147,7 @@ namespace SCM2020___Client.Frames
 
             }
         }
+
         class SearchPermanentProduct : ModelsLibraryCore.PermanentProduct
         {
             public ModelsLibraryCore.ConsumptionProduct ConsumptionProduct { get; set; }
@@ -74,12 +159,25 @@ namespace SCM2020___Client.Frames
                 ConsumptionProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{this.InformationProduct}").ToString(), Helper.Authentication);
             }
         }
+
         public Monitoring PrincipalMonitoring { get; set; }
         public InfoUser InfoUser { get; set; }
         WebBrowser WebBrowser = Helper.MyWebBrowser;
         public MaterialOutput()
         {
             InitializeComponent();
+
+            Menu = new List<MenuItem>()
+            {
+                new MenuItem(Name: "Informações", 0, true),
+                new MenuItem(Name: "Produtos Consumíveis", 1, false),
+                new MenuItem(Name: "Produtos Permanentes", 2, false),
+                new MenuItem(Name: "Finalização", 3, false)
+            };
+            CurrentMenuItem = Menu[0];
+            this.ComboBoxOutputType.SelectedIndex = 0;
+            this.DatePickerMovingDate.SelectedDate = DateTime.Now;
+
         }
 
         private bool previousOutputExists = false;
@@ -110,6 +208,7 @@ namespace SCM2020___Client.Frames
                 this.DataGridConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridConsumpterProducts.Items.Add(productsToOutput); }));
             }
         }
+
         private void PermanentProductSearch(string query)
         {
             if (query == string.Empty)
@@ -117,54 +216,25 @@ namespace SCM2020___Client.Frames
 
             query = System.Uri.EscapeDataString(query);
 
-
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{query}");
 
-            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
+            this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridPermanentProducts.ItemsSource = null; }));
 
-            var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => string.IsNullOrWhiteSpace(x.WorkOrder));
-            foreach (var product in products)
+            var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
+            List<PermanentProductDataGrid> permanentProducts = new List<PermanentProductDataGrid>();
+            
+            foreach (var permanentProduct in products)
             {
-                PermanentProductDataGrid permanentProductDataGrid = new PermanentProductDataGrid(new SearchPermanentProduct(product));
-                this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridPermanentProducts.Items.Add(permanentProductDataGrid); }));
+                permanentProducts.Add(new PermanentProductDataGrid(new SearchPermanentProduct(permanentProduct)));
             }
+            this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridPermanentProducts.ItemsSource = permanentProducts; }));
         }
+
         private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
         }
-        //private void BtnInformation_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.ButtonInformation.IsHitTestVisible = false;
-        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
-        //    this.ButtonFinish.IsHitTestVisible = true;
 
-        //    this.InfoScrollViewer.Visibility = Visibility.Visible;
-        //    this.InfoDockPanel.Visibility = Visibility.Visible;
-        //    this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        //}
-        //private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.ButtonInformation.IsHitTestVisible = true;
-        //    this.ButtonPermanentProducts.IsHitTestVisible = false;
-        //    this.ButtonFinish.IsHitTestVisible = true;
-
-        //    InfoScrollViewer.Visibility = Visibility.Collapsed;
-        //    InfoDockPanel.Visibility = Visibility.Collapsed;
-        //    PermanentDockPanel.Visibility = Visibility.Visible;
-        //}
-        //private void ButtonFinish_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.ButtonInformation.IsHitTestVisible = true;
-        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
-        //    this.ButtonFinish.IsHitTestVisible = false;
-
-        //    this.InfoScrollViewer.Visibility = Visibility.Collapsed;
-        //    this.InfoDockPanel.Visibility = Visibility.Collapsed;
-        //    this.FinalProductsDockPanel.Visibility = Visibility.Visible;
-        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        //}
         List<ProductToOutput> FinalConsumpterProductsAdded = new List<ProductToOutput>();
         List<ProductToOutput> FinalPermanentProductsAdded = new List<ProductToOutput>();
 
@@ -174,7 +244,7 @@ namespace SCM2020___Client.Frames
             var button = ((FrameworkElement)sender);
             var product = ((FrameworkElement)sender).DataContext as ProductToOutput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
-
+            dialog.Owner = Application.Current.MainWindow;
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
@@ -202,6 +272,9 @@ namespace SCM2020___Client.Frames
                 }
                 DataGridConsumpterProducts.UnselectAll();
                 DataGridFinalConsumpterProducts.UnselectAll();
+                MenuItemEventHandler?.Invoke(3, (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0));
+                this.ButtonFinish.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
+                this.ButtonNext3.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
             }
         }
         private void ProductToAddDataGrid_Selected(object sender, RoutedEventArgs e)
@@ -209,69 +282,13 @@ namespace SCM2020___Client.Frames
             var currentRowIndex = DataGridConsumpterProducts.Items.IndexOf(DataGridConsumpterProducts.CurrentItem);
             MessageBox.Show(currentRowIndex.ToString());
         }
-        private void BtnFinish_Click(object sender, RoutedEventArgs e)
+
+        private void AddOutput(DateTime dateTime, string WorkOrder)
         {
-            if (previousOutputExists)
-                UpdateOutput();
-            else
-                AddOutput();
-        }
-        private void AddOutput()
-        {
-            //AQUI SE ADICIONA UM NOVO MONITORAMENTO E UMA NOVA SAÍDA
-            //SUPONDO QUE NÃO EXISTA UMA NOVA ORDEM DE SERVIÇO...
-            DateTime dateTime = (DatePickerMovingDate.DisplayDate == DateTime.Today) ? (DateTime.Now) : DatePickerMovingDate.DisplayDate;
-
-            var register = TextBoxRegisterApplicant.Text;
-            string userId = string.Empty;
-            try
-            {
-                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
-
-            }
-            catch (HttpRequestException)
-            {
-                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-            var numberSector = TextBoxWorkOrder.Text.Substring(0, 2);
-            Sector sector = null;
-            try
-            {
-                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/{numberSector}").ToString(), Helper.Authentication);
-                //COMPARAR SE O USUÁRIO É DO MESMO SETOR DA ORDEM DE SERVIÇO
-                if (sector != Helper.CurrentSector)
-                {
-                    if (MessageBox.Show("Funcionário não é concernente com o setor da ordem de serviço." + Environment.NewLine + "Deseja continuar?", "Atenção", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-            }
-            catch
-            {
-                //Setor desconhecido...
-                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/99").ToString(), Helper.Authentication);
-            }
-            Monitoring monitoring = new Monitoring()
-            {
-                SCMEmployeeId = Helper.NameIdentifier,
-                Situation = false,
-                ClosingDate = null,
-                EmployeeId = userId,
-                RequestingSector = sector.Id,//o setor é referente ao número da ordem de serviço,
-                MovingDate = dateTime,
-                Work_Order = TextBoxWorkOrder.Text,
-                ServiceLocation = TextBoxServiceLocalization.Text
-            };
-
             //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
-
             var materialOutput = new ModelsLibraryCore.MaterialOutput
             {
-                WorkOrder = TextBoxWorkOrder.Text,
+                WorkOrder = WorkOrder,
                 MovingDate = dateTime,
             };
 
@@ -309,24 +326,13 @@ namespace SCM2020___Client.Frames
 
             Task.Run(() =>
             {
-                var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
-
-                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
-                if (!checkMonitoring)
-                {
-                    //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-                    var result1 = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
-                    MessageBox.Show(result1.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
                 //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
-
                 var result2 = APIClient.PostData(new Uri(Helper.ServerAPI, "Output/Add").ToString(), materialOutput, Helper.Authentication);
                 MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                PrincipalMonitoring = monitoring;
             });
         }
+
         private void UpdateOutput()
         {
             ModelsLibraryCore.MaterialOutput materialOutput = this.previousMaterialOutput;
@@ -393,22 +399,7 @@ namespace SCM2020___Client.Frames
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
-        private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
-        {
-            this.DataGridFinalConsumpterProducts.Visibility = Visibility.Visible;
-            this.DataGridFinalPermanentProducts.Visibility = Visibility.Collapsed;
 
-            //this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
-            //this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
-        }
-        private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
-        {
-            this.DataGridFinalPermanentProducts.Visibility = Visibility.Visible;
-            this.DataGridFinalConsumpterProducts.Visibility = Visibility.Collapsed;
-
-            //this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
-            //this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
-        }
         //Método conveninente somente a produtos permanentes
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
         {
@@ -432,12 +423,19 @@ namespace SCM2020___Client.Frames
             this.DataGridFinalPermanentProducts.Items.Refresh();
             this.DataGridPermanentProducts.UnselectAll();
             this.DataGridFinalPermanentProducts.UnselectAll();
+
+            MenuItemEventHandler?.Invoke(3, (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0));
+            this.ButtonFinish.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
+            this.ButtonNext3.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
+
         }
-        private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
+
+        private void ButtonSearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
             string query = TxtSearchConsumpterProduct.Text;
             Task.Run(() => ConsumpterProductSearch(query));
         }
+
         private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -446,7 +444,7 @@ namespace SCM2020___Client.Frames
                 Task.Run(() => ConsumpterProductSearch(query));
             }
         }
-        private void PermanentProductSearchButton_Click(object sender, RoutedEventArgs e)
+        private void ButtonSearchPermanentProduct_Click(object sender, RoutedEventArgs e)
         {
             string query = TxtSearchPermanentProduct.Text;
             Task.Run(() => { PermanentProductSearch(query); });
@@ -461,27 +459,7 @@ namespace SCM2020___Client.Frames
         }
 
         string previousOS = string.Empty;
-        //KeyUp
-        private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var workOrder = TextBoxWorkOrder.Text;
-            if (previousOS == workOrder)
-                return;
-            Task.Run(() => RescueData(workOrder));
-            previousOS = workOrder;
-
-        }
-        private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            var workOrder = TextBoxWorkOrder.Text;
-            if (e.Key == Key.Enter)
-            {
-                if (previousOS == workOrder)
-                    return;
-                Task.Run(() => RescueData(workOrder));
-                previousOS = workOrder;
-            }
-        }
+        
         private void RescueData(string workOrder)
         {
             /*
@@ -495,19 +473,7 @@ namespace SCM2020___Client.Frames
 
             DataToPrintORExportWasRescued = false;
             workOrder = System.Uri.EscapeDataString(workOrder);
-            Monitoring monitoring = null;
-            try
-            {
-                //Checar objeto monitoramento
-                monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.ServerAPI, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
-
-            }
-            catch (System.Net.Http.HttpRequestException) //Ordem de serviço inexistente
-            {
-                ClearData();
-                InputData(true);
-                return;
-            }
+            Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.ServerAPI, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);
 
             try
             {
@@ -525,7 +491,7 @@ namespace SCM2020___Client.Frames
                 var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
                 previousOutputExists = true;
                 this.previousMaterialOutput = materialOutput;
-                InputData(false);
+                EnableInputData(false);
                 this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DatePickerMovingDate.SelectedDate = monitoring.MovingDate; this.DatePickerMovingDate.DisplayDate = monitoring.MovingDate; }));
                 this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxServiceLocalization.Text = monitoring.ServiceLocation; }));
 
@@ -562,7 +528,7 @@ namespace SCM2020___Client.Frames
                         QuantityAdded = 1,
                         Patrimony = permanentProduct.Patrimony,
                     };
-                    this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Add(productDataGrid); }));
+                    this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(productDataGrid); }));
                     FinalPermanentProductsAdded.Add(productDataGrid);
                 }
 
@@ -571,7 +537,7 @@ namespace SCM2020___Client.Frames
             }
             catch (System.Net.Http.HttpRequestException) //Não existe saída de material nesta ordem de serviço.
             {
-                InputData(true);
+                EnableInputData(true);
             }
             catch (Exception ex)
             {
@@ -586,12 +552,12 @@ namespace SCM2020___Client.Frames
             this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = string.Empty; }));
             this.ComboBoxOutputType.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxOutputType.SelectedIndex = 0; }));
             this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.Text = string.Empty; }));
-            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
+            //this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
             this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Clear(); }));
             this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
         }
 
-        private void InputData(bool IsEnable)
+        private void EnableInputData(bool IsEnable)
         {
             this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = IsEnable; }));
             //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
@@ -604,19 +570,6 @@ namespace SCM2020___Client.Frames
         bool PrintORExport = false;
         string Document = string.Empty;
 
-        private void BtnPrint_Click(object sender, RoutedEventArgs e)
-        {
-            if (!DataToPrintORExportWasRescued)
-            {
-                DataToPrintORExportWasRescued = true;
-            }
-            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
-            PrintORExport = true;
-            Document = movement.RenderizeHtml();
-            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.WebBrowser.NavigateToString(Document);
-
-        }
         private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             Helper.SetOptionsToPrint();
@@ -655,21 +608,6 @@ namespace SCM2020___Client.Frames
             this.WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
-
-        private void BtnExport_Click(object sender, RoutedEventArgs e)
-        {
-            if (!DataToPrintORExportWasRescued)
-            {
-                DataToPrintORExportWasRescued = true;
-            }
-
-            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
-
-            PrintORExport = false;
-            Document = movement.RenderizeHtml();
-            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
-            this.WebBrowser.NavigateToString(Document);
-        }
         private void GetName(string register)
         {
             if (string.IsNullOrWhiteSpace(register))
@@ -685,68 +623,163 @@ namespace SCM2020___Client.Frames
             }
             catch (HttpRequestException)
             {
-                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-        }
-
-        private void RegisterApplicantTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string register = this.TextBoxRegisterApplicant.Text;
-                Task.Run(() => GetName(register));
-            }
-        }
-
-        private void RegisterApplicantTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            string register = this.TextBoxRegisterApplicant.Text;
-            Task.Run(() => GetName(register));
         }
 
         private void ButtonPrevious1_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void ButtonNext2_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ButtonNext3_Click(object sender, RoutedEventArgs e)
-        {
-
+            CurrentMenuItem = Menu[0];
         }
 
         private void ButtonPrevious2_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void ButtonExport_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ComboBoxOutputType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            CurrentMenuItem = Menu[1];
         }
 
         private void ButtonNext1_Click(object sender, RoutedEventArgs e)
         {
+            CurrentMenuItem = Menu[1];
+        }
 
+        private void ButtonNext2_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[2];
+        }
+
+        private void ButtonNext3_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[3];
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataToPrintORExportWasRescued)
+            {
+                DataToPrintORExportWasRescued = true;
+            }
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
+            PrintORExport = true;
+            Document = movement.RenderizeHtml();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DataToPrintORExportWasRescued)
+            {
+                DataToPrintORExportWasRescued = true;
+            }
+
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
+
+            PrintORExport = false;
+            Document = movement.RenderizeHtml();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
+        }
+
+        private bool AllowNext1()
+        {
+            bool WO = this.TextBoxWorkOrder.Text != string.Empty;
+            bool DateWO = this.DatePickerMovingDate.SelectedDate != null;
+            bool ServiceLocalization = this.TextBoxServiceLocalization.Text != string.Empty;
+            bool TextBoxApplicant = this.TextBoxApplicant.Text != string.Empty;
+            bool ComboBoxOutputType = this.ComboBoxOutputType.Text != string.Empty;
+
+            return WO && DateWO && ServiceLocalization && TextBoxApplicant && ComboBoxOutputType;
+        }
+
+        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
+        {
+            var workOrder = TextBoxWorkOrder.Text;
+            if (previousOS == workOrder)
+                return;
+            Task.Run(() => 
+            {
+                bool existMonitoring = false;
+                try
+                {
+                    existMonitoring = Monitoring.ExistsMonitoring(workOrder);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.PackIconStatus.Visibility = Visibility.Visible;
+                    });
+                }
+                catch
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                        this.PackIconStatus.ToolTip = "Campo vazio";
+
+                        this.ButtonFinish.IsEnabled = false;
+                    });
+                    return;
+                }
+
+                if (existMonitoring)
+                {
+                    //Ordem de serviço existente
+                    bool checkWorkOrder = Monitoring.CheckWorkOrder(workOrder);
+                    if (checkWorkOrder) //Ordem de serviço fechada
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                            this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                            this.PackIconStatus.ToolTip = "Ordem de serviço fechada";
+                            RescueData(workOrder);
+                            EnableInputData(true);
+                            this.ButtonFinish.IsEnabled = false;
+                        });
+                    }
+                    else //Ordem de serviço aberta
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
+                            this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                            this.PackIconStatus.ToolTip = "Ordem de serviço aberta";
+                            RescueData(workOrder);
+                            this.ButtonFinish.IsEnabled = true;
+                        });
+                    }
+                }
+                else
+                {
+                    //Ordem de serviço inexistente
+                    this.Dispatcher.Invoke(() => 
+                    {
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.PackIconStatus.ToolTip = "Ordem de serviço disponível";
+                        ClearData();
+                        EnableInputData(true);
+
+                        this.ButtonFinish.IsEnabled = true;
+                    });
+                }
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.ButtonNext1.IsEnabled = AllowNext1();
+                    this.ButtonNext3.IsEnabled = AllowNext1();
+                    MenuItemEventHandler?.Invoke(1, AllowNext1());
+                    MenuItemEventHandler?.Invoke(2, AllowNext1());
+                    MenuItemEventHandler?.Invoke(3, AllowNext1());
+                });
+            });
+            previousOS = workOrder;
+        }
+
+        private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+            MenuItemEventHandler?.Invoke(1, AllowNext1());
+            MenuItemEventHandler?.Invoke(2, AllowNext1());
         }
 
         private void DataGridConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -771,13 +804,108 @@ namespace SCM2020___Client.Frames
 
         private void ButtonFinish_Click(object sender, RoutedEventArgs e)
         {
-
+            string workOrder = this.TextBoxWorkOrder.Text;
+            DateTime dateTime = (DatePickerMovingDate.DisplayDate == DateTime.Today) ? (DateTime.Now) : DatePickerMovingDate.DisplayDate;
+            string register = TextBoxRegisterApplicant.Text;
+            string serviceLocation = TextBoxServiceLocalization.Text;
+            string numberSector = TextBoxWorkOrder.Text.Substring(0, 2);
+            Task.Run(() =>
+            {
+                if (Monitoring.ExistsMonitoring(workOrder))
+                {
+                    UpdateOutput();
+                }
+                else
+                {
+                    AddMonitoring(dateTime, register, numberSector, workOrder, serviceLocation);
+                    AddOutput(dateTime, workOrder);
+                }
+            });
         }
 
-        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        private void AddMonitoring(DateTime dateTime, string register, string numberSector, string workOrder, string serviceLocation)
         {
 
+            string userId = string.Empty;
+            try
+            {
+                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
+
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            Sector sector = null;
+            try
+            {
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/{numberSector}").ToString(), Helper.Authentication);
+                //COMPARAR SE O USUÁRIO É DO MESMO SETOR DA ORDEM DE SERVIÇO
+                if (sector != Helper.CurrentSector)
+                {
+                    if (MessageBox.Show("Funcionário não é concernente com o setor da ordem de serviço." + Environment.NewLine + "Deseja continuar?", "Atenção", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                //Setor desconhecido...
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/99").ToString(), Helper.Authentication);
+            }
+
+            Monitoring monitoring = new Monitoring()
+            {
+                SCMEmployeeId = Helper.NameIdentifier,
+                Situation = false,
+                ClosingDate = null,
+                EmployeeId = userId,
+                RequestingSector = sector.Id,//o setor é referente ao número da ordem de serviço,
+                MovingDate = dateTime,
+                Work_Order = workOrder,
+                ServiceLocation = serviceLocation
+            };
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
+            MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            PrincipalMonitoring = monitoring;
         }
 
+        private void TextBoxRegisterApplicant_KeyUp(object sender, KeyEventArgs e)
+        {
+            string register = this.TextBoxRegisterApplicant.Text;
+            Task.Run(() => 
+            {
+                GetName(register);
+                this.Dispatcher.Invoke(() => 
+                {
+                    this.ButtonNext1.IsEnabled = AllowNext1();
+                    MenuItemEventHandler?.Invoke(1, AllowNext1());
+                    MenuItemEventHandler?.Invoke(2, AllowNext1());
+                });
+            });
+
+        }
+
+        private void TextBoxApplicant_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+        }
+
+        private void TextBoxServiceLocalization_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+        }
+
+        private void ButtonPrevious3_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[2];
+        }
     }
 }

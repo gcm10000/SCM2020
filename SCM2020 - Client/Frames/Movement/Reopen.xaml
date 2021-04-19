@@ -29,7 +29,7 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" KeyDown="TextBoxWorkOrder_KeyDown" LostFocus="TextBoxWorkOrder_LostFocus" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
-                            <materialDesign:PackIcon Name="IconStatus" Visibility="Hidden" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <materialDesign:PackIcon Name="PackIconStatus" Visibility="Hidden" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Background="Transparent" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
