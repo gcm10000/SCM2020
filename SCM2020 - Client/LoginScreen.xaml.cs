@@ -30,7 +30,6 @@ namespace SCM2020___Client
     /// </summary>
     public partial class LoginScreen : Window
     {
-
         public LoginScreen()
         {
 
@@ -57,6 +56,7 @@ namespace SCM2020___Client
         {
             ConnectServer();
         }
+
         private void ConnectServer()
         {
             //user 59450
@@ -83,6 +83,7 @@ namespace SCM2020___Client
                 }
             });
         }
+
         private bool SignIn(string user, string password)
         {
             try
