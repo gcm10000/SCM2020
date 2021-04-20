@@ -171,7 +171,7 @@
             </Grid>
         </Grid>
         <!--Conclusão-->
-        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" Background="#FFF1F1F1">
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" PreviewMouseWheel="ScrollViewerFinish_PreviewMouseWheel" Background="#FFF1F1F1">
             <Grid Margin="30">
                 <StackPanel>
                     <Grid Name="GridData">
@@ -220,7 +220,9 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  PreviewMouseWheel="DataGridFinalConsumpterProducts_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridFinalConsumpterProducts_PreviewMouseWheel"
+                                  Mouse.PreviewMouseMove="DataGridFinalConsumpterProducts_PreviewMouseMove"
+                                  Mouse.MouseLeave="DataGridFinalConsumpterProducts_MouseLeave">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
@@ -249,7 +251,9 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   AutoGenerateColumns="False"
-                                  PreviewMouseWheel="DataGridFinalPermanentProducts_PreviewMouseWheel">
+                                  PreviewMouseWheel="DataGridFinalPermanentProducts_PreviewMouseWheel"
+                                  Mouse.PreviewMouseMove="DataGridFinalPermanentProducts_PreviewMouseMove"
+                                  Mouse.MouseLeave="DataGridFinalPermanentProducts_MouseLeave">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>

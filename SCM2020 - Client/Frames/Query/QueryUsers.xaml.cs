@@ -42,14 +42,15 @@ namespace SCM2020___Client.Frames.Query
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
         {
             string queryUser = TxtSearch.Text;
             Task.Run(() => Search(queryUser));
         }
+
         private void Search(string queryUser)
         {
-            this.UsersDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.UsersDataGrid.Items.Clear(); }));
+            this.DataGridUsers.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridUsers.Items.Clear(); }));
             ButtonEnable(false);
             
             try
@@ -67,7 +68,7 @@ namespace SCM2020___Client.Frames.Query
                         Sector = user.Sector.NameSector,
                         ThirdParty = user.ThirdParty,
                     };
-                    this.UsersDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.UsersDataGrid.Items.Add(userToAdd); }));
+                    this.DataGridUsers.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridUsers.Items.Add(userToAdd); }));
                     ListUsers.Add(userToAdd);
                 }
                 queryUsers = new Templates.Query.QueryUsers(ListUsers);
@@ -81,15 +82,15 @@ namespace SCM2020___Client.Frames.Query
 
         private void ButtonEnable(bool isEnable)
         {
-            this.Export_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Export_Button.IsEnabled = isEnable; }));
-            this.Print_Button.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.Print_Button.IsEnabled = isEnable; }));
+            this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = isEnable; }));
+            this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = isEnable; }));
         }
         private void UsersDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             e.Cancel = true;
         }
 
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = true;
             
@@ -99,7 +100,7 @@ namespace SCM2020___Client.Frames.Query
 
         }
 
-        private void Export_Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
         {
             PrintORExport = false;
 
@@ -145,5 +146,14 @@ namespace SCM2020___Client.Frames.Query
             webBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
 
+        private void DataGridUsers_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void DataGridUsers_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
+        }
     }
 }

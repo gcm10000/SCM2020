@@ -794,7 +794,24 @@ namespace SCM2020___Client.Frames
 
         private void DataGridFinalConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
         }
 
         private void DataGridFinalPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -906,6 +923,75 @@ namespace SCM2020___Client.Frames
         private void ButtonPrevious3_Click(object sender, RoutedEventArgs e)
         {
             CurrentMenuItem = Menu[2];
+        }
+
+        bool DataGridConsumpterProductFocus = false;
+        bool DataGridPermanentProductFocus = false;
+
+        private void ScrollViewerFinish_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            
+            var dtFinalConsumpter = DataGridFinalConsumpterProducts;
+            var dtFinalPermanent = DataGridFinalPermanentProducts;
+
+            var scrollViewerFinalConsumpter = dtFinalConsumpter.GetScrollViewer();
+            var scrollViewerFinalPermanent = dtFinalPermanent.GetScrollViewer();
+
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (DataGridConsumpterProductFocus || DataGridPermanentProductFocus)
+                {
+                    return;
+                }
+            }
+
+            if (e.Delta < 0) //Para baixo
+            {
+                if (((scrollViewerFinalConsumpter.VerticalOffset == scrollViewerFinalConsumpter.ScrollableHeight)))
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+                if ((scrollViewerFinalPermanent.VerticalOffset == scrollViewerFinalPermanent.ScrollableHeight) && DataGridPermanentProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+            else if (e.Delta > 0) //Para cima
+            {
+                if ((scrollViewerFinalConsumpter.VerticalOffset == 0) && DataGridConsumpterProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+                if ((scrollViewerFinalPermanent.VerticalOffset == 0) && DataGridPermanentProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void DataGridFinalConsumpterProducts_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            DataGridConsumpterProductFocus = true;
+        }
+
+        private void DataGridFinalConsumpterProducts_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DataGridConsumpterProductFocus = false;
+        }
+
+        private void DataGridFinalPermanentProducts_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            DataGridPermanentProductFocus = true;
+        }
+
+        private void DataGridFinalPermanentProducts_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DataGridPermanentProductFocus = false;
         }
     }
 }

@@ -246,16 +246,17 @@ namespace SCM2020___Client
             //menuListingItem.Add(new SubItem("Financeiro (em breve)", new Uri("Frames/Listing/Financial.xaml", UriKind.Relative)));
 
 
-            var item0 = new ItemMenu("Painel de Controle", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.ViewDashboardOutline, new Uri("Frames/Usercontrol1.xaml", UriKind.Relative));
+            //var item0 = new ItemMenu("Painel de Controle", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.ViewDashboardOutline, new Uri("Frames/Usercontrol1.xaml", UriKind.Relative));
             var item1 = new ItemMenu("Movimentações", menuMovement, MaterialDesignThemes.Wpf.PackIconKind.ImportExport);
             var item2 = new ItemMenu("Cadastros", menuRegister, MaterialDesignThemes.Wpf.PackIconKind.AddCircleOutline);
             var item3 = new ItemMenu("Consultas", menuQueries, MaterialDesignThemes.Wpf.PackIconKind.Search);
             var item4 = new ItemMenu("Relatórios", menuListingItem, MaterialDesignThemes.Wpf.PackIconKind.BooksVariant);
+            var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People, new Uri("Frames/UserManager/UserManager.xaml", UriKind.Relative));
             //var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People);
 
-            var s1 = new UserControlMenuItem(item0, this.FrameContent);
-            s1.FrameChanged += FrameChanged;
-            Menu.Children.Add(s1);
+            //var s1 = new UserControlMenuItem(item0, this.FrameContent);
+            //s1.FrameChanged += FrameChanged;
+            //Menu.Children.Add(s1);
 
             var s2 = new UserControlMenuItem(item1, this.FrameContent);
             s2.FrameChanged += FrameChanged;
@@ -269,8 +270,6 @@ namespace SCM2020___Client
             var s5 = new UserControlMenuItem(item4, this.FrameContent);
             s5.FrameChanged += FrameChanged;
             Menu.Children.Add(s5);
-            
-            s2.listViewMenu.ToString();
         }
 
         private void FrameChanged(object dataContext, object sender, EventArgs e)
@@ -300,7 +299,6 @@ namespace SCM2020___Client
                         userControlMenuItem.listViewMenu.SelectedIndex = -1;
                     }
                 }
-                
             }
         }
 
@@ -369,7 +367,6 @@ namespace SCM2020___Client
             this.StackPanelMenuHorizontal.Children.Clear();
             this.GridCursor.Visibility = Visibility.Hidden;
             GridCursor.Margin = new Thickness((0), 0, 0, 0);
-
 
             var src = FrameContent.Content;
             //MessageBox.Show(FrameContent.Source.ToString());
