@@ -111,13 +111,25 @@ namespace SCM2020___Server.Controllers
                 return Ok();
 
             string[] querySplited = query.Trim().Split(' ');
+            
+            var firstNumber = querySplited.FirstOrDefault(x => x.IsDigitsOnly());
 
-            var lproduct = context.ConsumptionProduct.ToList()
-                .Where(x => x.Description.MultiplesContainsWords(querySplited) || x.Code.ToString().Contains(query));
+            IEnumerable<ConsumptionProduct> lproduct = null;
+            if ((firstNumber != null) && (querySplited.Length > 1))
+            {
+                lproduct = context.ConsumptionProduct.ToList()
+                    .Where(x => string.Join(" ", x.Description, x.Code).MultiplesContainsWords(querySplited));
+            }
+            else
+            {
+                lproduct = context.ConsumptionProduct.ToList()
+                    .Where(x => x.Description.MultiplesContainsWords(querySplited) || x.Code.ToString().Contains(query));
+            }
+
             if (query.IsDigitsOnly())
             {
                 lproduct = lproduct.AsEnumerable()
-                        .OrderBy(x => !x.Code.ToString().Contains(query))
+                        .OrderBy(x => x.Code)
                         .ToList();
             }
             return Ok(lproduct);
@@ -141,7 +153,6 @@ namespace SCM2020___Server.Controllers
 
             return Ok(listInventory);
         }
-        [AllowAnonymous]
         [HttpGet("NextNumber")]
         public int NextNumber()
         {
@@ -158,7 +169,6 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Produto removido com sucesso.");
         }
-        [AllowAnonymous]
         [HttpPost("UploadImage")]
         public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
         {

@@ -37,7 +37,7 @@ namespace SCM2020___Client
                 }
                 else
                 {
-                    Models.ServerJson serverJson = new Models.ServerJson() { Server = "http://192.168.2.100:44306" };
+                    Models.ServerJson serverJson = new Models.ServerJson() { Server = "http://localhost:52991" };
                     File.WriteAllText(pathServer, serverJson.ToJson());
                     return serverJson.Server;
                 }
