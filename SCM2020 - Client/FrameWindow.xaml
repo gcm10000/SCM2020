@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SCM2020___Client"
         mc:Ignorable="d"
-        Title="FrameWindow" Height="450" Width="800">
+        Title="Sistema de Controle de Materiais" Height="450" Width="800">
     <Grid>
         <Frame x:Name="FrameContent" NavigationUIVisibility="Hidden"></Frame>
     </Grid>

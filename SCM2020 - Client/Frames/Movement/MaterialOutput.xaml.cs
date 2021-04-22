@@ -180,7 +180,6 @@ namespace SCM2020___Client.Frames
 
         }
 
-        private bool previousOutputExists = false;
         private ModelsLibraryCore.MaterialOutput previousMaterialOutput = null;
         private void ConsumpterProductSearch(string query)
         {
@@ -488,48 +487,52 @@ namespace SCM2020___Client.Frames
                     return; //DISABLE FILLING DATA.
                 }
                 //ID -> MATRÍCULA
-                var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
-                previousOutputExists = true;
-                this.previousMaterialOutput = materialOutput;
-                EnableInputData(false);
                 this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DatePickerMovingDate.SelectedDate = monitoring.MovingDate; this.DatePickerMovingDate.DisplayDate = monitoring.MovingDate; }));
                 this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxServiceLocalization.Text = monitoring.ServiceLocation; }));
 
                 this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxRegisterApplicant.Text = InfoUser.Register; }));
                 this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxApplicant.Text = InfoUser.Name; }));
+                EnableInputData(false);
 
-                this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Clear(); }));
-                this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
-                foreach (var item in materialOutput.ConsumptionProducts)
+                var existsOutput = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"Output/ExistsOutputByWorkOrder/{workOrder}").ToString(), Helper.Authentication);
+                if (existsOutput)
                 {
-                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    ProductToOutput productToOutput = new ProductToOutput()
+                    var materialOutput = APIClient.GetData<ModelsLibraryCore.MaterialOutput>(new Uri(Helper.ServerAPI, $"Output/workOrder/{workOrder}").ToString(), Helper.Authentication);
+                    this.previousMaterialOutput = materialOutput;
+
+                    this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Clear(); }));
+                    this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalPermanentProducts.Items.Clear(); }));
+                    foreach (var item in materialOutput.ConsumptionProducts)
                     {
-                        Id = item.ProductId,
-                        QuantityAdded = item.Quantity,
-                        Description = consumpterProduct.Description,
-                        Code = consumpterProduct.Code,
-                        Quantity = consumpterProduct.Stock,
-                        ConsumptionProduct = item
-                    };
-                    this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action (() => { DataGridFinalConsumpterProducts.Items.Add(productToOutput); }));
-                    FinalConsumpterProductsAdded.Add(productToOutput);
-                }
-                foreach (var item in materialOutput.PermanentProducts)
-                {
-                    var permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
-                    var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
-                    PermanentProductDataGrid productDataGrid = new PermanentProductDataGrid()
+                        var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        ProductToOutput productToOutput = new ProductToOutput()
+                        {
+                            Id = item.ProductId,
+                            QuantityAdded = item.Quantity,
+                            Description = consumpterProduct.Description,
+                            Code = consumpterProduct.Code,
+                            Quantity = consumpterProduct.Stock,
+                            ConsumptionProduct = item
+                        };
+                        this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumpterProducts.Items.Add(productToOutput); }));
+                        FinalConsumpterProductsAdded.Add(productToOutput);
+                    }
+                    foreach (var item in materialOutput.PermanentProducts)
                     {
-                        Id = item.ProductId,
-                        Code = consumpterProduct.Code,
-                        Description = consumpterProduct.Description,
-                        Quantity = consumpterProduct.Stock,
-                        QuantityAdded = 1,
-                        Patrimony = permanentProduct.Patrimony,
-                    };
-                    this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(productDataGrid); }));
-                    FinalPermanentProductsAdded.Add(productDataGrid);
+                        var permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                        var consumpterProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                        PermanentProductDataGrid productDataGrid = new PermanentProductDataGrid()
+                        {
+                            Id = item.ProductId,
+                            Code = consumpterProduct.Code,
+                            Description = consumpterProduct.Description,
+                            Quantity = consumpterProduct.Stock,
+                            QuantityAdded = 1,
+                            Patrimony = permanentProduct.Patrimony,
+                        };
+                        this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(productDataGrid); }));
+                        FinalPermanentProductsAdded.Add(productDataGrid);
+                    }
                 }
 
                 this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
@@ -880,7 +883,15 @@ namespace SCM2020___Client.Frames
             {
                 if (Monitoring.ExistsMonitoring(workOrder))
                 {
-                    UpdateOutput();
+                    var existsOutput = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"Output/ExistsOutputByWorkOrder/{System.Uri.EscapeDataString(workOrder)}").ToString(), Helper.Authentication);
+                    if (existsOutput)
+                    {
+                        UpdateOutput();
+                    }
+                    else
+                    {
+                        AddOutput(dateTime, workOrder);
+                    }
                 }
                 else
                 {

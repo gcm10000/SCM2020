@@ -42,6 +42,15 @@ namespace SCM2020___Server.Controllers
             var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
             return Ok(output);
         }
+
+        [HttpGet("ExistsOutputByWorkOrder/{workorder}")]
+        public IActionResult ExistsOutputByWorkOrder(string workorder)
+        {
+            workorder = System.Uri.UnescapeDataString(workorder);
+            var result = context.MaterialOutput.Any(x => x.WorkOrder == workorder);
+            return Ok(result);
+        }
+
         [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
