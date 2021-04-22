@@ -42,6 +42,8 @@
                                   AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ordem de Serviço" Binding="{Binding WorkOrder}" Width="Auto"/>
+                    <DataGridTextColumn Header="Matrícula do Solicitante" Binding="{Binding RegisterApplicant}" Width="Auto"/>
+                    <DataGridTextColumn Header="Solicitante" Binding="{Binding Applicant}" Width="Auto"/>
                     <DataGridTextColumn Header="Data Inicial" Binding="{Binding Path=MovingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
                     <DataGridTextColumn Header="Data de Fechamento" Binding="{Binding Path=ClosingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="Auto"/>
                 </DataGrid.Columns>

@@ -77,11 +77,16 @@ namespace SCM2020___Client.Frames.Query
                 List<Models.QueryWorkOrderByDate> dataQuery = new List<Models.QueryWorkOrderByDate>();
                 foreach (var item in result)
                 {
+                    //item.EmployeeId
+                    var infoUser = APIClient.GetData<ModelsLibraryCore.InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{item.EmployeeId}").ToString(), Helper.Authentication);
+                    
                     SCM2020___Client.Models.QueryWorkOrderByDate workorder = new SCM2020___Client.Models.QueryWorkOrderByDate()
                     {
                         WorkOrder = item.Work_Order,
                         MovingDate = item.MovingDate,
-                        ClosingDate = item.ClosingDate
+                        ClosingDate = item.ClosingDate,
+                        RegisterApplicant = infoUser.Register,
+                        Applicant = infoUser.Name
                     };
                     dataQuery.Add(workorder);
                 }
