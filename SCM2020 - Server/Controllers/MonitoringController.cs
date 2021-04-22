@@ -63,7 +63,6 @@ namespace SCM2020___Server.Controllers
             return Ok(result);
         }
         //[Authorize(Roles = Roles.Administrator)]
-        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
@@ -166,13 +165,26 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            //Checa monivomentações referente a ordem de serviço
+            //Checa movimentação referente a ordem de serviço
             var monitoring = context.Monitoring.Find(id);
             if ((context.MaterialOutput.Any(x => x.WorkOrder == monitoring.Work_Order)) || context.MaterialInput.Any(x => x.WorkOrder == monitoring.Work_Order))
                 return BadRequest("Já contém movimentações nesta ordem de serviço. Para remover o monitoramento, remova as movimentações.");
             context.Monitoring.Remove(monitoring);
             await context.SaveChangesAsync();
             return Ok("Monitoramento removida com sucesso.");
+        }
+
+        [HttpDelete("RemoveByWorkOrder/{workOrder}")]
+        public async Task<IActionResult> RemoveByWorkOrder(string workOrder)
+        {
+            workOrder = System.Uri.UnescapeDataString(workOrder);
+            //Checa movimentação referente a ordem de serviço
+            var monitoring = context.Monitoring.Single(x => x.Work_Order == workOrder);
+            if ((context.MaterialOutput.Any(x => x.WorkOrder == monitoring.Work_Order)) || context.MaterialInput.Any(x => x.WorkOrder == monitoring.Work_Order))
+                return BadRequest("Já contém movimentações nesta ordem de serviço. Para remover o monitoramento, remova as movimentações.");
+            context.Monitoring.Remove(monitoring);
+            await context.SaveChangesAsync();
+            return Ok("Monitoramento removido com sucesso.");
         }
     }
 }

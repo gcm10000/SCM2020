@@ -66,7 +66,6 @@ namespace SCM2020___Server.Controllers
             return Ok(outputs);
         }
         //[Authorize(Roles = Roles.Administrator)]
-        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {

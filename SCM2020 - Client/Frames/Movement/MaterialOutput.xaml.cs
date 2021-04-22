@@ -305,7 +305,7 @@ namespace SCM2020___Client.Frames
 
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
-                    Date = materialOutput.MovingDate,
+                    Date = DateTime.Now,
                     Quantity = outputProduct.QuantityAdded,
                     ProductId = outputProduct.Id, //verificar se o ID é o mesmo do produto...
                     SCMEmployeeId = Helper.NameIdentifier
@@ -370,14 +370,14 @@ namespace SCM2020___Client.Frames
 
             foreach (var item in FinalPermanentProductsAdded)
             {
-                //Se no DataGrid de produtos permanentes finais não conter o produto, será removido da lista
+                //Se no DataGrid de produtos permanentes finais não conter o produto, o material será removido da lista
                 if (!DataGridFinalPermanentProducts.Items.Contains(item))
                 {
                     var permanentProduct = materialOutput.PermanentProducts.Single(x => x.ProductId == item.Id);
                     materialOutput.PermanentProducts.Remove(permanentProduct);
                 }
 
-                //Se na lista final não conter o produto permanente, então trate de adicionar.
+                //Se na lista de produtos permanentes da movimentação de saída não conter o produto permanente desejado, então trate de adicionar.
                 if (!materialOutput.PermanentProducts.Any(x => x.ProductId == item.Id))
                 {
                     if (item.NewProduct)
@@ -458,7 +458,7 @@ namespace SCM2020___Client.Frames
             }
         }
 
-        string previousOS = string.Empty;
+        string previousWorkOrder = string.Empty;
         
         private void RescueData(string workOrder)
         {
@@ -560,7 +560,6 @@ namespace SCM2020___Client.Frames
         private void EnableInputData(bool IsEnable)
         {
             this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = IsEnable; }));
-            //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
             this.ComboBoxOutputType.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxOutputType.IsEnabled = IsEnable; }));
             this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.IsEnabled = IsEnable; }));
             this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = IsEnable; }));
@@ -695,7 +694,7 @@ namespace SCM2020___Client.Frames
         private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
         {
             var workOrder = TextBoxWorkOrder.Text;
-            if (previousOS == workOrder)
+            if (previousWorkOrder == workOrder)
                 return;
             Task.Run(() => 
             {
@@ -772,7 +771,7 @@ namespace SCM2020___Client.Frames
                     MenuItemEventHandler?.Invoke(3, AllowNext1());
                 });
             });
-            previousOS = workOrder;
+            previousWorkOrder = workOrder;
         }
 
         private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -784,12 +783,46 @@ namespace SCM2020___Client.Frames
 
         private void DataGridConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
         }
 
         private void DataGridPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
         }
 
         private void DataGridFinalConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -816,7 +849,24 @@ namespace SCM2020___Client.Frames
 
         private void DataGridFinalPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
         }
 
         private void ButtonFinish_Click(object sender, RoutedEventArgs e)
@@ -834,10 +884,27 @@ namespace SCM2020___Client.Frames
                 }
                 else
                 {
-                    AddMonitoring(dateTime, register, numberSector, workOrder, serviceLocation);
-                    AddOutput(dateTime, workOrder);
+                    try
+                    {
+                        AddMonitoring(dateTime, register, numberSector, workOrder, serviceLocation);
+                        AddOutput(dateTime, workOrder);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Ocorreu um erro durante o cadastro da ordem de serviço", MessageBoxButton.OK, MessageBoxImage.Error);
+                        RemoveMonitoring(workOrder);
+                    }
                 }
             });
+        }
+
+        private void RemoveMonitoring(string workOrder)
+        {
+            workOrder = System.Uri.EscapeDataString(workOrder);
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"Monitoring/RemoveByWorkOrder/{workOrder}").ToString(), Helper.Authentication);
+            MessageBox.Show(result.DeserializeJson<string>(), "Finalização", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void AddMonitoring(DateTime dateTime, string register, string numberSector, string workOrder, string serviceLocation)

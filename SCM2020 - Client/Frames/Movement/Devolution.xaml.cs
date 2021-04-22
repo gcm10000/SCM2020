@@ -1,9 +1,12 @@
-﻿using ModelsLibraryCore;
+﻿using MaterialDesignThemes.Wpf;
+using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
 using SCM2020___Client.Frames.Query;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -21,6 +24,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using WebAssemblyLibrary;
+using Monitoring = SCM2020___Client.Models.Monitoring;
 
 namespace SCM2020___Client.Frames.Movement
 {
@@ -29,9 +33,92 @@ namespace SCM2020___Client.Frames.Movement
     /// </summary>
     public partial class Devolution : UserControl
     {
+
+        public MenuItem CurrentMenuItem
+        {
+            get => currentMenuItem;
+            private set
+            {
+                if (value != null)
+                {
+                    currentMenuItem = value;
+                    switch (value.IdEvent.ToString())
+                    {
+                        case "0":
+                            ShowInfo();
+                            break;
+                        case "1":
+                            ShowConsumpterProducts();
+                            break;
+                        case "2":
+                            ShowPermanentProducts();
+                            break;
+                        case "3":
+                            ShowFinish();
+                            break;
+                    }
+                    ScreenChanged?.Invoke(value, new EventArgs());
+
+                }
+            }
+        }
+
+        private MenuItem currentMenuItem;
+        public List<MenuItem> Menu { get; private set; }
+        public delegate void MenuDelegate(object sender, EventArgs e);
+        public event MenuDelegate ScreenChanged;
+        public delegate void MenuItemEnabled(int IdEvent, bool IsEnabled);
+        public event MenuItemEnabled MenuItemEventHandler;
+
+        public void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            CurrentMenuItem = Menu[int.Parse(button.Uid)];
+        }
+
+        private void ShowInfo()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Visible;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowConsumpterProducts()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Visible;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowPermanentProducts()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Visible;
+            this.ScrollViewerFinish.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowFinish()
+        {
+            this.ScrollViewerInfo.Visibility = Visibility.Collapsed;
+            this.GridConsumpterProducts.Visibility = Visibility.Collapsed;
+            this.GridPermanentProducts.Visibility = Visibility.Collapsed;
+            this.ScrollViewerFinish.Visibility = Visibility.Visible;
+
+            List<SummaryInfo> infos = new List<SummaryInfo>()
+            {
+                new SummaryInfo("DOC/SM/OS", TextBoxWorkOrder.Text, PackIconKind.Invoice),
+                new SummaryInfo("Data da Ordem de Serviço", DatePickerMovingDate.SelectedDate.Value.ToString("dd/MM/yyyy"), PackIconKind.CalendarToday),
+                new SummaryInfo("Local de Serviço", TextBoxServiceLocalization.Text, PackIconKind.Work),
+                new SummaryInfo("Nome do Solicitante", TextBoxApplicant.Text, PackIconKind.Person),
+            };
+            this.ListView.ItemsSource = infos;
+        }
+
         class ConsumpterProductDataGrid
         {
-            //public string Image { get; set; }
             public int Id { get; set; }
             public int Code { get; set; }
             public double QuantityFuture { get => Quantity + QuantityAdded; }
@@ -43,16 +130,33 @@ namespace SCM2020___Client.Frames.Movement
             public bool ProductChanged { get; set; }
             public ModelsLibraryCore.AuxiliarConsumption ConsumptionProduct { get; set; }
         }
+
         class PermanentProductDataGrid : ConsumpterProductDataGrid
         {
             public string Patrimony { get; set; }
             public string BtnContent { get => (QuantityAdded == 1) ? "Remover" : "Adicionar"; }
         }
-        bool previousDevolutionExists = false;
+        //bool previousDevolutionExists = false;
+        Monitoring PrincipalMonitoring;
+        WebBrowser WebBrowser = Helper.MyWebBrowser;
         MaterialInput previousMaterialInput = null;
+        bool PrintORExport = false;
+        string Document = string.Empty;
+
         public Devolution()
         {
             InitializeComponent();
+
+            Menu = new List<MenuItem>()
+            {
+                new MenuItem(Name: "Informações", 0, true),
+                new MenuItem(Name: "Produtos Consumíveis", 1, false),
+                new MenuItem(Name: "Produtos Permanentes", 2, false),
+                new MenuItem(Name: "Finalização", 3, false)
+            };
+            CurrentMenuItem = Menu[0];
+            this.ComboBoxReference.SelectedIndex = 0;
+            this.DatePickerMovingDate.SelectedDate = DateTime.Now;
         }
 
         private void RescueData(string workOrder)
@@ -60,16 +164,16 @@ namespace SCM2020___Client.Frames.Movement
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.ServerAPI, $"monitoring/WorkOrder/{workOrder}");
             Monitoring resultMonitoring = null;
-            previousDevolutionExists = false;
+            //previousDevolutionExists = false;
             try
             {
                 resultMonitoring = APIClient.GetData<Monitoring>(uriRequest.ToString(), Helper.Authentication);
                 var userId = resultMonitoring.EmployeeId;
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUser/{userId}").ToString(), Helper.Authentication);
-                this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.RegisterApplicantTextBox.Text = infoUser.Register; }));
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ApplicantTextBox.Text = infoUser.Name; }));
-                this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.OSDatePicker.SelectedDate = resultMonitoring.MovingDate; this.OSDatePicker.DisplayDate = resultMonitoring.MovingDate; }));
-                this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ServiceLocalizationTextBox.Text = resultMonitoring.ServiceLocation; }));
+                this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxRegisterApplicant.Text = infoUser.Register; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxApplicant.Text = infoUser.Name; }));
+                this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DatePickerMovingDate.SelectedDate = resultMonitoring.MovingDate; this.DatePickerMovingDate.DisplayDate = resultMonitoring.MovingDate; }));
+                this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxServiceLocalization.Text = resultMonitoring.ServiceLocation; }));
                 //this.RegisterApplicantTextBox.Text = infoUser.Register;
                 //this.ApplicantTextBox.Text = infoUser.Name;
             }
@@ -92,20 +196,20 @@ namespace SCM2020___Client.Frames.Movement
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
                     
-                    this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
-                    this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
-                    this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
+                    //this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
+                    //this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
+                    //this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
 
-                    this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
-                    this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
-                    this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
-                    this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
+                    //this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
+                    //this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
+                    //this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
+                    //this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
 
                     try
                     {
                         previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.ServerAPI, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
-                        previousDevolutionExists = true;
-                        this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ReferenceComboBox.SelectedIndex = ((int)previousMaterialInput.Regarding) - 1; }));
+                        //previousDevolutionExists = true;
+                        this.ComboBoxReference.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ComboBoxReference.SelectedIndex = ((int)previousMaterialInput.Regarding) - 1; }));
 
                         RescueProducts(previousMaterialInput);
                         InputData(false, false);
@@ -129,36 +233,40 @@ namespace SCM2020___Client.Frames.Movement
 
         private void ClearData()
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.Text = string.Empty; }));
-            this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
-            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.SelectedIndex = 0; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.Text = string.Empty; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.SelectedDate = DateTime.Now; }));
+            this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.Text = string.Empty; }));
+            this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = string.Empty; }));
+            this.ComboBoxReference.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxReference.SelectedIndex = 0; }));
+            this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.Text = string.Empty; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
 
-            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); }));
-            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.ItemsSource = null; }));
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.ItemsSource = null; }));
         }
 
         private void InputData(bool IsEnable, bool OSDatePickerIsEnable)
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = IsEnable; }));
+            this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = IsEnable; }));
             //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
-            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = IsEnable; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = IsEnable; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
+            this.ComboBoxReference.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxReference.IsEnabled = IsEnable; }));
+            this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.IsEnabled = IsEnable; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = OSDatePickerIsEnable; }));
         }
+
         private void InputData(bool ReferenceComboBoxIsEnable, bool OSDatePickerIsEnable, bool RegisterApplicantTextBoxIsEnable, bool ServiceLocalizationIsEnable)
         {
-            this.RegisterApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { RegisterApplicantTextBox.IsEnabled = RegisterApplicantTextBoxIsEnable; }));
-            this.ReferenceComboBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ReferenceComboBox.IsEnabled = ReferenceComboBoxIsEnable; }));
-            this.ServiceLocalizationTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ServiceLocalizationTextBox.IsEnabled = ServiceLocalizationIsEnable; }));
-            this.OSDatePicker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { OSDatePicker.IsEnabled = OSDatePickerIsEnable; }));
+            this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = RegisterApplicantTextBoxIsEnable; }));
+            this.ComboBoxReference.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxReference.IsEnabled = ReferenceComboBoxIsEnable; }));
+            this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.IsEnabled = ServiceLocalizationIsEnable; }));
+            this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = OSDatePickerIsEnable; }));
         }
 
         private void RescueProducts(ModelsLibraryCore.MaterialInput materialInput)
         {
-            this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Clear(); } ));
+            List<ConsumpterProductDataGrid> consumpterProducts = new List<ConsumpterProductDataGrid>();
+
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Clear(); } ));
             //this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { } ));
+            
             foreach (var item in materialInput.ConsumptionProducts)
             {
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
@@ -174,12 +282,16 @@ namespace SCM2020___Client.Frames.Movement
                     //QuantityOutput
                 };
                 if (item.Quantity != 0)
-                    this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalConsumpterProductsAddedDataGrid.Items.Add(consumpterProductDataGrid); }));
+                {
+                    consumpterProducts.Add(consumpterProductDataGrid);
+                }
+                //this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(consumpterProductDataGrid); }));
 
-                ConsumpterProductInput.Add(consumpterProductDataGrid);
+                FinalConsumpterProductInputAdded.Add(consumpterProductDataGrid);
             }
 
-            this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Clear(); }));
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.ItemsSource = consumpterProducts; }));
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Clear(); }));
 
             foreach (var item in materialInput.PermanentProducts)
             {
@@ -195,8 +307,10 @@ namespace SCM2020___Client.Frames.Movement
                     //QuantityOutput = 1,
                     QuantityAdded = 1,
                 };
-                this.FinalPermanentProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalPermanentProductsAddedDataGrid.Items.Add(consumpterProductDataGrid); }));
+                this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(consumpterProductDataGrid); }));
             }
+
+            this.previousMaterialInput = materialInput;
         }
         //private void GetProducts(string workorder)
         //{
@@ -323,71 +437,73 @@ namespace SCM2020___Client.Frames.Movement
         //        MessageBox.Show(ex.Message, "Ocorreu um erro.", MessageBoxButton.OK, MessageBoxImage.Error);
         //    }
         //}
-        private void ButtonInformation_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = false;
-            this.ButtonPermanentProducts.IsHitTestVisible = true;
-            this.ButtonFinish.IsHitTestVisible = true;
+        //private void ButtonInformation_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = false;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
+        //    this.ButtonFinish.IsHitTestVisible = true;
 
-            this.InfoScrollViewer.Visibility = Visibility.Visible;
-            this.InfoDockPanel.Visibility = Visibility.Visible;
-            this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
-            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        }
-        private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = true;
-            this.ButtonPermanentProducts.IsHitTestVisible = false;
-            this.ButtonFinish.IsHitTestVisible = true;
+        //    this.InfoScrollViewer.Visibility = Visibility.Visible;
+        //    this.InfoDockPanel.Visibility = Visibility.Visible;
+        //    this.FinalProductsDockPanel.Visibility = Visibility.Collapsed;
+        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+        //}
+        //private void ButtonPermanentProducts_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = true;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = false;
+        //    this.ButtonFinish.IsHitTestVisible = true;
 
-            InfoScrollViewer.Visibility = Visibility.Collapsed;
-            InfoDockPanel.Visibility = Visibility.Collapsed;
-            PermanentDockPanel.Visibility = Visibility.Visible;
-        }
-        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
-        {
-            this.ButtonInformation.IsHitTestVisible = true;
-            this.ButtonPermanentProducts.IsHitTestVisible = true;
-            this.ButtonFinish.IsHitTestVisible = false;
+        //    InfoScrollViewer.Visibility = Visibility.Collapsed;
+        //    InfoDockPanel.Visibility = Visibility.Collapsed;
+        //    PermanentDockPanel.Visibility = Visibility.Visible;
+        //}
+        //private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.ButtonInformation.IsHitTestVisible = true;
+        //    this.ButtonPermanentProducts.IsHitTestVisible = true;
+        //    this.ButtonFinish.IsHitTestVisible = false;
 
-            this.InfoScrollViewer.Visibility = Visibility.Collapsed;
-            this.InfoDockPanel.Visibility = Visibility.Collapsed;
-            this.FinalProductsDockPanel.Visibility = Visibility.Visible;
-            this.PermanentDockPanel.Visibility = Visibility.Collapsed;
-        }
-        private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
-        {
-            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
-            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+        //    this.InfoScrollViewer.Visibility = Visibility.Collapsed;
+        //    this.InfoDockPanel.Visibility = Visibility.Collapsed;
+        //    this.FinalProductsDockPanel.Visibility = Visibility.Visible;
+        //    this.PermanentDockPanel.Visibility = Visibility.Collapsed;
+        //}
+        //private void ButtonFinalConsumpterProduct_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Visible;
+        //    this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Collapsed;
 
-            this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
-            this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
-        }
-        private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
-        {
-            this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
-            this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
+        //    this.ButtonFinalConsumpterProduct.IsHitTestVisible = false;
+        //    this.ButtonFinalPermanentProduct.IsHitTestVisible = true;
+        //}
+        //private void ButtonFinalPermanentProduct_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.FinalConsumpterProductsAddedDataGrid.Visibility = Visibility.Collapsed;
+        //    this.FinalPermanentProductsAddedDataGrid.Visibility = Visibility.Visible;
 
-            this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
-            this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
-        }
-        private void BtnFinish_Click(object sender, RoutedEventArgs e)
-        {
-            if (previousDevolutionExists)
-                UpdateInput();
-            else
-                AddInput();
+        //    this.ButtonFinalConsumpterProduct.IsHitTestVisible = true;
+        //    this.ButtonFinalPermanentProduct.IsHitTestVisible = false;
+        //}
 
-        }
-        private void AddInput()
-        {
-            DateTime dateTime = (OSDatePicker.DisplayDate == DateTime.Today) ? (DateTime.Now) : OSDatePicker.DisplayDate;
 
-            var register = RegisterApplicantTextBox.Text;
+        //private void BtnFinish_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (previousDevolutionExists)
+        //        UpdateInput();
+        //    else
+        //        AddInput();
+
+        //}
+
+        private void AddMonitoring(DateTime dateTime, string register, string numberSector, string workOrder, string serviceLocation)
+        {
+
             string userId = string.Empty;
             try
             {
                 userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
+
             }
             catch (HttpRequestException)
             {
@@ -396,31 +512,59 @@ namespace SCM2020___Client.Frames.Movement
             }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            Sector sector = null;
+            try
+            {
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/{numberSector}").ToString(), Helper.Authentication);
+                //COMPARAR SE O USUÁRIO É DO MESMO SETOR DA ORDEM DE SERVIÇO
+                if (sector != Helper.CurrentSector)
+                {
+                    if (MessageBox.Show("Funcionário não é concernente com o setor da ordem de serviço." + Environment.NewLine + "Deseja continuar?", "Atenção", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                //Setor desconhecido...
+                sector = APIClient.GetData<Sector>(new Uri(Helper.ServerAPI, $"sector/NumberSector/99").ToString(), Helper.Authentication);
+            }
+
             Monitoring monitoring = new Monitoring()
             {
                 SCMEmployeeId = Helper.NameIdentifier,
                 Situation = false,
                 ClosingDate = null,
                 EmployeeId = userId,
-                //O setor é referente ao funcionário que solicitou material na ordem de serviço
-                RequestingSector = Helper.CurrentSector.Id,
+                RequestingSector = sector.Id,//o setor é referente ao número da ordem de serviço,
                 MovingDate = dateTime,
-                Work_Order = OSTextBox.Text,
-                ServiceLocation = ServiceLocalizationTextBox.Text
+                Work_Order = workOrder,
+                ServiceLocation = serviceLocation
             };
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
+            MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            PrincipalMonitoring = monitoring;
+        }
+
+        private void AddInput(Regarding regarding, DateTime dateTime, string workOrder)
+        {
 
             MaterialInput materialInput = new MaterialInput()
             {
-                Regarding = ((Regarding)(ReferenceComboBox.SelectedIndex + 1)),
-                WorkOrder = OSTextBox.Text,
-                MovingDate = OSDatePicker.SelectedDate.Value,
+                Regarding = regarding,
+                WorkOrder = workOrder,
+                MovingDate = dateTime,
             };
 
-            if (FinalConsumpterProductsAddedDataGrid.Items.Count > 0)
+            if (DataGridFinalConsumpterProducts.Items.Count > 0)
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
-            if (FinalPermanentProductsAddedDataGrid.Items.Count > 0)
+            if (DataGridFinalPermanentProducts.Items.Count > 0)
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
-            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductsAddedDataGrid.Items)
+            foreach (ConsumpterProductDataGrid item in DataGridConsumpterProducts.Items)
             {
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
@@ -431,7 +575,7 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 materialInput.ConsumptionProducts.Add(auxiliarConsumption);
             }
-            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+            foreach (PermanentProductDataGrid item in DataGridFinalPermanentProducts.Items)
             {
                 AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
                 {
@@ -441,36 +585,31 @@ namespace SCM2020___Client.Frames.Movement
                 };
                 materialInput.PermanentProducts.Add(auxiliarPermanent);
             }
+
             //TASK...
             Task.Run(() => 
             {
-                var workOrder = System.Uri.EscapeDataString(monitoring.Work_Order);
-
-                var checkMonitoring = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"monitoring/checkworkorder/{workOrder}").ToString(), Helper.Authentication);
-                if (!checkMonitoring)
-                {
-                    //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
-                    var result1 = APIClient.PostData(new Uri(Helper.ServerAPI, "Monitoring/Add").ToString(), monitoring, Helper.Authentication);
-                    MessageBox.Show(result1.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
-                var result2 = APIClient.PostData(new Uri(Helper.ServerAPI, "devolution/add").ToString(), materialInput, Helper.Authentication);
-                MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                var result = APIClient.PostData(new Uri(Helper.ServerAPI, "devolution/add").ToString(), materialInput, Helper.Authentication);
+                MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
+
+            this.previousMaterialInput = materialInput;
         }
         private void UpdateInput()
         {
             MaterialInput materialInput = this.previousMaterialInput;
-            if ((FinalConsumpterProductsAddedDataGrid.Items.Count > 0) && (materialInput.ConsumptionProducts == null))
+            if ((DataGridFinalConsumpterProducts.Items.Count > 0) && (materialInput.ConsumptionProducts == null))
             {
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
             }
-            if ((FinalPermanentProductsAddedDataGrid.Items.Count > 0) && (materialInput.PermanentProducts == null))
+            if ((DataGridFinalPermanentProducts.Items.Count > 0) && (materialInput.PermanentProducts == null))
             {
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
             }
-            var listProduct = materialInput.ConsumptionProducts.ToList();
-            foreach (ConsumpterProductDataGrid item in ConsumpterProductInput)
+
+            //var listProduct = materialInput.ConsumptionProducts.ToList();
+
+            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductInputAdded)
             {
                 if (item.NewProduct)
                 {
@@ -482,18 +621,25 @@ namespace SCM2020___Client.Frames.Movement
                         SCMEmployeeId = Helper.NameIdentifier,
                     };
                     item.NewProduct = false;
-                    listProduct.Add(auxiliarConsumption);
+                    materialInput.ConsumptionProducts.Add(auxiliarConsumption);
                 }
                 if (item.ProductChanged)
                 {
-                    listProduct[ConsumpterProductInput.IndexOf(item)].Quantity = 
+                    //listProduct[FinalConsumpterProductInputAdded.IndexOf(item)].Quantity = 
                     item.ConsumptionProduct.Quantity = item.QuantityAdded;
                 }
             }
-            materialInput.ConsumptionProducts = listProduct;
-            foreach (PermanentProductDataGrid item in FinalPermanentProductsAddedDataGrid.Items)
+
+            //materialInput.ConsumptionProducts = listProduct;
+            foreach (PermanentProductDataGrid item in DataGridFinalPermanentProducts.Items)
             {
                 //MEXER
+                if (!DataGridFinalPermanentProducts.Items.Contains(item))
+                {
+                    var permanentProduct = materialInput.PermanentProducts.Single(x => x.ProductId == item.Id);
+                    materialInput.PermanentProducts.Remove(permanentProduct);
+                }
+
                 if (!materialInput.PermanentProducts.Any(x => x.ProductId == item.Id))
                 {
                     AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
@@ -509,11 +655,8 @@ namespace SCM2020___Client.Frames.Movement
             var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        private void ProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
-        }
-        List<ConsumpterProductDataGrid> ConsumpterProductInput = new List<ConsumpterProductDataGrid>();
+        List<ConsumpterProductDataGrid> FinalConsumpterProductInputAdded = new List<ConsumpterProductDataGrid>();
+        List<PermanentProductDataGrid> FinalPermanentProductInputAdded = new List<PermanentProductDataGrid>();
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
@@ -526,13 +669,13 @@ namespace SCM2020___Client.Frames.Movement
                 //    productInConsumpterProductInput = ConsumpterProductInput.Single(x => x == product);
                 product.QuantityAdded = dialog.QuantityAdded;
                 //int index = ProductToAddDataGrid.SelectedIndex;
-                this.ConsumpterProductToAddDataGrid.Items.Refresh();
-                this.FinalConsumpterProductsAddedDataGrid.Items.Refresh();
-                if (!this.FinalConsumpterProductsAddedDataGrid.Items.Contains(product))
+                this.DataGridConsumpterProducts.Items.Refresh();
+                this.DataGridFinalConsumpterProducts.Items.Refresh();
+                if (!this.DataGridFinalConsumpterProducts.Items.Contains(product))
                 {
                     product.NewProduct = button.Name == "BtnToAdd";
-                    this.FinalConsumpterProductsAddedDataGrid.Items.Add(product);
-                    ConsumpterProductInput.Add(product);
+                    this.DataGridFinalConsumpterProducts.Items.Add(product);
+                    FinalConsumpterProductInputAdded.Add(product);
                 }
                 else
                 {
@@ -540,7 +683,7 @@ namespace SCM2020___Client.Frames.Movement
                     {
                         //this.previousMaterialInput.ConsumptionProducts.Remove(product.ConsumptionProduct);
                         //ConsumpterProductInput.Remove(product);
-                        this.FinalConsumpterProductsAddedDataGrid.Items.Remove(product);
+                        this.DataGridFinalConsumpterProducts.Items.Remove(product);
                     }
                     else
                     {
@@ -548,26 +691,12 @@ namespace SCM2020___Client.Frames.Movement
                     }
                     product.ProductChanged = true;
                 }
-                this.ConsumpterProductToAddDataGrid.UnselectAll();
-                this.FinalConsumpterProductsAddedDataGrid.UnselectAll();
+                this.DataGridConsumpterProducts.UnselectAll();
+                this.DataGridFinalConsumpterProducts.UnselectAll();
+                MenuItemEventHandler?.Invoke(3, (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0));
+                this.ButtonFinish.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
+                this.ButtonNext3.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
             }
-        }
-        private void PermanentProductToAddDataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            e.Cancel = true;
-        }
-        private void TxtProductConsumpterSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string workOrder = TxtProductConsumpterSearch.Text;
-                Task.Run(() => ConsumpterProductSearch(workOrder));
-            }
-        }
-        private void ConsumpterProductSearchButton_Click(object sender, RoutedEventArgs e)
-        {
-                string workOrder = TxtProductConsumpterSearch.Text;
-                Task.Run(() => ConsumpterProductSearch(workOrder));
         }
 
         private void ConsumpterProductSearch(string query)
@@ -577,7 +706,7 @@ namespace SCM2020___Client.Frames.Movement
 
             query = System.Uri.EscapeDataString(query);
             //Limpa datagrid de consumo
-            this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Clear(); ConsumpterProductToAddDataGrid.UnselectAll(); }));
+            this.DataGridConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridConsumpterProducts.Items.Clear(); DataGridConsumpterProducts.UnselectAll(); }));
             
 
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
@@ -610,33 +739,11 @@ namespace SCM2020___Client.Frames.Movement
                     NewProduct = false,
                 };
 
-                this.ConsumpterProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ConsumpterProductToAddDataGrid.Items.Add(consumpterProductDataGrid); }));
-
+                this.DataGridConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridConsumpterProducts.Items.Add(consumpterProductDataGrid); }));
             }
         }
-        private void TxtPermanentProductSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string query = this.TxtPermanentProductSearch.Text;
-                Task.Run(() =>
-                {
-                    SearchPermamentProduct(query);
 
-                });
-            }
-        }
-        private void PermanentProductButton_Click(object sender, RoutedEventArgs e)
-        {
-            string query = this.TxtPermanentProductSearch.Text;
-            Task.Run(() =>
-            {
-                SearchPermamentProduct(query);
-
-            });
-        }
-
-        private void SearchPermamentProduct(string query)
+        private void PermanentProductSearch(string query)
         {
             if (query == string.Empty)
                 return;
@@ -645,7 +752,7 @@ namespace SCM2020___Client.Frames.Movement
 
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"PermanentProduct/search/{query}");
 
-            this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Clear(); }));
+            this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridPermanentProducts.Items.Clear(); }));
 
             var products = APIClient.GetData<List<PermanentProduct>>(uriProductsSearch.ToString(), Helper.Authentication).Where(x => !string.IsNullOrWhiteSpace(x.WorkOrder));
             foreach (var product in products)
@@ -661,39 +768,21 @@ namespace SCM2020___Client.Frames.Movement
                     Quantity = information.Stock,
                     NewProduct = true,
                 };
-                this.PermanentProductToAddDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { PermanentProductToAddDataGrid.Items.Add(permanentProductDataGrid); }));
+                this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridPermanentProducts.Items.Add(permanentProductDataGrid); }));
             }
 
         }
-        string oldOS = string.Empty;
-        private void OSTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            string workorder = OSTextBox.Text;
-            if (oldOS == workorder)
-                return;
-            else
-                oldOS = workorder;
-            new Task(() => RescueData(workorder)).Start();
-        }
-        private void OSTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                string workorder = OSTextBox.Text;
-                if (oldOS == workorder)
-                    return;
-                else
-                    oldOS = workorder;
-                new Task(() => RescueData(workorder)).Start();
-            }
-        }
+
+        string previousWorkOrder = string.Empty;
+        bool DataGridConsumpterProductFocus = false;
+        bool DataGridPermanentProductFocus = false;
 
         private void BtnAddRemovePermanent_Click(object sender, RoutedEventArgs e)
         {
             var product = ((FrameworkElement)sender).DataContext as PermanentProductDataGrid;
             if (product.BtnContent == "Adicionar")
             {
-                this.FinalPermanentProductsAddedDataGrid.Items.Add(product);
+                this.DataGridFinalPermanentProducts.Items.Add(product);
                 product.QuantityAdded += 1;
                 //product.BtnContent = "Remover";
             }
@@ -701,33 +790,56 @@ namespace SCM2020___Client.Frames.Movement
             {
                 //product.BtnContent = "Adicionar";
                 product.QuantityAdded -= 1;
-                this.FinalPermanentProductsAddedDataGrid.Items.Remove(product);
+                this.DataGridFinalPermanentProducts.Items.Remove(product);
             }
-            this.PermanentProductToAddDataGrid.Items.Refresh();
-            this.FinalPermanentProductsAddedDataGrid.Items.Refresh();
-            this.PermanentProductToAddDataGrid.UnselectAll();
-            this.FinalPermanentProductsAddedDataGrid.UnselectAll();
+            this.DataGridPermanentProducts.Items.Refresh();
+            this.DataGridFinalPermanentProducts.Items.Refresh();
+            this.DataGridPermanentProducts.UnselectAll();
+            this.DataGridFinalPermanentProducts.UnselectAll();
+
+            MenuItemEventHandler?.Invoke(3, (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0));
+            this.ButtonFinish.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
+            this.ButtonNext3.IsEnabled = (DataGridFinalConsumpterProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0);
         }
 
-        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        private void WebBrowser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
-
-        }
-
-        private void RegisterApplicantTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            string register = this.RegisterApplicantTextBox.Text;
-            Task.Run(() => GetName(register));
-        }
-
-        private void RegisterApplicantTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            Helper.SetOptionsToPrint();
+            if (PrintORExport)
             {
-                string register = this.RegisterApplicantTextBox.Text;
-                Task.Run(() => GetName(register));
+                WebBrowser.PrintDocument();
             }
+            else
+            {
+                string printer = Helper.GetPrinter("PDF");
+                string tempFile = string.Empty;
+                try
+                {
+
+                    tempFile = Helper.GetTempFilePathWithExtension(".tmp");
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(tempFile, true))
+                    {
+                        file.Write(Document);
+                        file.Flush();
+                    }
+
+                    //"f=" The input file
+                    //"p=" The temporary default printer
+                    //"d|delete" Delete file when finished
+                    var p = new Process();
+                    p.StartInfo.FileName = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Exporter\\document-exporter.exe");
+                    //Fazer com que o document-exporter apague o arquivo após a impressão. Ao invés de utilizar finally. Motivo é evitar que o arquivo seja apagado antes do Document-Exporter possa lê-lo.
+                    p.StartInfo.Arguments = $"-p=\"{printer}\" -f=\"{tempFile}\" -d";
+                    p.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro durante exportação", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+                }
+            }
+            this.WebBrowser.LoadCompleted -= WebBrowser_LoadCompleted;
         }
+
         private void GetName(string register)
         {
             if (string.IsNullOrWhiteSpace(register))
@@ -735,16 +847,423 @@ namespace SCM2020___Client.Frames.Movement
             try
             {
                 //Zera informação
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = string.Empty; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = string.Empty; }));
                 //Recebe informações
                 var infoUser = APIClient.GetData<InfoUser>(new Uri(Helper.ServerAPI, $"user/InfoUserRegister/{register}").ToString(), Helper.Authentication);
                 //Atribui o nome do funcionário no campo correspondente
-                this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.Text = infoUser.Name; }));
+                this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxApplicant.Text = infoUser.Name; }));
             }
             catch (HttpRequestException)
             {
-                MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+        }
+
+        private void ButtonNext1_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[1];
+        }
+
+        private void TxtSearchConsumpterProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string query = TxtSearchConsumpterProduct.Text;
+                Task.Run(() => ConsumpterProductSearch(query));
+            }
+        }
+
+        private void ButtonSearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
+        {
+            string query = TxtSearchConsumpterProduct.Text;
+            Task.Run(() => ConsumpterProductSearch(query));
+        }
+
+        private void DataGridConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void ButtonPrevious1_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[0];
+        }
+
+        private void ButtonNext2_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[2];
+        }
+
+        private void TxtSearchPermanentProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string query = TxtSearchPermanentProduct.Text;
+                Task.Run(() => { PermanentProductSearch(query); });
+            }
+        }
+
+        private void ButtonSearchPermanentProduct_Click(object sender, RoutedEventArgs e)
+        {
+            string query = TxtSearchPermanentProduct.Text;
+            Task.Run(() => { PermanentProductSearch(query); });
+        }
+
+        private void DataGridPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void ScrollViewerFinish_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+
+            var dtFinalConsumpter = DataGridFinalConsumpterProducts;
+            var dtFinalPermanent = DataGridFinalPermanentProducts;
+
+            var scrollViewerFinalConsumpter = dtFinalConsumpter.GetScrollViewer();
+            var scrollViewerFinalPermanent = dtFinalPermanent.GetScrollViewer();
+
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (DataGridConsumpterProductFocus || DataGridPermanentProductFocus)
+                {
+                    return;
+                }
+            }
+
+            if (e.Delta < 0) //Para baixo
+            {
+                if (((scrollViewerFinalConsumpter.VerticalOffset == scrollViewerFinalConsumpter.ScrollableHeight)))
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+                if ((scrollViewerFinalPermanent.VerticalOffset == scrollViewerFinalPermanent.ScrollableHeight) && DataGridPermanentProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+            else if (e.Delta > 0) //Para cima
+            {
+                if ((scrollViewerFinalConsumpter.VerticalOffset == 0) && DataGridConsumpterProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+                if ((scrollViewerFinalPermanent.VerticalOffset == 0) && DataGridPermanentProductFocus)
+                {
+                    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void DataGridFinalConsumpterProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void DataGridFinalConsumpterProducts_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            DataGridConsumpterProductFocus = true;
+        }
+
+        private void DataGridFinalConsumpterProducts_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DataGridConsumpterProductFocus = false;
+        }
+
+        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
+        {
+            var workOrder = TextBoxWorkOrder.Text;
+            if (previousWorkOrder == workOrder)
+                return;
+            Task.Run(() =>
+            {
+                bool existMonitoring = false;
+                try
+                {
+                    existMonitoring = Monitoring.ExistsMonitoring(workOrder);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.PackIconStatus.Visibility = Visibility.Visible;
+                    });
+                }
+                catch
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                        this.PackIconStatus.ToolTip = "Campo vazio";
+
+                        this.ButtonFinish.IsEnabled = false;
+                    });
+                    return;
+                }
+
+                if (existMonitoring)
+                {
+                    //Ordem de serviço existente
+                    bool checkWorkOrder = Monitoring.CheckWorkOrder(workOrder);
+                    if (checkWorkOrder) //Ordem de serviço fechada
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
+                            this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                            this.PackIconStatus.ToolTip = "Ordem de serviço fechada";
+                            RescueData(workOrder);
+                            InputData(false, false, false, false);
+                            this.ButtonFinish.IsEnabled = false;
+                        });
+                    }
+                    else //Ordem de serviço aberta
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
+                            this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                            this.PackIconStatus.ToolTip = "Ordem de serviço aberta";
+                            RescueData(workOrder);
+                            this.ButtonFinish.IsEnabled = true;
+                        });
+                    }
+                }
+                else
+                {
+                    //Ordem de serviço inexistente
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
+                        this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.PackIconStatus.ToolTip = "Ordem de serviço disponível";
+                        ClearData();
+                        InputData(true, true, true, true);
+
+                        this.ButtonFinish.IsEnabled = true;
+                    });
+                }
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.ButtonNext1.IsEnabled = AllowNext1();
+                    this.ButtonNext3.IsEnabled = AllowNext1();
+                    MenuItemEventHandler?.Invoke(1, AllowNext1());
+                    MenuItemEventHandler?.Invoke(2, AllowNext1());
+                    MenuItemEventHandler?.Invoke(3, AllowNext1());
+                });
+            });
+            previousWorkOrder = workOrder;
+        }
+
+        private bool AllowNext1()
+        {
+            bool WO = this.TextBoxWorkOrder.Text != string.Empty;
+            bool DateWO = this.DatePickerMovingDate.SelectedDate != null;
+            bool ServiceLocalization = this.TextBoxServiceLocalization.Text != string.Empty;
+            bool TextBoxApplicant = this.TextBoxApplicant.Text != string.Empty;
+            bool ComboBoxReference = this.ComboBoxReference.Text != string.Empty;
+
+            return WO && DateWO && ServiceLocalization && TextBoxApplicant && ComboBoxReference;
+        }
+
+        private void DatePickerMovingDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+            MenuItemEventHandler?.Invoke(1, AllowNext1());
+            MenuItemEventHandler?.Invoke(2, AllowNext1());
+        }
+
+        private void TextBoxServiceLocalization_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+        }
+
+        private void TextBoxRegisterApplicant_KeyUp(object sender, KeyEventArgs e)
+        {
+            string register = this.TextBoxRegisterApplicant.Text;
+            Task.Run(() =>
+            {
+                GetName(register);
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.ButtonNext1.IsEnabled = AllowNext1();
+                    MenuItemEventHandler?.Invoke(1, AllowNext1());
+                    MenuItemEventHandler?.Invoke(2, AllowNext1());
+                });
+            });
+        }
+
+        private void TextBoxApplicant_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ButtonNext1.IsEnabled = AllowNext1();
+        }
+
+        private void ButtonPrevious2_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[1];
+        }
+
+        private void ButtonNext3_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[3];
+        }
+
+        private void DataGridFinalPermanentProducts_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            DataGrid dt = (DataGrid)sender;
+            var scrollViewer = dt.GetScrollViewer();
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
+                e.Handled = true;
+            }
+            else
+            {
+                if (scrollViewer.VerticalOffset == scrollViewer.ScrollableHeight)
+                {
+                    scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void DataGridFinalPermanentProducts_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            DataGridPermanentProductFocus = true;
+        }
+
+        private void DataGridFinalPermanentProducts_MouseLeave(object sender, MouseEventArgs e)
+        {
+            DataGridPermanentProductFocus = false;
+        }
+
+        private void ButtonPrevious3_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentMenuItem = Menu[2];
+        }
+
+        private void ButtonFinish_Click(object sender, RoutedEventArgs e)
+        {
+            string workOrder = this.TextBoxWorkOrder.Text;
+            DateTime dateTime = (DatePickerMovingDate.DisplayDate == DateTime.Today) ? (DateTime.Now) : DatePickerMovingDate.DisplayDate;
+            string register = TextBoxRegisterApplicant.Text;
+            string serviceLocation = TextBoxServiceLocalization.Text;
+            string numberSector = TextBoxWorkOrder.Text.Substring(0, 2);
+            Regarding regarding = ((Regarding)(ComboBoxReference.SelectedIndex + 1));
+            Task.Run(() =>
+            {
+                if (Monitoring.ExistsMonitoring(workOrder))
+                {
+                    var existsInput = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"devolution/existsinput/{System.Uri.EscapeDataString(workOrder)}").ToString(), Helper.Authentication);
+                    if (existsInput)
+                    {
+                        UpdateInput();
+                    }
+                    else
+                    {
+                        AddInput(regarding, dateTime, workOrder);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        AddMonitoring(dateTime, register, numberSector, workOrder, serviceLocation);
+                        AddInput(regarding, dateTime, workOrder);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Ocorreu um erro durante o cadastro da ordem de serviço", MessageBoxButton.OK, MessageBoxImage.Error);
+                        RemoveMonitoring(workOrder);
+                    }
+                }
+            });
+        }
+
+        private void RemoveMonitoring(string workOrder)
+        {
+            workOrder = System.Uri.EscapeDataString(workOrder);
+
+            //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...
+            var result = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"Monitoring/RemoveByWorkOrder/{workOrder}").ToString(), Helper.Authentication);
+            MessageBox.Show(result.DeserializeJson<string>(), "Finalização", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e)
+        {
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
+            PrintORExport = true;
+            Document = movement.RenderizeHtml();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
+        }
+
+        private void ButtonExport_Click(object sender, RoutedEventArgs e)
+        {
+            SCM2020___Client.Templates.Movement.MaterialMovement movement = new Templates.Movement.MaterialMovement(PrincipalMonitoring.Work_Order);
+
+            PrintORExport = false;
+            Document = movement.RenderizeHtml();
+            this.WebBrowser.LoadCompleted += WebBrowser_LoadCompleted;
+            this.WebBrowser.NavigateToString(Document);
         }
     }
 }

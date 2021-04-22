@@ -34,7 +34,7 @@ namespace SCM2020___Client.Frames.Register
         private void RequestCodeAvaliable()
         {
             Uri nextNumberUri = new Uri(Helper.ServerAPI, "generalproduct/nextnumber");
-            var number = APIClient.GetData<int>(nextNumberUri.ToString());
+            var number = APIClient.GetData<int>(nextNumberUri.ToString(), Helper.Authentication);
 
             this.CodeTextBox.Text = number.ToString();
         }

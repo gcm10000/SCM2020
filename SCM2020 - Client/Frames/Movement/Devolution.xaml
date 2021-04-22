@@ -8,32 +8,288 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <UserControl.Resources>
-        <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
+    <Grid Background="#F0F0F0">
+        <ScrollViewer Name="ScrollViewerInfo" Visibility="Visible">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="30" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Height="24" Text="DOC/OS" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
+                        <Grid Margin="20 15 20 0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Name="TextBoxWorkOrder" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxWorkOrder_KeyUp"></TextBox>
+                            <materialDesign:PackIcon Name="PackIconStatus" Visibility="Hidden" Background="Transparent" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="Teste" />
                         </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="Disable" TargetType="Button">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#FF2196F3"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    <DockPanel Background="White">
-        <!--
+                        <TextBlock Text="Data da Ordem de Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
+                        <DatePicker Name="DatePickerMovingDate" FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" SelectedDateChanged="DatePickerMovingDate_SelectedDateChanged"></DatePicker>
+                        <TextBlock Text="Local do Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="4"></TextBlock>
+                        <TextBox Name="TextBoxServiceLocalization" KeyUp="TextBoxServiceLocalization_KeyUp"  FontSize="22" Margin="20 15 20 0" Grid.Row="5" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Número da Matrícula do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="6"></TextBlock>
+                        <TextBox Name="TextBoxRegisterApplicant" KeyUp="TextBoxRegisterApplicant_KeyUp"  FontSize="22" Margin="20 15 20 0" Grid.Row="7" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Nome do Solicitante" FontSize="22" Margin="20 20 20 0" Grid.Row="8"></TextBlock>
+                        <TextBox Name="TextBoxApplicant" IsEnabled="False" KeyUp="TextBoxApplicant_KeyUp"  FontSize="22" Margin="20 15 20 0" Grid.Row="9" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"></TextBox>
+                        <TextBlock Text="Entrada Referente" FontSize="22" Margin="20 20 20 0" Grid.Row="10"></TextBlock>
+                        <ComboBox Name="ComboBoxReference" SelectedIndex="0" FontSize="22" Margin="20 15 20 30" Grid.Row="11" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3">
+                            <ComboBoxItem>Não utilizado</ComboBoxItem>
+                            <ComboBoxItem>Transferência Interna</ComboBoxItem>
+                            <ComboBoxItem>Outra Comarca</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#F5F5F5" Margin="30">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10 10 0 10" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext1" Click="ButtonNext1_Click"  Content="Próximo">
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <Grid Name="GridConsumpterProducts" Margin="30" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 20" Background="#F5F5F5">
+                <Grid Margin="10 10 10 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TxtSearchConsumpterProduct" materialDesign:HintAssist.Hint="Produtos consumíveis..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black" KeyDown="TxtSearchConsumpterProduct_KeyDown"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearchConsumpterProduct" Click="ButtonSearchConsumpterProduct_Click">
+                        <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" x:Name="DataGridConsumpterProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="DataGridConsumpterProducts_PreviewMouseWheel">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Width="Auto" Header="Opções">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                    <Button x:Name="BtnToAdd" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious1" Click="ButtonPrevious1_Click"  Content="Anterior" Cursor="Hand"></Button>
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext2" Click="ButtonNext2_Click"  Content="Próximo" Cursor="Hand"></Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Name="GridPermanentProducts" Margin="30" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 20" Background="#F5F5F5">
+                <Grid Margin="10 10 10 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TxtSearchPermanentProduct" materialDesign:HintAssist.Hint="Produtos permanentes..." KeyDown="TxtSearchPermanentProduct_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearchPermanentProduct" Click="ButtonSearchPermanentProduct_Click">
+                        <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" x:Name="DataGridPermanentProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="DataGridPermanentProducts_PreviewMouseWheel">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Width="Auto" Header="Opções">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                    <StackPanel Width="150" Orientation="Vertical">
+                                        <Button x:Name="BtnAddRemovePermanent" HorizontalAlignment="Stretch" Content="{Binding BtnContent}" Click="BtnAddRemovePermanent_Click"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2" Background="#F5F5F5" Margin="0 15 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious2" Click="ButtonPrevious2_Click"  Content="Anterior" Cursor="Hand"></Button>
+                    <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext3" Click="ButtonNext3_Click"  IsEnabled="False" Content="Próximo" Cursor="Hand"></Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <!--Conclusão-->
+        <ScrollViewer Name="ScrollViewerFinish" Visibility="Collapsed" PreviewMouseWheel="ScrollViewerFinish_PreviewMouseWheel"  Background="#FFF1F1F1">
+            <Grid Margin="30">
+                <StackPanel>
+                    <Grid Name="GridData">
+                        <StackPanel>
+                            <ItemsControl x:Name="ListView" Margin="0 0 0 15">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="White" Margin="0 10 10 10" Width="240" Height="100">
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Margin="10" Text="{Binding Key}" FontSize="13" FontWeight="Bold"></TextBlock>
+                                                <Grid Background="White" Margin="0 15 0 0">
+                                                    <TextBlock Margin="10 0" Text="{Binding Value}" FontSize="18"></TextBlock>
+                                                    <materialDesign:PackIcon Margin="0 0 20 0" Kind="{Binding Icon}" Foreground="Black" Width="22" Height="22" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                    <!--Materiais selecionados-->
+                    <Grid Name="GridFinish" Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!--Resumo-->
+                        <TextBlock Grid.Row="0" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Consumíveis" Margin="0 0 0 10"></TextBlock>
+                        <DataGrid Grid.Row="1" Height="685" x:Name="DataGridFinalConsumpterProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="DataGridFinalConsumpterProducts_PreviewMouseWheel"
+                                  Mouse.PreviewMouseMove="DataGridFinalConsumpterProducts_PreviewMouseMove"
+                                  Mouse.MouseLeave="DataGridFinalConsumpterProducts_MouseLeave">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Opções" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                                <Button x:Name="BtnAdded" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemove_Click"/>
+                                            </materialDesign:PopupBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Separator Grid.Row="2" Margin="0 15 0 0"></Separator>
+                        <TextBlock Grid.Row="3" FontSize="30" FontFamily="Trebuchet MS" Text="Produtos Permanentes" Margin="0 30 0 0"></TextBlock>
+                        <DataGrid Grid.Row="4" Margin="0 10 0 0" Height="685" x:Name="DataGridFinalPermanentProducts" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
+                                  IsReadOnly="True"
+                                  ScrollViewer.CanContentScroll="True" 
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                  VirtualizingPanel.ScrollUnit="Pixel"
+                                  VirtualizingStackPanel.IsVirtualizing="True"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  AutoGenerateColumns="False"
+                                  PreviewMouseWheel="DataGridFinalPermanentProducts_PreviewMouseWheel"
+                                  Mouse.PreviewMouseMove="DataGridFinalPermanentProducts_PreviewMouseMove"
+                                  Mouse.MouseLeave="DataGridFinalPermanentProducts_MouseLeave">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="Auto" Header="SKU" Binding="{Binding Path=Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Estoque Atual" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Quantidade Adicionada" Binding="{Binding Path=QuantityAdded}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Opções" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False">
+                                                <Button x:Name="BtnRemove" Cursor="Hand" HorizontalAlignment="Stretch" Content="Adicionar ou Remover" Click="BtnAddRemovePermanent_Click"/>
+                                            </materialDesign:PopupBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="5" Background="#F5F5F5" Margin="0 15 0 0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="True" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious3" Click="ButtonPrevious3_Click"  Content="Anterior" Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonFinish" Content="Concluir" Click="ButtonFinish_Click"  Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrint" Click="ButtonPrint_Click"  Content="Imprimir" Cursor="Hand"></Button>
+                                <Button Margin="10 10 0 10" IsHitTestVisible="True" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonExport" Click="ButtonExport_Click"  Content="Exportar" Cursor="Hand"></Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+    <!--<DockPanel Background="White">
+        --><!--
             https://www.youtube.com/watch?v=Jma5VYwEQcY
             C# WPF Material Design UI: Tab Menu
-        -->
+        --><!--
         <WebBrowser x:Name="webBrowser" Visibility="Collapsed"></WebBrowser>
         <Grid DockPanel.Dock="Top" VerticalAlignment="Top" Height="70">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10 0">
@@ -119,7 +375,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*" CanUserResize="True"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}" Width="Auto"></DataGridTextColumn>
@@ -181,7 +437,7 @@
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}" Width="Auto"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}" Width="*"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}" Width="Auto"></DataGridTextColumn>
@@ -236,7 +492,7 @@
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Estoque Atual" Binding="{Binding Quantity}"></DataGridTextColumn>
@@ -261,7 +517,7 @@
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True">
                     <DataGrid.Columns>
-                        <!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>-->
+                        --><!--<DataGridTextColumn Header=" Imagem"></DataGridTextColumn>--><!--
                         <DataGridTextColumn Header=" SKU" Binding="{Binding Code}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Descrição" Binding="{Binding Description}"></DataGridTextColumn>
                         <DataGridTextColumn Header=" Patrimônio" Binding="{Binding Patrimony}"></DataGridTextColumn>
@@ -283,7 +539,7 @@
                 </DataGrid>
             </Grid>
         </DockPanel>
-        <!--<DockPanel x:Name="OSDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
+        --><!--<DockPanel x:Name="OSDockPanel" Visibility="Collapsed" Margin="10 0 10 30">
             <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -297,6 +553,6 @@
                     <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                 </Button>
             </Grid>
-        </DockPanel>-->
-    </DockPanel>
+        </DockPanel>--><!--
+    </DockPanel>-->
 </UserControl>

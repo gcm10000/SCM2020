@@ -66,14 +66,12 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Atualizado com sucesso.");
         }
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult ShowAll()
         {
             var lProduct = context.ConsumptionProduct.ToList();
             return Ok(lProduct);
         }
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> ShowById(int id)
         {
@@ -87,7 +85,6 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o id {id} não existe.");
             }
         }
-        [AllowAnonymous]
         [HttpGet("Code/{code}")]
         public IActionResult ShowByCode(int code)
         {
@@ -101,7 +98,6 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o código {code} não existe.");
             }
         }
-        [AllowAnonymous]
         [HttpGet("Search/{query}")]
         public IActionResult Search(string query)
         {

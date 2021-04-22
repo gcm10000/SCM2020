@@ -74,7 +74,6 @@ namespace SCM2020___Server.Controllers
 
             return Ok(inputs);
         }
-        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {

@@ -75,34 +75,52 @@ namespace SCM2020___Client.Frames
                 Stock = double.Parse(StockTextBox.Text),
                 Unity = UnityTextBox.Text,
                 Group = (GroupComboBox.SelectedIndex + 1),
-                Photo = $"img/{Product.Id}" + System.IO.Path.GetExtension(photopath)
+                Photo = (photopath != string.Empty) ? string.Concat(Product.Id, System.IO.Path.GetExtension(photopath)) : null
             };
+
             Task.Run(() => 
             {
-                var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
-                if (response.Ok)
+                if (Product.Photo != null)
+                {
+                    var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
+                    if (response.Ok)
+                    {
+                        Successful = true;
+                        Task.Run(() =>
+                        {
+                            UpdateProduct();
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show(response.Message, "Erro ao enviar imagem", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
                 {
                     Successful = true;
                     Task.Run(() =>
                     {
-                        var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
-                        this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
-                        if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                        {
-                            MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                        else
-                        {
-                            MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                            this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
-                        }
+                        UpdateProduct();
                     });
                 }
-                else
-                {
-                    MessageBox.Show(response.Message, "Erro ao enviar imagem", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             });
+        }
+
+        private void UpdateProduct()
+        {
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"generalproduct/update/{Product.Id}"), Product, Helper.Authentication);
+            this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
+            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
+            }
+
         }
 
         private void ImageTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)

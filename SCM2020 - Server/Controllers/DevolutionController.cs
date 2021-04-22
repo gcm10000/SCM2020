@@ -35,13 +35,21 @@ namespace SCM2020___Server.Controllers
             var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
             return Ok(devolution);
         }
-        [HttpGet("WorkOrder/{workorder}")]
-        public IActionResult ShowByWorkOrder(string workorder)
+        [HttpGet("WorkOrder/{workOrder}")]
+        public IActionResult ShowByWorkOrder(string workOrder)
         {
-            workorder = System.Uri.UnescapeDataString(workorder);
-            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workorder);
+            workOrder = System.Uri.UnescapeDataString(workOrder);
+            var devolution = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == workOrder);
             return Ok(devolution);
         }
+        [HttpGet("ExistsInput/{workOrder}")]
+        public IActionResult ExistsInput(string workOrder)
+        {
+            workOrder = System.Uri.UnescapeDataString(workOrder);
+            var result = context.MaterialInput.Any(x => x.WorkOrder == workOrder);
+            return Ok(result);
+        }
+
         [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
         public IActionResult ShowByDate(int StartDay, int StartMonth, int StartYear, int EndDay, int EndMonth, int EndYear)
         {
@@ -66,7 +74,6 @@ namespace SCM2020___Server.Controllers
             return Ok(inputs);
         }
         //[Authorize(Roles = Roles.Administrator)]
-        [AllowAnonymous]
         [HttpPost("Migrate")]
         public async Task<IActionResult> Migrate()
         {
@@ -253,6 +260,14 @@ namespace SCM2020___Server.Controllers
             {
                 devolution.ConsumptionProducts.Remove(productZero);
             }
+
+            foreach (var pp in devolution.PermanentProducts)
+            {
+                var p = context.PermanentProduct.Find(pp.ProductId);
+                p.WorkOrder = null;
+                context.PermanentProduct.Update(p);
+            }
+
             context.MaterialInput.Update(devolution);
             await context.SaveChangesAsync();
             return Ok("Devolução atualizada com sucesso.");

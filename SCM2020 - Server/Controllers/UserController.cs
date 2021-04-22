@@ -262,7 +262,6 @@ namespace SCM2020___Server.Controllers
             return BadRequest();
         }
         [HttpPost("ExistsName")]
-        [AllowAnonymous]
         public async Task<ActionResult<bool>> ExistsName()
         {
             var raw = await Helper.RawFromBody(this);
@@ -272,7 +271,6 @@ namespace SCM2020___Server.Controllers
             return result;
         }
         [HttpGet("UserId/{register}")]
-        [AllowAnonymous]
         public ActionResult<string> GetUserIdByPJERJRegister(string register)
         {
             var user = UserManager.FindByRegister(register);
@@ -283,7 +281,6 @@ namespace SCM2020___Server.Controllers
             return BadRequest("Matrícula não encontrada.");
         }
         [HttpGet("RegisterId/{userId}")]
-        [AllowAnonymous]
         public ActionResult<string> GetPJERJRegisterByUserId(string userId)
         {
             var user = UserManager.FindUserById(userId);
@@ -294,7 +291,6 @@ namespace SCM2020___Server.Controllers
             return BadRequest("Id não encontrado.");
         }
         [HttpGet("InfoUser/{userId}")]
-        [AllowAnonymous]
         public ActionResult<InfoUser> GetInfoUserById(string userId)
         {
             var user = UserManager.FindUserById(userId);
@@ -307,7 +303,6 @@ namespace SCM2020___Server.Controllers
             return BadRequest("Id não encontrado.");
         }
         [HttpGet("InfoUserRegister/{register}")]
-        [AllowAnonymous]
         public ActionResult<InfoUser> GetInfoUserByRegister(string register)
         {
             if (UserManager.Users.Any(x => x.UserName == register))
@@ -319,7 +314,6 @@ namespace SCM2020___Server.Controllers
             return BadRequest("Não existe um funcionário com esta matrícula.");
         }
         [HttpGet("search/{query}")]
-        [AllowAnonymous]
         public ActionResult<InfoUser> SearchByQuery(string query)
         {
             query = System.Uri.UnescapeDataString(query);
@@ -342,7 +336,6 @@ namespace SCM2020___Server.Controllers
         }
         
         [HttpGet("search")]
-        [AllowAnonymous]
         public ActionResult<InfoUser> ListAll()
         {
             var allUsers = UserManager.Users.ToList();
@@ -356,7 +349,6 @@ namespace SCM2020___Server.Controllers
 
         }
         [HttpGet("ListUser/{query}")]
-        [AllowAnonymous]
         public IActionResult GetListUser(string query)
         {
             System.Collections.Generic.List<ApplicationUser> listUser = (query != string.Empty) ? UserManager.Users.Where(x => 
