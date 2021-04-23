@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace SCM2020___Server.Controllers
 {
@@ -98,6 +99,93 @@ namespace SCM2020___Server.Controllers
                 return BadRequest($"O registro com o código {code} não existe.");
             }
         }
+        [HttpGet("ReverseSearch/{code}")]
+        [AllowAnonymous]
+        public IActionResult ReverseSearch(int code)
+        {
+            //A partir do código produto, exibir todas as ordens de serviço
+            var outputs = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
+            var inputs = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
+            var devolutions = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
+            var consumptionProducts = context.ConsumptionProduct.ToList();
+            var permanentProducts = context.PermanentProduct.ToList();
+
+            List<string> result = new List<string>();
+            foreach (var output in outputs)
+            {
+                foreach (var auxiliarConsumption in output.ConsumptionProducts)
+                {
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(output.WorkOrder))
+                            result.Add(output.WorkOrder);
+                    }
+                }
+                foreach (var auxiliarPermanent in output.PermanentProducts)
+                {
+                    var permanentProduct = permanentProducts.Single(x => x.Id == auxiliarPermanent.ProductId);
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == permanentProduct.InformationProduct);
+
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(output.WorkOrder))
+                            result.Add(output.WorkOrder);
+                    }
+                }
+            }
+
+            foreach (var input in inputs)
+            {
+                foreach (var auxiliarConsumption in input.ConsumptionProducts)
+                {
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(input.Invoice))
+                            result.Add(input.Invoice);
+                    }
+                }
+                foreach (var auxiliarPermanent in input.PermanentProducts)
+                {
+                    var permanentProduct = permanentProducts.Single(x => x.Id == auxiliarPermanent.ProductId);
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == permanentProduct.InformationProduct);
+
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(input.Invoice))
+                            result.Add(input.Invoice);
+                    }
+                }
+            }
+
+            foreach (var devolution in devolutions)
+            {
+                foreach (var auxiliarConsumption in devolution.ConsumptionProducts)
+                {
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(devolution.WorkOrder))
+                            result.Add(devolution.WorkOrder);
+                    }
+                }
+                foreach (var auxiliarPermanent in devolution.PermanentProducts)
+                {
+                    var permanentProduct = permanentProducts.Single(x => x.Id == auxiliarPermanent.ProductId);
+                    var consumptionProduct = consumptionProducts.Single(x => x.Id == permanentProduct.InformationProduct);
+
+                    if (consumptionProduct.Code == code)
+                    {
+                        if (!result.Contains(devolution.WorkOrder))
+                            result.Add(devolution.WorkOrder);
+                    }
+                }
+            }
+            //GC.Collect();
+            return Ok(result);
+        }
+
         [HttpGet("Search/{query}")]
         public IActionResult Search(string query)
         {
