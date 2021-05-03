@@ -251,22 +251,24 @@ namespace SCM2020___Client
             var item3 = new ItemMenu("Consultas", menuQueries, MaterialDesignThemes.Wpf.PackIconKind.Search);
             var item4 = new ItemMenu("Relatórios", menuListingItem, MaterialDesignThemes.Wpf.PackIconKind.BooksVariant);
             var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People, new Uri("Frames/UserManager/UserManager.xaml", UriKind.Relative));
-            //var item5 = new ItemMenu("Gestão de Usuários", new UserControl(), MaterialDesignThemes.Wpf.PackIconKind.People);
 
             //var s1 = new UserControlMenuItem(item0, this.FrameContent);
             //s1.FrameChanged += FrameChanged;
             //Menu.Children.Add(s1);
 
-            var s2 = new UserControlMenuItem(item1, this.FrameContent);
+            var s1 = new UserControlMenuItem(item1, this.FrameContent);
+            s1.FrameChanged += FrameChanged;
+            Menu.Children.Add(s1);
+            var s2 = new UserControlMenuItem(item2, this.FrameContent);
             s2.FrameChanged += FrameChanged;
             Menu.Children.Add(s2);
-            var s3 = new UserControlMenuItem(item2, this.FrameContent);
+            var s3 = new UserControlMenuItem(item3, this.FrameContent);
             s3.FrameChanged += FrameChanged;
             Menu.Children.Add(s3);
-            var s4 = new UserControlMenuItem(item3, this.FrameContent);
+            var s4 = new UserControlMenuItem(item4, this.FrameContent);
             s4.FrameChanged += FrameChanged;
             Menu.Children.Add(s4);
-            var s5 = new UserControlMenuItem(item4, this.FrameContent);
+            var s5 = new UserControlMenuItem(item5, this.FrameContent);
             s5.FrameChanged += FrameChanged;
             Menu.Children.Add(s5);
         }
@@ -292,6 +294,13 @@ namespace SCM2020___Client
                     }
                 }
                 if (context.Header.Contains("Painel"))
+                {
+                    if (userControlMenuItem.listViewMenu.SelectedIndex != -1)
+                    {
+                        userControlMenuItem.listViewMenu.SelectedIndex = -1;
+                    }
+                }
+                if (context.Header.Contains("Gestão"))
                 {
                     if (userControlMenuItem.listViewMenu.SelectedIndex != -1)
                     {
