@@ -109,8 +109,10 @@ namespace SCM2020___Server.Controllers
             var devolutions = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             var consumptionProducts = context.ConsumptionProduct.ToList();
             var permanentProducts = context.PermanentProduct.ToList();
+            var monitorings = context.Monitoring.ToList();
 
             List<ReverseSearch> result = new List<ReverseSearch>();
+            //Adicionar na lista se a ordem de serviço não existir e se a movimentação for diferente
             foreach (var output in outputs)
             {
                 foreach (var auxiliarConsumption in output.ConsumptionProducts)
@@ -118,13 +120,26 @@ namespace SCM2020___Server.Controllers
                     var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
                     if (consumptionProduct.Code == code)
                     {
-                        if (!result.Select(x => x.WorkOrder).Contains(output.WorkOrder))
+                        if (!(result.Any(x => (x.Movement == Movement.Output) && (x.WorkOrder == output.WorkOrder))))
                         {
-                            result.Add(new ModelsLibraryCore.ReverseSearch() { WorkOrder = output.WorkOrder, Stock = auxiliarConsumption.Quantity, Unity = consumptionProduct.Unity });
+                            var monitoring = monitorings.Single(x => x.Work_Order == output.WorkOrder);
+                            result.Add(new ModelsLibraryCore.ReverseSearch()
+                            {
+                                WorkOrder = output.WorkOrder,
+                                Stock = auxiliarConsumption.Quantity,
+                                Unity = consumptionProduct.Unity,
+                                Movement = Movement.Output,
+                                ServiceLocalization = monitoring.ServiceLocation,
+                                MovingDate = monitoring.MovingDate,
+                                ClosingDate = monitoring.ClosingDate,
+                                Invoice = null,
+                                Type = ModelsLibraryCore.Type.Consumpter,
+                                Patrimony = null
+                            });
                         }
                         else
                         {
-                            var y = result.Single(x => x.WorkOrder == output.WorkOrder);
+                            var y = result.Single(x => (x.Movement == Movement.Output) && (x.WorkOrder == output.WorkOrder));
                             y.Stock += auxiliarConsumption.Quantity;
                         }
                     }
@@ -136,18 +151,20 @@ namespace SCM2020___Server.Controllers
 
                     if (consumptionProduct.Code == code)
                     {
-                        if (consumptionProduct.Code == code)
+                        var monitoring = monitorings.Single(x => x.Work_Order == output.WorkOrder);
+                        result.Add(new ModelsLibraryCore.ReverseSearch()
                         {
-                            if (!result.Select(x => x.WorkOrder).Contains(output.WorkOrder))
-                            {
-                                result.Add(new ModelsLibraryCore.ReverseSearch() { WorkOrder = output.WorkOrder, Stock = 1, Unity = consumptionProduct.Unity });
-                            }
-                            else
-                            {
-                                var y = result.Single(x => x.WorkOrder == output.WorkOrder);
-                                y.Stock += 1;
-                            }
-                        }
+                            WorkOrder = output.WorkOrder,
+                            Stock = 1,
+                            Unity = consumptionProduct.Unity,
+                            Type = ModelsLibraryCore.Type.Permanent,
+                            Movement = Movement.Output,
+                            MovingDate = monitoring.MovingDate,
+                            ClosingDate = monitoring.ClosingDate,
+                            ServiceLocalization = monitoring.ServiceLocation,
+                            Patrimony = permanentProduct.Patrimony,
+                            Invoice = null
+                        });
                     }
                 }
             }
@@ -159,13 +176,25 @@ namespace SCM2020___Server.Controllers
                     var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
                     if (consumptionProduct.Code == code)
                     {
-                        if (!result.Select(x => x.WorkOrder).Contains(input.Invoice))
+                        if (!(result.Any(x => (x.Movement == Movement.Input) && (x.Invoice == input.Invoice))))
                         {
-                            result.Add(new ModelsLibraryCore.ReverseSearch() { Invoice = input.Invoice, Stock = auxiliarConsumption.Quantity, Unity = consumptionProduct.Unity });
+                            result.Add(new ModelsLibraryCore.ReverseSearch()
+                            {
+                                WorkOrder = null,
+                                Stock = auxiliarConsumption.Quantity,
+                                Unity = consumptionProduct.Unity,
+                                Movement = Movement.Input,
+                                ServiceLocalization = string.Empty,
+                                MovingDate = input.MovingDate,
+                                ClosingDate = null,
+                                Invoice = input.Invoice, 
+                                Patrimony = null, 
+                                Type = ModelsLibraryCore.Type.Consumpter
+                            });
                         }
                         else
                         {
-                            var y = result.Single(x => x.WorkOrder == input.Invoice);
+                            var y = result.Single(x => (x.Movement == Movement.Input) && (x.Invoice == input.Invoice));
                             y.Stock += auxiliarConsumption.Quantity;
                         }
                     }
@@ -177,15 +206,19 @@ namespace SCM2020___Server.Controllers
 
                     if (consumptionProduct.Code == code)
                     {
-                        if (!result.Select(x => x.WorkOrder).Contains(input.Invoice))
+                        result.Add(new ModelsLibraryCore.ReverseSearch()
                         {
-                            result.Add(new ModelsLibraryCore.ReverseSearch() { Invoice = input.Invoice, Stock = 1, Unity = consumptionProduct.Unity });
-                        }
-                        else
-                        {
-                            var y = result.Single(x => x.WorkOrder == input.Invoice);
-                            y.Stock += 1;
-                        }
+                            WorkOrder = null,
+                            Stock = 1,
+                            Unity = consumptionProduct.Unity,
+                            Type = ModelsLibraryCore.Type.Permanent,
+                            Movement = Movement.Input,
+                            MovingDate = input.MovingDate,
+                            ClosingDate = null,
+                            ServiceLocalization = null,
+                            Patrimony = permanentProduct.Patrimony,
+                            Invoice = input.Invoice
+                        });
                     }
                 }
             }
@@ -197,13 +230,26 @@ namespace SCM2020___Server.Controllers
                     var consumptionProduct = consumptionProducts.Single(x => x.Id == auxiliarConsumption.ProductId);
                     if (consumptionProduct.Code == code)
                     {
-                        if (!result.Select(x => x.WorkOrder).Contains(devolution.WorkOrder))
+                        if (!(result.Any(x => (x.Movement == Movement.Devolution) && (x.WorkOrder == devolution.WorkOrder))))
                         {
-                            result.Add(new ModelsLibraryCore.ReverseSearch() { WorkOrder = devolution.WorkOrder, Stock = auxiliarConsumption.Quantity, Unity = consumptionProduct.Unity });
+                            var monitoring = monitorings.Single(x => x.Work_Order == devolution.WorkOrder);
+                            result.Add(new ModelsLibraryCore.ReverseSearch()
+                            {
+                                WorkOrder = devolution.WorkOrder,
+                                Stock = auxiliarConsumption.Quantity,
+                                Unity = consumptionProduct.Unity,
+                                Movement = Movement.Devolution,
+                                ServiceLocalization = monitoring.ServiceLocation,
+                                MovingDate = monitoring.MovingDate,
+                                ClosingDate = monitoring.ClosingDate,
+                                Invoice = null, 
+                                Type = ModelsLibraryCore.Type.Consumpter,
+                                Patrimony = null
+                            });
                         }
                         else
                         {
-                            var y = result.Single(x => x.WorkOrder == devolution.WorkOrder);
+                            var y = result.Single(x => (x.Movement == Movement.Devolution) && (x.WorkOrder == devolution.WorkOrder));
                             y.Stock += auxiliarConsumption.Quantity;
                         }
                     }
@@ -215,15 +261,20 @@ namespace SCM2020___Server.Controllers
 
                     if (consumptionProduct.Code == code)
                     {
-                        if (!result.Select(x => x.WorkOrder).Contains(devolution.WorkOrder))
+                        var monitoring = monitorings.Single(x => x.Work_Order == devolution.WorkOrder);
+                        result.Add(new ModelsLibraryCore.ReverseSearch()
                         {
-                            result.Add(new ModelsLibraryCore.ReverseSearch() { WorkOrder = devolution.WorkOrder, Stock = 1, Unity = consumptionProduct.Unity });
-                        }
-                        else
-                        {
-                            var y = result.Single(x => x.WorkOrder == devolution.WorkOrder);
-                            y.Stock += 1;
-                        }
+                            WorkOrder = devolution.WorkOrder,
+                            Stock = 1,
+                            Unity = consumptionProduct.Unity,
+                            Type = ModelsLibraryCore.Type.Permanent,
+                            Movement = Movement.Devolution,
+                            MovingDate = monitoring.MovingDate,
+                            ClosingDate = monitoring.ClosingDate,
+                            ServiceLocalization = monitoring.ServiceLocation,
+                            Patrimony = permanentProduct.Patrimony,
+                            Invoice = null
+                        });
                     }
                 }
             }
