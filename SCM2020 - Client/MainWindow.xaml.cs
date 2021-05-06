@@ -331,43 +331,13 @@ namespace SCM2020___Client
         private void SignIn()
         {
             var signIn = APIClient.MakeSignIn(new Uri(Helper.ServerAPI, "user/login/").ToString(),
-    Register: "59450",
-    Password: "SenhaSecreta#2020");
+                Register: "59450",
+                Password: "SenhaSecreta#2020");
 
             Helper.Authentication = signIn.Headers.Authorization;
             Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
             Helper.CurrentSector = signIn.Sector;
             Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
-        }
-
-        private void UserItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var source = new Uri("Frames/UserManager/UserManager.xaml", UriKind.Relative);
-            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-            {
-                FrameWindow frame = new FrameWindow(source);
-                frame.Show();
-            }
-            else
-            {
-                FrameContent.Source = source;
-            }
-            GC.Collect();
-        }
-
-        private void DashboardItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var source = new Uri("Frames/Dashboard.xaml", UriKind.Relative);
-            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-            {
-                FrameWindow frame = new FrameWindow(source);
-                frame.Show();
-            }
-            else
-            {
-                FrameContent.Source = source;
-            }
-            GC.Collect();
         }
 
         private void LoadMenu()

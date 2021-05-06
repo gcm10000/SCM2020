@@ -7,65 +7,47 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <UserControl.Resources>
-        <Style x:Key="Body_Content_DataGrid_Centering"
-        TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="20 0 0 0" VerticalAlignment="Center" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
-    <DockPanel x:Name="InfoDockPanel" Visibility="Visible" Margin="10 0 10 10">
-        <Grid Margin="0 0 0 10" DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Faça uma busca..." KeyDown="TxtSearch_KeyDown"  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="0 0 0 0" Background="White" Foreground="Black"></TextBox>
-            <Button x:Name="BtnSearch" Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="White" Foreground="Black" Height="40" Width="100" Padding="0" Click="BtnSearch_Click">
-                <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
-            </Button>
-        </Grid>
-        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Grid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#007BFF" />
-            </Grid.Resources>
-            <DataGrid SelectionMode="Single" SelectionUnit="FullRow" BeginningEdit="QueryDataGrid_BeginningEdit"  VerticalAlignment="Stretch" RowHeaderWidth="0" x:Name="QueryDataGrid" CellStyle="{StaticResource Body_Content_DataGrid_Centering}"
+    <Grid Background="#F0F0F0">
+        <Grid x:Name="GridProducts" Visibility="Visible" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0 0 0 20" Background="#F5F5F5">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="TxtSearch" KeyDown="TxtSearch_KeyDown"  materialDesign:HintAssist.Hint="Pesquisar usuários..." materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black"></TextBox>
+                    <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="SearchConsumpterProduct" Click="SearchConsumpterProduct_Click">
+                        <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </Grid>
+            </Grid>
+            <DataGrid Grid.Row="1" x:Name="DataGridUsers" Visibility="Visible" SelectionMode="Single" SelectionUnit="FullRow" VerticalAlignment="Stretch" ColumnWidth="*" RowHeaderWidth="0"
                                   IsReadOnly="True"
                                   ScrollViewer.CanContentScroll="True" 
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   VirtualizingPanel.ScrollUnit="Pixel"
                                   VirtualizingStackPanel.IsVirtualizing="True"
-                                  AutoGeneratingColumn="QueryDataGrid_AutoGeneratingColumn"
-                                  HorizontalAlignment="Stretch" 
-                                  HorizontalContentAlignment="Stretch" 
-                                  ColumnWidth="*"
-                                  PreviewKeyDown="QueryDataGrid_PreviewKeyDown"
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
->
-                <DataGrid.ItemContainerStyle>
-                    <Style TargetType="DataGridRow">
-                        <EventSetter Event="MouseDoubleClick"  Handler="DataGridRow_MouseDoubleClick"/>
-                    </Style>
-                </DataGrid.ItemContainerStyle>
+                                  MouseDoubleClick="DataGridUsers_MouseDoubleClick"
+                                  PreviewMouseWheel="DataGridUsers_PreviewMouseWheel"
+                                  AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header="Matrícula" Binding="{Binding Register}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header="Empresa" Binding="{Binding Business}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header="Setor" Binding="{Binding Sector}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Permissão" Binding="{Binding Permission}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Posição" Binding="{Binding Position}" Width="Auto"></DataGridTextColumn>
+                    <!--Posição: Técnico, supervisor-->
                     <DataGridTemplateColumn Header="Opções" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="10">
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="0">
                                     <StackPanel>
                                         <Button x:Name="BtnUpdateMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Exibir informações" Click="BtnUpdateMaterial_Click"/>
                                         <Button x:Name="BtnRemoveMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Atualizar informações" Click="BtnRemoveMaterial_Click"/>
@@ -77,5 +59,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-    </DockPanel>
+    </Grid>
 </UserControl>

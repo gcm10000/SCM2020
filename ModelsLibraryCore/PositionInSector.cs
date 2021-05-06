@@ -4,12 +4,9 @@ using System.Text;
 
 namespace ModelsLibraryCore
 {
-    public enum CompanyPosition
+    public enum PositionInSector
     {
-        Director,
-        Engineer,
-        Manager,
         Supervisor,
-        Technician
+        Técnico
     }
 }

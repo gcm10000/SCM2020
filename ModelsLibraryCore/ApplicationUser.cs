@@ -12,6 +12,6 @@ namespace ModelsLibraryCore
         public string Name { get; set; }
         public int? SectorId { get; set; }
         public int? BusinessId { get; set; }
-
+        public PositionInSector? Position { get; set; }
     }
 }
