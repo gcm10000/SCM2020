@@ -10,15 +10,16 @@ namespace ModelsLibraryCore
         public string Name { get; set; }
         public string Register { get; set; }
         public string ThirdParty { get; set; }
+        public Business Business { get; set; }
         public Sector Sector { get; set; }
         public PositionInSector Position { get; set; }
         public InfoUser() { }
-        public InfoUser(string Id, string Name, string Register, string ThirdParty, Sector Sector) 
+        public InfoUser(string Id, string Name, string Register, string ThirdParty, Business Business, Sector Sector) 
         {
             this.Id = Id;
             this.Name = Name;
-            
             this.ThirdParty = ThirdParty;
+            this.Business = Business;
             this.Register = Register;
             this.Sector = Sector;
         }

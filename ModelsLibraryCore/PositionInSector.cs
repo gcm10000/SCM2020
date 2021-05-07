@@ -6,7 +6,7 @@ namespace ModelsLibraryCore
 {
     public enum PositionInSector
     {
-        Supervisor,
-        Técnico
+        Técnico,
+        Supervisor
     }
 }

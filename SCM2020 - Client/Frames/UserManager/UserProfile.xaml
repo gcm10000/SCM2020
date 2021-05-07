@@ -52,9 +52,9 @@
                         <TextBlock Text="Nome" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
                         <TextBox x:Name="TextBoxName" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="3"></TextBox>
                         <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>
-                        <ComboBox x:Name="ComboBoxBusiness" ItemsSource="{Binding Business}" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="5"></ComboBox>
+                        <ComboBox x:Name="ComboBoxBusiness" ItemsSource="{Binding Business}" DisplayMemberPath="Name" SelectedValuePath="Id" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="5"></ComboBox>
                         <TextBlock Text="Setor" FontSize="22" Margin="20 30 20 0" Grid.Row="6"></TextBlock>
-                        <ComboBox x:Name="ComboBoxSector" ItemsSource="{Binding Sectors}" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="7"></ComboBox>
+                        <ComboBox x:Name="ComboBoxSector" ItemsSource="{Binding Sectors}" DisplayMemberPath="NameSector" SelectedValuePath="Id" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="7"></ComboBox>
                         <TextBlock Text="Posição" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
                         <ComboBox x:Name="ComboBoxPosition" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 30" SelectedValuePath="Value" Grid.Row="9"></ComboBox>
                     </Grid>

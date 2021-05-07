@@ -24,6 +24,7 @@ namespace SCM2020___Client.Frames.UserManager
         private string imagePath = string.Empty;
         private InfoUser InfoUser;
         private List<ModelsLibraryCore.Sector> Sectors;
+        private List<ModelsLibraryCore.Business> Businesses;
 
         public EditProfile(InfoUser infoUser)
         {
@@ -38,26 +39,29 @@ namespace SCM2020___Client.Frames.UserManager
         private void FillUI()
         {
             Sectors = APIClient.GetData<List<ModelsLibraryCore.Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
+            Businesses = APIClient.GetData <List<ModelsLibraryCore.Business>>(new Uri(Helper.ServerAPI, "business").ToString(), Helper.Authentication);
             //var SectorsToComboBox = new List<string>();
 
-            var sectorsComboBox = Sectors.Select(x => x.NameSector);
-            this.ComboBoxSector.ItemsSource = sectorsComboBox;
-            this.ComboBoxPosition.ItemsSource = Enum.GetValues(typeof(Position)).Cast<object>().Select(e => new { Value = (int)e, DisplayName = e.ToString() });
-            //MEXER...
-            this.ComboBoxPosition.SelectedIndex = 0;
+            this.ComboBoxSector.ItemsSource = Sectors;
+            this.ComboBoxBusiness.ItemsSource = Businesses;
+
+            this.ComboBoxPosition.ItemsSource = Enum.GetValues(typeof(PositionInSector)).Cast<object>().Select(e => new { Value = (int)e, DisplayName = e.ToString() });
+            this.ComboBoxPosition.DisplayMemberPath = "DisplayName";
+            this.ComboBoxPosition.SelectedValuePath = "Value";
 
             int indexSector = Sectors.FindIndex(x => x.NameSector == InfoUser.Sector.NameSector);
             this.ComboBoxSector.SelectedIndex = indexSector;
+
+            int indexBusiness = Businesses.FindIndex(x => x.Name == InfoUser.Business.Name);
+
+
+            int indexPosition = Array.IndexOf(Enum.GetValues(typeof(PositionInSector)), InfoUser.Position);
+            this.ComboBoxPosition.SelectedIndex = indexPosition;
+
             
-            int indexPosition = Sectors.FindIndex(x => x.NameSector == InfoUser.Sector.NameSector);
-            this.ComboBoxSector.SelectedIndex = indexSector;
-
-
 
             this.TextBoxRegister.Text = InfoUser.Register;
             this.TextBoxName.Text = InfoUser.Name;
-            this.TextBoxBusiness.Text = InfoUser.ThirdParty;
-            this.ComboBoxPosition.Text = InfoUser.Position.ToString();
         }
 
         private void ButtonEditImage_Click(object sender, RoutedEventArgs e)

@@ -57,7 +57,7 @@ namespace SCM2020___Client.Frames.UserManager
                 return;
             }
 
-            this.DataGridUsers.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridUsers.Items.Clear(); }));
+            this.DataGridUsers.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridUsers.ItemsSource = null; }));
 
             try
             {
