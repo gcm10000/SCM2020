@@ -38,13 +38,26 @@ namespace SCM2020___Client.Frames.UserManager
         private void FillUI()
         {
             Sectors = APIClient.GetData<List<ModelsLibraryCore.Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
-            var ComboBoxSectors = Sectors.Select(x => x.NameSector);
-            this.SectorComboBox.ItemsSource = ComboBoxSectors;
+            //var SectorsToComboBox = new List<string>();
 
-            this.RegisterTextBox.Text = InfoUser.Register;
-            this.NameTextBox.Text = InfoUser.Name;
-            this.BusinessTextBox.Text = InfoUser.ThirdParty;
-            this.PositionComboBox.Text = InfoUser.Position.ToString();
+            var sectorsComboBox = Sectors.Select(x => x.NameSector);
+            this.ComboBoxSector.ItemsSource = sectorsComboBox;
+            this.ComboBoxPosition.ItemsSource = Enum.GetValues(typeof(Position)).Cast<object>().Select(e => new { Value = (int)e, DisplayName = e.ToString() });
+            //MEXER...
+            this.ComboBoxPosition.SelectedIndex = 0;
+
+            int indexSector = Sectors.FindIndex(x => x.NameSector == InfoUser.Sector.NameSector);
+            this.ComboBoxSector.SelectedIndex = indexSector;
+            
+            int indexPosition = Sectors.FindIndex(x => x.NameSector == InfoUser.Sector.NameSector);
+            this.ComboBoxSector.SelectedIndex = indexSector;
+
+
+
+            this.TextBoxRegister.Text = InfoUser.Register;
+            this.TextBoxName.Text = InfoUser.Name;
+            this.TextBoxBusiness.Text = InfoUser.ThirdParty;
+            this.ComboBoxPosition.Text = InfoUser.Position.ToString();
         }
 
         private void ButtonEditImage_Click(object sender, RoutedEventArgs e)

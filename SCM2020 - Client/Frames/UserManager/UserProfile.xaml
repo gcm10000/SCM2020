@@ -48,15 +48,15 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Matrícula" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
-                        <TextBox x:Name="RegisterTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="1"></TextBox>
+                        <TextBox x:Name="TextBoxRegister" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="1"></TextBox>
                         <TextBlock Text="Nome" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
-                        <TextBox x:Name="NameTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="3"></TextBox>
+                        <TextBox x:Name="TextBoxName" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="3"></TextBox>
                         <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>
-                        <TextBox x:Name="BusinessTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="5"></TextBox>
+                        <ComboBox x:Name="ComboBoxBusiness" ItemsSource="{Binding Business}" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="5"></ComboBox>
                         <TextBlock Text="Setor" FontSize="22" Margin="20 30 20 0" Grid.Row="6"></TextBlock>
-                        <ComboBox x:Name="SectorComboBox" SelectedIndex="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="7"></ComboBox>
+                        <ComboBox x:Name="ComboBoxSector" ItemsSource="{Binding Sectors}" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 0" Grid.Row="7"></ComboBox>
                         <TextBlock Text="Posição" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
-                        <ComboBox x:Name="PositionComboBox" SelectedIndex="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 30" Grid.Row="9"></ComboBox>
+                        <ComboBox x:Name="ComboBoxPosition" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 30" SelectedValuePath="Value" Grid.Row="9"></ComboBox>
                     </Grid>
                 </ScrollViewer>
                 <Button Grid.Row="1" Margin="10 0 10 0" Content="Atualizar Perfil" Name="ButtonUpdateProfile" Click="ButtonUpdateProfile_Click" Background="DarkGreen" BorderThickness="0"></Button>
