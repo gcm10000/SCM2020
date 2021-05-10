@@ -23,6 +23,7 @@ namespace ModelsLibraryCore
         /// </summary>
         [Required(ErrorMessage = "Insira o setor.")]
         public int Sector { get; set; }
-        public int Business { get; set; }
+        public int? Business { get; set; }
+        public PositionInSector Position { get; set; }
     }
 }

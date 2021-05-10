@@ -210,14 +210,22 @@ namespace SCM2020___Server.Controllers
             return BadRequest("Usuário ou senha inválidos.");
         }
 
-        [HttpPost("UpdateData")]
-        [Authorize(Roles = Roles.SCM)]
+        [HttpPost("UpdateProfile")]
+        //[Authorize(Roles = Roles.SCM)]
         public async Task<ActionResult<UserToken>> Update()
         {
-            var fromPOST = await SignUpUserInfo();
+            //CÓDIGO INCOMPLETO
 
-            var user = await UserManager.FindByNameAsync(fromPOST.Register);
-            UserManager.PasswordHasher.HashPassword(user, fromPOST.Password);
+            var fromPOST = JsonConvert.DeserializeObject<ModelsLibraryCore.Profile>(await Helper.RawFromBody(this));
+
+            var user = await UserManager.FindByIdAsync(fromPOST.Id);
+            user.Register = fromPOST.Register;
+            user.Name = fromPOST.Name;
+            user.BusinessId = fromPOST.Business;
+            user.SectorId = fromPOST.Sector;
+            user.Position = fromPOST.Position;
+            
+            //UserManager.PasswordHasher.HashPassword(user, fromPOST.Password);
 
             var updateUser = await UserManager.UpdateAsync(user);
             if (updateUser.Succeeded)
@@ -298,7 +306,9 @@ namespace SCM2020___Server.Controllers
             {
                 //var currentSector = ControlDbContext.Sectors.First(x => x.Id == user.IdSector);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.Register, string.Empty, currentSector);
+                var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
+                var businessName = (business != null) ? business.Name : string.Empty;
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector);
             }
             return BadRequest("Id não encontrado.");
         }
@@ -309,7 +319,9 @@ namespace SCM2020___Server.Controllers
             {
                 var user = UserManager.Users.First(x => x.UserName == register);
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
-                return new InfoUser(user.Id, user.Name, user.Register, string.Empty, currentSector);
+                var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
+                var businessName = (business != null) ? business.Name : string.Empty;
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
         }
@@ -329,7 +341,9 @@ namespace SCM2020___Server.Controllers
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in AppUsers)
             {
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.SectorId)));
+                var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
+                var businessName = (business != null) ? business.Name : string.Empty;
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId)));
             }
             return Ok(infoUsers);
 
@@ -343,7 +357,9 @@ namespace SCM2020___Server.Controllers
             System.Collections.Generic.List<InfoUser> infoUsers = new System.Collections.Generic.List<InfoUser>();
             foreach (var AppUser in allUsers)
             {
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, string.Empty, ControlDbContext.Sectors.Find(AppUser.SectorId)));
+                var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
+                var businessName = (business != null) ? business.Name : string.Empty;
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId)));
             }
             return Ok(infoUsers);
 

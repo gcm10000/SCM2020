@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -52,7 +53,8 @@ namespace SCM2020___Client.Frames.UserManager
             int indexSector = Sectors.FindIndex(x => x.NameSector == InfoUser.Sector.NameSector);
             this.ComboBoxSector.SelectedIndex = indexSector;
 
-            int indexBusiness = Businesses.FindIndex(x => x.Name == InfoUser.Business.Name);
+            var businessName = (InfoUser.Business != null) ? InfoUser.Business.Name : string.Empty;
+            int indexBusiness = Businesses.FindIndex(x => x.Name == businessName);
 
 
             int indexPosition = Array.IndexOf(Enum.GetValues(typeof(PositionInSector)), InfoUser.Position);
@@ -95,7 +97,32 @@ namespace SCM2020___Client.Frames.UserManager
 
         private void ButtonUpdateProfile_Click(object sender, RoutedEventArgs e)
         {
+            var register = TextBoxRegister.Text;
+            var name = TextBoxName.Text;
+            var business = ComboBoxBusiness.SelectedItem as Business;
+            int? businessId = (business != null) ? (int?)business.Id : null;
+            Sector sector = ComboBoxSector.SelectedItem as Sector;
+            var sectorId = sector.Id;
+            dynamic positionEnum = ComboBoxPosition.SelectedItem;
+            int positionIndex = positionEnum.Value;
 
+            Task.Run(() => UpdateProfile(InfoUser.Id, register, name, businessId, sectorId, positionIndex));
+        }
+
+        private void UpdateProfile(string id, string register, string name, int? businessId, int sectorId, int positionIndex)
+        {
+            Profile signUp = new Profile() 
+            {
+                Id = id,
+                Register = register, 
+                Name = name, 
+                Sector = sectorId, 
+                Business = businessId, 
+                Position = (PositionInSector) positionIndex 
+            };
+
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "user/UpdateProfile").ToString(), signUp, Helper.Authentication);
+            MessageBox.Show(result, "Servidor diz:");
         }
     }
 }
