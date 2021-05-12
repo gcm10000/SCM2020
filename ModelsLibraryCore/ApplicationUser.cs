@@ -13,5 +13,6 @@ namespace ModelsLibraryCore
         public int? SectorId { get; set; }
         public int? BusinessId { get; set; }
         public PositionInSector? Position { get; set; }
+        public string Image { get; set; }
     }
 }

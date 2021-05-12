@@ -8,7 +8,8 @@ namespace SCM2020___Server
 {
     public class ImageInput
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public string UserId { get; set; }
         public IFormFile Image { get; set; }
     }
 }

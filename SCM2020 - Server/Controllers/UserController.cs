@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.SignalR;
 using SCM2020___Server.Hubs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace SCM2020___Server.Controllers
 {
@@ -29,6 +30,7 @@ namespace SCM2020___Server.Controllers
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserController : Controller
     {
+        IHostingEnvironment _env;
         ControlDbContext ControlDbContext;
         UserManager<ApplicationUser> UserManager;
         SignInManager<ApplicationUser> SignInManager;
@@ -37,13 +39,14 @@ namespace SCM2020___Server.Controllers
         static bool EventActived = false;
         static List<StoreMessage> ListStoreMessage = new List<StoreMessage>();
         Sector MaterialControlSector;
-        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification)
+        public UserController(ControlDbContext controlDbContext, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, IHubContext<NotifyHub> Notification, IHostingEnvironment env)
         {
             this.ControlDbContext = controlDbContext;
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.Configuration = configuration;
             this.Notification = Notification;
+            this._env = env;
 
             Helper.Users = new List<ApplicationUser>(userManager.Users);
             if (!EventActived)
@@ -269,6 +272,47 @@ namespace SCM2020___Server.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
+        {
+            //EDITAR PARA ACEITAR IMAGEM...
+            if (imageInput.Image.Length < 10485760)
+            {
+                //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                var user = await UserManager.FindByIdAsync(imageInput.UserId);
+                //var product = context.ConsumptionProduct.Find(imageInput.Id);
+                //product.Photo = relativeUrl;
+                string relativeUrl = Helper.Combine("img", Helper.Combine("profiles", imageInput.UserId.ToString() + Path.GetExtension(imageInput.Image.FileName)));
+                string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
+
+                using (var stream = System.IO.File.Create(fullName))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await imageInput.Image.CopyToAsync(ms);
+                        var fileBytes = ms.ToArray();
+                        //Averiguar se é uma imagem válida
+                        if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
+                        {
+                            await imageInput.Image.CopyToAsync(stream);
+                        }
+                        else
+                        {
+                            return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+                        }
+                    }
+
+                }
+                //await context.SaveChangesAsync();
+                return Ok("Imagem enviada com sucesso.");
+            }
+            else
+            {
+                return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
+            }
+        }
+
         [HttpPost("ExistsName")]
         public async Task<ActionResult<bool>> ExistsName()
         {
@@ -308,7 +352,7 @@ namespace SCM2020___Server.Controllers
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector);
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position);
             }
             return BadRequest("Id não encontrado.");
         }
@@ -321,7 +365,7 @@ namespace SCM2020___Server.Controllers
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector);
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
         }
@@ -343,7 +387,7 @@ namespace SCM2020___Server.Controllers
             {
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId)));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position));
             }
             return Ok(infoUsers);
 
@@ -359,7 +403,7 @@ namespace SCM2020___Server.Controllers
             {
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId)));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position));
             }
             return Ok(infoUsers);
 

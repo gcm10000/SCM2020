@@ -55,6 +55,7 @@ namespace SCM2020___Client.Frames.UserManager
 
             var businessName = (InfoUser.Business != null) ? InfoUser.Business.Name : string.Empty;
             int indexBusiness = Businesses.FindIndex(x => x.Name == businessName);
+            this.ComboBoxBusiness.SelectedIndex = indexBusiness;
 
 
             int indexPosition = Array.IndexOf(Enum.GetValues(typeof(PositionInSector)), InfoUser.Position);

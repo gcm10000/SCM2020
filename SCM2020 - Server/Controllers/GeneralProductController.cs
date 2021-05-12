@@ -357,8 +357,8 @@ namespace SCM2020___Server.Controllers
             if (imageInput.Image.Length < 10485760)
             {
                 //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                string relativeUrl = Helper.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                var product = context.ConsumptionProduct.Find(imageInput.Id);
+                string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                var product = context.ConsumptionProduct.Find(imageInput.ProductId);
                 product.Photo = relativeUrl;
                 string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
                 
