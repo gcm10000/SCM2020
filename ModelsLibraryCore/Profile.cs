@@ -7,6 +7,7 @@ namespace ModelsLibraryCore
     public class Profile : InfoEmployee
     {
         public string Id { get; set; }
+        public string Photo { get; set; }
         public Profile() { }
     }
 }

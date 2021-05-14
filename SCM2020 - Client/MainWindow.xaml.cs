@@ -25,6 +25,7 @@ using System.Windows.Shapes;
 using WebAssemblyLibrary;
 using SCM2020___Client.Models;
 using System.Threading;
+using System.IO;
 
 namespace SCM2020___Client
 {
@@ -314,11 +315,13 @@ namespace SCM2020___Client
         private void InitializeNotifyIcon()
         {
             notifyIcon = new System.Windows.Forms.NotifyIcon();
-            notifyIcon.Icon = System.Drawing.SystemIcons.Exclamation;
             notifyIcon.BalloonTipTitle = "Controle de Materiais";
             notifyIcon.BalloonTipText = "Controle de Materiais";
             notifyIcon.Text = "Controle de Materiais";
             notifyIcon.Visible = true;
+            //var IcoPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "DETELNotify.ico");
+            var IcoUri = new Uri("DETELNotify.ico", UriKind.Relative);
+            notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
         }
         protected override void OnClosed(EventArgs e)
         {

@@ -13,8 +13,11 @@ namespace ModelsLibraryCore
         public Business Business { get; set; }
         public Sector Sector { get; set; }
         public PositionInSector? Position { get; set; }
+        public string Photo { get; set; }
+        public string NameBusiness { get; set; }
+        public string NameSector { get; set; }
         public InfoUser() { }
-        public InfoUser(string Id, string Name, string Register, string ThirdParty, Business Business, Sector Sector, PositionInSector? Position)
+        public InfoUser(string Id, string Name, string Register, string ThirdParty, Business Business, Sector Sector, PositionInSector? Position, string Photo)
         {
             this.Id = Id;
             this.Name = Name;
@@ -23,6 +26,7 @@ namespace ModelsLibraryCore
             this.Register = Register;
             this.Sector = Sector;
             this.Position = Position;
+            this.Photo = Photo;
         }
     }
 }

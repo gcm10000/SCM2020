@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
-        Title="LoginScreen" Height="500" Width="750" ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Title="LoginScreen" Height="500" Width="750">
     <Window.Resources>
         <Style x:Key="Triggers" TargetType="TextBox">
             <Style.Triggers>

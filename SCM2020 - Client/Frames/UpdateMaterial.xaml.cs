@@ -136,7 +136,7 @@ namespace SCM2020___Client.Frames
                     new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture)))
                 {
                     content.Add(new StreamContent(new FileStream(pathImage, FileMode.Open)), "Image", System.IO.Path.GetFileName(pathImage));
-                    content.Add(new StringContent(productId.ToString()), "Id");
+                    content.Add(new StringContent(productId.ToString()), "ProductId");
 
                     using (var message = client.PostAsync(url, content).Result)
                     {

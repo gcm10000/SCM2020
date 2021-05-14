@@ -64,19 +64,11 @@ namespace SCM2020___Client.Frames.UserManager
                 queryUser = System.Uri.EscapeDataString(queryUser);
 
                 var result = APIClient.GetData<List<InfoUser>>(new Uri(Helper.ServerAPI, $"User/search/{queryUser}").ToString(), Helper.Authentication);
-                //List<Models.QueryUsers> ListUsers = new List<Models.QueryUsers>();
-                //foreach (var user in result)
-                //{
-                //    Models.QueryUsers userToAdd = new Models.QueryUsers()
-                //    {
-                //        Name = user.Name,
-                //        Register = user.Register,
-                //        Sector = user.Sector.NameSector,
-                //        ThirdParty = user.ThirdParty,
-                //    };
-                //    ListUsers.Add(userToAdd);
-                //}
-                //queryUsers = new Templates.Query.QueryUsers(ListUsers);
+                foreach (var user in result)
+                {
+                    user.NameSector = (user.Sector != null) ? user.Sector.NameSector : null;
+                    user.NameBusiness = (user.Business != null) ? user.Business.Name : null;
+                }
                 this.DataGridUsers.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridUsers.ItemsSource = result; }));
             }
             catch (Exception ex)

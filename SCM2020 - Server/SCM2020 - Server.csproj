@@ -30,7 +30,7 @@
   <ItemGroup>
     <Folder Include="Migrations\ApplicationDb\" />
     <Folder Include="Models\" />
-    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\img\profiles\" />
   </ItemGroup>
 
   <ItemGroup>

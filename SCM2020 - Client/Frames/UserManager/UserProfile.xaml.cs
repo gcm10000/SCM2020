@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +18,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using ModelsLibraryCore;
 using ModelsLibraryCore.RequestingClient;
+using WebAssemblyLibrary;
+using static SCM2020___Client.Frames.UpdateMaterial;
 
 namespace SCM2020___Client.Frames.UserManager
 {
@@ -24,8 +30,11 @@ namespace SCM2020___Client.Frames.UserManager
     {
         private string imagePath = string.Empty;
         private InfoUser InfoUser;
+        private Profile Profile;
         private List<ModelsLibraryCore.Sector> Sectors;
         private List<ModelsLibraryCore.Business> Businesses;
+        public bool Successful = false;
+
 
         public EditProfile(InfoUser infoUser)
         {
@@ -60,11 +69,17 @@ namespace SCM2020___Client.Frames.UserManager
 
             int indexPosition = Array.IndexOf(Enum.GetValues(typeof(PositionInSector)), InfoUser.Position);
             this.ComboBoxPosition.SelectedIndex = indexPosition;
-
             
 
             this.TextBoxRegister.Text = InfoUser.Register;
             this.TextBoxName.Text = InfoUser.Name;
+
+            BitmapImage img = new BitmapImage(new Uri(Helper.Server, InfoUser.Photo));
+            ImageBrush image = new ImageBrush();
+            image.ImageSource = img;
+            this.BorderImagemProfile.Background = image;
+
+            this.ButtonRemoveImage.IsEnabled = InfoUser.Photo != null;
         }
 
         private void ButtonEditImage_Click(object sender, RoutedEventArgs e)
@@ -93,7 +108,11 @@ namespace SCM2020___Client.Frames.UserManager
 
         private void ButtonRemoveImage_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(this.GridImage.ActualWidth.ToString());
+            Task.Run(() =>
+            { 
+                var result = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/RemoveImage/{InfoUser.Id}").ToString(), Helper.Authentication);
+                MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+            });
         }
 
         private void ButtonUpdateProfile_Click(object sender, RoutedEventArgs e)
@@ -107,23 +126,100 @@ namespace SCM2020___Client.Frames.UserManager
             dynamic positionEnum = ComboBoxPosition.SelectedItem;
             int positionIndex = positionEnum.Value;
 
-            Task.Run(() => UpdateProfile(InfoUser.Id, register, name, businessId, sectorId, positionIndex));
-        }
-
-        private void UpdateProfile(string id, string register, string name, int? businessId, int sectorId, int positionIndex)
-        {
-            Profile signUp = new Profile() 
+            Profile = new Profile()
             {
-                Id = id,
-                Register = register, 
-                Name = name, 
-                Sector = sectorId, 
-                Business = businessId, 
-                Position = (PositionInSector) positionIndex 
+                Id = InfoUser.Id,
+                Register = register,
+                Name = name,
+                Sector = sectorId,
+                Business = businessId,
+                Position = (PositionInSector)positionIndex,
+                Photo = (imagePath != string.Empty) ? string.Concat(InfoUser.Id, System.IO.Path.GetExtension(imagePath)) : null
             };
 
-            var result = APIClient.PostData(new Uri(Helper.ServerAPI, "user/UpdateProfile").ToString(), signUp, Helper.Authentication);
-            MessageBox.Show(result, "Servidor diz:");
+            Task.Run(() => 
+            {
+                if (Profile.Photo != null)
+                {
+                    var response = UploadImage(new Uri(Helper.ServerAPI, "User/UploadImage").ToString(), Profile.Id, imagePath);
+                    if (response.Ok)
+                    {
+                        Successful = true;
+                        Task.Run(() =>
+                        {
+                            UpdateProfile();
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show(response.Message, "Erro ao enviar imagem", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    Successful = true;
+                    Task.Run(() =>
+                    {
+                        UpdateProfile();
+                    });
+                }
+            });
         }
+
+        private void UpdateProfile()
+        {
+            var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"user/UpdateProfile"), Profile, Helper.Authentication);
+            this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
+            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
+            }
+        }
+
+        private ResponseMaterial UploadImage(string url, string userId, string pathImage)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = Helper.Authentication;
+
+                using (var content =
+                    new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture)))
+                {
+                    content.Add(new StreamContent(new FileStream(pathImage, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)), "Image", System.IO.Path.GetFileName(pathImage));
+                    content.Add(new StringContent(userId.ToString()), "UserId");
+
+                    using (var message = client.PostAsync(url, content).Result)
+                    {
+                        var response = message.Content.ReadAsStringAsync().Result;
+                        return new ResponseMaterial() { Ok = message.IsSuccessStatusCode, Message = response };
+                    }
+                }
+            }
+        }
+
+
+        //private void UpdateProduct()
+        //{
+        //    var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"user/update/{Product.Id}"), Product, Helper.Authentication);
+        //    this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
+        //    if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        //    {
+        //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+        //        this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
+        //    }
+
+        //}
     }
 }

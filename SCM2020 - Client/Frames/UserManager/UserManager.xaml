@@ -40,22 +40,9 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Matrícula" Binding="{Binding Register}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Empresa" Binding="{Binding Business}" Width="Auto"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Setor" Binding="{Binding Sector}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Empresa" Binding="{Binding NameBusiness}" Width="Auto"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Setor" Binding="{Binding NameSector}" Width="Auto"></DataGridTextColumn>
                     <DataGridTextColumn Header="Posição" Binding="{Binding Position}" Width="Auto"></DataGridTextColumn>
-                    <!--Posição: Técnico, supervisor-->
-                    <DataGridTemplateColumn Header="Opções" Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <materialDesign:PopupBox PlacementMode="BottomAndAlignLeftEdges" Foreground="#FF999999" StaysOpen="False" Margin="0">
-                                    <StackPanel>
-                                        <Button x:Name="BtnUpdateMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Exibir informações" Click="BtnUpdateMaterial_Click"/>
-                                        <Button x:Name="BtnRemoveMaterial" Cursor="Hand" HorizontalAlignment="Stretch" Content="Atualizar informações" Click="BtnRemoveMaterial_Click"/>
-                                    </StackPanel>
-                                </materialDesign:PopupBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

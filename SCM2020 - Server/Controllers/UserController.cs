@@ -280,10 +280,11 @@ namespace SCM2020___Server.Controllers
             if (imageInput.Image.Length < 10485760)
             {
                 //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                var user = await UserManager.FindByIdAsync(imageInput.UserId);
                 //var product = context.ConsumptionProduct.Find(imageInput.Id);
                 //product.Photo = relativeUrl;
                 string relativeUrl = Helper.Combine("img", Helper.Combine("profiles", imageInput.UserId.ToString() + Path.GetExtension(imageInput.Image.FileName)));
+                var user = await UserManager.FindByIdAsync(imageInput.UserId);
+                user.Image = relativeUrl;
                 string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
 
                 using (var stream = System.IO.File.Create(fullName))
@@ -304,13 +305,42 @@ namespace SCM2020___Server.Controllers
                     }
 
                 }
+                var updateUser = await UserManager.UpdateAsync(user);
+                if (updateUser.Succeeded)
+                {
+                    return Ok("Imagem enviada com sucesso.");
+                }
+
+                return BadRequest("Erro na gravação na atualização da imagem.");
                 //await context.SaveChangesAsync();
-                return Ok("Imagem enviada com sucesso.");
             }
             else
             {
                 return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
             }
+        }
+
+        [HttpGet("RemoveImage/{userId}")]
+        public async Task<IActionResult> RemoveImage(string userId)
+        {
+            var user = await UserManager.FindByIdAsync(userId);
+            string fullName = Path.Combine(_env.WebRootPath, user.Image);
+            try
+            {
+                System.IO.File.Delete(fullName);
+                user.Image = null;
+
+                var updateUser = await UserManager.UpdateAsync(user);
+                if (updateUser.Succeeded)
+                {
+                    return Ok("Imagem removida com sucesso.");
+                }
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
+            return BadRequest("Não foi possivel remover imagem.");
         }
 
         [HttpPost("ExistsName")]
@@ -352,7 +382,7 @@ namespace SCM2020___Server.Controllers
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position);
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position, user.Image);
             }
             return BadRequest("Id não encontrado.");
         }
@@ -365,7 +395,7 @@ namespace SCM2020___Server.Controllers
                 var currentSector = ControlDbContext.Sectors.First(x => x.Id == 1);
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == user.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position);
+                return new InfoUser(user.Id, user.Name, user.Register, businessName, business, currentSector, user.Position, user.Image);
             }
             return BadRequest("Não existe um funcionário com esta matrícula.");
         }
@@ -387,7 +417,7 @@ namespace SCM2020___Server.Controllers
             {
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position, AppUser.Image));
             }
             return Ok(infoUsers);
 
@@ -403,7 +433,7 @@ namespace SCM2020___Server.Controllers
             {
                 var business = ControlDbContext.Business.SingleOrDefault(x => x.Id == AppUser.BusinessId);
                 var businessName = (business != null) ? business.Name : string.Empty;
-                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position));
+                infoUsers.Add(new InfoUser(AppUser.Id, AppUser.Name, AppUser.Register, businessName, business, ControlDbContext.Sectors.Find(AppUser.SectorId), AppUser.Position, AppUser.Image));
             }
             return Ok(infoUsers);
 
