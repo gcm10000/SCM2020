@@ -40,16 +40,6 @@ namespace SCM2020___Client.Frames.UserManager
             }
         }
 
-        private void BtnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            string txtsearch = TxtSearch.Text;
-            Task.Run(new Action(() =>
-            {
-                Search(txtsearch);
-            }));
-
-        }
-
         private void Search(string queryUser)
         {
             if (queryUser.Trim() == string.Empty)
@@ -77,21 +67,6 @@ namespace SCM2020___Client.Frames.UserManager
             }
         }
 
-        private void BtnUpdateMaterial_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnRemoveMaterial_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SearchConsumpterProduct_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void DataGridUsers_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (sender == null)
@@ -104,13 +79,29 @@ namespace SCM2020___Client.Frames.UserManager
                 //Client.Models.QueryUsers
                 e.Handled = true;
                 EditProfile userManager = new EditProfile(profile);
-                userManager.ShowDialog();
+                if (userManager.ShowDialog() == true)
+                {
+                    string txtsearch = TxtSearch.Text;
+                    Task.Run(new Action(() =>
+                    {
+                        Search(txtsearch);
+                    }));
+                }
             }
         }
 
         private void DataGridUsers_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
 
+        }
+
+        private void SearchUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            string txtsearch = TxtSearch.Text;
+            Task.Run(new Action(() =>
+            {
+                Search(txtsearch);
+            }));
         }
     }
 }

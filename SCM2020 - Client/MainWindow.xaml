@@ -85,8 +85,8 @@
                                 <materialDesign:PackIcon Foreground="White" Width="25" Height="25" Kind="DotsVertical" />
                             </materialDesign:PopupBox.ToggleContent>
                             <StackPanel Orientation="Vertical" Width="150">
-                                <Button Cursor="Hand" Content="Notificações"></Button>
-                                <Button Cursor="Hand" Content="Sair"></Button>
+                                <Button x:Name="ButtonNotification" Click="ButtonNotification_Click" Cursor="Hand" Content="Notificações"></Button>
+                                <Button x:Name="ButtonSignout" Click="ButtonSignout_Click" Cursor="Hand" Content="Sair"></Button>
                             </StackPanel>
                         </materialDesign:PopupBox>
                     </StackPanel>

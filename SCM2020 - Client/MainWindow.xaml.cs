@@ -209,7 +209,7 @@ namespace SCM2020___Client
         {
             notifyIcon.Visible = false;
             notifyIcon.Dispose();
-            Application.Current.Shutdown();
+
         }
         #region MenuVertical
         private void InitializeMenu()
@@ -328,19 +328,8 @@ namespace SCM2020___Client
             base.OnClosed(e);
             notifyIcon.Visible = false;
             notifyIcon.Dispose();
-            Application.Current.Shutdown();
-        }
-
-        private void SignIn()
-        {
-            var signIn = APIClient.MakeSignIn(new Uri(Helper.ServerAPI, "user/login/").ToString(),
-                Register: "59450",
-                Password: "SenhaSecreta#2020");
-
-            Helper.Authentication = signIn.Headers.Authorization;
-            Helper.NameIdentifier = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            Helper.CurrentSector = signIn.Sector;
-            Helper.Role = signIn.JwtSecurityToken.Claims.First(x => x.Type == ClaimTypes.Role).Value;
+            if (Helper.Authentication != null)
+                Application.Current.Shutdown();
         }
 
         private void LoadMenu()
@@ -456,5 +445,24 @@ namespace SCM2020___Client
             e.Handled = true;
 
         }
+
+        #region MenuOptions
+        private void ButtonNotification_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonSignout_Click(object sender, RoutedEventArgs e)
+        {
+            Helper.Authentication = null;
+            Helper.NameIdentifier = null;
+            Helper.CurrentSector = null;
+            Helper.Role = null;
+            GC.Collect();
+            LoginScreen loginScreen = new LoginScreen();
+            loginScreen.Show();
+            this.Close();
+        }
+        #endregion
     }
 }

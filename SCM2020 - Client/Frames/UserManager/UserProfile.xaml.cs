@@ -204,22 +204,5 @@ namespace SCM2020___Client.Frames.UserManager
                 }
             }
         }
-
-
-        //private void UpdateProduct()
-        //{
-        //    var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"user/update/{Product.Id}"), Product, Helper.Authentication);
-        //    this.Dispatcher.Invoke(new Action(() => { this.DialogResult = true; }));
-        //    if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
-        //    {
-        //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-        //        this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
-        //    }
-
-        //}
     }
 }
