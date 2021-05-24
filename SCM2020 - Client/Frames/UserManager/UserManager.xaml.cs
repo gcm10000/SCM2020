@@ -78,6 +78,8 @@ namespace SCM2020___Client.Frames.UserManager
                 InfoUser profile = obj as InfoUser;
                 //Client.Models.QueryUsers
                 e.Handled = true;
+                if (profile == null)
+                    return;
                 EditProfile userManager = new EditProfile(profile);
                 if (userManager.ShowDialog() == true)
                 {

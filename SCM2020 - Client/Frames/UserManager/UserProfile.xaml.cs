@@ -112,6 +112,10 @@ namespace SCM2020___Client.Frames.UserManager
             { 
                 var result = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/RemoveImage/{InfoUser.Id}").ToString(), Helper.Authentication);
                 MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (result.Contains("removida"))
+                {
+                    this.BorderImagemProfile.Dispatcher.Invoke(() => { this.BorderImagemProfile.Background = null; });
+                }
             });
         }
 
@@ -124,7 +128,7 @@ namespace SCM2020___Client.Frames.UserManager
             Sector sector = ComboBoxSector.SelectedItem as Sector;
             var sectorId = sector.Id;
             dynamic positionEnum = ComboBoxPosition.SelectedItem;
-            int positionIndex = positionEnum.Value;
+            int? positionIndex = (positionEnum != null) ? positionEnum.Value : null;
 
             Profile = new Profile()
             {
@@ -133,7 +137,7 @@ namespace SCM2020___Client.Frames.UserManager
                 Name = name,
                 Sector = sectorId,
                 Business = businessId,
-                Position = (PositionInSector)positionIndex,
+                Position = (PositionInSector?)positionIndex,
                 Photo = (imagePath != string.Empty) ? string.Concat(InfoUser.Id, System.IO.Path.GetExtension(imagePath)) : null
             };
 
