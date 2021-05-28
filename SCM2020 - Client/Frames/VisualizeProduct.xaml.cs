@@ -26,12 +26,13 @@ namespace SCM2020___Client.Frames
         public VisualizeProduct()
         {
             InitializeComponent();
-            this.PackIconBack.Visibility = Visibility.Hidden;
-            this.PackIconForward.Visibility = Visibility.Hidden;
+
         }
         public VisualizeProduct(ConsumptionProduct product)
         {
             InitializeComponent();
+            this.PackIconBack.Visibility = Visibility.Hidden;
+            this.PackIconForward.Visibility = Visibility.Hidden;
             this.Product = product;
             FillUI();
         }
@@ -129,24 +130,28 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.PackIconBack.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#A0000000"));
         }
 
         private void GridImageLeft_MouseLeave(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.PackIconBack.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#80000000"));
         }
 
         private void GridImageRight_MouseEnter(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.PackIconForward.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#A0000000"));
         }
 
         private void GridImageRight_MouseLeave(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.PackIconForward.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#80000000"));
         }
     }
 }
