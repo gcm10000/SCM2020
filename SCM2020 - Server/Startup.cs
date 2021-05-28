@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Collections.Generic;
 using SCM2020___Server.Hubs;
+using System.Net;
 
 namespace SCM2020___Server
 {
@@ -37,8 +38,15 @@ namespace SCM2020___Server
 
             services.AddControllers();
 
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(60);
+            });
 
-            //Indicate the database
+
+            //indicate the database
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ControlDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //Add identity
@@ -105,18 +113,15 @@ namespace SCM2020___Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            //app.Run(async (context) =>
-            //{
-            //    //await context.Response.WriteAsync("Hello World! - " + env.EnvironmentName);
-            //});
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseStatusCodePages(async context =>
             {
                 if (context.HttpContext.Response.StatusCode == 401)
                     await context.HttpContext.Response.WriteAsync("Access Denied. Please, sign in.");
             });
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 

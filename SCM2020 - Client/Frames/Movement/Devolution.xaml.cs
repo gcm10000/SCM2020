@@ -502,7 +502,7 @@ namespace SCM2020___Client.Frames.Movement
             string userId = string.Empty;
             try
             {
-                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
+                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString(), Helper.Authentication);
 
             }
             catch (HttpRequestException)
@@ -712,7 +712,7 @@ namespace SCM2020___Client.Frames.Movement
             Uri uriProductsSearch = new Uri(Helper.ServerAPI, $"generalproduct/search/{query}");
 
             //Requisição de dados baseado na busca
-            var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString());
+            var products = APIClient.GetData<List<ConsumptionProduct>>(uriProductsSearch.ToString(), Helper.Authentication);
 
             foreach (var infoProduct in products.ToList())
             {

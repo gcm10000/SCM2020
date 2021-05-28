@@ -59,7 +59,7 @@
                         <ComboBox x:Name="ComboBoxPosition" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 10 20 30" SelectedValuePath="Value" Grid.Row="9"></ComboBox>
                     </Grid>
                 </ScrollViewer>
-                <Button Grid.Row="1" Margin="10 0 10 0" Content="Atualizar Perfil" Name="ButtonUpdateProfile" Click="ButtonUpdateProfile_Click" Background="DarkGreen" BorderThickness="0"></Button>
+                <Button Grid.Row="1" Margin="10 0 10 0" Content="Atualizar Perfil" Name="ButtonUpdateProfile" Click="ButtonUpdateProfile_Click" Background="DarkGreen" BorderThickness="0" Cursor="Hand"></Button>
             </Grid>
         </Grid>
     </Grid>

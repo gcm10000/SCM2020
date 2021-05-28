@@ -20,7 +20,7 @@ namespace SCM2020___Server.Controllers
 
         public IActionResult Index()
         {
-            return Ok("HomeController");
+            return Ok("HomeController123");
         }
     }
 }

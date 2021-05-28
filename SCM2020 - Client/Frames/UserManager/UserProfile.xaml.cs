@@ -76,7 +76,7 @@ namespace SCM2020___Client.Frames.UserManager
 
             BitmapImage img = new BitmapImage(new Uri(Helper.Server, InfoUser.Photo));
             ImageBrush image = new ImageBrush();
-            image.ImageSource = img;
+            image.ImageSource = (InfoUser.Photo != null) ? img : Helper.DataImageNotAvaliable.LoadImage();
             this.BorderImagemProfile.Background = image;
 
             this.ButtonRemoveImage.IsEnabled = InfoUser.Photo != null;

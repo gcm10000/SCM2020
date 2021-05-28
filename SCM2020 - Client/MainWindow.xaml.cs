@@ -234,6 +234,7 @@ namespace SCM2020___Client
             menuQueries.Add(new SubItem("Movimentação", new Uri("Frames/Query/Movement.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Entrada por Fornecedor", new Uri("Frames/Query/InputByVendor.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Estoque", new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative)));
+            menuQueries.Add(new SubItem("Busca Inversa de Produtos", new Uri("Frames/Query/StockQuery.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Estoque pela Data", new Uri("Frames/Query/QueryByDate.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Patrimônio", new Uri("Frames/Query/QueryByPatrimony.xaml", UriKind.Relative)));
             menuQueries.Add(new SubItem("Ordem de Serviço por Data", new Uri("Frames/Query/QueryWorkOrderByDate.xaml", UriKind.Relative)));

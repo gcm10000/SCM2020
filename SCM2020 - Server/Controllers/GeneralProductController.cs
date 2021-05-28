@@ -354,39 +354,40 @@ namespace SCM2020___Server.Controllers
         [HttpPost("UploadImage")]
         public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
         {
-            if (imageInput.Image.Length < 10485760)
-            {
-                //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                var product = context.ConsumptionProduct.Find(imageInput.ProductId);
-                product.Photo = relativeUrl;
-                string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
+            //if (imageInput.Image.Length < 10485760)
+            //{
+            //    //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+            //    string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
+            //    var product = context.ConsumptionProduct.Find(imageInput.ProductId);
+            //    product.Photo = relativeUrl;
+            //    string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
                 
-                using (var stream = System.IO.File.Create(fullName))
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        await imageInput.Image.CopyToAsync(ms);
-                        var fileBytes = ms.ToArray();
-                        //Averiguar se é uma imagem válida
-                        if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
-                        {
-                            await imageInput.Image.CopyToAsync(stream);
-                        }
-                        else
-                        {
-                            return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
-                        }
-                    }
+            //    using (var stream = System.IO.File.Create(fullName))
+            //    {
+            //        using (var ms = new MemoryStream())
+            //        {
+            //            await imageInput.Image.CopyToAsync(ms);
+            //            var fileBytes = ms.ToArray();
+            //            //Averiguar se é uma imagem válida
+            //            if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
+            //            {
+            //                await imageInput.Image.CopyToAsync(stream);
+            //            }
+            //            else
+            //            {
+            //                return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+            //            }
+            //        }
 
-                }
-                await context.SaveChangesAsync();
-                return Ok("Imagem enviada com sucesso.");
-            }
-            else
-            {
-                return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
-            }
+            //    }
+            //    await context.SaveChangesAsync();
+            //    return Ok("Imagem enviada com sucesso.");
+            //}
+            //else
+            //{
+            //    return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
+            //}
+            return Ok("teste");
         }
     }
 }

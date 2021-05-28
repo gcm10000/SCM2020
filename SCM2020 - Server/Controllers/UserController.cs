@@ -274,14 +274,14 @@ namespace SCM2020___Server.Controllers
         }
 
         [HttpPost("UploadImage")]
+        [Consumes("multipart/form-data")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
         {
             //EDITAR PARA ACEITAR IMAGEM...
+            
             if (imageInput.Image.Length < 10485760)
             {
-                //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                //var product = context.ConsumptionProduct.Find(imageInput.Id);
-                //product.Photo = relativeUrl;
                 string relativeUrl = Helper.Combine("img", Helper.Combine("profiles", imageInput.UserId.ToString() + Path.GetExtension(imageInput.Image.FileName)));
                 var user = await UserManager.FindByIdAsync(imageInput.UserId);
                 user.Image = relativeUrl;
