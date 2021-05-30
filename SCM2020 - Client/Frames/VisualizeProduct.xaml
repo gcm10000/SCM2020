@@ -18,6 +18,9 @@
                 <materialDesign:PackIcon Name="PackIconForward" Visibility="Hidden" MouseEnter="PackIconForward_MouseEnter" MouseLeave="PackIconForward_MouseLeave" Panel.ZIndex="999" Cursor="Hand" Kind="ArrowForwardCircle" Width="48" Height="48" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#80000000"></materialDesign:PackIcon>
                 <Border CornerRadius="24" Height="48" Width="48" HorizontalAlignment="Right" Cursor="Hand" Name="GridImageRight" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseEnter="GridImageRight_MouseEnter"  MouseLeave="GridImageRight_MouseLeave"  Panel.ZIndex="9999" Background="Transparent">
                 </Border>
+                <Grid x:Name="GridCount" Visibility="Hidden" MouseEnter="GridCount_MouseEnter" MouseLeave="GridCount_MouseLeave"  Background="#A0000000" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="32" Panel.ZIndex="9999">
+                    <TextBlock x:Name="TextBlockCount" Text="1/2" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                </Grid>
             </Grid>
         </Grid>
         <Grid DockPanel.Dock="Right" Height="440">
