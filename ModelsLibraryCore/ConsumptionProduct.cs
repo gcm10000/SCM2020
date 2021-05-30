@@ -58,9 +58,8 @@ namespace ModelsLibraryCore
         public string Description { get; set; }
         /// <summary>
         /// Imagem do produto.
-        /// É recomendável que neste campo esteja apenas uma URL referenciando a imagem.
         /// </summary>
-        public string Photo { get; set; }
+        public List<Photo> Photos { get; set; }
         /// <summary>
         /// Onde o produto se encontra dentro do Sistema de Materiais.
         /// </summary>
