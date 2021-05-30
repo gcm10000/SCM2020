@@ -69,8 +69,8 @@ namespace SCM2020___Client.Frames
 
         private void FillUI()
         {
-            if (Product.Photo != null)
-                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, Product.Photo));
+            if (Product.Photos != null)
+                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, Product.Photos[0].Path));
             else
                 this.ProductImage.Source = Helper.DataImageNotAvaliable.LoadImage();
             this.DescriptionTextBlock.Text = $"{Product.Description} ({Product.Code})";

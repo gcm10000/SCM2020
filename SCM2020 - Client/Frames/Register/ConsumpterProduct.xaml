@@ -15,8 +15,9 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Background="White" Margin="30">
+                    <Grid Grid.Row="0" Background="White" Margin="30" x:Name="GridInputs">
                         <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
@@ -50,6 +51,14 @@
                         <TextBox x:Name="StockTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="13"></TextBox>
                         <TextBlock Text="Unidade" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="14"></TextBlock>
                         <TextBox x:Name="UnityTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 30" Grid.Row="15"></TextBox>
+                        <Grid Grid.Row="16" Margin="0 0 15 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Imagens" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="15"></TextBlock>
+                            <Button Grid.Column="1" x:Name="BtnAddImages" Margin="10 10 0 10" Click="BtnAddImages_Click" HorizontalAlignment="Right" Background="#FF1368BD" Foreground="White" Height="30" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" Content="Adicionar Imagem"></Button>
+                        </Grid>
                     </Grid>
                     <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">

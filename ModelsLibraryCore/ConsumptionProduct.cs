@@ -24,7 +24,7 @@ namespace ModelsLibraryCore
             this.Localization = productFromRaw.Value<string>("Localization");
             this.MaximumStock = productFromRaw.Value<double>("MaximumStock");
             this.MininumStock = productFromRaw.Value<double>("MininumStock");
-            this.Photo = productFromRaw.Value<string>("Photo");
+            this.Photos = productFromRaw.Value<List<Photo>>("Photos");
             this.Stock = productFromRaw.Value<double>("Stock");
             this.Unity = productFromRaw.Value<string>("Unity");
 
