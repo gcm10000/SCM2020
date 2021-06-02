@@ -463,7 +463,7 @@ namespace SCM2020___Server.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             //Token expiration
-            var expiration = DateTime.UtcNow.AddMinutes(60);
+            var expiration = DateTime.UtcNow.AddHours(24);
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: null,
                 audience: null,

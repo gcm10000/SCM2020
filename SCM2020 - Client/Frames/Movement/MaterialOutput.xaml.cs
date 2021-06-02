@@ -243,7 +243,7 @@ namespace SCM2020___Client.Frames
             var button = ((FrameworkElement)sender);
             var product = ((FrameworkElement)sender).DataContext as ProductToOutput;
             var dialog = new SCM2020___Client.Frames.DialogBox.AddAndRemove(product.QuantityAdded);
-            dialog.Owner = Application.Current.MainWindow;
+
             if (dialog.ShowDialog() == true)
             {
                 product.QuantityAdded = dialog.QuantityAdded;
@@ -924,13 +924,13 @@ namespace SCM2020___Client.Frames
             string userId = string.Empty;
             try
             {
-                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString());
+                userId = APIClient.GetData<string>(new Uri(Helper.ServerAPI, $"User/UserId/{register}").ToString(), Helper.Authentication);
 
             }
             catch (HttpRequestException)
             {
                 MessageBox.Show("Não existe um funcionário com esta matrícula.", "Matrícula sem funcionário", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return; 
             }
 
             //CRIANDO REGISTRO NO BANCO DE DADOS DE UMA NOVA ORDEM DE SERVIÇO...

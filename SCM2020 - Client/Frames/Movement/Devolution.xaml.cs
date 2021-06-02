@@ -174,8 +174,7 @@ namespace SCM2020___Client.Frames.Movement
                 this.TextBoxApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxApplicant.Text = infoUser.Name; }));
                 this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DatePickerMovingDate.SelectedDate = resultMonitoring.MovingDate; this.DatePickerMovingDate.DisplayDate = resultMonitoring.MovingDate; }));
                 this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.TextBoxServiceLocalization.Text = resultMonitoring.ServiceLocation; }));
-                //this.RegisterApplicantTextBox.Text = infoUser.Register;
-                //this.ApplicantTextBox.Text = infoUser.Name;
+                PrincipalMonitoring = resultMonitoring;
             }
             catch (System.Net.Http.HttpRequestException)
             {
@@ -195,16 +194,6 @@ namespace SCM2020___Client.Frames.Movement
             {
                 if (resultMonitoring.Situation == false) //Se a ordem de serviço encontra-se aberta
                 {
-                    
-                    //this.ButtonInformation.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonInformation.IsHitTestVisible = false; }));
-                    //this.ButtonPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPermanentProducts.IsHitTestVisible = true; }));
-                    //this.ButtonFinish.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonFinish.IsHitTestVisible = true; }));
-
-                    //this.InfoScrollViewer.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoScrollViewer.Visibility = Visibility.Visible; }));
-                    //this.InfoDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.InfoDockPanel.Visibility = Visibility.Visible; }));
-                    //this.FinalProductsDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.FinalProductsDockPanel.Visibility = Visibility.Collapsed; }));
-                    //this.PermanentDockPanel.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.PermanentDockPanel.Visibility = Visibility.Collapsed; }));
-
                     try
                     {
                         previousMaterialInput = APIClient.GetData<MaterialInput>(new Uri(Helper.ServerAPI, $"devolution/workorder/{workOrder}").ToString(), Helper.Authentication);
@@ -213,6 +202,9 @@ namespace SCM2020___Client.Frames.Movement
 
                         RescueProducts(previousMaterialInput);
                         InputData(false, false);
+
+                        this.ButtonPrint.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonPrint.IsEnabled = true; }));
+                        this.ButtonExport.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.ButtonExport.IsEnabled = true; }));
                     }
 
                     catch (System.Net.Http.HttpRequestException) //Não existe entrada nesta ordem de serviço
@@ -246,7 +238,6 @@ namespace SCM2020___Client.Frames.Movement
         private void InputData(bool IsEnable, bool OSDatePickerIsEnable)
         {
             this.TextBoxRegisterApplicant.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxRegisterApplicant.IsEnabled = IsEnable; }));
-            //this.ApplicantTextBox.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ApplicantTextBox.IsEnabled = IsEnable; }));
             this.ComboBoxReference.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { ComboBoxReference.IsEnabled = IsEnable; }));
             this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.IsEnabled = IsEnable; }));
             this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.IsEnabled = OSDatePickerIsEnable; }));
@@ -265,7 +256,6 @@ namespace SCM2020___Client.Frames.Movement
             List<ConsumpterProductDataGrid> consumpterProducts = new List<ConsumpterProductDataGrid>();
 
             this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Clear(); } ));
-            //this.FinalConsumpterProductsAddedDataGrid.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { } ));
             
             foreach (var item in materialInput.ConsumptionProducts)
             {
@@ -304,7 +294,6 @@ namespace SCM2020___Client.Frames.Movement
                     Description = infoProduct.Description,
                     Quantity = infoProduct.Stock,
                     Patrimony = infoPermanentProduct.Patrimony,
-                    //QuantityOutput = 1,
                     QuantityAdded = 1,
                 };
                 this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(consumpterProductDataGrid); }));
@@ -564,7 +553,7 @@ namespace SCM2020___Client.Frames.Movement
                 materialInput.ConsumptionProducts = new List<AuxiliarConsumption>();
             if (DataGridFinalPermanentProducts.Items.Count > 0)
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
-            foreach (ConsumpterProductDataGrid item in DataGridConsumpterProducts.Items)
+            foreach (ConsumpterProductDataGrid item in DataGridFinalConsumpterProducts.Items)
             {
                 AuxiliarConsumption auxiliarConsumption = new AuxiliarConsumption()
                 {
@@ -630,7 +619,6 @@ namespace SCM2020___Client.Frames.Movement
                 }
             }
 
-            //materialInput.ConsumptionProducts = listProduct;
             foreach (PermanentProductDataGrid item in DataGridFinalPermanentProducts.Items)
             {
                 //MEXER
