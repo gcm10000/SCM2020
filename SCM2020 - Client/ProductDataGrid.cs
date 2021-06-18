@@ -19,8 +19,8 @@ namespace SCM2020___Client
     }
     //É aconselhável que seja dado as classes internamente por cada classe GUI pois é fundamental que siga as especificações de entrada e saída.
     //A variável QuantityFuture por exemplo, na saída deveria apresentar uma subtração das duas variáveis, ao contrário das entradas.
-    //class PermanentProductDataGrid : ConsumpterProductDataGrid
-    //{
-    //    public string Patrimony { get; set; }
-    //}
+    class PermanentProductDataGrid : ConsumpterProductDataGrid
+    {
+        public string Patrimony { get; set; }
+    }
 }

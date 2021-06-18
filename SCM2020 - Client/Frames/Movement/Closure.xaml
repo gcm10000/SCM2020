@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid Background="#F0F0F0">
-        <ScrollViewer Name="ScrollViewerInfo" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Visibility="Visible">
+        <ScrollViewer Name="ScrollViewerInfo" Visibility="Visible">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -28,7 +28,7 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyDown="TextBoxWorkOrder_KeyDown" LostFocus="TextBoxWorkOrder_LostFocus"></TextBox>
+                            <TextBox Grid.Column="0" FontSize="22" x:Name="TextBoxWorkOrder" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxWorkOrder_KeyUp" KeyDown="TextBoxWorkOrder_KeyDown"></TextBox>
                             <materialDesign:PackIcon x:Name="IconStatus" Visibility="Hidden" Margin="10 0 0 0" Grid.Column="1" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" />
                         </Grid>
                         <TextBlock Text="Data de Fechamento" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>

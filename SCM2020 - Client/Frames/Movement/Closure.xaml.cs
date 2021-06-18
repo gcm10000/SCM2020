@@ -23,6 +23,7 @@ namespace SCM2020___Client.Frames
         public Closure()
         {
             InitializeComponent();
+            this.DatePickerClosureOSDate.SelectedDate = DateTime.Now;
         }
 
         private void BtnFinish_Click(object sender, RoutedEventArgs e)
@@ -40,21 +41,6 @@ namespace SCM2020___Client.Frames
             Uri uriClosure = new Uri(Helper.ServerAPI, $"Monitoring/Closure/{Year}/{Month}/{Day}");
             var result = APIClient.PostData(uriClosure.ToString(), workOrder, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-
-        }
-
-        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            DataGrid dt = (DataGrid)sender;
-            var scrollViewer = dt.GetScrollViewer();
-            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-            {
-                if (e.Delta > 0)
-                    scrollViewer.LineLeft();
-                else
-                    scrollViewer.LineRight();
-                e.Handled = true;
-            }
         }
 
         private void TextBoxWorkOrder_KeyDown(object sender, KeyEventArgs e)
@@ -74,16 +60,10 @@ namespace SCM2020___Client.Frames
             }
         }
 
-        private void TextBoxWorkOrder_LostFocus(object sender, RoutedEventArgs e)
-        {
-            string workOrder = this.TextBoxWorkOrder.Text;
-            Task.Run(() => 
-            {
-                StatusWO(workOrder);
-            });
-        }
         private bool StatusWO(string workOrder)
         {
+            if (workOrder == string.Empty)
+                return false;
             workOrder = System.Uri.EscapeDataString(workOrder);
 
             Uri uriExistsWorkOrder = new Uri(Helper.ServerAPI, $"Monitoring/ExistsWorkOrder/{workOrder}");
@@ -103,6 +83,7 @@ namespace SCM2020___Client.Frames
                     {
                         this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
                         this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.IconStatus.ToolTip = "Ordem de serviço aberta.";
                         this.ButtonFinish.IsEnabled = true;
                     });
                     return true;
@@ -113,6 +94,8 @@ namespace SCM2020___Client.Frames
                     {
                         this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
                         this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                        this.IconStatus.ToolTip = "Ordem de serviço fechada.";
+                        this.ButtonFinish.IsEnabled = false;
                     });
                 }
             }
@@ -122,6 +105,8 @@ namespace SCM2020___Client.Frames
                 {
                     this.IconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
                     this.IconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                    this.IconStatus.ToolTip = "Ordem de serviço inexistente.";
+                    this.ButtonFinish.IsEnabled = false;
                 });
 
             }
@@ -143,6 +128,15 @@ namespace SCM2020___Client.Frames
                     }
                 });
             }
+        }
+
+        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
+        {
+            string workOrder = this.TextBoxWorkOrder.Text;
+            Task.Run(() =>
+            {
+                StatusWO(workOrder);
+            });
         }
     }
 }

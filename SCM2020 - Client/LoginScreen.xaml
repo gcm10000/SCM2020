@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         ResizeMode="NoResize"
-        Title="LoginScreen" Height="500" Width="750">
+        Title="Entrar - Sistema de Controle de Materiais" Height="500" Width="750">
     <Window.Resources>
         <Style x:Key="Triggers" TargetType="TextBox">
             <Style.Triggers>

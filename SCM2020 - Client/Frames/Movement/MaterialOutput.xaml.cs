@@ -224,7 +224,10 @@ namespace SCM2020___Client.Frames
             
             foreach (var permanentProduct in products)
             {
-                permanentProducts.Add(new PermanentProductDataGrid(new SearchPermanentProduct(permanentProduct)));
+                if (permanentProduct.WorkOrder == null)
+                {
+                    permanentProducts.Add(new PermanentProductDataGrid(new SearchPermanentProduct(permanentProduct)));
+                }
             }
             this.DataGridPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridPermanentProducts.ItemsSource = permanentProducts; }));
         }
@@ -251,6 +254,8 @@ namespace SCM2020___Client.Frames
                 DataGridFinalConsumpterProducts.Items.Refresh();
                 if (!DataGridFinalConsumpterProducts.Items.Contains(product))
                 {
+                    if (product.QuantityAdded == 0)
+                        return;
                     product.NewProduct = button.Name == "BtnAdd";
                     DataGridFinalConsumpterProducts.Items.Add(product);
                     FinalConsumpterProductsAdded.Add(product);
@@ -327,8 +332,12 @@ namespace SCM2020___Client.Frames
             {
                 //CRIANDO REGISTRO DE UMA NOVA SAÍDA NA ORDEM DE SERVIÇO
                 var result2 = APIClient.PostData(new Uri(Helper.ServerAPI, "Output/Add").ToString(), materialOutput, Helper.Authentication);
-                MessageBox.Show(result2.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                string message = result2.DeserializeJson<string>();
+                if (message.Contains("sucesso"))
+                {
+                    RescueData(WorkOrder);
+                }
+                MessageBox.Show(message, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
 
@@ -470,6 +479,8 @@ namespace SCM2020___Client.Frames
             if (workOrder == string.Empty)
                 return;
 
+            FinalConsumpterProductsAdded.Clear();
+            FinalPermanentProductsAdded.Clear();
             DataToPrintORExportWasRescued = false;
             workOrder = System.Uri.EscapeDataString(workOrder);
             Monitoring monitoring = APIClient.GetData<Monitoring>(new Uri(Helper.ServerAPI, $"Monitoring/workorder/{workOrder}").ToString(), Helper.Authentication);

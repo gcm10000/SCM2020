@@ -89,22 +89,10 @@ namespace SCM2020___Client.Frames.Movement
             }
         }
 
-        private void ScrollViewerInfo_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            DataGrid dt = (DataGrid)sender;
-            var scrollViewer = dt.GetScrollViewer();
-            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-            {
-                if (e.Delta > 0)
-                    scrollViewer.LineLeft();
-                else
-                    scrollViewer.LineRight();
-                e.Handled = true;
-            }
-        }
-
         private bool StatusWO(string workOrder)
         {
+            if (workOrder.Length <= 1)
+                return false;
             workOrder = System.Uri.EscapeDataString(workOrder);
 
             Uri uriExistsWorkOrder = new Uri(Helper.ServerAPI, $"Monitoring/ExistsWorkOrder/{workOrder}");
@@ -119,11 +107,12 @@ namespace SCM2020___Client.Frames.Movement
                 var resultSituation = APIClient.GetData<bool>(uriCheckWorkOrder.ToString(), Helper.Authentication);
                 if (resultSituation)
                 {
-                    //Ordem de serviço existente e aberta
+                    //Ordem de serviço existente e fechada
                     this.Dispatcher.Invoke(() => 
                     {
                         this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("Green");
                         this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Done;
+                        this.PackIconStatus.ToolTip = "Ordem de serviço fechada.";
                         this.ButtonOpenWO.IsEnabled = true;
                     });
                     return true;
@@ -134,6 +123,8 @@ namespace SCM2020___Client.Frames.Movement
                     {
                         this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("DarkOrange");
                         this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Warning;
+                        this.PackIconStatus.ToolTip = "Ordem de serviço aberta.";
+                        this.ButtonOpenWO.IsEnabled = false;
                     });
                 }
             }
@@ -143,16 +134,18 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     this.PackIconStatus.Foreground = (SolidColorBrush)new BrushConverter().ConvertFromString("#CC0000");
                     this.PackIconStatus.Kind = MaterialDesignThemes.Wpf.PackIconKind.Error;
+                    this.PackIconStatus.ToolTip = "Ordem de serviço inexistente.";
+                    this.ButtonOpenWO.IsEnabled = false;
                 });
 
             }
             return false;
         }
 
-        private void TextBoxWorkOrder_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBoxWorkOrder_KeyUp(object sender, KeyEventArgs e)
         {
             string workOrder = this.TextBoxWorkOrder.Text;
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 StatusWO(workOrder);
             });

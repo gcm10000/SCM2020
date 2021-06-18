@@ -100,7 +100,6 @@ namespace SCM2020___Server.Controllers
             }
         }
         [HttpGet("ReverseSearch/{code}")]
-        [AllowAnonymous]
         public IActionResult ReverseSearch(int code)
         {
             //A partir do código produto, exibir todas as ordens de serviço e notas fiscais
@@ -283,7 +282,12 @@ namespace SCM2020___Server.Controllers
             GC.WaitForPendingFinalizers();
             return Ok(result);
         }
-
+        [HttpGet("CheckCode/{code}")]
+        public IActionResult CheckCode(int code)
+        {
+            var result = context.ConsumptionProduct.Any(x => x.Code == code);
+            return Ok(result);
+        }
         [HttpGet("Search/{query}")]
         public IActionResult Search(string query)
         {

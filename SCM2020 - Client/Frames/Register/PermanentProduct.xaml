@@ -27,7 +27,7 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Text="SKU do Produto" FontSize="22" Margin="20 30 20 0" Grid.Row="0"></TextBlock>
-                        <TextBox x:Name="CodeTextBox" LostFocus="CodeTextBox_LostFocus" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
+                        <TextBox x:Name="CodeTextBox" KeyUp="CodeTextBox_KeyUp" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
                         <TextBlock Text="Descrição" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
                         <TextBox x:Name="DescriptionTextBox" IsEnabled="False" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 20 20 0" Grid.Row="3"></TextBox>
                         <TextBlock Text="Estado" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>

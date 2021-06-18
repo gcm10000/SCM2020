@@ -37,7 +37,7 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="TextBoxWorkOrder" Grid.Column="0" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" KeyUp="TextBoxWorkOrder_KeyUp"></TextBox>
-                            <materialDesign:PackIcon Name="PackIconStatus" Visibility="Hidden" Background="Transparent" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="Teste" />
+                            <materialDesign:PackIcon Name="PackIconStatus" Visibility="Hidden" Background="Transparent" Margin="10 0 0 0" Kind="Done" Grid.Column="1" Foreground="Green" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="" />
                         </Grid>
                         <TextBlock Text="Data da Ordem de Serviço" FontSize="22" Margin="20 20 20 0" Grid.Row="2"></TextBlock>
                         <DatePicker Name="DatePickerMovingDate" FontSize="22" Margin="20 15 20 0" Grid.Row="3" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" SelectedDateChanged="DatePickerMovingDate_SelectedDateChanged"></DatePicker>

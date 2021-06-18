@@ -18,6 +18,7 @@ namespace ModelsLibraryCore
             this.Patrimony = newproduct.Patrimony;
             this.Status = newproduct.Status;
             this.DateAdd = newproduct.DateAdd;
+            this.WorkOrder = newproduct.WorkOrder;
         }
         public PermanentProduct()
         {

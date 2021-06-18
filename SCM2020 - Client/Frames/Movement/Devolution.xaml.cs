@@ -161,9 +161,15 @@ namespace SCM2020___Client.Frames.Movement
 
         private void RescueData(string workOrder)
         {
+            if (workOrder == string.Empty)
+                return;
+
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(() => { this.DataGridFinalConsumpterProducts.Items.Clear(); });
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(() => { this.DataGridFinalPermanentProducts.Items.Clear(); });
             workOrder = System.Uri.EscapeDataString(workOrder);
             var uriRequest = new Uri(Helper.ServerAPI, $"monitoring/WorkOrder/{workOrder}");
             Monitoring resultMonitoring = null;
+            
             //previousDevolutionExists = false;
             try
             {
@@ -231,8 +237,8 @@ namespace SCM2020___Client.Frames.Movement
             this.TextBoxServiceLocalization.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { TextBoxServiceLocalization.Text = string.Empty; }));
             this.DatePickerMovingDate.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DatePickerMovingDate.SelectedDate = DateTime.Now; }));
 
-            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.ItemsSource = null; }));
-            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.ItemsSource = null; }));
+            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Clear(); }));
+            this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Clear(); }));
         }
 
         private void InputData(bool IsEnable, bool OSDatePickerIsEnable)
@@ -255,8 +261,6 @@ namespace SCM2020___Client.Frames.Movement
         {
             List<ConsumpterProductDataGrid> consumpterProducts = new List<ConsumpterProductDataGrid>();
 
-            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Clear(); } ));
-            
             foreach (var item in materialInput.ConsumptionProducts)
             {
                 var infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{item.ProductId}").ToString(), Helper.Authentication);
@@ -275,12 +279,10 @@ namespace SCM2020___Client.Frames.Movement
                 {
                     consumpterProducts.Add(consumpterProductDataGrid);
                 }
-                //this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Add(consumpterProductDataGrid); }));
-
-                FinalConsumpterProductInputAdded.Add(consumpterProductDataGrid);
+                this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.Items.Add(consumpterProductDataGrid); }));
             }
 
-            this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.ItemsSource = consumpterProducts; }));
+            //this.DataGridFinalConsumpterProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalConsumpterProducts.ItemsSource = consumpterProducts; }));
             this.DataGridFinalPermanentProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { this.DataGridFinalPermanentProducts.Items.Clear(); }));
 
             foreach (var item in materialInput.PermanentProducts)
@@ -579,10 +581,13 @@ namespace SCM2020___Client.Frames.Movement
             Task.Run(() => 
             {
                 var result = APIClient.PostData(new Uri(Helper.ServerAPI, "devolution/add").ToString(), materialInput, Helper.Authentication);
-                MessageBox.Show(result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
+                string message = result.DeserializeJson<string>();
+                if (message.Contains("sucesso"))
+                {
+                    RescueData(workOrder);
+                }
+                MessageBox.Show(message, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
             });
-
-            this.previousMaterialInput = materialInput;
         }
         private void UpdateInput()
         {
@@ -598,7 +603,7 @@ namespace SCM2020___Client.Frames.Movement
 
             //var listProduct = materialInput.ConsumptionProducts.ToList();
 
-            foreach (ConsumpterProductDataGrid item in FinalConsumpterProductInputAdded)
+            foreach (ConsumpterProductDataGrid item in DataGridFinalConsumpterProducts.Items)
             {
                 if (item.NewProduct)
                 {
@@ -643,8 +648,6 @@ namespace SCM2020___Client.Frames.Movement
             var result = APIClient.PostData(new Uri(Helper.ServerAPI, $"devolution/Update/{materialInput.Id}").ToString(), this.previousMaterialInput, Helper.Authentication);
             MessageBox.Show(result, "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        List<ConsumpterProductDataGrid> FinalConsumpterProductInputAdded = new List<ConsumpterProductDataGrid>();
-        List<PermanentProductDataGrid> FinalPermanentProductInputAdded = new List<PermanentProductDataGrid>();
         private void BtnAddRemove_Click(object sender, RoutedEventArgs e)
         {
             var button = ((FrameworkElement)sender);
@@ -661,9 +664,11 @@ namespace SCM2020___Client.Frames.Movement
                 this.DataGridFinalConsumpterProducts.Items.Refresh();
                 if (!this.DataGridFinalConsumpterProducts.Items.Contains(product))
                 {
+                    if (product.QuantityAdded == 0)
+                        return;
                     product.NewProduct = button.Name == "BtnToAdd";
                     this.DataGridFinalConsumpterProducts.Items.Add(product);
-                    FinalConsumpterProductInputAdded.Add(product);
+                    //FinalConsumpterProductInputAdded.Add(product);
                 }
                 else
                 {

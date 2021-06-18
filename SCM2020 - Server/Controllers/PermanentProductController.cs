@@ -33,6 +33,19 @@ namespace SCM2020___Server.Controllers
             await context.SaveChangesAsync();
             return Ok("Migração feita com sucesso.");
         }
+        [HttpPost("RegisterInOutput/{patrimony}")]
+        public async Task<IActionResult> RegisterInOutput(string patrimony)
+        {
+            var product = context.PermanentProduct.Single(x => x.Patrimony == patrimony);
+            var output = context.MaterialOutput.Include(x => x.PermanentProducts).SingleOrDefault(x => x.WorkOrder == product.WorkOrder);
+            //É PRECISO CONVERTER UM PRODUTO CONSUMÍVEL EM PERMAMENTE
+            //PARA ISSO É PRECISO APAGAR UM PRODUTO CONSUMÍVEL DENTRO DA MOVIMENTAÇÃO DE CÓDIGO IGUAL
+            //E ADICIONAR UM PRODUTO PERMAMENTE NA COLEÇÃO DE PERMANENTES
+            output.PermanentProducts.Add(new AuxiliarPermanent() { Date = DateTime.Now, ProductId = product.Id, SCMEmployeeId = null });
+            await context.SaveChangesAsync();
+            return Ok("Migração feita com sucesso.");
+
+        }
         //Add new product content every information about
         [HttpPost("Add")]
         public async Task<IActionResult> Add()
