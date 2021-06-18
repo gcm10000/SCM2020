@@ -18,7 +18,7 @@
                                 <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Pesquisar movimentação..."  materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black" KeyDown="TxtSearch_KeyDown"></TextBox>
+                            <TextBox x:Name="TxtSearch" materialDesign:HintAssist.Hint="Pesquisar movimentação..." materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3"  Grid.Column="0" FontSize="16" VerticalContentAlignment="Center" Padding="2 0 0 0" Background="White" Foreground="Black" KeyDown="TxtSearch_KeyDown"></TextBox>
                             <Button Style="{x:Null}" Cursor="Hand" Grid.Column="1" Margin="10 0 0 0" Background="#FF1368BD" Foreground="White" Height="60" Width="100" Padding="0" x:Name="ButtonSearch" Click="ButtonSearch_Click">
                                 <materialDesign:PackIcon Kind="Search" Margin="10" Width="22" Height="22" VerticalAlignment="Center"></materialDesign:PackIcon>
                             </Button>

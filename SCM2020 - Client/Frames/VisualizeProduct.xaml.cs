@@ -69,8 +69,8 @@ namespace SCM2020___Client.Frames
 
         private void FillUI()
         {
-            if (Product.Photo != null)
-                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, Product.Photo));
+            if (Product.Photos != null)
+                this.ProductImage.Source = new BitmapImage(new Uri(Helper.Server, Product.Photos[0].Path));
             else
                 this.ProductImage.Source = Helper.DataImageNotAvaliable.LoadImage();
             this.DescriptionTextBlock.Text = $"{Product.Description} ({Product.Code})";
@@ -88,36 +88,45 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
         }
 
         private void ProductImage_MouseLeave(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
         }
 
         private void PackIconForward_MouseEnter(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
+
         }
 
         private void PackIconForward_MouseLeave(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
         }
 
         private void PackIconBack_MouseEnter(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
+
         }
 
         private void PackIconBack_MouseLeave(object sender, MouseEventArgs e)
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
+
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -130,6 +139,7 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
             this.PackIconBack.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#A0000000"));
         }
 
@@ -137,6 +147,7 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
             this.PackIconBack.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#80000000"));
         }
 
@@ -144,6 +155,7 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Visible;
             this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
             this.PackIconForward.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#A0000000"));
         }
 
@@ -151,7 +163,22 @@ namespace SCM2020___Client.Frames
         {
             this.PackIconBack.Visibility = Visibility.Hidden;
             this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
             this.PackIconForward.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#80000000"));
+        }
+
+        private void GridCount_MouseEnter(object sender, MouseEventArgs e)
+        {
+            this.PackIconBack.Visibility = Visibility.Visible;
+            this.PackIconForward.Visibility = Visibility.Visible;
+            this.GridCount.Visibility = Visibility.Visible;
+        }
+
+        private void GridCount_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.PackIconBack.Visibility = Visibility.Hidden;
+            this.PackIconForward.Visibility = Visibility.Hidden;
+            this.GridCount.Visibility = Visibility.Hidden;
         }
     }
 }

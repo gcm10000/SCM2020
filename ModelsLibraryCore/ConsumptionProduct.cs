@@ -24,7 +24,7 @@ namespace ModelsLibraryCore
             this.Localization = productFromRaw.Value<string>("Localization");
             this.MaximumStock = productFromRaw.Value<double>("MaximumStock");
             this.MininumStock = productFromRaw.Value<double>("MininumStock");
-            this.Photo = productFromRaw.Value<string>("Photo");
+            this.Photos = productFromRaw.Value<List<Photo>>("Photos");
             this.Stock = productFromRaw.Value<double>("Stock");
             this.Unity = productFromRaw.Value<string>("Unity");
 
@@ -58,9 +58,8 @@ namespace ModelsLibraryCore
         public string Description { get; set; }
         /// <summary>
         /// Imagem do produto.
-        /// É recomendável que neste campo esteja apenas uma URL referenciando a imagem.
         /// </summary>
-        public string Photo { get; set; }
+        public List<Photo> Photos { get; set; }
         /// <summary>
         /// Onde o produto se encontra dentro do Sistema de Materiais.
         /// </summary>

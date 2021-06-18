@@ -15,7 +15,7 @@ namespace SCM2020___Client.Models
             this.Localization = consumptionProduct.Localization;
             this.MaximumStock = consumptionProduct.MaximumStock;
             this.MininumStock = consumptionProduct.MininumStock;
-            this.Photo = consumptionProduct.Photo;
+            this.Photos = consumptionProduct.Photos;
             this.Stock = consumptionProduct.Stock;
             this.Unity = consumptionProduct.Unity;
 
@@ -39,7 +39,7 @@ namespace SCM2020___Client.Models
         /// Imagem do produto.
         /// É recomendável que neste campo esteja apenas uma URL referenciando a imagem.
         /// </summary>
-        public string Photo { get; set; }
+        public List<Photo> Photos { get; set; }
         /// <summary>
         /// Onde o produto se encontra dentro do Sistema de Materiais.
         /// </summary>

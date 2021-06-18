@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SCM2020___Server.Context;
 
 namespace SCM2020___Server.Migrations.ControlDb
 {
     [DbContext(typeof(ControlDbContext))]
-    partial class ControlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210529235650_NewMigration8")]
+    partial class NewMigration8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,6 +163,9 @@ namespace SCM2020___Server.Migrations.ControlDb
 
                     b.Property<double>("MininumStock")
                         .HasColumnType("float");
+
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Unity")
                         .IsRequired()
@@ -427,26 +432,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                     b.ToTable("PermanentProduct");
                 });
 
-            modelBuilder.Entity("ModelsLibraryCore.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ConsumptionProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConsumptionProductId");
-
-                    b.ToTable("Photo");
-                });
-
             modelBuilder.Entity("ModelsLibraryCore.Sector", b =>
                 {
                     b.Property<int>("Id")
@@ -624,13 +609,6 @@ namespace SCM2020___Server.Migrations.ControlDb
                         .WithMany("NumberSectors")
                         .HasForeignKey("SectorId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("ModelsLibraryCore.Photo", b =>
-                {
-                    b.HasOne("ModelsLibraryCore.ConsumptionProduct", null)
-                        .WithMany("Photos")
-                        .HasForeignKey("ConsumptionProductId");
                 });
 
             modelBuilder.Entity("ModelsLibraryCore.SolicitationMessage", b =>

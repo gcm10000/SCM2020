@@ -75,12 +75,13 @@ namespace SCM2020___Client.Frames
                 Stock = double.Parse(StockTextBox.Text),
                 Unity = UnityTextBox.Text,
                 Group = (GroupComboBox.SelectedIndex + 1),
-                Photo = (photopath != string.Empty) ? string.Concat(Product.Id, System.IO.Path.GetExtension(photopath)) : null
+                //Photo = (photopath != string.Empty) ? string.Concat(Product.Id, System.IO.Path.GetExtension(photopath)) : null
             };
 
             Task.Run(() => 
             {
-                if (Product.Photo != null)
+                //editar
+                if (Product.Photos != null)
                 {
                     var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, photopath);
                     if (response.Ok)
