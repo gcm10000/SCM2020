@@ -70,13 +70,13 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var lProduct = context.ConsumptionProduct.ToList();
+            var lProduct = context.ConsumptionProduct.Include(x => x.Photos).ToList();
             return Ok(lProduct);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> ShowById(int id)
         {
-            var product = await context.ConsumptionProduct.SingleOrDefaultAsync(x => x.Id == id);
+            var product = await context.ConsumptionProduct.Include(x => x.Photos).SingleOrDefaultAsync(x => x.Id == id);
             if (product != null)
             {
                 return Ok(product);
@@ -89,7 +89,7 @@ namespace SCM2020___Server.Controllers
         [HttpGet("Code/{code}")]
         public IActionResult ShowByCode(int code)
         {
-            var product = context.ConsumptionProduct.SingleOrDefault(x => x.Code == code);
+            var product = context.ConsumptionProduct.Include(x => x.Photos).SingleOrDefault(x => x.Code == code);
             if (product != null)
             {
                 return Ok(product);
@@ -106,7 +106,7 @@ namespace SCM2020___Server.Controllers
             var outputs = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             var inputs = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             var devolutions = context.MaterialInput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
-            var consumptionProducts = context.ConsumptionProduct.ToList();
+            var consumptionProducts = context.ConsumptionProduct.Include(x => x.Photos).ToList();
             var permanentProducts = context.PermanentProduct.ToList();
             var monitorings = context.Monitoring.ToList();
 
@@ -335,7 +335,6 @@ namespace SCM2020___Server.Controllers
                     Stock = product.Stock,
                 });
             }
-            //var tojson = JsonConvert.SerializeObject(listInventory, Formatting.Indented);
 
             return Ok(listInventory);
         }
@@ -358,40 +357,43 @@ namespace SCM2020___Server.Controllers
         [HttpPost("UploadImage")]
         public async Task<IActionResult> OnPostUploadAsync([FromForm] ImageInput imageInput)
         {
-            //if (imageInput.Image.Length < 10485760)
-            //{
-            //    //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-            //    string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
-            //    var product = context.ConsumptionProduct.Find(imageInput.ProductId);
-            //    product.Photo = relativeUrl;
-            //    string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
-                
-            //    using (var stream = System.IO.File.Create(fullName))
-            //    {
-            //        using (var ms = new MemoryStream())
-            //        {
-            //            await imageInput.Image.CopyToAsync(ms);
-            //            var fileBytes = ms.ToArray();
-            //            //Averiguar se é uma imagem válida
-            //            if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
-            //            {
-            //                await imageInput.Image.CopyToAsync(stream);
-            //            }
-            //            else
-            //            {
-            //                return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
-            //            }
-            //        }
+            if (imageInput.Image.Length < 10485760)
+            {
+                //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
+                var product = context.ConsumptionProduct.Find(imageInput.ProductId);
+                if (product.Photos == null)
+                {
+                    product.Photos = new List<Photo>();
+                }
+                product.Photos.Add(new Photo() { Path = relativeUrl });
+                string fullName = Path.Combine(_env.WebRootPath, relativeUrl);
 
-            //    }
-            //    await context.SaveChangesAsync();
-            //    return Ok("Imagem enviada com sucesso.");
-            //}
-            //else
-            //{
-            //    return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
-            //}
-            return Ok("teste");
+                using (var stream = System.IO.File.Create(fullName))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        await imageInput.Image.CopyToAsync(ms);
+                        var fileBytes = ms.ToArray();
+                        //Averiguar se é uma imagem válida
+                        if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
+                        {
+                            await imageInput.Image.CopyToAsync(stream);
+                        }
+                        else
+                        {
+                            return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+                        }
+                    }
+
+                }
+                await context.SaveChangesAsync();
+                return Ok("Imagem enviada com sucesso.");
+            }
+            else
+            {
+                return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
+            }
         }
     }
 }
