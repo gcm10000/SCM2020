@@ -50,6 +50,8 @@ namespace SCM2020___Client.Frames.Register
             }
         }
         List<InputImage> InputImages = new List<InputImage>();
+        int RemoveImages = 0;
+
         public ConsumptionProduct Product { get; private set; }
         public bool UpdateProduct = false;
         public class ResponseMaterial
@@ -285,6 +287,7 @@ namespace SCM2020___Client.Frames.Register
                 gridNewImage.Children.Remove(buttonSelectImage);
                 gridNewImage.Children.Remove(button);
                 gridInputsParent.Children.Remove(gridNewImage);
+                RemoveImages++;
             };
 
             buttonSelectImage.SetValue(Grid.ColumnProperty, 1);
@@ -292,7 +295,7 @@ namespace SCM2020___Client.Frames.Register
             gridNewImage.Children.Add(textboxImage);
             gridNewImage.Children.Add(buttonSelectImage);
             gridNewImage.Children.Add(buttonRemoveImage);
-            gridNewImage.SetValue(Grid.RowProperty, GridInputs.Children.Count);
+            gridNewImage.SetValue(Grid.RowProperty, GridInputs.Children.Count + RemoveImages);
             GridInputs.Children.Add(gridNewImage);
             InputImages.Add(new InputImage(nextNumber, textboxImage, buttonSelectImage, NewImage));
         }
