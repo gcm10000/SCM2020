@@ -144,6 +144,8 @@ namespace SCM2020___Client.Frames.Register
                             {
                                 string TextBoxPathText = string.Empty;
                                 inputImage.TextBoxPath.Dispatcher.Invoke(() => { TextBoxPathText = inputImage.TextBoxPath.Text; });
+                                if (TextBoxPathText == string.Empty)
+                                    return;
                                 var resultUploadImage = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), resultData.Id ?? default(int), TextBoxPathText);
                                 MessageBox.Show(resultUploadImage.Result.Message, "Servidor diz:", MessageBoxButton.OK, (resultUploadImage.Ok) ? MessageBoxImage.Information : MessageBoxImage.Error);
                             }
@@ -161,7 +163,6 @@ namespace SCM2020___Client.Frames.Register
                     else
                     {
                         MessageBox.Show(result.Result.DeserializeJson<string>(), "Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //this.Dispatcher.Invoke(new Action(() => { this.Close(); }));
                     }
 
                     var a = InputImages.Where(x => (x.NewImage == false) && (x.DeleteImage == true)); //Lista de imagens solicitadas
@@ -169,15 +170,19 @@ namespace SCM2020___Client.Frames.Register
                     {
                         //Apagar imagens já adicionadas
                         var resultRemoveImage = APIClient.DeleteData(new Uri(Helper.ServerAPI, $"generalproduct/RemoveImage/{Product.Id}/{item.PhotoId}").ToString(), Helper.Authentication);
+                        var deserializeJson = resultRemoveImage.DeserializeJson<Result>();
+                        MessageBox.Show(deserializeJson.Message, $"Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     var b = InputImages.Where(x => (x.NewImage == true)); //Adicionar imagens 
                     foreach (var item in b)
                     {
-                        string textBoxPath = string.Empty;
-                        item.TextBoxPath.Dispatcher.Invoke(() => { textBoxPath = item.TextBoxPath.Text; });
-                        var resultUploadImage = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, textBoxPath);
+                        string TextBoxPathText = string.Empty;
+                        item.TextBoxPath.Dispatcher.Invoke(() => { TextBoxPathText = item.TextBoxPath.Text; });
+                        if (TextBoxPathText == string.Empty)
+                            return;
+                        var resultUploadImage = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), Product.Id, TextBoxPathText);
+                        MessageBox.Show(resultUploadImage.Result.Message, $"Servidor diz:", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    //var response = UploadImage(new Uri(Helper.ServerAPI, "generalproduct/UploadImage").ToString(), product);
                 }
             }).Start();
         }
@@ -214,15 +219,17 @@ namespace SCM2020___Client.Frames.Register
             };
             textboxImage.SetValue(Grid.ColumnProperty, 0);
 
-            textboxImage.MouseDoubleClick += (args, e) =>
+            if (NewImage)
             {
-                string fullFileName = ImageDialog();
-                if (fullFileName != null)
+                textboxImage.MouseDoubleClick += (args, e) =>
                 {
-                    textboxImage.Text = fullFileName;
-                }
-
-            };
+                    string fullFileName = ImageDialog();
+                    if (fullFileName != null)
+                    {
+                        textboxImage.Text = fullFileName;
+                    }
+                };
+            }
 
             System.Windows.Controls.Button buttonSelectImage = new System.Windows.Controls.Button()
             {

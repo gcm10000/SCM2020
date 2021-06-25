@@ -401,6 +401,8 @@ namespace SCM2020___Server.Controllers
         {
             var product = context.ConsumptionProduct.Include(x => x.Photos).Single(x => x.Id == ProductId);
             var photo = product.Photos.Single(x => x.Id == PhotoId);
+            string fullName = Path.Combine(_env.WebRootPath, photo.Path);
+            System.IO.File.Delete(fullName);
             product.Photos.Remove(photo);
             await context.SaveChangesAsync();
             return Ok(new Result(ProductId, "Imagem removida com sucesso.", null));
