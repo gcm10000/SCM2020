@@ -49,7 +49,8 @@ namespace SCM2020___Server.Controllers
 
             context.ConsumptionProduct.Add(newProduct);
             await context.SaveChangesAsync();
-            return Ok("Produto adicionado com sucesso.");
+            await context.Entry(newProduct).GetDatabaseValuesAsync();
+            return Ok(new Result(newProduct.Id, "Produto adicionado com sucesso.", null));
         }
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id)
@@ -303,12 +304,12 @@ namespace SCM2020___Server.Controllers
             IEnumerable<ConsumptionProduct> lproduct = null;
             if ((firstNumber != null) && (querySplited.Length > 1))
             {
-                lproduct = context.ConsumptionProduct.ToList()
+                lproduct = context.ConsumptionProduct.Include(x => x.Photos).ToList()
                     .Where(x => string.Join(" ", x.Description, x.Code).MultiplesContainsWords(querySplited));
             }
             else
             {
-                lproduct = context.ConsumptionProduct.ToList()
+                lproduct = context.ConsumptionProduct.Include(x => x.Photos).ToList()
                     .Where(x => x.Description.MultiplesContainsWords(querySplited) || x.Code.ToString().Contains(query));
             }
 
@@ -360,8 +361,8 @@ namespace SCM2020___Server.Controllers
             if (imageInput.Image.Length < 10485760)
             {
                 //string path = Path.Combine("img", imageInput.Id.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + Path.GetExtension(imageInput.Image.FileName));
-                var product = context.ConsumptionProduct.Find(imageInput.ProductId);
+                string relativeUrl = Helper.Combine("img", imageInput.ProductId.ToString() + "-" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + Path.GetExtension(imageInput.Image.FileName));
+                var product = context.ConsumptionProduct.Include(x => x.Photos).Single(x => x.Id == imageInput.ProductId);
                 if (product.Photos == null)
                 {
                     product.Photos = new List<Photo>();
@@ -375,25 +376,34 @@ namespace SCM2020___Server.Controllers
                     {
                         await imageInput.Image.CopyToAsync(ms);
                         var fileBytes = ms.ToArray();
-                        //Averiguar se é uma imagem válida
+                        //Averigua se é uma imagem válida
                         if (!((Helper.GetImageFormat(fileBytes) == ImageFormat.tiff) || (Helper.GetImageFormat(fileBytes) == ImageFormat.unknown)))
                         {
                             await imageInput.Image.CopyToAsync(stream);
                         }
                         else
                         {
-                            return BadRequest("Este arquivo não é uma imagem ou não é um formato compatível.");
+                            return BadRequest(new Result(imageInput.ProductId, "Este arquivo não é uma imagem ou não é um formato compatível.", null));
                         }
                     }
 
                 }
                 await context.SaveChangesAsync();
-                return Ok("Imagem enviada com sucesso.");
+                return Ok(new Result(imageInput.ProductId, "Imagem enviada com sucesso.", relativeUrl));
             }
             else
             {
-                return BadRequest("Imagem maior ou igual a 10 MB. Envie um tamanho menor.");
+                return BadRequest(new Result(imageInput.ProductId, "Imagem maior ou igual a 10 MB. Envie um tamanho menor.", null));
             }
+        }
+        [HttpDelete("RemoveImage/{ProductId}/{PhotoId}")]
+        public async Task<IActionResult> RemoveImage(int ProductId, int PhotoId)
+        {
+            var product = context.ConsumptionProduct.Include(x => x.Photos).Single(x => x.Id == ProductId);
+            var photo = product.Photos.Single(x => x.Id == PhotoId);
+            product.Photos.Remove(photo);
+            await context.SaveChangesAsync();
+            return Ok(new Result(ProductId, "Imagem removida com sucesso.", null));
         }
     }
 }

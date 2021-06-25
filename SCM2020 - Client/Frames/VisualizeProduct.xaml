@@ -12,14 +12,14 @@
         <Grid DockPanel.Dock="Left" Width="450" Name="GridImage">
             <Grid Margin="30" Width="390" Height="390">
                 <Image x:Name="ProductImage" MouseEnter="ProductImage_MouseEnter" MouseLeave="ProductImage_MouseLeave" VerticalAlignment="Top" HorizontalAlignment="Left" Width="390" Height="390" Stretch="Fill"  Source="{x:Null}"></Image>
-                <materialDesign:PackIcon Name="PackIconBack" Visibility="Hidden" MouseEnter="PackIconBack_MouseEnter" MouseLeave="PackIconBack_MouseLeave" Panel.ZIndex="999" Cursor="Hand" Kind="ArrowBackCircle" Width="48" Height="48" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#80000000"></materialDesign:PackIcon>
-                <Border CornerRadius="24" Height="48" Width="48" HorizontalAlignment="Left" Cursor="Hand" Name="GridImageLeft" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseEnter="GridImageLeft_MouseEnter"  MouseLeave="GridImageLeft_MouseLeave"  Panel.ZIndex="9999" Background="Transparent">
+                <materialDesign:PackIcon Name="PackIconBack" Visibility="Hidden" MouseEnter="PackIconBack_MouseEnter" MouseLeave="PackIconBack_MouseLeave" Panel.ZIndex="999" Kind="ArrowBackCircle" Width="48" Height="48" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#80000000"></materialDesign:PackIcon>
+                <Border CornerRadius="24" Height="48" Width="48" HorizontalAlignment="Left" Cursor="Hand" Name="BorderImageLeft" MouseLeftButtonDown="BorderImageLeft_MouseLeftButtonDown" MouseEnter="BorderImageLeft_MouseEnter" MouseLeave="BorderImageLeft_MouseLeave" Panel.ZIndex="9999" Background="Transparent">
                 </Border>
-                <materialDesign:PackIcon Name="PackIconForward" Visibility="Hidden" MouseEnter="PackIconForward_MouseEnter" MouseLeave="PackIconForward_MouseLeave" Panel.ZIndex="999" Cursor="Hand" Kind="ArrowForwardCircle" Width="48" Height="48" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#80000000"></materialDesign:PackIcon>
-                <Border CornerRadius="24" Height="48" Width="48" HorizontalAlignment="Right" Cursor="Hand" Name="GridImageRight" MouseLeftButtonDown="Grid_MouseLeftButtonDown" MouseEnter="GridImageRight_MouseEnter"  MouseLeave="GridImageRight_MouseLeave"  Panel.ZIndex="9999" Background="Transparent">
+                <materialDesign:PackIcon Name="PackIconForward" Visibility="Hidden" MouseEnter="PackIconForward_MouseEnter" MouseLeave="PackIconForward_MouseLeave" Panel.ZIndex="999" Kind="ArrowForwardCircle" Width="48" Height="48" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#80000000"></materialDesign:PackIcon>
+                <Border CornerRadius="24" Height="48" Width="48" HorizontalAlignment="Right" Cursor="Hand" Name="BorderImageRight" MouseLeftButtonDown="BorderImageRight_MouseLeftButtonDown"  MouseEnter="BorderImageRight_MouseEnter"  MouseLeave="BorderImageRight_MouseLeave" Panel.ZIndex="9999" Background="Transparent">
                 </Border>
                 <Grid x:Name="GridCount" Visibility="Hidden" MouseEnter="GridCount_MouseEnter" MouseLeave="GridCount_MouseLeave"  Background="#A0000000" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="32" Panel.ZIndex="9999">
-                    <TextBlock x:Name="TextBlockCount" Text="1/2" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock x:Name="TextBlockCount" Text="0/0" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </Grid>
             </Grid>
         </Grid>
