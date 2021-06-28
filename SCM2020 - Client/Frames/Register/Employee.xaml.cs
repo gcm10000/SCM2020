@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,47 +26,30 @@ namespace SCM2020___Client.Frames.Register
     /// </summary>
     public partial class Employee : UserControl
     {
-        List<ModelsLibraryCore.Sector> Sectors;
-        List<ModelsLibraryCore.Business> Businesses;
-        List<string> SectorsName;
-        List<string> BusinessesName;
-        ObservableCollection<ModelsLibraryCore.Sector> SectorsComboBox;
-        public Sector SSector;
         public Employee()
         {
-            Sectors = APIClient.GetData<List<ModelsLibraryCore.Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
-            Businesses = APIClient.GetData<List<ModelsLibraryCore.Business>>(new Uri(Helper.ServerAPI, "business").ToString(), Helper.Authentication);
-            SectorsComboBox = new ObservableCollection<ModelsLibraryCore.Sector>();
-            SectorsName = new List<string>();
-            foreach (var sector in Sectors)
-            {
-                //SectorsName.Add($"{sector.NumberSector}: {sector.NameSector}");
-                SectorsComboBox.Add(sector);
-            }
-            //RESOLVER CADASTRO DE FUNCIONÁRIOS, SETORES OPERANDO OK
+            List<ModelsLibraryCore.Sector> Sectors = APIClient.GetData<List<ModelsLibraryCore.Sector>>(new Uri(Helper.ServerAPI, "sector").ToString(), Helper.Authentication);
+            List<ModelsLibraryCore.Business> Businesses = APIClient.GetData<List<ModelsLibraryCore.Business>>(new Uri(Helper.ServerAPI, "business").ToString(), Helper.Authentication);
             InitializeComponent();
             SectorComboBox.ItemsSource = Sectors;
-            Console.WriteLine(SectorComboBox.SelectedValue);
-            BusinessesName = new List<string>();
-            foreach (var business in Businesses)
-            {
-                BusinessesName.Add(business.Name);
-            }
-            BusinessComboBox.ItemsSource = BusinessesName;
+            BusinessComboBox.ItemsSource = Businesses;
         }
 
         private void BtnSaveEmployee_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(SectorComboBox.SelectedValue);
+            if (SectorComboBox.SelectedIndex != -1)
+            {
+                MessageBox.Show("Preencha campo de setor.", "Campo vazio", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ModelsLibraryCore.Sector sector = ((ModelsLibraryCore.Sector)SectorComboBox.SelectedItem);
 
             ModelsLibraryCore.SignUpUserInfo employee = new ModelsLibraryCore.SignUpUserInfo
             {
                 Name = NameTextBox.Text,
                 Register = RegisterTextBox.Text,
-                //Editar
-                //Occupation = OccupationTextBox.Text,
-                Business = (BusinessComboBox.SelectedIndex + 1),
-                Sector = (SectorComboBox.SelectedIndex + 1),
+                Business = (BusinessComboBox.SelectedIndex != -1) ? (int?)((ModelsLibraryCore.Business)BusinessComboBox.SelectedItem).Id : null,
+                Sector = sector.Id,
                 Password = PasswordBoxTextBox.Password
             };
             new Task(() =>

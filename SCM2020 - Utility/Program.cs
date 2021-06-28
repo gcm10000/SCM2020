@@ -177,6 +177,23 @@ namespace SCM2020___Utility
                 NameSector = "Desconhecido",
                 NumberSectors = new List<NumberSectors>() { new NumberSectors() {  Number = 99 } }
             };
+            //Sector sector8 = new Sector()
+            //{
+            //    NameSector = "Controle de Materiais",
+            //    NumberSectors = new List<NumberSectors>() { }
+            //};
+            //Sector sector9 = new Sector()
+            //{
+            //    NameSector = "DETEL",
+            //    NumberSectors = new List<NumberSectors>() { }
+            //};
+
+            Sector sector10 = new Sector()
+            {
+                NameSector = "Administrador",
+                NumberSectors = new List<NumberSectors>() { }
+            };
+
 
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector2, Authentication));
@@ -185,6 +202,9 @@ namespace SCM2020___Utility
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector5, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector6, Authentication));
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
+            //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector8, Authentication));
+            //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector9, Authentication));
+            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector10, Authentication));
 
 
         }

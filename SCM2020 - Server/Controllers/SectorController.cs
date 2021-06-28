@@ -86,7 +86,7 @@ namespace SCM2020___Server.Controllers
         [HttpDelete("Remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var sector = context.Sectors.Find(id);
+            var sector = context.Sectors.Include(x => x.NumberSectors).Single(x => x.Id == id);
             var list = await userManager.GetUsersForClaimAsync(new System.Security.Claims.Claim("Occupation", sector.NameSector));
 
             if (list.Count > 0)
@@ -103,6 +103,11 @@ namespace SCM2020___Server.Controllers
                     }
                 }
             }
+            foreach (var number in sector.NumberSectors)
+            {
+                context.NumberSectors.Remove(number);
+            }
+            sector.NumberSectors.Clear();
             context.Sectors.Remove(sector);
             await context.SaveChangesAsync();
             return Ok("Setor removido com sucesso.");

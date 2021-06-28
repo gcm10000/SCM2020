@@ -35,14 +35,12 @@
                         <TextBox x:Name="NameTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="1"></TextBox>
                         <TextBlock Text="Matrícula" FontSize="22" Margin="20 30 20 0" Grid.Row="2"></TextBlock>
                         <TextBox x:Name="RegisterTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="3"></TextBox>
-                        <TextBlock Text="Cargo" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>
-                        <TextBox x:Name="OccupationTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="5"></TextBox>
-                        <TextBlock Text="Setor" FontSize="22" Margin="20 30 20 0" Grid.Row="6"></TextBlock>
-                        <ComboBox x:Name="SectorComboBox" FontSize="22" ItemsSource="{Binding Sector}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="7"></ComboBox>
-                        <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
-                        <ComboBox x:Name="BusinessComboBox" FontSize="22" ItemsSource="{Binding Business}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 0" Grid.Row="9"></ComboBox>
-                        <TextBlock Text="Senha" FontSize="22" Margin="20 30 20 0" Grid.Row="10"></TextBlock>
-                        <PasswordBox x:Name="PasswordBoxTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 30" Grid.Row="11"></PasswordBox>
+                        <TextBlock Text="Setor" FontSize="22" Margin="20 30 20 0" Grid.Row="4"></TextBlock>
+                        <ComboBox x:Name="SectorComboBox" FontSize="22" ItemsSource="{Binding Sector}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" DisplayMemberPath="NameSector" SelectedValuePath="Id" Margin="20 15 20 0" Grid.Row="5"></ComboBox>
+                        <TextBlock Text="Empresa" FontSize="22" Margin="20 30 20 0" Grid.Row="6"></TextBlock>
+                        <ComboBox x:Name="BusinessComboBox" FontSize="22" ItemsSource="{Binding Business}" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" DisplayMemberPath="Name" SelectedValuePath="Id" Margin="20 15 20 0" Grid.Row="7"></ComboBox>
+                        <TextBlock Text="Senha" FontSize="22" Margin="20 30 20 0" Grid.Row="8"></TextBlock>
+                        <PasswordBox x:Name="PasswordBoxTextBox" FontSize="22" materialDesign:TextFieldAssist.UnderlineBrush="#FF2196F3" Margin="20 15 20 30" Grid.Row="9"></PasswordBox>
                     </Grid>
                     <Grid Grid.Row="1" Background="#FFF5F5F5" Margin="30">
                         <StackPanel Orientation="Horizontal">

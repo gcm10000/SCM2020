@@ -55,7 +55,7 @@ namespace SCM2020___Server.Controllers
                 //criar uma tabela referenciando setor(es)
                 //ID
                 //SECTORID
-                MaterialControlSector = this.ControlDbContext.Sectors.Single(x => x.NameSector.Contains("Controle de Materiais"));
+                MaterialControlSector = this.ControlDbContext.Sectors.SingleOrDefault(x => x.NameSector.Contains("Controle de Materiais"));
                 ConsumptionProduct.ValueChanged += ConsumptionProduct_ValueChanged;
             }
 
@@ -78,6 +78,8 @@ namespace SCM2020___Server.Controllers
 
         private void ConsumptionProduct_ValueChanged(ConsumptionProduct ConsumptionProduct, EventArgs e)
         {
+            if (MaterialControlSector == null)
+                return;
             var SCM = Helper.Users.Where(x => x.SectorId == MaterialControlSector.Id);
             List<Destination> destination = new List<Destination>();
             foreach (var user in SCM)
