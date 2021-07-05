@@ -96,7 +96,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Button Margin="10 0 0 0" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonPrevious1" Click="ButtonPrevious1_Click"   Content="Anterior" Cursor="Hand">
                     </Button>
-                    <Button Margin="10 0 0 0" IsEnabled="False" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext2" Click="ButtonNext2_Click"  Content="Próximo" Cursor="Hand">
+                    <Button Margin="10 0 0 0" IsEnabled="True" HorizontalAlignment="Left" Background="#FF1368BD" Foreground="White" Height="40" Width="100" materialDesign:ShadowAssist.ShadowEdges="None" SnapsToDevicePixels="True" BorderThickness="0" x:Name="ButtonNext2" Click="ButtonNext2_Click" Content="Próximo" Cursor="Hand">
                     </Button>
                 </StackPanel>
             </Grid>

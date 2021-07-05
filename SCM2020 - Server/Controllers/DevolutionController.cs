@@ -99,6 +99,7 @@ namespace SCM2020___Server.Controllers
             if (materialInput.PermanentProducts == null)
                 materialInput.PermanentProducts = new List<AuxiliarPermanent>();
 
+            #region Comentários
             //14-08-2020
             //var output = context.MaterialOutput.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts)
             //    .FirstOrDefault(x => x.WorkOrder == materialInput.WorkOrder);
@@ -146,7 +147,7 @@ namespace SCM2020___Server.Controllers
 
             //}
             //FIM - 14-08-2020
-
+            #endregion
             if (context.MaterialInput.Any(x => x.WorkOrder == materialInput.WorkOrder))
                 return BadRequest("Já existe objeto de entrada vinculada a esta ordem de serviço.");
 

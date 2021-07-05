@@ -25,13 +25,13 @@ namespace SCM2020___Server.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            var list = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).ToList();
+            var list = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList();
             return Ok(list);
         }
         [HttpGet("{id}")]
         public IActionResult ShowById(int id)
         {
-            var list = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Id == id);
+            var list = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Id == id);
             return Ok(list);
         }
         [HttpGet("ExistsInput/{invoice}")]
@@ -48,7 +48,7 @@ namespace SCM2020___Server.Controllers
             invoice = invoice.Trim();
             if (string.IsNullOrWhiteSpace(invoice))
                 return Ok();
-            var record = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).SingleOrDefault(x => x.Invoice == invoice);
+            var record = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).SingleOrDefault(x => x.Invoice == invoice);
             return Ok(record);
         }
         [HttpGet("Date/{StartDay}-{StartMonth}-{StartYear}/{EndDay}-{EndMonth}-{EndYear}")]
@@ -58,7 +58,7 @@ namespace SCM2020___Server.Controllers
             DateTime dateEnd = new DateTime(EndYear, EndMonth, EndDay, 23, 59, 59);
             List<AuxiliarConsumption> inputs = new List<AuxiliarConsumption>();
 
-            var listMaterialInput = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts);
+            var listMaterialInput = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts);
 
             foreach (var input in listMaterialInput)
             {
@@ -102,7 +102,6 @@ namespace SCM2020___Server.Controllers
             if (!input.ConsumptionProducts.All(x => context.ConsumptionProduct.Any(y => y.Id == x.ProductId)))
                 return BadRequest("Há algum produto na lista não cadastrado. Verifique e tente novamente.");
 
-            context.MaterialInputByVendor.Add(input);
             //Incrementar um produto
             foreach (var item in input.ConsumptionProducts)
             {
@@ -110,6 +109,31 @@ namespace SCM2020___Server.Controllers
                 product.Stock += item.Quantity;
                 context.ConsumptionProduct.Update(product);
             }
+
+            foreach (var pp in input.PermanentProducts)
+            {
+                //Cria um novo produto permanente
+                PermanentProduct p = new PermanentProduct()
+                {
+                    DateAdd = pp.Date,
+                    InformationProduct = pp.ProductId,
+                    Patrimony = pp.Patrimony,
+                    Status = Status.New,
+                    WorkOrder = null
+                };
+                var c = context.ConsumptionProduct.Find(p.InformationProduct);
+                p.WorkOrder = null;
+                c.Stock += 1;
+                context.PermanentProduct.Add(p);
+                context.ConsumptionProduct.Update(c);
+                await context.SaveChangesAsync();
+                
+                //Atrela a movimentação
+                context.Entry(p).GetDatabaseValues();
+                pp.ProductId = p.Id;
+            }
+
+            context.MaterialInputByVendor.Add(input);
             await context.SaveChangesAsync();
             return Ok("Entrada por fornecedor foi adicionada com sucesso.");
         }

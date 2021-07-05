@@ -91,6 +91,7 @@
                                 <DataGridTextColumn Width="Auto" Header="Descrição" Binding="{Binding Path=Description}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Quantidade" Binding="{Binding Path=Quantity}"></DataGridTextColumn>
                                 <DataGridTextColumn Width="Auto" Header="Unidade" Binding="{Binding Path=Unity}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="Auto" Header="Patrimônio" Binding="{Binding Path=Patrimony}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Grid Grid.Row="1" Background="#F5F5F5" Margin="0 15 0 0">

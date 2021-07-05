@@ -128,9 +128,9 @@ namespace SCM2020___Client.Frames
             return ((this.TextBoxInvoice.Text.Trim() != string.Empty) && (this.ComboBoxVendor.Items.Count > 0) && (this.DatePickerMovingDate.SelectedDate != null) && (DateTime.TryParse(this.DatePickerMovingDate.SelectedDate.Value.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), out DateTime _)));
         }
 
-        private bool AllowNext2()
+        private bool AllowNext3()
         {
-            return (DataGridFinalConsumptionProducts.Items.Count > 0);
+            return ((DataGridFinalConsumptionProducts.Items.Count > 0) || (DataGridFinalPermanentProducts.Items.Count > 0));
         }
         #endregion
 
@@ -201,9 +201,9 @@ namespace SCM2020___Client.Frames
                 DataGridToAddProduct.UnselectAll();
                 DataGridFinalConsumptionProducts.UnselectAll();
 
-                this.ButtonNext2.IsEnabled = AllowNext2();
-                this.ButtonFinish.IsEnabled = AllowNext2();
-                this.MenuItemEventHandler?.Invoke(3, AllowNext2());
+                this.ButtonNext3.IsEnabled = AllowNext3();
+                this.ButtonFinish.IsEnabled = AllowNext3();
+                this.MenuItemEventHandler?.Invoke(3, AllowNext3());
             }
         }
 
@@ -221,8 +221,10 @@ namespace SCM2020___Client.Frames
             materialInputByVendor.Invoice = invoice;
             materialInputByVendor.MovingDate = dateTime;
             materialInputByVendor.VendorId = vendorId;
+            materialInputByVendor.SCMEmployeeId = Helper.NameIdentifier;
 
-            List<AuxiliarConsumption> p = new List<AuxiliarConsumption>();
+            List<AuxiliarConsumption> cp = new List<AuxiliarConsumption>();
+            List<AuxiliarPermanentInputByVendor> pp = new List<AuxiliarPermanentInputByVendor>();
 
             foreach (var item in DataGridFinalConsumptionProducts.Items)
             {
@@ -234,7 +236,7 @@ namespace SCM2020___Client.Frames
                     Quantity = product.QuantityAdded,
                     SCMEmployeeId = Helper.NameIdentifier
                 };
-                p.Add(auxiliarConsumption);
+                cp.Add(auxiliarConsumption);
             }
 
             foreach (var inputPermamentProduct in ListFinalAddedPermanentProducts)
@@ -244,16 +246,21 @@ namespace SCM2020___Client.Frames
                     //1- Adicionar material no controller PermanentProduct
                     //2- Receber o ID do produto adicionado
                     //3- Adicionar na movimentação de entrada
+
+                    AuxiliarPermanentInputByVendor auxiliarPermanent = new AuxiliarPermanentInputByVendor()
+                    {
+                        Date = DateTime.Now,
+                        SCMEmployeeId = Helper.NameIdentifier,
+                        ProductId = inputPermamentProduct.Id,
+                        Patrimony = inputPermamentProduct.Patrimony
+                    };
+                    pp.Add(auxiliarPermanent);
                 }
-                //AuxiliarPermanent auxiliarPermanent = new AuxiliarPermanent()
-                //{
-                //    Date = materialInputByVendor.MovingDate,
-                //    SCMEmployeeId = Helper.NameIdentifier,
-                //    ProductId = inputPermamentProduct.Id
-                //};
+
             }
 
-            materialInputByVendor.ConsumptionProducts = p;
+            materialInputByVendor.ConsumptionProducts = cp;
+            materialInputByVendor.PermanentProducts = pp;
             Task.Run(() =>
             {
                 var result = APIClient.PostData(new Uri(Helper.ServerAPI, "input/Add").ToString(), materialInputByVendor, Helper.Authentication);
@@ -333,7 +340,7 @@ namespace SCM2020___Client.Frames
                 existsInput = false;
                 this.Dispatcher.Invoke(() => 
                 {
-                    this.ButtonNext2.IsEnabled = false;
+                    //this.ButtonNext2.IsEnabled = false;
                     this.ButtonFinish.IsEnabled = false;
                     this.MenuItemEventHandler?.Invoke(3, false);
                 });
@@ -356,13 +363,18 @@ namespace SCM2020___Client.Frames
                     Description = information.Description,
                     QuantityAdded = item.Quantity,
                     Quantity = information.Stock,
-                    ConsumptionProduct = item
+                    ConsumptionProduct = item,
+                    NewProduct = false
                 };
                 this.DataGridFinalConsumptionProducts.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { DataGridFinalConsumptionProducts.Items.Add(product); }));
             }
+            foreach (var item in previousInput.PermanentProducts)
+            {
+                ModelsLibraryCore.PermanentProduct permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"PermanentProduct/{item.ProductId}").ToString(), Helper.Authentication);
+
+            }
             this.Dispatcher.Invoke(() => 
             {
-                this.ButtonNext2.IsEnabled = AllowNext1();
                 this.MenuItemEventHandler?.Invoke(3, AllowNext1());
                 this.ButtonFinish.IsEnabled = AllowNext1();
             });
@@ -448,7 +460,7 @@ namespace SCM2020___Client.Frames
         {
             invoice = System.Uri.EscapeDataString(invoice);
             bool allReady = false;
-            this.Dispatcher.Invoke(() => { allReady = AllowNext1() && AllowNext2(); });
+            this.Dispatcher.Invoke(() => { allReady = AllowNext1() && AllowNext3(); });
             if (allReady)
             {
                 var existsPreviousInput = APIClient.GetData<bool>(new Uri(Helper.ServerAPI, $"input/ExistsInput/{invoice}").ToString(), Helper.Authentication);
@@ -521,15 +533,14 @@ namespace SCM2020___Client.Frames
                 FillSummary();
         }
 
-
         private void ButtonPrevious3_Click(object sender, RoutedEventArgs e)
         {
-
+            CurrentMenuItem = Menu[2];
         }
 
         private void ButtonNext3_Click(object sender, RoutedEventArgs e)
         {
-
+            CurrentMenuItem = Menu[3];
         }
 
         private void ButtonAddPermanentProduct_Click(object sender, RoutedEventArgs e)

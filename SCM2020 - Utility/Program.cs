@@ -35,7 +35,7 @@ namespace SCM2020___Utility
             //UPDATE -> GENERIC POST V
             //DELETE -> INT DELETE
 
-            //SignUpAdministrator();
+            SignUpAdministrator();
             var start = Start();
 
             //ModelsLibrary.AuxiliarConsumption auxiliar1 = new ModelsLibrary.AuxiliarConsumption()
@@ -98,17 +98,17 @@ namespace SCM2020___Utility
             //APIClient client2 = new APIClient(new Uri("http://localhost:52991/api/Input/Add"),
             //    null);
 
-            //RegisterVendors(start);   //OK
-            //AddGroup(start);          //OK
+            RegisterVendors(start);   //OK
+            AddGroup(start);          //OK
             AddSector(start);         //OK
-            //SignUpSCMEmployees();     //OK
-            //SignUpAll();              //OK
-            //AddProduct(start);        //OK
-            //AddMonitoring(start);     //OK
-            //AddOutput(start);           //OK!
-            //AddInputByVendor(start);    //OK
+            SignUpSCMEmployees();     //OK
+            SignUpAll(start);         //OK
+            AddProduct(start);        //OK
+            AddMonitoring(start);     //OK
+            AddOutput(start);           //OK!
+            AddInputByVendor(start);    //OK
 
-            //AddInput(start);            //OK
+            AddInput(start);            //OK
 
             //var result = client1.DELETEData();
             //Console.WriteLine(result);
@@ -188,11 +188,11 @@ namespace SCM2020___Utility
             //    NumberSectors = new List<NumberSectors>() { }
             //};
 
-            Sector sector10 = new Sector()
-            {
-                NameSector = "Administrador",
-                NumberSectors = new List<NumberSectors>() { }
-            };
+            //Sector sector10 = new Sector()
+            //{
+            //    NameSector = "Administrador",
+            //    NumberSectors = new List<NumberSectors>() { }
+            //};
 
 
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector1, Authentication));
@@ -204,7 +204,7 @@ namespace SCM2020___Utility
             Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector7, Authentication));
             //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector8, Authentication));
             //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector9, Authentication));
-            Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector10, Authentication));
+            //Console.WriteLine(APIClient.POSTData(new Uri(uriServer, "sector/add"), sector10, Authentication));
 
 
         }
@@ -680,7 +680,7 @@ namespace SCM2020___Utility
 
             Sector sector = new Sector()
             {
-                NameSector = "Setor de Controle de Materiais",
+                NameSector = "Controle de Materiais",
                 NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 90 } }
 
             };
@@ -720,7 +720,7 @@ namespace SCM2020___Utility
             }
             Console.WriteLine($"Total de {records.Count} funcionários.");
         }
-        static void SignUpAll()
+        static void SignUpAll(AuthenticationHeaderValue Authentication)
         {
             SCMAccess dbAccess = new SCMAccess(
                 ConnectionString: SCMAccess.ConnectionString,
@@ -732,7 +732,7 @@ namespace SCM2020___Utility
                 NameSector = "DETEL",
                 NumberSectors = new List<NumberSectors>() { new NumberSectors() { Number = 0 } }
             };
-            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, null);
+            var result = APIClient.POSTDataSector(new Uri(uriServer, "sector/add"), sector, Authentication);
 
             foreach (var employees in records)
             {
@@ -768,7 +768,7 @@ namespace SCM2020___Utility
             {
                 var nameEmployee = employees.First(x => x.Key == "Funcionario").Value.Trim();
                 var registrationEmployee = employees.First(x => x.Key == "Matricula").Value;
-                if (!CheckIfExistsName(null, nameEmployee))
+                if (!CheckIfExistsName(Authentication, nameEmployee))
                 {
                     Console.WriteLine($"O nome {nameEmployee} será cadastrado.");
                     var signUp = new SignUpUserInfo()

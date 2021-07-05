@@ -43,7 +43,7 @@ namespace SCM2020___Client.Templates.Query
                 invoice = System.Uri.EscapeDataString(invoice);
                 inputByVendor = APIClient.GetData<MaterialInputByVendor>(new Uri(Helper.ServerAPI, $"Input/Invoice/{invoice}").ToString(), Helper.Authentication);
             }
-            catch
+            catch (Exception ex)
             {
                 MessageBox.Show("Movimentação com nota fiscal inexistente.", "Movimentação inexistente", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -76,6 +76,22 @@ namespace SCM2020___Client.Templates.Query
                     Description = infoProduct.Description,
                     MoveDate = item.Date,
                     Quantity = item.Quantity,
+                    Unity = infoProduct.Unity
+                };
+                this.Products.Add(product);
+            }
+
+            foreach (var item in inputByVendor.PermanentProducts)
+            {
+                ModelsLibraryCore.PermanentProduct permanentProduct = APIClient.GetData<ModelsLibraryCore.PermanentProduct>(new Uri(Helper.ServerAPI, $"permanentproduct/{item.ProductId}").ToString(), Helper.Authentication);
+                ModelsLibraryCore.ConsumptionProduct infoProduct = APIClient.GetData<ModelsLibraryCore.ConsumptionProduct>(new Uri(Helper.ServerAPI, $"generalproduct/{permanentProduct.InformationProduct}").ToString(), Helper.Authentication);
+                Product product = new Product()
+                {
+                    Code = infoProduct.Code,
+                    Description = infoProduct.Description,
+                    Patrimony = permanentProduct.Patrimony,
+                    MoveDate = item.Date,
+                    Quantity = 1,
                     Unity = infoProduct.Unity
                 };
                 this.Products.Add(product);
