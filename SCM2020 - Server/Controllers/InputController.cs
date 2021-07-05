@@ -142,9 +142,13 @@ namespace SCM2020___Server.Controllers
         {
             var raw = await Helper.RawFromBody(this);
             var inputFromJson = JsonConvert.DeserializeObject<MaterialInputByVendor>(raw);
-            var oldInput = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).ToList().Single(x => x.Id == id);
+            var oldInput = context.MaterialInputByVendor.Include(x => x.ConsumptionProducts).Include(x => x.PermanentProducts).ToList().Single(x => x.Id == id);
             List<AuxiliarConsumption> AuxProducts = new List<AuxiliarConsumption>();
             AuxProducts.AddRange(oldInput.ConsumptionProducts);
+            var lPermanent = new List<AuxiliarPermanentInputByVendor>();
+            //EDITAR UPDATE PARA ENTRADA DE MATERIAIS PERMANENTES
+            //if (.PermanentProducts != null)
+            //    lPermanent.AddRange(devolution.PermanentProducts);
 
             var input = oldInput;
             input.Invoice = inputFromJson.Invoice;
@@ -158,14 +162,22 @@ namespace SCM2020___Server.Controllers
             if (!allEquals)
             {
                 listProduct = new List<ConsumptionProduct>();
-                List<int> productIds = new List<int>();
+                List<int> ConsumpterProductIds = new List<int>();
+                List<int> PermanentsProductIds = new List<int>();
+                
                 foreach (var p in input.ConsumptionProducts)
                 {
-                    if (!productIds.Contains(p.ProductId))
-                        productIds.Add(p.ProductId);
+                    if (!ConsumpterProductIds.Contains(p.ProductId))
+                        ConsumpterProductIds.Add(p.ProductId);
                 }
 
-                foreach (var currentId in productIds)
+                foreach (var p in input.PermanentProducts)
+                {
+                    if (!PermanentsProductIds.Contains(p.ProductId))
+                        PermanentsProductIds.Add(p.ProductId);
+                }
+
+                foreach (var currentId in ConsumpterProductIds)
                 {
                     var products = AuxProducts.Where(x => x.ProductId == currentId);
                     double quantityProduct = 0d;
@@ -184,6 +196,21 @@ namespace SCM2020___Server.Controllers
                     listProduct.Add(productModify);
                     //context.ConsumptionProduct.Update(productModify);
                 }
+
+                ////permanent
+                //foreach (var currentId in PermanentsProductIds)
+                //{
+                //    //oldder - newest
+                //    var productModify = await context.ConsumptionProduct.FindAsync(currentId);
+                //    double oldder = lPermanent.Count(x => x.ProductId == currentId);
+                //    double newest = devolution.PermanentProducts.Count(x => x.ProductId == currentId);
+                //    if (oldder != newest)
+                //    {
+                //        productModify.Stock += newest - oldder;
+                //        context.ConsumptionProduct.Update(productModify);
+                //    }
+
+                //}
             }
             if (listProduct != null)
                 context.ConsumptionProduct.UpdateRange(listProduct);

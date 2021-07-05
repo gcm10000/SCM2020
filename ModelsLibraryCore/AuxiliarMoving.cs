@@ -25,8 +25,9 @@ namespace ModelsLibraryCore
     public class AuxiliarPermanentInputByVendor : ProductBase 
     {
         [NotMapped]
-        [JsonIgnore]
         public string Patrimony { get; set; }
+        [NotMapped]
+        public bool NewProduct { get; set; }
         [JsonIgnore]
         public MaterialInputByVendor MaterialInputByVendor { get; set; }
 
